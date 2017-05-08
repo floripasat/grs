@@ -2,18 +2,12 @@
 ## Ground Station module of the FloripaSat project
 
 * FloripaSat Ground Station.
-* AX25 Decoder: A Python script to decode [AX25](http://www.ax25.net/) packets.
-* NGHam Decoder: A C++ program to decode [NGHam](https://github.com/skagmo/ngham) packets.
+* FloripaSat Packet Analyzer: A software to decode [NGHam](https://github.com/skagmo/ngham) and [AX25](http://www.ax25.net/) packets (From binary files or from the serial port).
 
 ## Dependencies
 
 * gnuradio
 * gr-osmosdr
-
-### Instalation on Ubuntu 16.04
-
-* sudo apt-get install gnuradio
-* sudo apt-get install gr-osmosdr
 
 ## Tested SDRs
 
