@@ -36,10 +36,12 @@
  * \{
  */
 
+#include <gtkmm.h>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <stdint.h>
-#include <gtkmm.h>
+#include <vector>
 
 #include "../inc/signals.h"
 #include "../inc/aux.hpp"
@@ -103,11 +105,12 @@ void on_togglebutton_open_close_port_toggled()
             
             widgets.entry_serial_port->set_sensitive(false);
             widgets.combobox_baudrate->set_sensitive(false);
-            
             widgets.checkbutton_log_raw_packets->set_sensitive(false);
             widgets.checkbutton_log_ngham_packets->set_sensitive(false);
             widgets.checkbutton_log_ax25_packets->set_sensitive(false);
             widgets.checkbutton_log_eps_data->set_sensitive(false);
+            widgets.filechooserbutton_raw_packets->set_sensitive(false);
+            widgets.button_load_raw_packets->set_sensitive(false);
             
             widgets.label_serial_port_status->set_text("Serial port: Open");
         }
@@ -127,11 +130,12 @@ void on_togglebutton_open_close_port_toggled()
         
         widgets.entry_serial_port->set_sensitive(true);
         widgets.combobox_baudrate->set_sensitive(true);
-        
         widgets.checkbutton_log_raw_packets->set_sensitive(true);
         widgets.checkbutton_log_ngham_packets->set_sensitive(true);
         widgets.checkbutton_log_ax25_packets->set_sensitive(true);
         widgets.checkbutton_log_eps_data->set_sensitive(true);
+        widgets.filechooserbutton_raw_packets->set_sensitive(true);
+        widgets.button_load_raw_packets->set_sensitive(true);
         
         widgets.label_serial_port_status->set_text("Serial port: Closed");
     }
@@ -139,7 +143,142 @@ void on_togglebutton_open_close_port_toggled()
 
 void on_button_load_raw_packets_clicked()
 {
-    Info("Not implemented!", "This resource will be implemented soon (or not)!");
+    if (widgets.checkbutton_log_raw_packets->get_active())
+    {
+        log_raw_pkts.open((LOG_DEFAULT_DIR "/RAW_" + log_raw_pkts.CurrentDateTime() + ".txt").c_str(), std::ofstream::out);
+    }
+    if (widgets.checkbutton_log_ngham_packets->get_active())
+    {
+        log_ngham_pkts.open((LOG_DEFAULT_DIR "/NGHAM_" + log_ngham_pkts.CurrentDateTime() + ".txt").c_str(), std::ofstream::out);
+    }
+    //if (widgets.checkbutton_log_ax25_packets->get_active())
+    //{
+    //    log_ax25_pkts.open((LOG_DEFAULT_DIR "/AX25_" + log_ngham_pkts.CurrentDateTime() + ".txt").c_str(), std::ofstream::out);
+    //}
+    
+    std::ifstream fin;
+    
+    fin.open(widgets.filechooserbutton_raw_packets->get_filename().c_str(), std::ifstream::in);
+    
+    if (!fin.is_open())
+    {
+        Error("Error opening this file!", "Maybe the current file is not valid!");
+    }
+    else
+    {
+        std::vector<uint8_t> sync_bytes;
+
+        sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s3->get_text()));
+        sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s2->get_text()));
+        sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s1->get_text()));
+        sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s0->get_text()));
+        
+        std::vector<uint8_t> sync_bits_buffer;
+        
+        while(!fin.eof())
+        {
+            uint8_t byte;
+            fin >> byte;
+            
+            if (!receive_pkt)
+            {
+                sync_bits_buffer.push_back(byte);
+                if (sync_bits_buffer.size() == sync_bytes.size()*8)  // 1 byte = 8 bits
+                {
+                    std::vector<uint8_t> sync_bytes_buffer(sync_bytes.size(), 0x00);
+                    unsigned int j = 7;
+                    unsigned int k = 0;
+                    for(unsigned int l=0;l<sync_bits_buffer.size();l++)
+                    {
+                        sync_bytes_buffer[k] |= (uint8_t)(sync_bits_buffer[l] << j);
+                        if (j == 0)
+                        {
+                            j = 7;
+                            k++;
+                        }
+                        else
+                        {
+                            j--;
+                        }
+                    }
+                    
+                    if (sync_bytes_buffer == sync_bytes)
+                    {
+                        receive_pkt = true;
+                        ngham_pkt_counter++;
+                    }
+                    
+                    sync_bits_buffer.erase(sync_bits_buffer.begin());
+                }
+            }
+            else
+            {
+                byte_buffer.push_back(byte);
+                if (byte_buffer.size() == 8)
+                {
+                    uint8_t byte = 0x00;
+                    unsigned int k = 8-1;
+                    for(unsigned int j=0;j<byte_buffer.size();j++)
+                    {
+                        byte |= (uint8_t)(byte_buffer[j] << k);
+                        k--;
+                    }
+                    
+                    uint8_t data[256];
+                    uint8_t data_len;
+                    switch(ngham_Decode(byte, data, &data_len))
+                    {
+                        case PKT_CONDITION_OK:
+                            receive_pkt = false;
+                            for(unsigned int j=0;j<data_len;j++)
+                            {
+                                std::stringstream byte_str;
+                                byte_str << (char)data[j];
+                                std::string b = byte_str.str();
+                                widgets.textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
+                                if (widgets.checkbutton_log_ngham_packets->get_active())
+                                {
+                                    log_ngham_pkts << b;
+                                }
+                            }
+                            widgets.textview_ngham_packets_buffer->insert_at_cursor("\n");
+                    
+                            if (widgets.checkbutton_log_ngham_packets->get_active())
+                            {
+                                log_ngham_pkts << "\n";
+                            }
+                            
+                            receive_pkt = false;
+                            break;
+                        case PKT_CONDITION_PREFAIL:
+                            break;
+                        case PKT_CONDITION_FAIL:
+                            widgets.textview_ngham_packets_buffer->insert_at_cursor("ERROR!\n");
+                            if (widgets.checkbutton_log_ngham_packets->get_active())
+                            {
+                                log_ngham_pkts << "ERROR!\n";
+                            }
+                            receive_pkt = false;
+                            ngham_lost_pkts++;
+                            break;
+                    }
+                    
+                    byte_buffer.clear();
+                }
+            }
+        }
+        
+        widgets.label_ngham_valid_value->set_text(ToConstChar(ngham_pkt_counter - ngham_lost_pkts));
+        widgets.label_ngham_invalid_value->set_text(ToConstChar(ngham_lost_pkts));
+        widgets.label_ngham_total_value->set_text(ToConstChar(ngham_pkt_counter));
+        widgets.label_ngham_lost_value->set_text(ToConstChar((float)(ngham_lost_pkts*100.0/ngham_pkt_counter)));
+        
+        fin.close();
+        
+        log_raw_pkts.close();
+        log_ngham_pkts.close();
+        //log_ax25_pkts.close();
+    }
 }
 
 void on_button_clear_all_clicked()
