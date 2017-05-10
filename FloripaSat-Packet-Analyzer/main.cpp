@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
             widgets.textview_raw_packets_buffer = widgets.textview_raw_packets->get_buffer();
         }
         
+        refBuilder->get_widget("checkbutton_ngham_hex_output", widgets.checkbutton_ngham_hex_output);
         refBuilder->get_widget("textview_ngham_packets", widgets.textview_ngham_packets);
         if (widgets.textview_ngham_packets)
         {

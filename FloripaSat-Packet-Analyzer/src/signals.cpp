@@ -235,7 +235,15 @@ void on_button_load_raw_packets_clicked()
                                 std::stringstream byte_str;
                                 byte_str << (char)data[j];
                                 std::string b = byte_str.str();
-                                widgets.textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
+                                if (widgets.checkbutton_ngham_hex_output->get_active())
+                                {
+                                    widgets.textview_ngham_packets_buffer->insert_at_cursor(HexToStr(data[j]).c_str());
+                                    widgets.textview_ngham_packets_buffer->insert_at_cursor(" ");
+                                }
+                                else
+                                {
+                                    widgets.textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
+                                }
                                 if (widgets.checkbutton_log_ngham_packets->get_active())
                                 {
                                     log_ngham_pkts << b;
@@ -351,11 +359,19 @@ bool timer_handler()
                     {
                         std::stringstream byte_str;
                         byte_str << (char)r[i];
-                        std::string b = byte_str.str();
-                        widgets.textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
+                        std::string b_ngham = byte_str.str();
+                        if (widgets.checkbutton_ngham_hex_output->get_active())
+                        {
+                            widgets.textview_ngham_packets_buffer->insert_at_cursor(HexToStr(r[i]).c_str());
+                            widgets.textview_ngham_packets_buffer->insert_at_cursor(" ");
+                        }
+                        else
+                        {
+                            widgets.textview_ngham_packets_buffer->insert_at_cursor(b_ngham.c_str());
+                        }
                         if (widgets.checkbutton_log_ngham_packets->get_active())
                         {
-                            log_ngham_pkts << b;
+                            log_ngham_pkts << b_ngham;
                         }
                     }
                     

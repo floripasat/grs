@@ -79,6 +79,7 @@ struct Widgets
     Gtk::TextView                   *textview_raw_packets;
     Glib::RefPtr<Gtk::TextBuffer>   textview_raw_packets_buffer;
     
+    Gtk::CheckButton                *checkbutton_ngham_hex_output;
     Gtk::TextView                   *textview_ngham_packets;
     Glib::RefPtr<Gtk::TextBuffer>   textview_ngham_packets_buffer;
     
