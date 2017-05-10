@@ -111,8 +111,6 @@ void on_togglebutton_open_close_port_toggled()
             widgets.checkbutton_log_eps_data->set_sensitive(false);
             widgets.filechooserbutton_raw_packets->set_sensitive(false);
             widgets.button_load_raw_packets->set_sensitive(false);
-            
-            widgets.label_serial_port_status->set_text("Serial port: Open");
         }
         else
         {
@@ -136,8 +134,6 @@ void on_togglebutton_open_close_port_toggled()
         widgets.checkbutton_log_eps_data->set_sensitive(true);
         widgets.filechooserbutton_raw_packets->set_sensitive(true);
         widgets.button_load_raw_packets->set_sensitive(true);
-        
-        widgets.label_serial_port_status->set_text("Serial port: Closed");
     }
 }
 

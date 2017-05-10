@@ -107,7 +107,6 @@ struct Widgets
     
     Gtk::Button                     *button_about;
     
-    Gtk::Label                      *label_serial_port_status;
     Gtk::AboutDialog                *aboutdialog;
 };
 

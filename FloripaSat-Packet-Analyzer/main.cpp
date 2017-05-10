@@ -185,9 +185,6 @@ int main(int argc, char *argv[])
         
         refBuilder->get_widget("aboutdialog", widgets.aboutdialog);
         
-        // Status bar
-        refBuilder->get_widget("label_serial_port_status", widgets.label_serial_port_status);
-        
         g_timeout_add(DATA_RECEPTION_SAMPLE_RATE, (GSourceFunc)timer_handler, (gpointer)widgets.main_window);
         timer_handler();
 
