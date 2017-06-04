@@ -28,3 +28,5 @@
 *.out
 *.app
 
+# Other softwares extensions
+*.glade~
