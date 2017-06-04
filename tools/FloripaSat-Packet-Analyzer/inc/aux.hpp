@@ -23,7 +23,7 @@
 /**
  * \file aux.hpp
  * 
- * \brief .
+ * \brief Auxiliary functions.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 

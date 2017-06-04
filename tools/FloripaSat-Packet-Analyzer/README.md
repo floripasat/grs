@@ -2,6 +2,8 @@
 
 This software decodes incoming NGHam and AX25 packets over the serial port. It also allows the search and decoding of packets in a binary file (The output of the GNURadio block chain).
 
+![FloripaSat Packet Analyzer](doc/fsat-pkt-ana.png)
+
 ## Dependencies
 
 * libgtkmm-3.0-dev

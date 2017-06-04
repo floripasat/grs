@@ -31,7 +31,7 @@
  * \date 10/02/2017
  * 
  * \defgroup ngham NGHam
- * \ingroup beacon
+ * \ingroup lib
  * \{
  */
 

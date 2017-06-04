@@ -24,7 +24,7 @@
 /**
  * \file aux.cpp
  * 
- * \brief .
+ * \brief Auxiliary functions implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
