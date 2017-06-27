@@ -5,22 +5,20 @@ The software of the ground segment of the FloripaSat project.
 
 ## Dependencies
 
-* libgtkmm-3.0-dev
+* A.
 
 ## GUI Design
 
-* GTKmm 3
-* Glade 3.18.3
+* Qt 5.x
+* Qt Creator x.x
+
+## Compiling
+
+A.
 
 ## Installation
 
-For now, it is only available on Linux based platforms. But after the installation of the dependencies, you can install it with:
-
-```sh
-$ make
-```
-
-Tested distributions: Ubuntu 16.04 LTS
+A.
 
 ## References
 
