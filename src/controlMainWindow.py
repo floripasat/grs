@@ -1,8 +1,8 @@
 from PySide import QtCore, QtGui
-import os, sys
-lib_path = os.path.abspath(os.path.join('..', 'gui'))
-sys.path.append(lib_path)
+import sys
+sys.path.insert(0, '../gui')
 from qt import Ui_MainWindow
+from tabRequest import ControlTabRequest
 
 
 class ControlMainWindow(QtGui.QMainWindow):
@@ -16,23 +16,25 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.setupMenuActions()
         self.setupShortcuts()
         self.setWorldmap("worldmap-lq")
-        print self.ui
     
     def setupControlTabs(self):
-        pass
+        self.CTRequest = ControlTabRequest(self.ui)
     
     def setupButtons(self):
-        pass
+        self.ui.Bcfgsaveas.clicked.connect(self.CTRequest.saveRequestData)
+        self.ui.Bcfgload.clicked.connect(self.CTRequest.loadRequestData)
+        self.ui.Buncheckall.clicked.connect(self.CTRequest.uncheckAll)
+        self.ui.Bcheckall.clicked.connect(self.CTRequest.checkAll)
     
     def setupIcons(self):
         self.iconStart = QtGui.QIcon()
-        self.iconStart.addPixmap(QtGui.QPixmap("img/icon/start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.iconStart.addPixmap(QtGui.QPixmap("../img/icon/start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ui.TBstartsdr.setIcon(self.iconStart)
         self.iconPing = QtGui.QIcon()
-        self.iconPing.addPixmap(QtGui.QPixmap("img/icon/ping2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.iconPing.addPixmap(QtGui.QPixmap("../img/icon/ping2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ui.TBping.setIcon(self.iconPing)
         self.iconSend = QtGui.QIcon()
-        self.iconSend.addPixmap(QtGui.QPixmap("img/icon/antenna3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.iconSend.addPixmap(QtGui.QPixmap("../img/icon/antenna3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ui.TBsend.setIcon(self.iconSend)
     
     def setupMenuActions(self):
@@ -56,7 +58,7 @@ class ControlMainWindow(QtGui.QMainWindow):
             self.ui.LEeventlog.hide()
     
     def setWorldmap(self, imgName):
-        imgDir = "img/%s.jpg" % imgName
+        imgDir = "../img/%s.jpg" % imgName
         pixmap = QtGui.QPixmap(imgDir)
         pixmap = pixmap.scaled(640,360)
         self.ui.Lworldmap.setPixmap(pixmap)

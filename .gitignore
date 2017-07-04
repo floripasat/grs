@@ -30,3 +30,7 @@
 
 # Other softwares extensions
 *.glade~
+*.pyc
+*.cfg
+layout.txt
+

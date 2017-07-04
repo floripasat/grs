@@ -358,6 +358,32 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="Buncheckall">
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Uncheck All</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="Bcheckall">
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Check All</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -372,6 +398,9 @@
              <property name="title">
               <string>OBDH</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
              <property name="flat">
               <bool>false</bool>
              </property>
@@ -381,8 +410,14 @@
              <property name="checked">
               <bool>false</bool>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4"/>
-             <zorder>widget_2</zorder>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
            </item>
            <item>
@@ -397,8 +432,14 @@
              <property name="title">
               <string>EPS</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5"/>
-             <zorder>GBobdh</zorder>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
            </item>
            <item>
@@ -413,7 +454,14 @@
              <property name="title">
               <string>TTC</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_6"/>
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
            </item>
            <item>
@@ -438,9 +486,16 @@
               <string>Payloads</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7"/>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <property name="spacing">
+               <number>3</number>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
            </item>
           </layout>

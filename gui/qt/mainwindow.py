@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Jul  3 14:18:49 2017
+# Created: Tue Jul  4 14:42:29 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -162,6 +162,14 @@ class Ui_MainWindow(object):
         self.space3.setText("")
         self.space3.setObjectName("space3")
         self.horizontalLayout_4.addWidget(self.space3)
+        self.Buncheckall = QtGui.QPushButton(self.widget_2)
+        self.Buncheckall.setMaximumSize(QtCore.QSize(90, 16777215))
+        self.Buncheckall.setObjectName("Buncheckall")
+        self.horizontalLayout_4.addWidget(self.Buncheckall)
+        self.Bcheckall = QtGui.QPushButton(self.widget_2)
+        self.Bcheckall.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.Bcheckall.setObjectName("Bcheckall")
+        self.horizontalLayout_4.addWidget(self.Bcheckall)
         self.verticalLayout_2.addWidget(self.widget_2)
         self.widget_3 = QtGui.QWidget(self.tabRequest)
         self.widget_3.setObjectName("widget_3")
@@ -170,10 +178,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.GBobdh = QtGui.QGroupBox(self.widget_3)
         self.GBobdh.setAutoFillBackground(False)
+        self.GBobdh.setAlignment(QtCore.Qt.AlignCenter)
         self.GBobdh.setFlat(False)
         self.GBobdh.setCheckable(False)
+        self.GBobdh.setChecked(False)
         self.GBobdh.setObjectName("GBobdh")
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.GBobdh)
+        self.verticalLayout_4.setSpacing(3)
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.horizontalLayout_3.addWidget(self.GBobdh)
         self.VL1 = QtGui.QFrame(self.widget_3)
@@ -184,6 +196,8 @@ class Ui_MainWindow(object):
         self.GBeps = QtGui.QGroupBox(self.widget_3)
         self.GBeps.setObjectName("GBeps")
         self.verticalLayout_5 = QtGui.QVBoxLayout(self.GBeps)
+        self.verticalLayout_5.setSpacing(3)
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout_3.addWidget(self.GBeps)
         self.VL2 = QtGui.QFrame(self.widget_3)
@@ -194,6 +208,8 @@ class Ui_MainWindow(object):
         self.GBttc = QtGui.QGroupBox(self.widget_3)
         self.GBttc.setObjectName("GBttc")
         self.verticalLayout_6 = QtGui.QVBoxLayout(self.GBttc)
+        self.verticalLayout_6.setSpacing(3)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.horizontalLayout_3.addWidget(self.GBttc)
         self.VL3 = QtGui.QFrame(self.widget_3)
@@ -204,9 +220,11 @@ class Ui_MainWindow(object):
         self.GBpayloads = QtGui.QGroupBox(self.widget_3)
         self.GBpayloads.setBaseSize(QtCore.QSize(0, 0))
         self.GBpayloads.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.GBpayloads.setAlignment(QtCore.Qt.AlignCenter)
+        self.GBpayloads.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.GBpayloads.setObjectName("GBpayloads")
         self.verticalLayout_7 = QtGui.QVBoxLayout(self.GBpayloads)
+        self.verticalLayout_7.setSpacing(3)
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.horizontalLayout_3.addWidget(self.GBpayloads)
         self.verticalLayout_2.addWidget(self.widget_3)
@@ -287,6 +305,8 @@ class Ui_MainWindow(object):
         self.Lcfgfile.setText(QtGui.QApplication.translate("MainWindow", "Config. file:", None, QtGui.QApplication.UnicodeUTF8))
         self.Bcfgload.setText(QtGui.QApplication.translate("MainWindow", "Load", None, QtGui.QApplication.UnicodeUTF8))
         self.Bcfgsaveas.setText(QtGui.QApplication.translate("MainWindow", "Save As", None, QtGui.QApplication.UnicodeUTF8))
+        self.Buncheckall.setText(QtGui.QApplication.translate("MainWindow", "Uncheck All", None, QtGui.QApplication.UnicodeUTF8))
+        self.Bcheckall.setText(QtGui.QApplication.translate("MainWindow", "Check All", None, QtGui.QApplication.UnicodeUTF8))
         self.GBobdh.setTitle(QtGui.QApplication.translate("MainWindow", "OBDH", None, QtGui.QApplication.UnicodeUTF8))
         self.GBeps.setTitle(QtGui.QApplication.translate("MainWindow", "EPS", None, QtGui.QApplication.UnicodeUTF8))
         self.GBttc.setTitle(QtGui.QApplication.translate("MainWindow", "TTC", None, QtGui.QApplication.UnicodeUTF8))
