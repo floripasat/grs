@@ -44,6 +44,9 @@ class ControlMainWindow(QtGui.QMainWindow):
         QtGui.QShortcut(QtGui.QKeySequence("Alt+Return"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("F11"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+E"), self, self.toggleEventLog, context=self)
+        QtGui.QShortcut(QtGui.QKeySequence("Esc"), self, self.exit, context=self)
+        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+O"), self, self.CTRequest.loadRequestData, context=self)
+        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.CTRequest.saveRequestData, context=self)
     
     def toggleFullScreen(self):
         if self.isFullScreen():
@@ -62,3 +65,6 @@ class ControlMainWindow(QtGui.QMainWindow):
         pixmap = QtGui.QPixmap(imgDir)
         pixmap = pixmap.scaled(640,360)
         self.ui.Lworldmap.setPixmap(pixmap)
+    
+    def exit(self):
+        sys.exit()
