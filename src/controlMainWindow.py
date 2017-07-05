@@ -4,6 +4,7 @@ sys.path.insert(0, '../gui')
 from qt import Ui_MainWindow
 from tabRequest import ControlTabRequest
 from tabReceived import ControlTabReceived
+from tabFlight import ControlTabFlight
 
 
 class ControlMainWindow(QtGui.QMainWindow):
@@ -16,9 +17,9 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.setupIcons()
         self.setupMenuActions()
         self.setupShortcuts()
-        self.setWorldmap("worldmap-lq")
     
     def setupControlTabs(self):
+        self.CtrlFlight = ControlTabFlight(self.ui)
         self.CtrlRequest = ControlTabRequest(self.ui)
         self.CtrlReceived = ControlTabReceived(self.ui)
         
@@ -56,12 +57,6 @@ class ControlMainWindow(QtGui.QMainWindow):
             self.ui.LEeventlog.show()
         else:
             self.ui.LEeventlog.hide()
-    
-    def setWorldmap(self, imgName):
-        imgDir = "../img/%s.jpg" % imgName
-        pixmap = QtGui.QPixmap(imgDir)
-        pixmap = pixmap.scaled(640,360)
-        self.ui.Lworldmap.setPixmap(pixmap)
     
     def exit(self):
         sys.exit()
