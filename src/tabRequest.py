@@ -75,6 +75,7 @@ class ControlTabRequest(object):
     def __init__(self, ui):
         super(ControlTabRequest, self).__init__()
         self.ui = ui
+        self.setupActions()
         self.optionsData = [
                 [OBDH,[self.ui.GBreqobdh,self.ui.verticalLayout_4]],
                 [EPS,[self.ui.GBreqeps,self.ui.verticalLayout_5]],
@@ -83,8 +84,13 @@ class ControlTabRequest(object):
                 ]
         self.requestData = []
         self.createRequestData()
-        
-        
+    
+    def setupActions(self):
+        self.ui.Bcfgsaveas.clicked.connect(self.saveRequestData)
+        self.ui.Bcfgopen.clicked.connect(self.openRequestData)
+        self.ui.Buncheckall.clicked.connect(self.uncheckAll)
+        self.ui.Bcheckall.clicked.connect(self.checkAll)
+    
     def createRequestData(self):
         maxCBHeight = 15
         maxLHeight = 20
@@ -137,12 +143,11 @@ class ControlTabRequest(object):
             f = open(filename,"w")
             f.write(text)
             f.close()
-            self.ui.LEcfgfile.setText(unicode(filename))
         except:
             pass
         
     
-    def loadRequestData(self):
+    def openRequestData(self):
         filename = QtGui.QFileDialog.getOpenFileName(title="Load Request Data Config",dir="cfg/",filter="Config file (*.cfg)")[0]
         try:
             f = open(filename, "r")
@@ -150,7 +155,6 @@ class ControlTabRequest(object):
             f.close()
             self.requestData = [True if x=="True" else False for x in text.split(",")]
             self.setRequestData()
-            self.ui.LEcfgfile.setText(unicode(filename))
         except:
             pass
     
@@ -165,4 +169,3 @@ class ControlTabRequest(object):
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
             for CB in CBs:
                 CB.setChecked(False)
-        

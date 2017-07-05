@@ -16,17 +16,14 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.setupIcons()
         self.setupMenuActions()
         self.setupShortcuts()
-        self.setWorldmap("worldmap-wow")
+        self.setWorldmap("worldmap-lq")
     
     def setupControlTabs(self):
         self.CtrlRequest = ControlTabRequest(self.ui)
         self.CtrlReceived = ControlTabReceived(self.ui)
         
     def setupButtons(self):
-        self.ui.Bcfgsaveas.clicked.connect(self.CtrlRequest.saveRequestData)
-        self.ui.Bcfgload.clicked.connect(self.CtrlRequest.loadRequestData)
-        self.ui.Buncheckall.clicked.connect(self.CtrlRequest.uncheckAll)
-        self.ui.Bcheckall.clicked.connect(self.CtrlRequest.checkAll)
+        pass
     
     def setupIcons(self):
         self.iconStart = QtGui.QIcon()
@@ -47,8 +44,6 @@ class ControlMainWindow(QtGui.QMainWindow):
         QtGui.QShortcut(QtGui.QKeySequence("F11"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+E"), self, self.toggleEventLog, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Esc"), self, self.exit, context=self)
-        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+O"), self, self.CtrlRequest.loadRequestData, context=self)
-        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.CtrlRequest.saveRequestData, context=self)
     
     def toggleFullScreen(self):
         if self.isFullScreen():

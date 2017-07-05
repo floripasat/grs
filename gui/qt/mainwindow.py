@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Wed Jul  5 15:14:58 2017
+# Created: Wed Jul  5 15:51:00 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -143,17 +143,18 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.Lcfgfile = QtGui.QLabel(self.Wrequestbar)
-        self.Lcfgfile.setMaximumSize(QtCore.QSize(80, 16777215))
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.Lcfgfile.sizePolicy().hasHeightForWidth())
+        self.Lcfgfile.setSizePolicy(sizePolicy)
+        self.Lcfgfile.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.Lcfgfile.setObjectName("Lcfgfile")
         self.horizontalLayout_4.addWidget(self.Lcfgfile)
-        self.LEcfgfile = QtGui.QLineEdit(self.Wrequestbar)
-        self.LEcfgfile.setMaximumSize(QtCore.QSize(300, 16777215))
-        self.LEcfgfile.setObjectName("LEcfgfile")
-        self.horizontalLayout_4.addWidget(self.LEcfgfile)
-        self.Bcfgload = QtGui.QPushButton(self.Wrequestbar)
-        self.Bcfgload.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.Bcfgload.setObjectName("Bcfgload")
-        self.horizontalLayout_4.addWidget(self.Bcfgload)
+        self.Bcfgopen = QtGui.QPushButton(self.Wrequestbar)
+        self.Bcfgopen.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.Bcfgopen.setObjectName("Bcfgopen")
+        self.horizontalLayout_4.addWidget(self.Bcfgopen)
         self.Bcfgsaveas = QtGui.QPushButton(self.Wrequestbar)
         self.Bcfgsaveas.setMaximumSize(QtCore.QSize(80, 16777215))
         self.Bcfgsaveas.setObjectName("Bcfgsaveas")
@@ -389,7 +390,7 @@ class Ui_MainWindow(object):
         self.Lsalelliteinfo.setText(QtGui.QApplication.translate("MainWindow", "Satellite flight info", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabFlight), QtGui.QApplication.translate("MainWindow", "Flight Data", None, QtGui.QApplication.UnicodeUTF8))
         self.Lcfgfile.setText(QtGui.QApplication.translate("MainWindow", "Config. file:", None, QtGui.QApplication.UnicodeUTF8))
-        self.Bcfgload.setText(QtGui.QApplication.translate("MainWindow", "Load", None, QtGui.QApplication.UnicodeUTF8))
+        self.Bcfgopen.setText(QtGui.QApplication.translate("MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
         self.Bcfgsaveas.setText(QtGui.QApplication.translate("MainWindow", "Save As", None, QtGui.QApplication.UnicodeUTF8))
         self.Buncheckall.setText(QtGui.QApplication.translate("MainWindow", "Uncheck All", None, QtGui.QApplication.UnicodeUTF8))
         self.Bcheckall.setText(QtGui.QApplication.translate("MainWindow", "Check All", None, QtGui.QApplication.UnicodeUTF8))

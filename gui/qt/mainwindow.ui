@@ -304,9 +304,15 @@
            </property>
            <item>
             <widget class="QLabel" name="Lcfgfile">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>80</width>
+               <width>16777215</width>
                <height>16777215</height>
               </size>
              </property>
@@ -316,17 +322,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="LEcfgfile">
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>16777215</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="Bcfgload">
+            <widget class="QPushButton" name="Bcfgopen">
              <property name="maximumSize">
               <size>
                <width>80</width>
@@ -334,7 +330,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Load</string>
+              <string>Open</string>
              </property>
             </widget>
            </item>
