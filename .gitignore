@@ -32,5 +32,6 @@
 *.glade~
 *.pyc
 *.cfg
+*.fsat
 layout.txt
 

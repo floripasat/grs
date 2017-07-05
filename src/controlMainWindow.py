@@ -3,6 +3,7 @@ import sys
 sys.path.insert(0, '../gui')
 from qt import Ui_MainWindow
 from tabRequest import ControlTabRequest
+from tabReceived import ControlTabReceived
 
 
 class ControlMainWindow(QtGui.QMainWindow):
@@ -15,16 +16,17 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.setupIcons()
         self.setupMenuActions()
         self.setupShortcuts()
-        self.setWorldmap("worldmap-lq")
+        self.setWorldmap("worldmap-wow")
     
     def setupControlTabs(self):
-        self.CTRequest = ControlTabRequest(self.ui)
-    
+        self.CtrlRequest = ControlTabRequest(self.ui)
+        self.CtrlReceived = ControlTabReceived(self.ui)
+        
     def setupButtons(self):
-        self.ui.Bcfgsaveas.clicked.connect(self.CTRequest.saveRequestData)
-        self.ui.Bcfgload.clicked.connect(self.CTRequest.loadRequestData)
-        self.ui.Buncheckall.clicked.connect(self.CTRequest.uncheckAll)
-        self.ui.Bcheckall.clicked.connect(self.CTRequest.checkAll)
+        self.ui.Bcfgsaveas.clicked.connect(self.CtrlRequest.saveRequestData)
+        self.ui.Bcfgload.clicked.connect(self.CtrlRequest.loadRequestData)
+        self.ui.Buncheckall.clicked.connect(self.CtrlRequest.uncheckAll)
+        self.ui.Bcheckall.clicked.connect(self.CtrlRequest.checkAll)
     
     def setupIcons(self):
         self.iconStart = QtGui.QIcon()
@@ -45,8 +47,8 @@ class ControlMainWindow(QtGui.QMainWindow):
         QtGui.QShortcut(QtGui.QKeySequence("F11"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+E"), self, self.toggleEventLog, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Esc"), self, self.exit, context=self)
-        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+O"), self, self.CTRequest.loadRequestData, context=self)
-        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.CTRequest.saveRequestData, context=self)
+        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+O"), self, self.CtrlRequest.loadRequestData, context=self)
+        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.CtrlRequest.saveRequestData, context=self)
     
     def toggleFullScreen(self):
         if self.isFullScreen():

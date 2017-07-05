@@ -291,7 +291,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QWidget" name="widget_2" native="true">
+         <widget class="QWidget" name="Wrequestbar" native="true">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -388,10 +388,10 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget_3" native="true">
+         <widget class="QWidget" name="Wrequestdata" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="QGroupBox" name="GBobdh">
+            <widget class="QGroupBox" name="GBreqobdh">
              <property name="autoFillBackground">
               <bool>false</bool>
              </property>
@@ -399,7 +399,7 @@
               <string>OBDH</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="flat">
               <bool>false</bool>
@@ -428,7 +428,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="GBeps">
+            <widget class="QGroupBox" name="GBreqeps">
              <property name="title">
               <string>EPS</string>
              </property>
@@ -450,7 +450,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="GBttc">
+            <widget class="QGroupBox" name="GBreqttc">
              <property name="title">
               <string>TTC</string>
              </property>
@@ -472,7 +472,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="GBpayloads">
+            <widget class="QGroupBox" name="GBreqpayloads">
              <property name="baseSize">
               <size>
                <width>0</width>
@@ -503,10 +503,148 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabSatellite">
+      <widget class="QWidget" name="tabReceived">
        <attribute name="title">
-        <string>Satellite Data</string>
+        <string>Received Data</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QWidget" name="Wreceivedbar" native="true">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>27</height>
+           </size>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="Ldatashow">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="CBdatashow">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="Ldatashowfile">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="Bdataopen">
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Open</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="space4">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="Wreceiveddata" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QGroupBox" name="GBrecobdh">
+             <property name="title">
+              <string>OBDH</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_10"/>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="VL4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="GBreceps">
+             <property name="title">
+              <string>EPS</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9"/>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="VL5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="GBrecttc">
+             <property name="title">
+              <string>TTC</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_12"/>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="VL6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="GBrecpayloads">
+             <property name="title">
+              <string>Payloads</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_11"/>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tabSignal">
        <attribute name="title">

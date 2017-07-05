@@ -76,10 +76,10 @@ class ControlTabRequest(object):
         super(ControlTabRequest, self).__init__()
         self.ui = ui
         self.optionsData = [
-                [OBDH,[self.ui.GBobdh,self.ui.verticalLayout_4]],
-                [EPS,[self.ui.GBeps,self.ui.verticalLayout_5]],
-                [TTC,[self.ui.GBttc,self.ui.verticalLayout_6]],
-                [PAYLOADS,[self.ui.GBpayloads,self.ui.verticalLayout_7]],
+                [OBDH,[self.ui.GBreqobdh,self.ui.verticalLayout_4]],
+                [EPS,[self.ui.GBreqeps,self.ui.verticalLayout_5]],
+                [TTC,[self.ui.GBreqttc,self.ui.verticalLayout_6]],
+                [PAYLOADS,[self.ui.GBreqpayloads,self.ui.verticalLayout_7]],
                 ]
         self.requestData = []
         self.createRequestData()
@@ -125,6 +125,7 @@ class ControlTabRequest(object):
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
             for CB in CBs:
                 self.requestData.append(CB.isChecked())
+                
     
     def setRequestData(self):
         i = 0
