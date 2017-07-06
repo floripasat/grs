@@ -16,10 +16,10 @@ class ControlTabReceived(object):
         super(ControlTabReceived, self).__init__()
         self.ui = ui
         self.optionsData = [
-                [OBDH,[self.ui.GBrecobdh,self.ui.verticalLayout_4]],
-                [EPS,[self.ui.GBreceps,self.ui.verticalLayout_5]],
-                [TTC,[self.ui.GBrecttc,self.ui.verticalLayout_6]],
-                [PAYLOADS,[self.ui.GBrecpayloads,self.ui.verticalLayout_7]],
+                [OBDH,[self.ui.GBrecobdh,self.ui.verticalLayout_10]],
+                [EPS,[self.ui.GBreceps,self.ui.verticalLayout_9]],
+                [TTC,[self.ui.GBrecttc,self.ui.verticalLayout_12]],
+                [PAYLOADS,[self.ui.GBrecpayloads,self.ui.verticalLayout_11]],
                 ]
         self.dataShowMode = dataShowOptions[0]
         self.lastReceivedData = []
@@ -29,11 +29,46 @@ class ControlTabReceived(object):
     def setupTab(self):
         self.ui.Ldatashow.setText(u"Showing")
         self.ui.CBdatashow.addItems(dataShowOptions)
+        self.createReceiveDataLabels()
         self.changeDataShowMode()
     
     def setupActions(self):
         QtCore.QObject.connect(self.ui.CBdatashow, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataShowMode)
         self.ui.Bdataopen.clicked.connect(self.openReceivedData)
+        
+    def createReceiveDataLabels(self):
+        maxHeight = 20
+        maxWidth = 16777215
+        for GB in self.optionsData: 
+            GroupBoxData = GB[0] 
+            GroupBox = GB[1][0] 
+            GroupBoxLayout = GB[1][1] 
+            for group in GroupBoxData: 
+                title = group[0] 
+                content = group[1] 
+                Ltitle = QtGui.QLabel(GroupBox) 
+                Ltitle.setText(u"<html><em><strong>%s</strong></em></html>" % title) 
+                Ltitle.setMaximumSize(QtCore.QSize(maxWidth, maxHeight)) 
+                GroupBoxLayout.addWidget(Ltitle)
+                for option in content: 
+                    HLcontent = QtGui.QHBoxLayout() 
+                    HLcontent.setContentsMargins(0, 0, 0, 0) 
+                    HLcontent.setSpacing(0) 
+                    Loption = QtGui.QLabel(GroupBox) 
+                    Loption.setText(u"%s:" % option) 
+                    Loption.setAlignment(QtCore.Qt.AlignLeft) 
+                    Loption.setMaximumSize(QtCore.QSize(maxWidth, maxHeight))
+                    Lvalue = QtGui.QLabel(GroupBox)
+                    Lvalue.setAlignment(QtCore.Qt.AlignLeft) 
+                    Lvalue.setMaximumSize(QtCore.QSize(maxWidth, maxHeight))
+                    HLcontent.addWidget(Loption) 
+                    HLcontent.addWidget(Lvalue) 
+                    widget = QtGui.QWidget(GroupBox) 
+                    widget.setLayout(HLcontent) 
+                    widget.setMaximumSize(QtCore.QSize(maxWidth, maxHeight)) 
+                    GroupBoxLayout.addWidget(widget) 
+            spacer = QtGui.QLabel(GroupBox) 
+            GroupBoxLayout.addWidget(spacer)
     
     def changeDataShowMode(self):
         CBindex = self.ui.CBdatashow.currentIndex()
