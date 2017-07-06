@@ -1,4 +1,5 @@
 from PySide import QtCore, QtGui
+from satelliteData import OBDH,EPS,TTC,PAYLOADS
 from os import listdir
 from os.path import isfile, join
 
@@ -14,12 +15,18 @@ class ControlTabReceived(object):
     def __init__(self, ui):
         super(ControlTabReceived, self).__init__()
         self.ui = ui
+        self.optionsData = [
+                [OBDH,[self.ui.GBrecobdh,self.ui.verticalLayout_4]],
+                [EPS,[self.ui.GBreceps,self.ui.verticalLayout_5]],
+                [TTC,[self.ui.GBrecttc,self.ui.verticalLayout_6]],
+                [PAYLOADS,[self.ui.GBrecpayloads,self.ui.verticalLayout_7]],
+                ]
         self.dataShowMode = dataShowOptions[0]
         self.lastReceivedData = []
-        self.setupBar()
+        self.setupTab()
         self.setupActions()
     
-    def setupBar(self):
+    def setupTab(self):
         self.ui.Ldatashow.setText(u"Showing")
         self.ui.CBdatashow.addItems(dataShowOptions)
         self.changeDataShowMode()
@@ -39,7 +46,7 @@ class ControlTabReceived(object):
             self.ui.Ldatashowfile.setEnabled(False)
             
     def openReceivedData(self):
-        filename = QtGui.QFileDialog.getOpenFileName(title="Load Received Data",dir=pathToReceivedData,filter="Floripasat data file (*.fsat)")[0]
+        filename = QtGui.QFileDialog.getOpenFileName(title="Load Received Data",dir=pathToReceivedData,filter="Raw data (*.raw)")[0]
         try:
             f = open(filename, "r")
             text = f.read()
