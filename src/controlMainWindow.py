@@ -40,8 +40,10 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.ui.TBsend.setIcon(self.iconSend)
     
     def setupMenuActions(self):
-        pass
-    
+        self.ui.actionFullscreen.triggered.connect(self.toggleFullScreen)
+        self.ui.actionExit.triggered.connect(self.exit)
+        self.ui.actionToolbar.triggered.connect(self.toggleToolbar)
+        
     def setupShortcuts(self):
         QtGui.QShortcut(QtGui.QKeySequence("Alt+Return"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("F11"), self, self.toggleFullScreen, context=self)
@@ -60,5 +62,11 @@ class ControlMainWindow(QtGui.QMainWindow):
         else:
             self.ui.TEeventlog.hide()
     
+    def toggleToolbar(self):
+        if self.ui.Toolbar.isHidden():
+            self.ui.Toolbar.show()
+        else:
+            self.ui.Toolbar.hide()
+            
     def exit(self):
         sys.exit()

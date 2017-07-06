@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Thu Jul  6 11:22:41 2017
+# Created: Thu Jul  6 13:25:38 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,11 +61,6 @@ class Ui_MainWindow(object):
         self.TBstartsdr.setIconSize(QtCore.QSize(32, 32))
         self.TBstartsdr.setObjectName("TBstartsdr")
         self.horizontalLayout.addWidget(self.TBstartsdr)
-        self.space1 = QtGui.QLabel(self.Toolbar)
-        self.space1.setMaximumSize(QtCore.QSize(120, 16777215))
-        self.space1.setText("")
-        self.space1.setObjectName("space1")
-        self.horizontalLayout.addWidget(self.space1)
         self.TBping = QtGui.QToolButton(self.Toolbar)
         self.TBping.setIconSize(QtCore.QSize(32, 32))
         self.TBping.setObjectName("TBping")
@@ -185,8 +180,8 @@ class Ui_MainWindow(object):
         self.GBreqobdh.setChecked(False)
         self.GBreqobdh.setObjectName("GBreqobdh")
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.GBreqobdh)
-        self.verticalLayout_4.setSpacing(3)
-        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setSpacing(6)
+        self.verticalLayout_4.setContentsMargins(9, 9, 9, 9)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.horizontalLayout_3.addWidget(self.GBreqobdh)
         self.VL1 = QtGui.QFrame(self.Wrequestdata)
@@ -197,8 +192,8 @@ class Ui_MainWindow(object):
         self.GBreqeps = QtGui.QGroupBox(self.Wrequestdata)
         self.GBreqeps.setObjectName("GBreqeps")
         self.verticalLayout_5 = QtGui.QVBoxLayout(self.GBreqeps)
-        self.verticalLayout_5.setSpacing(3)
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_5.setSpacing(6)
+        self.verticalLayout_5.setContentsMargins(9, 9, 9, 9)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout_3.addWidget(self.GBreqeps)
         self.VL2 = QtGui.QFrame(self.Wrequestdata)
@@ -209,8 +204,8 @@ class Ui_MainWindow(object):
         self.GBreqttc = QtGui.QGroupBox(self.Wrequestdata)
         self.GBreqttc.setObjectName("GBreqttc")
         self.verticalLayout_6 = QtGui.QVBoxLayout(self.GBreqttc)
-        self.verticalLayout_6.setSpacing(3)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setSpacing(6)
+        self.verticalLayout_6.setContentsMargins(9, 9, 9, 9)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.horizontalLayout_3.addWidget(self.GBreqttc)
         self.VL3 = QtGui.QFrame(self.Wrequestdata)
@@ -224,8 +219,8 @@ class Ui_MainWindow(object):
         self.GBreqpayloads.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.GBreqpayloads.setObjectName("GBreqpayloads")
         self.verticalLayout_7 = QtGui.QVBoxLayout(self.GBreqpayloads)
-        self.verticalLayout_7.setSpacing(3)
-        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_7.setSpacing(6)
+        self.verticalLayout_7.setContentsMargins(9, 9, 9, 9)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.horizontalLayout_3.addWidget(self.GBreqpayloads)
         self.verticalLayout_2.addWidget(self.Wrequestdata)
@@ -380,6 +375,8 @@ class Ui_MainWindow(object):
         self.actionLeft_side.setObjectName("actionLeft_side")
         self.actionUnshow = QtGui.QAction(MainWindow)
         self.actionUnshow.setObjectName("actionUnshow")
+        self.actionFullscreen = QtGui.QAction(MainWindow)
+        self.actionFullscreen.setObjectName("actionFullscreen")
         self.menuFile.addAction(self.actionExit)
         self.menuOptions.addAction(self.actionSettings)
         self.menuHelp.addAction(self.actionAbout)
@@ -389,6 +386,7 @@ class Ui_MainWindow(object):
         self.menuEvent_log.addAction(self.actionUnshow)
         self.menuView.addAction(self.actionToolbar)
         self.menuView.addAction(self.menuEvent_log.menuAction())
+        self.menuView.addAction(self.actionFullscreen)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
@@ -442,4 +440,5 @@ class Ui_MainWindow(object):
         self.actionRight_side.setText(QtGui.QApplication.translate("MainWindow", "Right side", None, QtGui.QApplication.UnicodeUTF8))
         self.actionLeft_side.setText(QtGui.QApplication.translate("MainWindow", "Left side", None, QtGui.QApplication.UnicodeUTF8))
         self.actionUnshow.setText(QtGui.QApplication.translate("MainWindow", "Unshow", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionFullscreen.setText(QtGui.QApplication.translate("MainWindow", "Fullscreen", None, QtGui.QApplication.UnicodeUTF8))
 
