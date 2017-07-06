@@ -5,6 +5,7 @@ from qt import Ui_MainWindow
 from tabRequest import ControlTabRequest
 from tabReceived import ControlTabReceived
 from tabFlight import ControlTabFlight
+from tabSignal import ControlTabSignal
 
 
 class ControlMainWindow(QtGui.QMainWindow):
@@ -22,6 +23,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.CtrlFlight = ControlTabFlight(self.ui)
         self.CtrlRequest = ControlTabRequest(self.ui)
         self.CtrlReceived = ControlTabReceived(self.ui)
+        self.CtrlSignal = ControlTabSignal(self.ui)
         
     def setupButtons(self):
         pass
@@ -53,10 +55,10 @@ class ControlMainWindow(QtGui.QMainWindow):
             self.showFullScreen()
     
     def toggleEventLog(self):
-        if self.ui.LEeventlog.isHidden():
-            self.ui.LEeventlog.show()
+        if self.ui.TEeventlog.isHidden():
+            self.ui.TEeventlog.show()
         else:
-            self.ui.LEeventlog.hide()
+            self.ui.TEeventlog.hide()
     
     def exit(self):
         sys.exit()

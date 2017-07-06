@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Wed Jul  5 15:51:00 2017
+# Created: Thu Jul  6 10:42:08 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -123,11 +123,11 @@ class Ui_MainWindow(object):
         self.Lsalelliteinfo = QtGui.QLabel(self.widget)
         self.Lsalelliteinfo.setObjectName("Lsalelliteinfo")
         self.VLsatinfo.addWidget(self.Lsalelliteinfo)
-        self.LEsatelliteinfo = QtGui.QTextEdit(self.widget)
-        self.LEsatelliteinfo.setMaximumSize(QtCore.QSize(10000000, 300))
-        self.LEsatelliteinfo.setReadOnly(True)
-        self.LEsatelliteinfo.setObjectName("LEsatelliteinfo")
-        self.VLsatinfo.addWidget(self.LEsatelliteinfo)
+        self.TEsatelliteinfo = QtGui.QTextEdit(self.widget)
+        self.TEsatelliteinfo.setMaximumSize(QtCore.QSize(10000000, 300))
+        self.TEsatelliteinfo.setReadOnly(True)
+        self.TEsatelliteinfo.setObjectName("TEsatelliteinfo")
+        self.VLsatinfo.addWidget(self.TEsatelliteinfo)
         self.horizontalLayout_2.addLayout(self.VLsatinfo)
         self.verticalLayout_3.addWidget(self.widget)
         self.tabWidget.addTab(self.tabFlight, "")
@@ -321,14 +321,31 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabReceived, "")
         self.tabSignal = QtGui.QWidget()
         self.tabSignal.setObjectName("tabSignal")
+        self.horizontalLayout_7 = QtGui.QHBoxLayout(self.tabSignal)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.VLsignal = QtGui.QVBoxLayout()
+        self.VLsignal.setObjectName("VLsignal")
+        self.Lfft = QtGui.QLabel(self.tabSignal)
+        self.Lfft.setText("")
+        self.Lfft.setObjectName("Lfft")
+        self.VLsignal.addWidget(self.Lfft)
+        self.Lwaterfall = QtGui.QLabel(self.tabSignal)
+        self.Lwaterfall.setText("")
+        self.Lwaterfall.setObjectName("Lwaterfall")
+        self.VLsignal.addWidget(self.Lwaterfall)
+        self.horizontalLayout_7.addLayout(self.VLsignal)
+        self.GBsignalconfig = QtGui.QGroupBox(self.tabSignal)
+        self.GBsignalconfig.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.GBsignalconfig.setObjectName("GBsignalconfig")
+        self.horizontalLayout_7.addWidget(self.GBsignalconfig)
         self.tabWidget.addTab(self.tabSignal, "")
         self.verticalLayout.addWidget(self.tabWidget)
-        self.LEeventlog = QtGui.QTextEdit(self.centralwidget)
-        self.LEeventlog.setMinimumSize(QtCore.QSize(0, 80))
-        self.LEeventlog.setMaximumSize(QtCore.QSize(16777215, 80))
-        self.LEeventlog.setReadOnly(True)
-        self.LEeventlog.setObjectName("LEeventlog")
-        self.verticalLayout.addWidget(self.LEeventlog)
+        self.TEeventlog = QtGui.QTextEdit(self.centralwidget)
+        self.TEeventlog.setMinimumSize(QtCore.QSize(0, 80))
+        self.TEeventlog.setMaximumSize(QtCore.QSize(16777215, 80))
+        self.TEeventlog.setReadOnly(True)
+        self.TEeventlog.setObjectName("TEeventlog")
+        self.verticalLayout.addWidget(self.TEeventlog)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1135, 25))
@@ -378,7 +395,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -405,8 +422,9 @@ class Ui_MainWindow(object):
         self.GBrecttc.setTitle(QtGui.QApplication.translate("MainWindow", "TTC", None, QtGui.QApplication.UnicodeUTF8))
         self.GBrecpayloads.setTitle(QtGui.QApplication.translate("MainWindow", "Payloads", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabReceived), QtGui.QApplication.translate("MainWindow", "Received Data", None, QtGui.QApplication.UnicodeUTF8))
+        self.GBsignalconfig.setTitle(QtGui.QApplication.translate("MainWindow", "Signal Configuration", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabSignal), QtGui.QApplication.translate("MainWindow", "Signal Data", None, QtGui.QApplication.UnicodeUTF8))
-        self.LEeventlog.setHtml(QtGui.QApplication.translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.TEeventlog.setHtml(QtGui.QApplication.translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
