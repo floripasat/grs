@@ -1,18 +1,19 @@
 from PySide import QtCore, QtGui
-from satdata.floripasat import OBDH,EPS,TTC,PAYLOADS
+from satdata import fsattltc
 
 class ControlTabRequest(object):
     def __init__(self, ui):
         super(ControlTabRequest, self).__init__()
-        self.ui = ui
-        self.setupActions()
-        self.optionsData = [
-                [OBDH,[self.ui.GBreqobdh,self.ui.verticalLayout_4]],
-                [EPS,[self.ui.GBreqeps,self.ui.verticalLayout_5]],
-                [TTC,[self.ui.GBreqttc,self.ui.verticalLayout_6]],
-                [PAYLOADS,[self.ui.GBreqpayloads,self.ui.verticalLayout_7]],
-                ]
+        self.ui = ui        
+        self.optionsData = [["FSAT TLTC", fsattltc]]
+        self.data = self.optionsData[0][1].data
         self.requestData = []
+        self.setupTab()
+        self.setupActions()
+    
+    def setupTab(self):
+        options = [o[0] for o in self.optionsData]
+        self.ui.CBreqtype.addItems(options)
         self.createRequestData()
     
     def setupActions(self):
@@ -20,15 +21,25 @@ class ControlTabRequest(object):
         self.ui.Bcfgopen.clicked.connect(self.openRequestData)
         self.ui.Buncheckall.clicked.connect(self.uncheckAll)
         self.ui.Bcheckall.clicked.connect(self.checkAll)
+        QtCore.QObject.connect(self.ui.CBreqtype, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataType)
     
     def createRequestData(self):
+        self.clearTabWidget()
         maxCBHeight = 15
         maxLHeight = 20
         maxWidth = 16777215
-        for GB in self.optionsData:
-            GroupBoxData = GB[0]
-            GroupBox = GB[1][0]
-            GroupBoxLayout = GB[1][1]
+        WidgetLayout = QtGui.QHBoxLayout(self.ui.Wrequestdata)
+        WidgetLayout.setSpacing(6)
+        WidgetLayout.setContentsMargins(9, 9, 9, 9)
+        for GB in self.data:
+            GroupBoxData = GB[1]
+            GroupBox = QtGui.QGroupBox(self.ui.Wrequestdata)
+            GroupBox.setTitle(u"%s" % GB[0])
+            GroupBox.setAlignment(QtCore.Qt.AlignCenter)
+            WidgetLayout.addWidget(GroupBox)
+            GroupBoxLayout = QtGui.QVBoxLayout(GroupBox)
+            GroupBoxLayout.setSpacing(6)
+            GroupBoxLayout.setContentsMargins(9, 9, 9, 9)
             for group in GroupBoxData:
                 title = group[0]
                 content = group[1]
@@ -44,6 +55,9 @@ class ControlTabRequest(object):
             spacer = QtGui.QLabel(GroupBox)
             GroupBoxLayout.addWidget(spacer)
                 
+    def changeDataType(self):
+        self.data = [data[1].data for data in self.optionsData if data[0] == str(self.ui.CBreqtype.currentText())][0]
+    
     def refreshRequestData(self):
         self.requestData = []
         for GB in self.optionsData:
@@ -99,3 +113,19 @@ class ControlTabRequest(object):
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
             for CB in CBs:
                 CB.setChecked(False)
+    
+    def clearTabWidget(self):
+        layout = self.ui.Wrequestdata.layout()
+        if layout != None:
+            self.clearLayout(layout)
+        QtGui.QWidget().setLayout(layout)
+        
+    def clearLayout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    self.clearLayout(item.layout())

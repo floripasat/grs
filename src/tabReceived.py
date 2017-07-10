@@ -1,7 +1,8 @@
 from PySide import QtCore, QtGui
-from satdata.floripasat import OBDH,EPS,TTC,PAYLOADS
+from satdata import fsattltc, fsatbeacon
 from os import listdir
 from os.path import isfile, join
+from time import sleep
 
 dataShowOptions = ["Current","From file"]
 pathToReceivedData = "received/"
@@ -15,12 +16,8 @@ class ControlTabReceived(object):
     def __init__(self, ui):
         super(ControlTabReceived, self).__init__()
         self.ui = ui
-        self.optionsData = [
-                [OBDH,[self.ui.GBrecobdh,self.ui.verticalLayout_10]],
-                [EPS,[self.ui.GBreceps,self.ui.verticalLayout_9]],
-                [TTC,[self.ui.GBrecttc,self.ui.verticalLayout_12]],
-                [PAYLOADS,[self.ui.GBrecpayloads,self.ui.verticalLayout_11]],
-                ]
+        self.optionsData = [["FSAT TLTC", fsattltc],["FSAT BEACON", fsatbeacon]]
+        self.data = self.optionsData[0][1].data
         self.dataShowMode = dataShowOptions[0]
         self.lastReceivedData = []
         self.setupTab()
@@ -29,20 +26,32 @@ class ControlTabReceived(object):
     def setupTab(self):
         self.ui.Ldatashow.setText(u"Showing")
         self.ui.CBdatashow.addItems(dataShowOptions)
-        self.createReceiveDataLabels()
+        options = [o[0] for o in self.optionsData]
+        self.ui.CBrectype.addItems(options)
+        self.createReceivedDataLabels()
         self.changeDataShowMode()
     
     def setupActions(self):
-        QtCore.QObject.connect(self.ui.CBdatashow, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataShowMode)
         self.ui.Bdataopen.clicked.connect(self.openReceivedData)
+        QtCore.QObject.connect(self.ui.CBdatashow, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataShowMode)
+        QtCore.QObject.connect(self.ui.CBrectype, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataType)
         
-    def createReceiveDataLabels(self):
+    def createReceivedDataLabels(self):
+        self.clearTabWidget()
         maxHeight = 20
         maxWidth = 16777215
-        for GB in self.optionsData: 
-            GroupBoxData = GB[0] 
-            GroupBox = GB[1][0] 
-            GroupBoxLayout = GB[1][1] 
+        WidgetLayout = QtGui.QHBoxLayout(self.ui.Wreceiveddata)
+        WidgetLayout.setSpacing(6)
+        WidgetLayout.setContentsMargins(9, 9, 9, 9)
+        for GB in self.data:
+            GroupBoxData = GB[1]
+            GroupBox = QtGui.QGroupBox(self.ui.Wreceiveddata)
+            GroupBox.setTitle(u"%s" % GB[0])
+            GroupBox.setAlignment(QtCore.Qt.AlignCenter)
+            WidgetLayout.addWidget(GroupBox)
+            GroupBoxLayout = QtGui.QVBoxLayout(GroupBox)
+            GroupBoxLayout.setSpacing(6)
+            GroupBoxLayout.setContentsMargins(9, 9, 9, 9)
             for group in GroupBoxData: 
                 title = group[0] 
                 content = group[1] 
@@ -70,6 +79,10 @@ class ControlTabReceived(object):
             spacer = QtGui.QLabel(GroupBox) 
             GroupBoxLayout.addWidget(spacer)
     
+    def changeDataType(self):
+        self.data = [data[1].data for data in self.optionsData if data[0] == str(self.ui.CBrectype.currentText())][0]
+        self.createReceivedDataLabels()
+        
     def changeDataShowMode(self):
         CBindex = self.ui.CBdatashow.currentIndex()
         self.dataShowMode = dataShowOptions[CBindex]
@@ -98,4 +111,20 @@ class ControlTabReceived(object):
         elif self.dataShowMode == "From file":
             pass#da outro jeito de pegar os dados
         #Agora mostra os dados da variavel "data"
+        
+    def clearTabWidget(self):
+        layout = self.ui.Wreceiveddata.layout()
+        if layout != None:
+            self.clearLayout(layout)
+        QtGui.QWidget().setLayout(layout)
+        
+    def clearLayout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    self.clearLayout(item.layout())
             
