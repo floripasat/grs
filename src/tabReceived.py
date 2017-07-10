@@ -1,5 +1,5 @@
 from PySide import QtCore, QtGui
-from satelliteData import OBDH,EPS,TTC,PAYLOADS
+from satdata.floripasat import OBDH,EPS,TTC,PAYLOADS
 from os import listdir
 from os.path import isfile, join
 

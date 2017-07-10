@@ -1,5 +1,5 @@
 from PySide import QtCore, QtGui
-from satelliteData import OBDH,EPS,TTC,PAYLOADS
+from satdata.floripasat import OBDH,EPS,TTC,PAYLOADS
 
 class ControlTabRequest(object):
     def __init__(self, ui):
