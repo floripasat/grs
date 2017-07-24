@@ -1,8 +1,5 @@
-"""FloripaSat-GRS: The ground station software of the FloripaSat project."""
-
 """
-ControlTabSignal: control whats where tab signal.
-Tab initialization, actions (buttons, comboboxes, etc) setups, layout management.
+Tab signal initialization, actions (buttons, comboboxes, etc) setups, layout management.
 """
 
 #
@@ -39,6 +36,12 @@ __status__      = "Prototype"
 from PySide import QtCore, QtGui
 
 class ControlTabSignal(object):
+    '''
+    Controls all tab flight interface features.
+    '''
     def __init__(self, ui):
+        '''
+        Initializes tab features.
+        '''
         super(ControlTabSignal, self).__init__()
         self.ui = ui

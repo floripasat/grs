@@ -1,6 +1,4 @@
-"""FloripaSat-GRS: The ground station software of the FloripaSat project."""
-
-"""This file has beacon data names of FloripaSat"""
+"""This file has beacon data names of FloripaSat."""
 
 #
 #  fsatbeacon.py
@@ -37,4 +35,5 @@ BEACON = [
         ["",                ["Level",
                              "Weapon"]],
           ]
+
 data = [["Beacon",BEACON]]

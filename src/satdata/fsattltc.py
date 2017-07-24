@@ -1,6 +1,4 @@
-"""FloripaSat-GRS: The ground station software of the FloripaSat project."""
-
-"""This file has request data names for FloripaSat TLTC"""
+"""This file has request data names for FloripaSat TLTC."""
 
 #
 #  fsattltc.py

@@ -1,8 +1,5 @@
-"""FloripaSat-GRS: The ground station software of the FloripaSat project."""
-
 """
-ControlTabRequest: control whats where tab request.
-Tab initialization, actions (buttons, comboboxes, etc) setups, layout management, saving and openning config files.
+Tab request initialization, actions (buttons, comboboxes, etc) setups, layout management, saving and openning config files.
 """
 
 #
@@ -40,7 +37,13 @@ from PySide import QtCore, QtGui
 from satdata import fsattltc
 
 class ControlTabRequest(object):
+    '''
+    Controls all tab request interface features.
+    '''
     def __init__(self, ui):
+        '''
+        Initializes tab features.
+        '''
         super(ControlTabRequest, self).__init__()
         self.ui = ui        
         self.optionsData = [["FSAT TLTC", fsattltc]]
@@ -50,11 +53,17 @@ class ControlTabRequest(object):
         self.setupActions()
     
     def setupTab(self):
+        '''
+        Setups tab content.
+        '''
         options = [o[0] for o in self.optionsData]
         self.ui.CBreqtype.addItems(options)
         self.createRequestData()
     
     def setupActions(self):
+        '''
+        Setups button, signal actions.
+        '''
         self.ui.Bcfgsaveas.clicked.connect(self.saveRequestData)
         self.ui.Bcfgopen.clicked.connect(self.openRequestData)
         self.ui.Buncheckall.clicked.connect(self.uncheckAll)
@@ -62,6 +71,9 @@ class ControlTabRequest(object):
         QtCore.QObject.connect(self.ui.CBreqtype, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataType)
     
     def createRequestData(self):
+        '''
+        Creates interface, labels and groupboxes, for request data.
+        '''
         self.clearTabWidget()
         maxCBHeight = 15
         maxLHeight = 20
@@ -94,9 +106,15 @@ class ControlTabRequest(object):
             GroupBoxLayout.addWidget(spacer)
                 
     def changeDataType(self):
+        '''
+        Changes requested data type.
+        '''
         self.data = [data[1].data for data in self.optionsData if data[0] == str(self.ui.CBreqtype.currentText())][0]
     
-    def refreshRequestData(self):
+    def getRequestData(self):
+        '''
+        Puts request data from the checkboxes into a class list object (requestData).
+        '''
         self.requestData = []
         for GB in self.optionsData:
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
@@ -105,6 +123,9 @@ class ControlTabRequest(object):
                 
     
     def setRequestData(self):
+        '''
+        Set request data checkboxes from a class list object (requestData).
+        '''
         i = 0
         for GB in self.optionsData:
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
@@ -117,7 +138,10 @@ class ControlTabRequest(object):
                 i+=1
     
     def saveRequestData(self):
-        self.refreshRequestData()
+        '''
+        Saves request data into a file.
+        '''
+        self.getRequestData()
         filename = QtGui.QFileDialog.getSaveFileName(title="Save Request Data Config",dir="cfg/",filter="Config file (*.cfg)")[0]
         try:
             strRequestData = [str(x) for x in self.requestData]
@@ -130,6 +154,9 @@ class ControlTabRequest(object):
         
     
     def openRequestData(self):
+        '''
+        Loads request data from a file.
+        '''
         filename = QtGui.QFileDialog.getOpenFileName(title="Load Request Data Config",dir="cfg/",filter="Config file (*.cfg)")[0]
         try:
             f = open(filename, "r")
@@ -141,24 +168,36 @@ class ControlTabRequest(object):
             pass
     
     def checkAll(self):
+        '''
+        Checks all request data checkboxes.
+        '''
         for GB in self.optionsData:
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
             for CB in CBs:
                 CB.setChecked(True)
     
     def uncheckAll(self):
+        '''
+        Unchecks all request data checkboxes.
+        '''
         for GB in self.optionsData:
             CBs = GB[1][0].findChildren(QtGui.QCheckBox)
             for CB in CBs:
                 CB.setChecked(False)
     
     def clearTabWidget(self):
+        '''
+        Clears (deletes) all QtGui objects from this tab main widget.
+        '''
         layout = self.ui.Wrequestdata.layout()
         if layout != None:
             self.clearLayout(layout)
         QtGui.QWidget().setLayout(layout)
         
     def clearLayout(self, layout):
+        '''
+        Clear a widget layout.
+        '''
         if layout is not None:
             while layout.count():
                 item = layout.takeAt(0)

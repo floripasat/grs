@@ -1,6 +1,4 @@
-"""FloripaSat-GRS: The ground station software of the FloripaSat project."""
-
-"""This file turns the folder satdata onto a library"""
+"""This file turns the folder satdata onto a library, containing all requestable and receiveable data."""
 
 #
 #  __init__.py

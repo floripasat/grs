@@ -1,8 +1,5 @@
-"""FloripaSat-GRS: The ground station software of the FloripaSat project."""
-
 """
-ControlTabFlight: control whats where tab received.
-Tab initialization, actions (buttons, comboboxes, etc) setups, layout management.
+Tab flight initialization, actions (buttons, comboboxes, etc) setups, layout management.
 """
 
 #
@@ -42,20 +39,35 @@ mainMap = "worldmap-lq"
 mapFolder = "../img/"
 
 class ControlTabFlight(object):
+    '''
+    Controls all tab flight interface features.
+    '''
     def __init__(self, ui):
+        '''
+        Initializes tab features.
+        '''
         super(ControlTabFlight, self).__init__()
         self.ui = ui
         self.setupActions()
         self.setWorldMap(mainMap)
     
     def setupActions(self):
+        '''
+        Setups tab shortcuts actions.
+        '''
         QtGui.QShortcut(QtGui.QKeySequence("S+M+W"), self.ui.Lworldmap, self.superSecretWorldMap, context=self.ui.Lworldmap)
             
     def setWorldMap(self, imgName):
+        '''
+        Change world map picture.
+        '''
         imgDir = "%s.jpg" % (mapFolder+imgName)
         pixmap = QtGui.QPixmap(imgDir)
         pixmap = pixmap.scaled(640,360)
         self.ui.Lworldmap.setPixmap(pixmap)
     
     def superSecretWorldMap(self):
+        '''
+        Change world map to Super Mario World map as an easter egg.
+        '''
         self.setWorldMap("worldmap-smw")
