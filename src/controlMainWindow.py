@@ -68,14 +68,20 @@ class ControlMainWindow(QtGui.QMainWindow):
     
     def setupIcons(self):
         self.iconStart = QtGui.QIcon()
-        self.iconStart.addPixmap(QtGui.QPixmap("../img/icon/start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.iconStart.addPixmap(QtGui.QPixmap("../img/icon/media-playback-start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ui.TBstartsdr.setIcon(self.iconStart)
         self.iconPing = QtGui.QIcon()
-        self.iconPing.addPixmap(QtGui.QPixmap("../img/icon/ping2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.iconPing.addPixmap(QtGui.QPixmap("../img/icon/reload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ui.TBping.setIcon(self.iconPing)
-        self.iconSend = QtGui.QIcon()
-        self.iconSend.addPixmap(QtGui.QPixmap("../img/icon/antenna3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBsend.setIcon(self.iconSend)
+        self.iconSendRequest = QtGui.QIcon()
+        self.iconSendRequest.addPixmap(QtGui.QPixmap("../img/icon/go-up.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBsendreq.setIcon(self.iconSendRequest)
+        self.iconSendDataRead = QtGui.QIcon()
+        self.iconSendDataRead.addPixmap(QtGui.QPixmap("../img/icon/go-home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBsenddataread.setIcon(self.iconSendDataRead)
+        self.iconConfig = QtGui.QIcon()
+        self.iconConfig.addPixmap(QtGui.QPixmap("../img/icon/document-properties.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBconfig.setIcon(self.iconConfig)
     
     def setupMenuActions(self):
         self.ui.actionFullscreen.triggered.connect(self.toggleFullScreen)
