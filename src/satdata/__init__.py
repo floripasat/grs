@@ -1,4 +1,6 @@
-"""This file turns the folder satdata onto a library, containing all requestable and receiveable data."""
+"""
+This file turns the folder satdata onto a library, containing all requestable and receiveable data.
+"""
 
 #
 #  __init__.py

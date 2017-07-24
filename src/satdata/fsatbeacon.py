@@ -1,4 +1,6 @@
-"""This file has beacon data names of FloripaSat."""
+"""
+This file has beacon data names of FloripaSat.
+"""
 
 #
 #  fsatbeacon.py

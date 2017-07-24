@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-"""FloripaSat-GRS: The ground station software of the FloripaSat project. This script runs the software."""
+"""
+FloripaSat-GRS: The ground station software of the FloripaSat project. This script runs the software.
+"""
 
 #
 #  main.py
