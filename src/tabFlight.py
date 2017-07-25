@@ -35,8 +35,8 @@ __status__      = "Prototype"
 
 from PySide import QtCore, QtGui
 
-mainMap = "worldmap-lq"
-mapFolder = "../img/"
+MAIN_MAP = "worldmap-lq"
+MAP_FOLDER = "../img/"
 
 
 class ControlTabFlight(object):
@@ -53,7 +53,7 @@ class ControlTabFlight(object):
         super(ControlTabFlight, self).__init__()
         self.ui = ui
         self.setupActions()
-        self.setWorldMap(mainMap)
+        self.setWorldMap(MAIN_MAP)
     
     def setupActions(self):
         """
@@ -61,12 +61,12 @@ class ControlTabFlight(object):
         """
         QtGui.QShortcut(QtGui.QKeySequence("S+M+W"), self.ui.Lworldmap, self.superSecretWorldMap, context=self.ui.Lworldmap)
             
-    def setWorldMap(self, imgName):
+    def setWorldMap(self, img_name):
         """
         Change world map picture.
         """
-        imgDir = "%s.jpg" % (mapFolder+imgName)
-        pixmap = QtGui.QPixmap(imgDir)
+        img_path = "%s.jpg" % (MAP_FOLDER+img_name)
+        pixmap = QtGui.QPixmap(img_path)
         pixmap = pixmap.scaled(640,360)
         self.ui.Lworldmap.setPixmap(pixmap)
     

@@ -1,5 +1,5 @@
 """
-Tab received initialization, actions (buttons, comboboxes, etc) setups, layout management, openning data files.
+Tab received initialization, actions (buttons, comboboxes, etc) setups, layout management, openning DATA files.
 """
 
 #
@@ -39,8 +39,8 @@ from os import listdir
 from os.path import isfile, join
 from time import sleep
 
-dataShowOptions = ["Current","From file"]
-pathToReceivedData = "received/"
+DATA_SHOW_OPTIONS = ["Current","From file"]
+PATH_TO_RECEIVED_DATA = "received/"
 
 def getFolderFiles(folder_path):
     """
@@ -52,9 +52,9 @@ def getFolderFiles(folder_path):
     Returns:
         A list of path to files in the folder
     """
-    allfiles = listdir(folder_path)
-    onlyfiles = [f for f in allfiles if isfile(join(folder_path, f))]
-    return onlyfiles
+    all_content = listdir(folder_path)
+    only_files = [f for f in all_content if isfile(join(folder_path, f))]
+    return only_files
 
 
 class ControlTabReceived(object):
@@ -63,10 +63,10 @@ class ControlTabReceived(object):
     
     Attributes:
         ui: UI instance from the class instancer.
-        optionsData: A list that represents what where at received combobox data type selector.
-        data: A list of lists of ordered requestable data.
-        dataShowMode: A string representing the current data show mode.
-        lastReceivedData: A string containing last received data from satellite.
+        OPTIONS_DATA: A list that represents what where at received combobox DATA type selector.
+        DATA: A list of lists of ordered requestable DATA.
+        data_show_mode: A string representing the current DATA show mode.
+        last_received_data: A string containing last received DATA from satellite.
     """
     def __init__(self, ui):
         '''
@@ -74,10 +74,10 @@ class ControlTabReceived(object):
         '''
         super(ControlTabReceived, self).__init__()
         self.ui = ui
-        self.optionsData = [["FSAT TLTC", fsattltc],["FSAT BEACON", fsatbeacon]]
-        self.data = self.optionsData[0][1].data
-        self.dataShowMode = dataShowOptions[0]
-        self.lastReceivedData = []
+        self.OPTIONS_DATA = [["FSAT TLTC", fsattltc],["FSAT BEACON", fsatbeacon]]
+        self.data = self.OPTIONS_DATA[0][1].DATA
+        self.data_show_mode = DATA_SHOW_OPTIONS[0]
+        self.last_received_data = []
         self.setupTab()
         self.setupActions()
     
@@ -86,8 +86,8 @@ class ControlTabReceived(object):
         Setups tab content.
         """
         self.ui.Ldatashow.setText(u"Showing")
-        self.ui.CBdatashow.addItems(dataShowOptions)
-        options = [o[0] for o in self.optionsData]
+        self.ui.CBdatashow.addItems(DATA_SHOW_OPTIONS)
+        options = [o[0] for o in self.OPTIONS_DATA]
         self.ui.CBrectype.addItems(options)
         self.createReceivedDataLabels()
         self.changeDataShowMode()
@@ -102,64 +102,64 @@ class ControlTabReceived(object):
         
     def createReceivedDataLabels(self):
         """
-        Creates interface, labels and groupboxes, for received data for the selected data type (beacon, tltc, etc.).
+        Creates interface, labels and groupboxes, for received DATA for the selected DATA type (beacon, tltc, etc.).
         """
         self.clearTabWidget()
-        maxHeight = 20
-        maxWidth = 16777215
-        WidgetLayout = QtGui.QHBoxLayout(self.ui.Wreceiveddata)
-        WidgetLayout.setSpacing(6)
-        WidgetLayout.setContentsMargins(9, 9, 9, 9)
+        max_height = 20
+        max_width = 16777215
+        widget_layout = QtGui.QHBoxLayout(self.ui.Wreceiveddata)
+        widget_layout.setSpacing(6)
+        widget_layout.setContentsMargins(9, 9, 9, 9)
         for GB in self.data:
-            GroupBoxData = GB[1]
-            GroupBox = QtGui.QGroupBox(self.ui.Wreceiveddata)
-            GroupBox.setTitle(u"%s" % GB[0])
-            GroupBox.setAlignment(QtCore.Qt.AlignCenter)
-            WidgetLayout.addWidget(GroupBox)
-            GroupBoxLayout = QtGui.QVBoxLayout(GroupBox)
-            GroupBoxLayout.setSpacing(6)
-            GroupBoxLayout.setContentsMargins(9, 9, 9, 9)
-            for group in GroupBoxData: 
+            groupbox_data = GB[1]
+            groupbox = QtGui.QGroupBox(self.ui.Wreceiveddata)
+            groupbox.setTitle(u"%s" % GB[0])
+            groupbox.setAlignment(QtCore.Qt.AlignCenter)
+            widget_layout.addWidget(groupbox)
+            groupbox_layout = QtGui.QVBoxLayout(groupbox)
+            groupbox_layout.setSpacing(6)
+            groupbox_layout.setContentsMargins(9, 9, 9, 9)
+            for group in groupbox_data: 
                 title = group[0] 
                 content = group[1] 
-                Ltitle = QtGui.QLabel(GroupBox) 
-                Ltitle.setText(u"<html><em><strong>%s</strong></em></html>" % title) 
-                Ltitle.setMaximumSize(QtCore.QSize(maxWidth, maxHeight)) 
-                GroupBoxLayout.addWidget(Ltitle)
+                label_title = QtGui.QLabel(groupbox) 
+                label_title.setText(u"<html><em><strong>%s</strong></em></html>" % title) 
+                label_title.setMaximumSize(QtCore.QSize(max_width, max_height)) 
+                groupbox_layout.addWidget(label_title)
                 for option in content: 
-                    HLcontent = QtGui.QHBoxLayout() 
-                    HLcontent.setContentsMargins(0, 0, 0, 0) 
-                    HLcontent.setSpacing(0) 
-                    Loption = QtGui.QLabel(GroupBox) 
-                    Loption.setText(u"%s:" % option) 
-                    Loption.setAlignment(QtCore.Qt.AlignLeft) 
-                    Loption.setMaximumSize(QtCore.QSize(maxWidth, maxHeight))
-                    Lvalue = QtGui.QLabel(GroupBox)
-                    Lvalue.setAlignment(QtCore.Qt.AlignLeft) 
-                    Lvalue.setMaximumSize(QtCore.QSize(maxWidth, maxHeight))
-                    HLcontent.addWidget(Loption) 
-                    HLcontent.addWidget(Lvalue) 
-                    widget = QtGui.QWidget(GroupBox) 
-                    widget.setLayout(HLcontent) 
-                    widget.setMaximumSize(QtCore.QSize(maxWidth, maxHeight)) 
-                    GroupBoxLayout.addWidget(widget) 
-            spacer = QtGui.QLabel(GroupBox) 
-            GroupBoxLayout.addWidget(spacer)
+                    horizontal_layout_content = QtGui.QHBoxLayout() 
+                    horizontal_layout_content.setContentsMargins(0, 0, 0, 0) 
+                    horizontal_layout_content.setSpacing(0) 
+                    label_option = QtGui.QLabel(groupbox) 
+                    label_option.setText(u"%s:" % option) 
+                    label_option.setAlignment(QtCore.Qt.AlignLeft) 
+                    label_option.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    label_value = QtGui.QLabel(groupbox)
+                    label_value.setAlignment(QtCore.Qt.AlignLeft) 
+                    label_value.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    horizontal_layout_content.addWidget(label_option) 
+                    horizontal_layout_content.addWidget(label_value) 
+                    widget = QtGui.QWidget(groupbox) 
+                    widget.setLayout(horizontal_layout_content) 
+                    widget.setMaximumSize(QtCore.QSize(max_width, max_height)) 
+                    groupbox_layout.addWidget(widget) 
+            spacer = QtGui.QLabel(groupbox) 
+            groupbox_layout.addWidget(spacer)
     
     def changeDataType(self):
         """
-        Changes received data type, calling createReceivedDataLabels() for the selected data type (beacon, tltc, etc.).
+        Changes received DATA type, calling createReceivedDataLabels() for the selected DATA type (beacon, tltc, etc.).
         """
-        self.data = [data[1].data for data in self.optionsData if data[0] == str(self.ui.CBrectype.currentText())][0]
+        self.data = [DATA[1].data for DATA in self.OPTIONS_DATA if DATA[0] == str(self.ui.CBrectype.currentText())][0]
         self.createReceivedDataLabels()
         
     def changeDataShowMode(self):
         """
-        Changes data show mode, enabling/disabling file open button.
+        Changes DATA show mode, enabling/disabling file open button.
         """
-        CBindex = self.ui.CBdatashow.currentIndex()
-        self.dataShowMode = dataShowOptions[CBindex]
-        if self.dataShowMode == "From file":
+        cb_index = self.ui.CBdatashow.currentIndex()
+        self.data_show_mode = DATA_SHOW_OPTIONS[cb_index]
+        if self.data_show_mode == "From file":
             self.ui.Bdataopen.setEnabled(True)
             self.ui.Ldatashowfile.setEnabled(True)
         else:
@@ -168,28 +168,28 @@ class ControlTabReceived(object):
             
     def openReceivedData(self):
         """
-        Loads received data from a file, reading its content and showing it in the tab.
+        Loads received DATA from a file, reading its content and showing it in the tab.
         """
-        filename = QtGui.QFileDialog.getOpenFileName(title="Load Received Data",dir=pathToReceivedData,filter="Raw data (*.raw)")[0]
+        filepath = QtGui.QFileDialog.getOpenFileName(title="Load Received Data",dir=PATH_TO_RECEIVED_DATA,filter="Raw DATA (*.raw)")[0]
         try:
-            f = open(filename, "r")
+            f = open(filepath, "r")
             text = f.read()
             f.close()
             # LEITURA DOS DADOS (text)
-            dataShowOpenedFilename = filename.split("/")[-1]
-            self.ui.Ldatashowfile.setText(dataShowOpenedFilename)
+            filename = filepath.split("/")[-1]
+            self.ui.Ldatashowfile.setText(filename)
         except:
             pass
     
     def showData(self):
         """
-        Shows "Current" or "From file" data in the tab.
+        Shows "Current" or "From file" DATA in the tab.
         """
-        if self.dataShowMode == "Current":
-            data = self.lastReceivedData
-        elif self.dataShowMode == "From file":
+        if self.data_show_mode == "Current":
+            DATA = self.last_received_data
+        elif self.data_show_mode == "From file":
             pass#da outro jeito de pegar os dados
-        #Agora mostra os dados da variavel "data"
+        #Agora mostra os dados da variavel "DATA"
         
     def clearTabWidget(self):
         """

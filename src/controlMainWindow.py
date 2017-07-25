@@ -67,10 +67,10 @@ class ControlMainWindow(QtGui.QMainWindow):
         """
         Instances and initializes tab control classes.
         """
-        self.CtrlFlight = ControlTabFlight(self.ui)
-        self.CtrlRequest = ControlTabRequest(self.ui)
-        self.CtrlReceived = ControlTabReceived(self.ui)
-        self.CtrlSignal = ControlTabSignal(self.ui)
+        self.ctrl_flight = ControlTabFlight(self.ui)
+        self.ctrl_request = ControlTabRequest(self.ui)
+        self.ctrl_received = ControlTabReceived(self.ui)
+        self.ctrl_signal = ControlTabSignal(self.ui)
         
     def setupButtons(self):
         """
@@ -82,21 +82,21 @@ class ControlMainWindow(QtGui.QMainWindow):
         """
         Sets toolbar buttons icon and connects them to functions.
         """
-        self.iconStart = QtGui.QIcon()
-        self.iconStart.addPixmap(QtGui.QPixmap("../img/icon/media-playback-start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBstartsdr.setIcon(self.iconStart)
-        self.iconPing = QtGui.QIcon()
-        self.iconPing.addPixmap(QtGui.QPixmap("../img/icon/reload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBping.setIcon(self.iconPing)
-        self.iconSendRequest = QtGui.QIcon()
-        self.iconSendRequest.addPixmap(QtGui.QPixmap("../img/icon/go-up.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBsendreq.setIcon(self.iconSendRequest)
-        self.iconSendDataRead = QtGui.QIcon()
-        self.iconSendDataRead.addPixmap(QtGui.QPixmap("../img/icon/go-home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBsenddataread.setIcon(self.iconSendDataRead)
-        self.iconConfig = QtGui.QIcon()
-        self.iconConfig.addPixmap(QtGui.QPixmap("../img/icon/document-properties.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBconfig.setIcon(self.iconConfig)
+        self.icon_start = QtGui.QIcon()
+        self.icon_start.addPixmap(QtGui.QPixmap("../img/icon/media-playback-start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBstartsdr.setIcon(self.icon_start)
+        self.icon_ping = QtGui.QIcon()
+        self.icon_ping.addPixmap(QtGui.QPixmap("../img/icon/reload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBping.setIcon(self.icon_ping)
+        self.icon_send_request = QtGui.QIcon()
+        self.icon_send_request.addPixmap(QtGui.QPixmap("../img/icon/go-up.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBsendreq.setIcon(self.icon_send_request)
+        self.icon_send_data_read = QtGui.QIcon()
+        self.icon_send_data_read.addPixmap(QtGui.QPixmap("../img/icon/go-home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBsenddataread.setIcon(self.icon_send_data_read)
+        self.icon_config = QtGui.QIcon()
+        self.icon_config.addPixmap(QtGui.QPixmap("../img/icon/document-properties.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBconfig.setIcon(self.icon_config)
     
     def setupMenuActions(self):
         """

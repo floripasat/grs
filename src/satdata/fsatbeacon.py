@@ -38,4 +38,4 @@ BEACON = [
                              "Weapon"]],
           ]
 
-data = [["Beacon",BEACON]]
+DATA = [["Beacon",BEACON]]

@@ -105,4 +105,4 @@ PAYLOADS = [
         ["RUSH",             ["RUSH Data"]],
     ]
 
-data = [["OBDH",OBDH],["EPS",EPS],["TTC",TTC],["Payloads",PAYLOADS]]
+DATA = [["OBDH",OBDH],["EPS",EPS],["TTC",TTC],["Payloads",PAYLOADS]]
