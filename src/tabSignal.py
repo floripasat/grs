@@ -35,9 +35,13 @@ __status__      = "Prototype"
 
 from PySide import QtCore, QtGui
 
+
 class ControlTabSignal(object):
     """
     Controls all tab flight interface features.
+    
+    Attributes:
+        ui: UI instance from the class instancer.
     """
     def __init__(self, ui):
         """

@@ -44,15 +44,29 @@ pathToReceivedData = "received/"
 
 def getFolderFiles(folder_path):
     """
-    Returns a list of path to files (string) from a folder.
+    Fetches a list of path to files (string) from a folder.
+
+    Args:
+        folder_path: a string representing the path to the folder
+        
+    Returns:
+        A list of path to files in the folder
     """
     allfiles = listdir(folder_path)
     onlyfiles = [f for f in allfiles if isfile(join(folder_path, f))]
     return onlyfiles
 
+
 class ControlTabReceived(object):
     """
     Controls all tab received interface features.
+    
+    Attributes:
+        ui: UI instance from the class instancer.
+        optionsData: A list that represents what where at received combobox data type selector.
+        data: A list of lists of ordered requestable data.
+        dataShowMode: A string representing the current data show mode.
+        lastReceivedData: A string containing last received data from satellite.
     """
     def __init__(self, ui):
         '''

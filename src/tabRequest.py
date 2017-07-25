@@ -36,9 +36,16 @@ __status__      = "Prototype"
 from PySide import QtCore, QtGui
 from satdata import fsattltc
 
+
 class ControlTabRequest(object):
     """
     Controls all tab request interface features.
+    
+    Attributes:
+        ui: UI instance from the class instancer.
+        optionsData: A list that represents what where at request combobox data type selector.
+        data: A list of lists of ordered requestable data.
+        requestData: A list of request data gathered from checkboxes.
     """
     def __init__(self, ui):
         """

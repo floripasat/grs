@@ -46,6 +46,9 @@ from tabSignal import ControlTabSignal
 class ControlMainWindow(QtGui.QMainWindow):
     """
     Main class, it manage other classes and main window features.
+    
+    Attributes:
+        ui: UI instance.
     """
     def __init__(self, parent=None):
         """

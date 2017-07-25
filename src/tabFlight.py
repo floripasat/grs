@@ -38,9 +38,13 @@ from PySide import QtCore, QtGui
 mainMap = "worldmap-lq"
 mapFolder = "../img/"
 
+
 class ControlTabFlight(object):
     """
     Controls all tab flight interface features.
+    
+    Attributes:
+        ui: UI instance from the class instancer.
     """
     def __init__(self, ui):
         """
