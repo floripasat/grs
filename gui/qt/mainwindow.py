@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Jul 24 11:28:34 2017
+# Created: Mon Jul 24 11:31:28 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,6 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1135, 811)
-        MainWindow.setWindowTitle("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../../img/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -441,6 +440,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Floripasat Groundstation", None, QtGui.QApplication.UnicodeUTF8))
         self.Lsdrdvc.setText(QtGui.QApplication.translate("MainWindow", "SDR Device:", None, QtGui.QApplication.UnicodeUTF8))
         self.Lsdrrate.setText(QtGui.QApplication.translate("MainWindow", "Sample rate:", None, QtGui.QApplication.UnicodeUTF8))
         self.TBstartsdr.setToolTip(QtGui.QApplication.translate("MainWindow", "Start/Stop SDR", None, QtGui.QApplication.UnicodeUTF8))
