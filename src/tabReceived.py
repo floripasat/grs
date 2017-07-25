@@ -71,6 +71,9 @@ class ControlTabReceived(object):
     def __init__(self, ui):
         '''
         Initializes tab features.
+        
+        Args:
+            ui: UI interface instance.
         '''
         super(ControlTabReceived, self).__init__()
         self.ui = ui

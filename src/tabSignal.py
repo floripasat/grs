@@ -46,6 +46,9 @@ class ControlTabSignal(object):
     def __init__(self, ui):
         """
         Initializes tab features.
+        
+        Args:
+            ui: UI interface instance.
         """
         super(ControlTabSignal, self).__init__()
         self.ui = ui

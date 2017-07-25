@@ -49,6 +49,9 @@ class ControlTabFlight(object):
     def __init__(self, ui):
         """
         Initializes tab features.
+        
+        Args:
+            ui: UI interface instance.
         """
         super(ControlTabFlight, self).__init__()
         self.ui = ui
@@ -64,6 +67,9 @@ class ControlTabFlight(object):
     def setWorldMap(self, img_name):
         """
         Change world map picture.
+        
+        Args:
+            img_name: A string containg the worldmap image name.
         """
         img_path = "%s.jpg" % (MAP_FOLDER+img_name)
         pixmap = QtGui.QPixmap(img_path)

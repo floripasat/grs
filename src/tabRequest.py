@@ -50,6 +50,9 @@ class ControlTabRequest(object):
     def __init__(self, ui):
         """
         Initializes tab features.
+        
+        Args:
+            ui: UI interface instance.
         """
         super(ControlTabRequest, self).__init__()
         self.ui = ui        
