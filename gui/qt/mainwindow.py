@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Jul 24 11:31:28 2017
+# Created: Tue Jul 25 16:34:19 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1135, 811)
+        MainWindow.resize(1135, 844)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../../img/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -131,7 +131,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.SBbeaconfreq.sizePolicy().hasHeightForWidth())
         self.SBbeaconfreq.setSizePolicy(sizePolicy)
-        self.SBbeaconfreq.setDecimals(3)
+        self.SBbeaconfreq.setDecimals(4)
         self.SBbeaconfreq.setMinimum(1.0)
         self.SBbeaconfreq.setMaximum(999.999)
         self.SBbeaconfreq.setProperty("value", 1.0)
@@ -164,7 +164,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.SBtltcfreq.sizePolicy().hasHeightForWidth())
         self.SBtltcfreq.setSizePolicy(sizePolicy)
-        self.SBtltcfreq.setDecimals(3)
+        self.SBtltcfreq.setDecimals(4)
         self.SBtltcfreq.setMinimum(1.0)
         self.SBtltcfreq.setMaximum(999.99)
         self.SBtltcfreq.setProperty("value", 1.0)
