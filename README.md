@@ -5,20 +5,20 @@ The software of the ground segment of the FloripaSat project.
 
 ## Dependencies
 
-* A.
+* PySide
 
 ## GUI Design
 
-* Qt 5.x
-* Qt Creator x.x
+* Qt 4.8.7
+* Qt Designer 4.8.7
 
 ## Compiling
 
-A.
+No compiling, its a python project.
 
 ## Installation
 
-A.
+No installation required, just run with python main.py on 'src' folder.
 
 ## References
 
