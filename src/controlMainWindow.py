@@ -76,7 +76,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         """
         Connects all main window buttons to functions.
         """
-        pass
+        self.ui.TBstartsdr.clicked.connect(self.ctrl_signal.toggleSDR)
     
     def setupIcons(self):
         """

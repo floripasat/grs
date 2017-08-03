@@ -1,5 +1,5 @@
 """
-
+Manage a single graph,containing FTT and Waterfall from a SDR.
 """
 
 #
@@ -37,14 +37,14 @@ from PySide import QtCore, QtGui
 from pyqtgraph.Qt import QtGui, QtCore
 import numpy as np
 import pyqtgraph as pg
-from rtlsdr import RtlSdr
 
-class ControlSignal(object):
+
+class ControlSignalGraph(object):
     """
-    Controls SDR signal and plot it in a widget.
+    Control signal graph. It creates a graph and plots into it the FFT and Waterfall signal read on SDR.
     
     Attributes:
-        widget: QWidget instance, where the graph will be.
+        widget: QWidget object, where the graph will be created.
         sample_rate: Int value of the SDR sample rate.
         center_freq: Int value of the SDR center (desired) frequency.
         sample_size: Int value of the SDR sample size.
@@ -52,19 +52,19 @@ class ControlSignal(object):
         timer_period: Int value of the QTimer timer period, in miliseconds.
         min_fft_y: Int minimum FFT Y graph value.
         max_fft_y: Int minimum FFT Y graph value.
-        pw_fft: Pyqtgraph PlotWidget instance of the FFT.
-        pw_waterfall: Pyqtgraph PlotWidget instance of the Waterfall.
-        plot_fft: Pyqtgraph PlotWidget PlotItem instance of pw_fft, witch plots the FFT graph.
-        plot_waterfll: Pyqtgraph PlotWidget PlotItem instance of pw_waterfall, witch plots the Waterfall graph.
-        sdr: RtlSdr instance witch controls the SDR.
+        pw_fft: Pyqtgraph PlotWidget object of the FFT.
+        pw_waterfall: Pyqtgraph PlotWidget object of the Waterfall.
+        plot_fft: Pyqtgraph PlotWidget PlotItem object of pw_fft, witch plots the FFT graph.
+        plot_waterfll: Pyqtgraph PlotWidget PlotItem object of pw_waterfall, witch plots the Waterfall graph.
         timer: QTimer object, witch calls the graph to update every timer_period miliseconds.
-        sdr_index: Int value of the SDR device index.
-        _sdr_initiated: Bool representing if RtlSdr instance have already started.
-        _sdr_running: Bool representing if SDR is being used by this software.
     """
-    def __init__(self, widget):
+    def __init__(self, widget, ctrl_sdr):
         """
-        Default values initialization, interface creation and timer instance creation
+        Default values initialization, interface creation and timer instance creation.
+        
+        Args:
+            widget: QWidget instance, where the graph will be created.
+            ctrl_sdr: ControlSDR instance.
         """
         self.widget = widget
         self.sample_rate = 2.4e6
@@ -77,13 +77,11 @@ class ControlSignal(object):
         self.createInterface()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.updateData)
-        self.sdr_index = 0
-        self._sdr_initiated = False
-        self._sdr_running = False
+        self.ctrl_sdr = ctrl_sdr
         
     def createInterface(self):
         """
-        Create interface and plot widget objects in order to show two plots: FFT and Waterfall
+        Create interface and plot widget objects in order to show two plots: FFT and Waterfall.
         """
         layout = QtGui.QVBoxLayout()
         self.widget.setLayout(layout)
@@ -98,36 +96,26 @@ class ControlSignal(object):
         self.pw_fft.setYRange(self.min_fft_y,self.max_fft_y)
         self.pw_fft.setMouseEnabled(x=False, y=False)
     
-    def start(self):
+    def startPlotting(self):
         """
         It connects to SDR and start the timer in order to start showing data on the graphs.
         """
-        if not self._sdr_running:
-            if self._sdr_initiated:
-                self.sdr.open(device_index=self.sdr_index)
-            else:
-                self.sdr = RtlSdr(device_index=self.sdr_index)
-                self._sdr_initiated = True
-            self.sdr.sample_rate = self.sample_rate
-            self.sdr.center_freq = self.center_freq
-            self.sdr.gain = self.gain
+        if self.ctrl_sdr.isRunning():
+            self.ctrl_sdr.setParameters(self.sample_rate, self.center_freq, self.gain)
             self.timer.start(self.timer_period)
-            self._sdr_running = True
+        
     
-    def stop(self):
+    def stopPlotting(self):
         """
         Stop showing data, disconects from SDR and stop the timer.
         """
-        if self._sdr_running:
-            self.sdr.close()
-            self.timer.stop()
-            self._sdr_running = False
+        self.timer.stop()
 
     def updateData(self):
         """
         Update a frame to the graphs (FFT and Waterfall).
         """
-        samples = self.sdr.read_samples(self.sample_size)
+        samples = self.ctrl_sdr.readSamples(self.sample_size)
         fft = np.fft.fft(samples)
         amplitude = np.absolute(fft)
         self.redefineFFTScale(amplitude)
