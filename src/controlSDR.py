@@ -69,7 +69,7 @@ class ControlSDR(object):
         self.sdr.close()
         self.running = False
     
-    def setParameters(self, sample_rate, center_freq, gain):
+    def setParameters(self, sample_rate, center_freq, bandwidth, gain):
         """
         Set sample rate, center frequency and gain parameters on SDR.
         
@@ -80,14 +80,8 @@ class ControlSDR(object):
         """
         self.sdr.sample_rate = sample_rate
         self.sdr.center_freq = center_freq
+        self.sdr.set_bandwidth(bandwidth)
         self.sdr.gain = gain
-    
-    def isRunning(self):
-        """
-        Returns:
-            A bool value representing if SDR is running (openned).
-        """
-        return self.running
     
     def readSamples(self, sample_size):
         """
@@ -106,3 +100,10 @@ class ControlSDR(object):
         Set a new index for loading SDR device.
         """
         self.index = value
+        
+    def isRunning(self):
+        """
+        Returns:
+            A bool value representing if SDR is running (openned).
+        """
+        return self.running

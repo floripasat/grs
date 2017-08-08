@@ -38,7 +38,7 @@ from controlSignalGraph import ControlSignalGraph
 from controlSDR import ControlSDR
 
 
-BEACON_FREQ = 145.9e6
+BEACON_FREQ = 100.9e6#145.9e6
 BEACON_SDR_INDEX = 0
 TLTC_FREQ = 437.9e6
 TLTC_SDR_INDEX = 0
@@ -95,7 +95,6 @@ class ControlTabSignal(object):
         Setups signal connections and button actions.
         """
         QtCore.QObject.connect(self.ui.TWsignal, QtCore.SIGNAL("currentChanged(int)"), self.changeSignalType)
-        print "set"
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+B"), self.ui.tabSignal, self.startBeacon, context=self.ui.tabSignal)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+T"), self.ui.tabSignal, self.startTLTC, context=self.ui.tabSignal)
     
@@ -148,7 +147,7 @@ class ControlTabSignal(object):
         """
         Plots the signal (FFT and Waterfall) in the selected tab graph.
         """
-        if self.singal_type == "beacon":
+        if self.signal_type == "beacon":
             self.csg_tltc.stopPlotting()
             self.csg_beacon.startPlotting()
         elif self.signal_type == "tltc":
