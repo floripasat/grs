@@ -69,7 +69,7 @@ class ControlSDR(object):
         self.sdr.close()
         self.running = False
     
-    def setParameters(self, sample_rate, center_freq, bandwidth, gain):
+    def setParameters(self, sample_rate, center_freq, gain):
         """
         Set sample rate, center frequency and gain parameters on SDR.
         
@@ -80,7 +80,6 @@ class ControlSDR(object):
         """
         self.sdr.sample_rate = sample_rate
         self.sdr.center_freq = center_freq
-        self.sdr.set_bandwidth(bandwidth)
         self.sdr.gain = gain
     
     def readSamples(self, sample_size):

@@ -46,8 +46,8 @@ class ControlSignalGraph(object):
     Attributes:
         widget: QWidget object, where the graph will be created.
         sample_rate: Int value of the SDR sample rate.
-        center_freq: Int value of the SDR center (desired) frequency.
         sample_size: Int value of the SDR sample size.
+        center_freq: Int value of the SDR center frequency.
         gain: Int value of the SDR gain.
         timer_period: Int value of the QTimer timer period, in miliseconds.
         min_fft_y: Int minimum FFT Y graph value.
@@ -57,24 +57,27 @@ class ControlSignalGraph(object):
         plot_spectrum: Pyqtgraph PlotWidget PlotItem object of pw_spectrum, witch plots the FFT graph.
         plot_waterfll: Pyqtgraph PlotWidget PlotItem object of pw_waterfall, witch plots the Waterfall graph.
         timer: QTimer object, witch calls the graph to update every timer_period miliseconds.
+        ctrl_sdr: ControlSDR object to control sdr parameters and read data.
     """
-    def __init__(self, widget, ctrl_sdr):
+    def __init__(self, widget, ctrl_sdr, sample_rate = 1e6, sample_size = 1024, center_freq = 100.9e6):
         """
         Default values initialization, interface creation and timer instance creation.
         
         Args:
             widget: QWidget instance, where the graph will be created.
             ctrl_sdr: ControlSDR instance.
+            sample_rate: Int value of the SDR sample rate.
+            sample_size: Int value of the SDR sample size.
+            center_freq: Int value of the SDR center frequency.
         """
         self.widget = widget
-        self.sample_rate = 2.4e6
-        self.center_freq = 100.9e6
-        self.bandwidth = 10e6
-        self.sample_size = 1024
-        self.gain = 4
+        self.sample_rate = sample_rate
+        self.sample_size = sample_size
+        self.center_freq = center_freq
+        self.gain = 1
         self.timer_period = 100
         self.min_fft_y = -1
-        self.max_fft_y = 50
+        self.max_fft_y = 100
         self.history_size = 100
         self.low_waterfall = 1
         self.high_waterfall = 30
@@ -90,26 +93,39 @@ class ControlSignalGraph(object):
         """
         layout = QtGui.QVBoxLayout()
         self.widget.setLayout(layout)
-        self.pw_spectrum = pg.PlotWidget(name='Plotion of heart')
-        layout.addWidget(self.pw_spectrum)
-        self.pw_waterfall = pg.PlotWidget(name='Plotion of water')
-        layout.addWidget(self.pw_waterfall)
+        graphics_layout = pg.GraphicsLayoutWidget()
+        layout.addWidget(graphics_layout)
+        self.pw_spectrum = pg.PlotItem(name='Plotion of soul')
+        self.pw_waterfall = pg.PlotItem(name='Plotion of water')
+        graphics_layout.addItem(self.pw_spectrum)
+        graphics_layout.nextRow()
+        graphics_layout.addItem(self.pw_waterfall)
         self.plot_spectrum = self.pw_spectrum.plot()
         self.pw_spectrum.setLabel('left', 'Relative Power', units='dB')
         self.pw_spectrum.setLabel('bottom', 'Frequency', units='Hz')
         self.pw_spectrum.setYRange(self.min_fft_y,self.max_fft_y)
+        self.pw_spectrum.setXRange(self.center_freq - self.sample_rate/2, self.center_freq + self.sample_rate/2)
         self.pw_spectrum.setMouseEnabled(x=False, y=False)
+        self.lpf_spectrum = pg.LinearRegionItem([self.center_freq-self.sample_rate/8,self.center_freq+self.sample_rate/8])
+        self.lpf_spectrum.setZValue(-10)
+        self.pw_spectrum.addItem(self.lpf_spectrum)
         self.pw_waterfall.setLabel("bottom", "Frequency", units="Hz")
-        self.pw_waterfall.setLabel("left", "Time", units="s")
-        #self.pw_waterfall.setYRange(-self.history_size, 0)
+        self.pw_waterfall.setLabel("left", "Time")
+        self.pw_waterfall.hideAxis('bottom')
         self.pw_waterfall.setLimits(xMin=0, yMax=0)
         self.pw_waterfall.setMouseEnabled(x=False, y=False)
+        pg.setConfigOptions(antialias=True)
+
     
     def setupWaterfall(self):
+        """
+        Setups waterfall image. Sets graph scale, position, color, levels and creates waterfallImgArray.
+        """
         self.waterfallImg = pg.ImageItem()
         self.pw_waterfall.clear()
         self.pw_waterfall.addItem(self.waterfallImg)
         
+        # Calculate parameters
         window_size = self.pw_waterfall.width()
         self.waterfall_counter = 0
         nyquist = self.sample_rate / 2
@@ -120,25 +136,26 @@ class ControlSignalGraph(object):
         self.low_index = int(np.floor(self.low_waterfall / freq_step))
         self.high_index = int(np.ceil(self.high_waterfall / freq_step))
 
+        # Set waterfall levels and colors
+        pos = np.array([0., 1., 0.5, 0.25, 0.75])
+        color = np.array([[0,255,255,255], [255,255,0,255], [0,0,0,255], (0, 0, 255, 255), (255, 0, 0, 255)], dtype=np.ubyte)
+        cmap = pg.ColorMap(pos, color)
+        lut = cmap.getLookupTable(0.0, 1.0, 256)
+        self.waterfallImg.setLookupTable(lut)
+        self.waterfallImg.setLevels([-100,800])
+
         # Snap values to actual bin frequencies
         self.low_waterfall = freq_step * self.low_index
         self.high_waterfall = freq_step * self.high_index
-
         display_bins = self.high_index - self.low_index
-
-        """
-        self.waterfallImgArray = np.zeros((self.history_size, display_bins))
-        history_time = self.history_size / self.sample_rate * self.timer_period
-        self.waterfallImg.resetTransform()
-        self.waterfallImg.setPos(self.low_waterfall, -history_time)
-        self.waterfallImg.scale((self.high_waterfall - self.low_waterfall) / display_bins, history_time / self.history_size)
-        """
+        
+        # Set waterfall position and scale
         self.waterfallImgArray = np.zeros((self.history_size, self.sample_size))
         history_time = self.history_size / self.sample_rate * self.timer_period / 1000
         self.waterfallImg.resetTransform()
-        self.waterfallImg.setPos(self.center_freq, -history_time)
+        self.waterfallImg.setPos(self.center_freq - self.sample_rate/2, -history_time)
         self.waterfallImg.scale((self.high_waterfall - self.low_waterfall) / display_bins, history_time / self.history_size)
-        #self.waterfallImg.scale((self.high_waterfall - self.low_waterfall) / self.sample_size, history_time / self.history_size)
+        
 
     def updateData(self):
         """
@@ -148,21 +165,20 @@ class ControlSignalGraph(object):
         
         # UPDATE FFT
         fft = np.fft.fft(samples, self.sample_size)
-        amplitude = np.absolute(fft)
+        amplitude = np.absolute(fft)/10
         
+        # UPDATE FREQ SCALE
         sample_spacing = 1/self.sample_rate
         freq = np.fft.fftfreq(self.sample_size,sample_spacing)
         
+        # SORTING X (FREQUENCY) AND Y (AMPLITUDE) ARRAYS
         argsort = freq.argsort()
         freq_sorted = freq[argsort]
         amplitude_sorted = amplitude[argsort]
         freq_scale = freq_sorted + self.center_freq
         
-        
         # UPDATE SPECTRUM
-        #freq_sorted = np.sort(freq)
         self.redefineSpectrumScale(amplitude_sorted)
-        #freq_scale = np.linspace(self.center_freq-self.sample_rate/2, self.center_freq+self.sample_rate/2, num=self.sample_size)
         self.plot_spectrum.setData(x = freq_scale, y = amplitude_sorted)
         
         # UPDATE WATERFALL
@@ -188,7 +204,7 @@ class ControlSignalGraph(object):
         It connects to SDR and start the timer in order to start showing data on the graphs.
         """
         if self.ctrl_sdr.isRunning():
-            self.ctrl_sdr.setParameters(self.sample_rate, self.center_freq, self.bandwidth, self.gain)
+            self.ctrl_sdr.setParameters(self.sample_rate, self.center_freq, self.gain)
             self.timer.start(self.timer_period)
     
     def stopPlotting(self):
@@ -218,9 +234,6 @@ class ControlSignalGraph(object):
     def setMaxFFTY(self, value):
         self.max_fft_y = value
     
-    def setSDRIndex(self, value):
-        self.sdr_index = value
-    
     def getSampleRate(self):
         return self.sample_rate
     
@@ -241,6 +254,3 @@ class ControlSignalGraph(object):
     
     def getMaxFFTY(self):
         return self.max_fft_y
-    
-    def getSDRIndex(self):
-        return self.sdr_index

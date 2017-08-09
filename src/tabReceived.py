@@ -153,7 +153,7 @@ class ControlTabReceived(object):
         """
         Changes received DATA type, calling createReceivedDataLabels() for the selected DATA type (beacon, tltc, etc.).
         """
-        self.data = [DATA[1].data for DATA in self.OPTIONS_DATA if DATA[0] == str(self.ui.CBrectype.currentText())][0]
+        self.data = [DATAM[1].DATA for DATAM in self.OPTIONS_DATA if DATAM[0] == str(self.ui.CBrectype.currentText())][0]
         self.createReceivedDataLabels()
         
     def changeDataShowMode(self):

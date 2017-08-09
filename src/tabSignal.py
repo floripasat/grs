@@ -39,19 +39,21 @@ from controlSDR import ControlSDR
 
 
 BEACON_FREQ = 100.9e6#145.9e6
-BEACON_SDR_INDEX = 0
 TLTC_FREQ = 437.9e6
-TLTC_SDR_INDEX = 0
-SAMPLE_RATE = 2.4e6
+SAMPLE_RATE = 1e6
 SAMPLE_SIZE = 1024
 
 
 class ControlTabSignal(object):
     """
-    Controls all tab flight interface features.
+    Controls all tab signal interface features.
     
     Attributes:
         ui: UI instance from the class instancer.
+        signal_type: string containing signal type.
+        ctrl_sdr: ControlSDR object to control sdr parameters and read data.
+        csg_beacon: ControlSignalGraph object that controls tabBeacon graphs: signal spectrum and watefall.
+        csg_tltc: ControlSignalGraph object that controls tabTLTC graphs: signal spectrum and watefall.
     """
     def __init__(self, ui):
         """
@@ -72,16 +74,8 @@ class ControlTabSignal(object):
         """
         self.signal_type = "beacon"
         self.ctrl_sdr = ControlSDR()
-        self.csg_beacon = ControlSignalGraph(self.ui.tabBeacon, self.ctrl_sdr)
-        self.csg_tltc = ControlSignalGraph(self.ui.tabTLTC, self.ctrl_sdr)
-        self.csg_beacon.setCenterFreq(BEACON_FREQ)
-        self.csg_beacon.setSampleRate(SAMPLE_RATE)
-        self.csg_beacon.setSampleSize(SAMPLE_SIZE)
-        self.csg_beacon.setSDRIndex(BEACON_SDR_INDEX)
-        self.csg_tltc.setCenterFreq(TLTC_FREQ)
-        self.csg_tltc.setSampleRate(SAMPLE_RATE)
-        self.csg_tltc.setSampleSize(SAMPLE_SIZE)
-        self.csg_tltc.setSDRIndex(TLTC_SDR_INDEX)
+        self.csg_beacon = ControlSignalGraph(self.ui.tabBeacon, self.ctrl_sdr, SAMPLE_RATE, SAMPLE_SIZE, BEACON_FREQ)
+        self.csg_tltc = ControlSignalGraph(self.ui.tabTLTC, self.ctrl_sdr, SAMPLE_RATE, SAMPLE_SIZE, TLTC_FREQ)
     
     def setupTab(self):
         """
@@ -89,7 +83,7 @@ class ControlTabSignal(object):
         """
         self.ui.SBbeaconfreq.setValue(BEACON_FREQ/1e6)
         self.ui.SBtltcfreq.setValue(TLTC_FREQ/1e6)
-    
+     
     def setupActions(self):
         """
         Setups signal connections and button actions.
