@@ -34,117 +34,100 @@ __email__       = "samuelnoll96@gmail.com"
 __status__      = "Prototype"
 
 from PySide import QtCore, QtGui
-from controlSignalGraph import ControlSignalGraph
-from controlSDR import ControlSDR
+from signalGraphWidget import SignalGraphWidget
 
 
-BEACON_FREQ = 100.9e6#145.9e6
+BEACON_FREQ = 145.9e6
 TLTC_FREQ = 437.9e6
 SAMPLE_RATE = 1e6
 SAMPLE_SIZE = 1024
+GAIN = 4
+TIMER_PERIOD = 100
 
 
 class ControlTabSignal(object):
-    """
-    Controls all tab signal interface features.
+    """Controls all tab signal interface features.
     
     Attributes:
         ui: UI instance from the class instancer.
+        ctrl_tab_signal: control signal object.
         signal_type: string containing signal type.
         ctrl_sdr: ControlSDR object to control sdr parameters and read data.
         csg_beacon: ControlSignalGraph object that controls tabBeacon graphs: signal spectrum and watefall.
         csg_tltc: ControlSignalGraph object that controls tabTLTC graphs: signal spectrum and watefall.
     """
-    def __init__(self, ui):
-        """
-        Initializes tab features.
+    def __init__(self, ui, ctrl_signal):
+        """Initializes tab features.
         
         Args:
             ui: UI interface instance.
         """
         super(ControlTabSignal, self).__init__()
         self.ui = ui
+        self.ctrl_signal = ctrl_signal
         self.setupTab()
         self.setupActions()
-        self.setupControlGraphs()
-    
-    def setupControlGraphs(self):
-        """
-        Instances tabBeacon and tabTLTC graph controls and set default values.
-        """
         self.signal_type = "beacon"
-        self.ctrl_sdr = ControlSDR()
-        self.csg_beacon = ControlSignalGraph(self.ui.tabBeacon, self.ctrl_sdr, SAMPLE_RATE, SAMPLE_SIZE, BEACON_FREQ)
-        self.csg_tltc = ControlSignalGraph(self.ui.tabTLTC, self.ctrl_sdr, SAMPLE_RATE, SAMPLE_SIZE, TLTC_FREQ)
     
     def setupTab(self):
-        """
-        Setups tab content.
-        """
+        """Setups tab content."""
         self.ui.SBbeaconfreq.setValue(BEACON_FREQ/1e6)
         self.ui.SBtltcfreq.setValue(TLTC_FREQ/1e6)
+        self.ctrl_signal.setCenterFreq(BEACON_FREQ)
+        self.ctrl_signal.setSampleRate(SAMPLE_RATE)
+        self.ctrl_signal.setSampleSize(SAMPLE_SIZE)
+        self.ctrl_signal.setGain(GAIN)
+        self.ctrl_signal.setTimerPeriod(TIMER_PERIOD)
+        self.gw_beacon = SignalGraphWidget(self.ctrl_signal, TIMER_PERIOD)
+        self.gw_tltc = SignalGraphWidget(self.ctrl_signal, TIMER_PERIOD)
+        beaconLayout = QtGui.QVBoxLayout()
+        beaconLayout.addWidget(self.gw_beacon)
+        tltcLayout = QtGui.QVBoxLayout()
+        tltcLayout.addWidget(self.gw_tltc)
+        self.ui.tabBeacon.setLayout(beaconLayout)
+        self.ui.tabTLTC.setLayout(tltcLayout)
      
     def setupActions(self):
-        """
-        Setups signal connections and button actions.
-        """
+        """Setups signal connections and button actions."""
         QtCore.QObject.connect(self.ui.TWsignal, QtCore.SIGNAL("currentChanged(int)"), self.changeSignalType)
-        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+B"), self.ui.tabSignal, self.startBeacon, context=self.ui.tabSignal)
-        QtGui.QShortcut(QtGui.QKeySequence("Ctrl+T"), self.ui.tabSignal, self.startTLTC, context=self.ui.tabSignal)
     
-    def startBeacon(self):
-        """
-        Starts showing Beacon signal and, if needed, stops at TLTC.
-        """
-        self.csg_tltc.stopPlotting()
-        self.csg_beacon.startPlotting()
-    
-    def startTLTC(self):
-        """
-        Starts showing TLTC signal and, if needed, stops at Beacon.
-        """
-        self.csg_beacon.stopPlotting()
-        self.csg_tltc.startPlotting()
+    def plotSignalGraph(self):
+        if self.signal_type == "beacon":
+            self.gw_beacon.startPlot()
+            self.gw_tltc.stopPlot()
+        elif self.signal_type == "tltc":
+            self.gw_tltc.startPlot()
+            self.gw_beacon.stopPlot()
+            
     
     def toggleSDR(self):
-        """
-        Open/close SDRa and stops plotting graphs.
-        """
-        if self.ctrl_sdr.isRunning():
-            self.csg_beacon.stopPlotting()
-            self.csg_tltc.stopPlotting()
+        """Open/close SDRa and stops plotting graphs."""
+
+        if self.ctrl_signal.isRunning():
+            self.gw_beacon.stopPlot()
+            self.gw_tltc.stopPlot()
             try:
-                self.ctrl_sdr.close()
+                self.ctrl_signal.close()
             except:
                 pass
         else:
             try:
-                self.ctrl_sdr.open()
+                self.ctrl_signal.open()
                 self.plotSignalGraph()
             except:
-                pass#Emit eventlog signal
+                pass#Emit eventlog signal - SDR load failure
 
     def changeSignalType(self):
-        """
-        Changes self.signal_type value depending on the current tab. It also changes plot location if SDR is running.
+        """Changes self.signal_type value depending on the current tab. It also changes plot location if SDR is running.
         This functions is supposed to be called when the signal tab changes.
         """
         tab_index = self.ui.TWsignal.currentIndex()
         if tab_index == 0:
             self.signal_type = "beacon"
+            self.ctrl_signal.setCenterFreq(BEACON_FREQ)
         elif tab_index == 1:
             self.signal_type = "tltc"
-        if self.ctrl_sdr.isRunning():
+            self.ctrl_signal.setCenterFreq(TLTC_FREQ)
+        if self.ctrl_signal.isRunning():
             self.plotSignalGraph()
-
-    def plotSignalGraph(self):
-        """
-        Plots the signal (FFT and Waterfall) in the selected tab graph.
-        """
-        if self.signal_type == "beacon":
-            self.csg_tltc.stopPlotting()
-            self.csg_beacon.startPlotting()
-        elif self.signal_type == "tltc":
-            self.csg_beacon.stopPlotting()
-            self.csg_tltc.startPlotting()
             

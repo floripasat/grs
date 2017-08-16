@@ -50,11 +50,12 @@ class ControlMainWindow(QtGui.QMainWindow):
     Attributes:
         ui: UI instance.
     """
-    def __init__(self, parent=None):
+    def __init__(self, ctrl_signal, parent=None):
         """
         Initializes UI interface, tab control classes, buttons, icons, menu actions and main shortcuts for the main window context.
         """
         super(ControlMainWindow, self).__init__(parent)
+        self.ctrl_signal = ctrl_signal
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setupControlTabs()
@@ -67,16 +68,16 @@ class ControlMainWindow(QtGui.QMainWindow):
         """
         Instances and initializes tab control classes.
         """
-        self.ctrl_flight = ControlTabFlight(self.ui)
-        self.ctrl_request = ControlTabRequest(self.ui)
-        self.ctrl_received = ControlTabReceived(self.ui)
-        self.ctrl_signal = ControlTabSignal(self.ui)
+        self.ctrl_tab_flight = ControlTabFlight(self.ui)
+        self.ctrl_tab_request = ControlTabRequest(self.ui)
+        self.ctrl_tab_received = ControlTabReceived(self.ui)
+        self.ctrl_tab_signal = ControlTabSignal(self.ui, self.ctrl_signal)
         
     def setupButtons(self):
         """
         Connects all main window buttons to functions.
         """
-        self.ui.TBstartsdr.clicked.connect(self.ctrl_signal.toggleSDR)
+        self.ui.TBstartsdr.clicked.connect(self.ctrl_tab_signal.toggleSDR)
     
     def setupIcons(self):
         """

@@ -3,7 +3,7 @@ Controls important functions and parameters of a SDR.
 """
 
 #
-#  controlSDR.py
+#  controlSignal.py
 #  
 #  Copyright (C) 2017, Federal University of Santa Catarina.
 #  
@@ -33,12 +33,13 @@ __maintainer__  = "Samuel Eduardo Noll"
 __email__       = "samuelnoll96@gmail.com"
 __status__      = "Prototype"
 
+from PySide import QtCore, QtGui
 from rtlsdr import RtlSdr
+import numpy as np
 
 
-class ControlSDR(object):
-    """
-    Controls SDR signal.
+class ControlSignal(QtCore.QObject):
+    """Controls SDR signal.
     
     Attributes:
         index: Int value of SDR device index at system.
@@ -46,45 +47,40 @@ class ControlSDR(object):
         sdr: RtlSdr object.
     """
     def __init__(self, index=0):
-        """
-        Default values initialization.
+        """Default values initialization.
         
         Args:
             index: Int value of SDR device index at system.
         """
         self.index = index
+        self.sample_rate = None
+        self.sample_size = None
+        self.center_freq = None
+        self.gain = None
+        self.samples = None
+        self.amplitude = None
+        self.freq = None
         self.running = False
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.updateData)
     
     def open(self):
-        """
-        Opens SDR and run.
-        """
+        """Opens SDR and run."""
         self.sdr = RtlSdr(device_index = self.index)
+        self.sdr.sample_rate = self.sample_rate
+        self.sdr.center_freq = self.center_freq
+        self.sdr.gain = self.gain
+        self.timer.start(self.timer_period)
         self.running = True
     
     def close(self):
-        """
-        Closes SDR.
-        """
+        """Closes SDR."""
+        self.timer.stop()
         self.sdr.close()
         self.running = False
     
-    def setParameters(self, sample_rate, center_freq, gain):
-        """
-        Set sample rate, center frequency and gain parameters on SDR.
-        
-        Args:
-            sample_rate: SDR sample rate.
-            center_freq: SDR center frequency.
-            gain: SDR gain.
-        """
-        self.sdr.sample_rate = sample_rate
-        self.sdr.center_freq = center_freq
-        self.sdr.gain = gain
-    
-    def readSamples(self, sample_size):
-        """
-        Read samples from SDR in a desired sample size.
+    def updateData(self):
+        """Read samples from SDR in a desired sample size.
         
         Args:
             sample_size: sample size.
@@ -92,17 +88,48 @@ class ControlSDR(object):
         Returns:
             A list of values (complex).
         """
-        return self.sdr.read_samples(sample_size)
+        self.samples = self.sdr.read_samples(self.sample_size)
+        fft = np.fft.fft(self.samples, self.sample_size)
+        amplitude = np.absolute(fft)
+        sample_spacing = 1/self.sample_rate
+        freq = np.fft.fftfreq(self.sample_size,sample_spacing)
+        argsort = freq.argsort()
+        freq_sorted = freq[argsort]
+        amplitude_sorted = amplitude[argsort]
+        self.amplitude = amplitude_sorted
+        self.freq = freq_sorted
     
     def setIndex(self, value):
-        """
-        Set a new index for loading SDR device.
+        """Set a new index for loading SDR device.
+        
+        Args:
+            value: int sdr device index.
         """
         self.index = value
         
     def isRunning(self):
-        """
-        Returns:
+        """Returns:
             A bool value representing if SDR is running (openned).
         """
         return self.running
+    
+    def setSampleRate(self, value):
+        self.sample_rate = value
+        if self.isRunning():
+            self.sdr.sample_rate = value
+    
+    def setCenterFreq(self, value):
+        self.center_freq = value
+        if self.isRunning():
+            self.sdr.center_freq = value
+    
+    def setGain(self, value):
+        self.gain = value
+        if self.isRunning():
+            self.sdr.gain = value
+    
+    def setSampleSize(self, value):
+        self.sample_size = value
+        
+    def setTimerPeriod(self, value):
+        self.timer_period = value
