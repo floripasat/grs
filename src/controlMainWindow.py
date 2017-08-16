@@ -37,27 +37,33 @@ from PySide import QtCore, QtGui
 import sys
 sys.path.insert(0, '../gui')
 from qt import Ui_MainWindow
+from tabFlight import ControlTabFlight
 from tabRequest import ControlTabRequest
 from tabReceived import ControlTabReceived
-from tabFlight import ControlTabFlight
 from tabSignal import ControlTabSignal
 
 
 class ControlMainWindow(QtGui.QMainWindow):
-    """
-    Main class, it manage other classes and main window features.
+    """Main class, it manage other classes and main window features.
     
     Attributes:
         ui: UI instance.
+        ctrl_signal: ControlSignal object.
+        ctrl_tab_flight: ControlTabFlight object to control tab flight content.
+        ctrl_tab_request: ControlTabFlight object to control tab flight content.
+        ctrl_tab_received: ControlTabReceived object to control tab flight content.
+        ctrl_tab_signal: ControlTabSignal object to control tab flight content.
     """
     def __init__(self, ctrl_signal, parent=None):
-        """
-        Initializes UI interface, tab control classes, buttons, icons, menu actions and main shortcuts for the main window context.
+        """Initializes UI interface, tab control classes, buttons, icons, menu actions and main shortcuts for the main window context.
+        
+        Args:
+            ctrl_signal: ControlSignal object.
         """
         super(ControlMainWindow, self).__init__(parent)
-        self.ctrl_signal = ctrl_signal
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ctrl_signal = ctrl_signal
         self.setupControlTabs()
         self.setupButtons()
         self.setupIcons()
@@ -65,24 +71,18 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.setupShortcuts()
     
     def setupControlTabs(self):
-        """
-        Instances and initializes tab control classes.
-        """
+        """Instances and initializes tab control classes."""
         self.ctrl_tab_flight = ControlTabFlight(self.ui)
         self.ctrl_tab_request = ControlTabRequest(self.ui)
         self.ctrl_tab_received = ControlTabReceived(self.ui)
         self.ctrl_tab_signal = ControlTabSignal(self.ui, self.ctrl_signal)
         
     def setupButtons(self):
-        """
-        Connects all main window buttons to functions.
-        """
+        """Connects all main window buttons to functions."""
         self.ui.TBstartsdr.clicked.connect(self.ctrl_tab_signal.toggleSDR)
     
     def setupIcons(self):
-        """
-        Sets toolbar buttons icon and connects them to functions.
-        """
+        """Sets toolbar buttons icon and connects them to functions."""
         self.icon_start = QtGui.QIcon()
         self.icon_start.addPixmap(QtGui.QPixmap("../img/icon/media-playback-start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ui.TBstartsdr.setIcon(self.icon_start)
@@ -100,52 +100,40 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.ui.TBconfig.setIcon(self.icon_config)
     
     def setupMenuActions(self):
-        """
-        Connects all menu actions (options) to functions.
-        """
+        """Connects all menu actions (options) to functions."""
         self.ui.actionFullscreen.triggered.connect(self.toggleFullScreen)
         self.ui.actionExit.triggered.connect(self.exit)
         self.ui.actionToolbar.triggered.connect(self.toggleToolbar)
         
     def setupShortcuts(self):
-        """
-        Creates shortcuts and connects the to functions.
-        """
+        """Creates shortcuts and connects the to functions."""
         QtGui.QShortcut(QtGui.QKeySequence("Alt+Return"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("F11"), self, self.toggleFullScreen, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+E"), self, self.toggleEventLog, context=self)
         QtGui.QShortcut(QtGui.QKeySequence("Esc"), self, self.exit, context=self)
     
     def toggleFullScreen(self):
-        """
-        Toggles fullscreen view mode.
-        """
+        """Toggles fullscreen view mode."""
         if self.isFullScreen():
             self.showNormal()
         else:
             self.showFullScreen()
     
     def toggleEventLog(self):
-        """
-        Shows/unshows event log text block.
-        """
+        """Shows/unshows event log text block."""
         if self.ui.TEeventlog.isHidden():
             self.ui.TEeventlog.show()
         else:
             self.ui.TEeventlog.hide()
     
     def toggleToolbar(self):
-        """
-        Shows/unshows toolbar.
-        """
+        """Shows/unshows toolbar."""
         if self.ui.Toolbar.isHidden():
             self.ui.Toolbar.show()
         else:
             self.ui.Toolbar.hide()
             
     def exit(self):
-        """
-        Exits the program.
-        """
+        """Exits the program."""
         sys.exit()
         

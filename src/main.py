@@ -2,6 +2,10 @@
 
 """
 FloripaSat-GRS: The ground station software of the FloripaSat project. This script runs the software.
+
+Main functions that calls all control objects:
+    ControlMainWindow: for controling Qt window content.
+    ControlSignal: for controling signal read and processing.
 """
 
 #

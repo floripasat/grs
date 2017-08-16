@@ -1,5 +1,5 @@
 """
-Controls important functions and parameters of a SDR.
+Controls signal: SDR, spectrum, frequencies and data recognition.
 """
 
 #
@@ -43,11 +43,19 @@ class ControlSignal(QtCore.QObject):
     
     Attributes:
         index: Int value of SDR device index at system.
+        sample_rate: Int value of SDR sampple rate
+        center_freq: Int value of SDR center frequency.
+        gain: Int value of SDR gain.
+        sample_size: Int value of fft sample size.
+        samples: Numpy array of complex floats containing whats read at SDR.
+        amplitude: Numpy array of floats containing samples amplitudes got after fft.
+        freq: Numpy array of floats containing samples frequencies got after fft.
         running: Bool value to identify if SDR is running.
+        timer: QTimer object timer that calls for data updating.
         sdr: RtlSdr object.
     """
     def __init__(self, index=0):
-        """Default values initialization.
+        """Default values initialization and timer defined.
         
         Args:
             index: Int value of SDR device index at system.
@@ -61,6 +69,7 @@ class ControlSignal(QtCore.QObject):
         self.amplitude = None
         self.freq = None
         self.running = False
+        self.timer_period = None
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.updateData)
     
@@ -114,22 +123,47 @@ class ControlSignal(QtCore.QObject):
         return self.running
     
     def setSampleRate(self, value):
+        """Set SDR sample rate.
+        
+        Args:
+            value: Int value of sample rate.
+        """
         self.sample_rate = value
         if self.isRunning():
             self.sdr.sample_rate = value
     
     def setCenterFreq(self, value):
+        """Set SDR center frequency.
+        
+        Args:
+            value: Int value of center frequency.
+        """
         self.center_freq = value
         if self.isRunning():
             self.sdr.center_freq = value
     
     def setGain(self, value):
+        """Set SDR gain.
+        
+        Args:
+            value: Int value of gain.
+        """
         self.gain = value
         if self.isRunning():
             self.sdr.gain = value
     
     def setSampleSize(self, value):
+        """Set sample size (fft length).
+        
+        Args:
+            value: Int value of Set sample size (fft length).
+        """
         self.sample_size = value
         
     def setTimerPeriod(self, value):
+        """Set timer period (fft refresh rate).
+        
+        Args:
+            value: Int value of timer period (fft refresh rate) in miliseconds.
+        """
         self.timer_period = value
