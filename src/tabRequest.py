@@ -38,8 +38,7 @@ from satdata import fsattltc
 
 
 class ControlTabRequest(object):
-    """
-    Controls all tab request interface features.
+    """Controls all tab request interface features.
     
     Attributes:
         ui: UI instance from the class instancer.
@@ -48,8 +47,7 @@ class ControlTabRequest(object):
         request_data: A list of request DATA gathered from checkboxes.
     """
     def __init__(self, ui):
-        """
-        Initializes tab features.
+        """Initializes tab features.
         
         Args:
             ui: UI interface instance.
@@ -63,17 +61,13 @@ class ControlTabRequest(object):
         self.setupActions()
     
     def setupTab(self):
-        """
-        Setups tab content.
-        """
+        """Setups tab content."""
         options = [o[0] for o in self.OPTIONS_DATA]
         self.ui.CBreqtype.addItems(options)
         self.createRequestData()
     
     def setupActions(self):
-        """
-        Setups button, signal actions.
-        """
+        """Setups button, signal actions."""
         self.ui.Bcfgsaveas.clicked.connect(self.saveRequestData)
         self.ui.Bcfgopen.clicked.connect(self.openRequestData)
         self.ui.Buncheckall.clicked.connect(self.uncheckAll)
@@ -81,9 +75,7 @@ class ControlTabRequest(object):
         QtCore.QObject.connect(self.ui.CBreqtype, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataType)
     
     def createRequestData(self):
-        """
-        Creates interface, labels and groupboxes, for request DATA.
-        """
+        """Creates interface, labels and groupboxes, for request DATA."""
         self.clearTabWidget()
         max_checkbox_height = 20
         max_label_height = 20
@@ -116,15 +108,11 @@ class ControlTabRequest(object):
             groupbox_layout.addWidget(spacer)
                 
     def changeDataType(self):
-        """
-        Changes requested DATA type.
-        """
+        """Changes requested DATA type."""
         self.data = [DATA[1].data for DATA in self.OPTIONS_DATA if DATA[0] == str(self.ui.CBreqtype.currentText())][0]
     
     def getRequestData(self):
-        """
-        Puts request DATA from the checkboxes into a class list object (request_data).
-        """
+        """Puts request DATA from the checkboxes into a class list object (request_data)."""
         self.request_data = []
         for gb in self.OPTIONS_DATA:
             checkboxes = gb[1][0].findChildren(QtGui.QCheckBox)
@@ -133,9 +121,7 @@ class ControlTabRequest(object):
                 
     
     def setRequestData(self):
-        """
-        Set request DATA checkboxes from a class list object (request_data).
-        """
+        """Set request DATA checkboxes from a class list object (request_data)."""
         i = 0
         for gb in self.OPTIONS_DATA:
             checkboxes = gb[1][0].findChildren(QtGui.QCheckBox)
@@ -148,9 +134,7 @@ class ControlTabRequest(object):
                 i+=1
     
     def saveRequestData(self):
-        """
-        Saves request DATA into a file.
-        """
+        """Saves request DATA into a file."""
         self.getRequestData()
         filepath = QtGui.QFileDialog.getSaveFileName(title="Save Request Data Config",dir="cfg/",filter="Config file (*.cfg)")[0]
         try:
@@ -164,9 +148,7 @@ class ControlTabRequest(object):
         
     
     def openRequestData(self):
-        """
-        Loads request DATA from a file.
-        """
+        """Loads request DATA from a file."""
         filepath = QtGui.QFileDialog.getOpenFileName(title="Load Request Data Config",dir="cfg/",filter="Config file (*.cfg)")[0]
         try:
             f = open(filepath, "r")
@@ -178,36 +160,28 @@ class ControlTabRequest(object):
             pass
     
     def checkAll(self):
-        """
-        Checks all request DATA checkboxes.
-        """
+        """Checks all request DATA checkboxes."""
         for gb in self.OPTIONS_DATA:
             checkboxes = gb[1][0].findChildren(QtGui.QCheckBox)
             for checkbox in checkboxes:
                 checkbox.setChecked(True)
     
     def uncheckAll(self):
-        """
-        Unchecks all request DATA checkboxes.
-        """
+        """Unchecks all request DATA checkboxes."""
         for gb in self.OPTIONS_DATA:
             checkboxes = gb[1][0].findChildren(QtGui.QCheckBox)
             for checkbox in checkboxes:
                 checkbox.setChecked(False)
     
     def clearTabWidget(self):
-        """
-        Clears (deletes) all QtGui objects from this tab main widget.
-        """
+        """Clears (deletes) all QtGui objects from this tab main widget."""
         layout = self.ui.Wrequestdata.layout()
         if layout != None:
             self.clearLayout(layout)
         QtGui.QWidget().setLayout(layout)
         
     def clearLayout(self, layout):
-        """
-        Clear a widget layout.
-        """
+        """Clear this widget layout."""
         if layout is not None:
             while layout.count():
                 item = layout.takeAt(0)

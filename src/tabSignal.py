@@ -92,6 +92,7 @@ class ControlTabSignal(object):
         QtCore.QObject.connect(self.ui.TWsignal, QtCore.SIGNAL("currentChanged(int)"), self.changeSignalType)
     
     def plotSignalGraph(self):
+        """Start plotting in the graph at the current tab."""
         if self.signal_type == "beacon":
             self.gw_beacon.startPlot()
             self.gw_tltc.stopPlot()

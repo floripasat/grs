@@ -43,7 +43,7 @@ class ControlSignal(QtCore.QObject):
     
     Attributes:
         index: Int value of SDR device index at system.
-        sample_rate: Int value of SDR sampple rate
+        sample_rate: Int value of SDR sampple rate.
         center_freq: Int value of SDR center frequency.
         gain: Int value of SDR gain.
         sample_size: Int value of fft sample size.
@@ -51,6 +51,7 @@ class ControlSignal(QtCore.QObject):
         amplitude: Numpy array of floats containing samples amplitudes got after fft.
         freq: Numpy array of floats containing samples frequencies got after fft.
         running: Bool value to identify if SDR is running.
+        timer_period: Int value of timer period in miliseconds.
         timer: QTimer object timer that calls for data updating.
         sdr: RtlSdr object.
     """
@@ -161,9 +162,9 @@ class ControlSignal(QtCore.QObject):
         self.sample_size = value
         
     def setTimerPeriod(self, value):
-        """Set timer period (fft refresh rate).
+        """Set timer period (time between each sample processing).
         
         Args:
-            value: Int value of timer period (fft refresh rate) in miliseconds.
+            value: Int value of timer period (time between each sample processing) in miliseconds.
         """
         self.timer_period = value

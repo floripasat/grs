@@ -43,8 +43,7 @@ DATA_SHOW_OPTIONS = ["Current","From file"]
 PATH_TO_RECEIVED_DATA = "received/"
 
 def getFolderFiles(folder_path):
-    """
-    Fetches a list of path to files (string) from a folder.
+    """Fetches a list of path to files (string) from a folder.
 
     Args:
         folder_path: a string representing the path to the folder
@@ -58,8 +57,7 @@ def getFolderFiles(folder_path):
 
 
 class ControlTabReceived(object):
-    """
-    Controls all tab received interface features.
+    """Controls all tab received interface features.
     
     Attributes:
         ui: UI instance from the class instancer.
@@ -69,12 +67,11 @@ class ControlTabReceived(object):
         last_received_data: A string containing last received DATA from satellite.
     """
     def __init__(self, ui):
-        '''
-        Initializes tab features.
+        """Initializes tab features.
         
         Args:
             ui: UI interface instance.
-        '''
+        """
         super(ControlTabReceived, self).__init__()
         self.ui = ui
         self.OPTIONS_DATA = [["FSAT TLTC", fsattltc],["FSAT BEACON", fsatbeacon]]
@@ -85,9 +82,7 @@ class ControlTabReceived(object):
         self.setupActions()
     
     def setupTab(self):
-        """
-        Setups tab content.
-        """
+        """Setups tab content."""
         self.ui.Ldatashow.setText(u"Showing")
         self.ui.CBdatashow.addItems(DATA_SHOW_OPTIONS)
         options = [o[0] for o in self.OPTIONS_DATA]
@@ -96,17 +91,13 @@ class ControlTabReceived(object):
         self.changeDataShowMode()
     
     def setupActions(self):
-        """
-        Setups button, signal actions.
-        """
+        """Setups button, signal actions."""
         self.ui.Bdataopen.clicked.connect(self.openReceivedData)
         QtCore.QObject.connect(self.ui.CBdatashow, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataShowMode)
         QtCore.QObject.connect(self.ui.CBrectype, QtCore.SIGNAL("currentIndexChanged(int)"), self.changeDataType)
         
     def createReceivedDataLabels(self):
-        """
-        Creates interface, labels and groupboxes, for received DATA for the selected DATA type (beacon, tltc, etc.).
-        """
+        """Creates interface, labels and groupboxes, for received DATA for the selected DATA type (beacon, tltc, etc.)."""
         self.clearTabWidget()
         max_height = 20
         max_width = 16777215
@@ -150,16 +141,12 @@ class ControlTabReceived(object):
             groupbox_layout.addWidget(spacer)
     
     def changeDataType(self):
-        """
-        Changes received DATA type, calling createReceivedDataLabels() for the selected DATA type (beacon, tltc, etc.).
-        """
+        """Changes received DATA type, calling createReceivedDataLabels() for the selected DATA type (beacon, tltc, etc.)."""
         self.data = [DATAM[1].DATA for DATAM in self.OPTIONS_DATA if DATAM[0] == str(self.ui.CBrectype.currentText())][0]
         self.createReceivedDataLabels()
         
     def changeDataShowMode(self):
-        """
-        Changes DATA show mode, enabling/disabling file open button.
-        """
+        """Changes DATA show mode, enabling/disabling file open button."""
         cb_index = self.ui.CBdatashow.currentIndex()
         self.data_show_mode = DATA_SHOW_OPTIONS[cb_index]
         if self.data_show_mode == "From file":
@@ -170,9 +157,7 @@ class ControlTabReceived(object):
             self.ui.Ldatashowfile.setEnabled(False)
             
     def openReceivedData(self):
-        """
-        Loads received DATA from a file, reading its content and showing it in the tab.
-        """
+        """Loads received DATA from a file, reading its content and showing it in the tab."""
         filepath = QtGui.QFileDialog.getOpenFileName(title="Load Received Data",dir=PATH_TO_RECEIVED_DATA,filter="Raw DATA (*.raw)")[0]
         try:
             f = open(filepath, "r")
@@ -185,9 +170,7 @@ class ControlTabReceived(object):
             pass
     
     def showData(self):
-        """
-        Shows "Current" or "From file" DATA in the tab.
-        """
+        """Shows "Current" or "From file" DATA in the tab."""
         if self.data_show_mode == "Current":
             DATA = self.last_received_data
         elif self.data_show_mode == "From file":
@@ -195,18 +178,14 @@ class ControlTabReceived(object):
         #Agora mostra os dados da variavel "DATA"
         
     def clearTabWidget(self):
-        """
-        Clears (deletes) all QtGui objects from this tab main widget.
-        """
+        """Clears (deletes) all QtGui objects from this tab main widget."""
         layout = self.ui.Wreceiveddata.layout()
         if layout != None:
             self.clearLayout(layout)
         QtGui.QWidget().setLayout(layout)
         
     def clearLayout(self, layout):
-        """
-        Clear a widget layout.
-        """
+        """Clear this widget layout."""
         if layout is not None:
             while layout.count():
                 item = layout.takeAt(0)

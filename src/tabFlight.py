@@ -40,15 +40,13 @@ MAP_FOLDER = "../img/"
 
 
 class ControlTabFlight(object):
-    """
-    Controls all tab flight interface features.
+    """Controls all tab flight interface features.
     
     Attributes:
         ui: UI instance from the class instancer.
     """
     def __init__(self, ui):
-        """
-        Initializes tab features.
+        """Initializes tab features.
         
         Args:
             ui: UI interface instance.
@@ -59,14 +57,11 @@ class ControlTabFlight(object):
         self.setWorldMap(MAIN_MAP)
     
     def setupActions(self):
-        """
-        Setups tab shortcuts actions.
-        """
+        """Setups tab shortcuts actions."""
         QtGui.QShortcut(QtGui.QKeySequence("S+M+W"), self.ui.Lworldmap, self.superSecretWorldMap, context=self.ui.Lworldmap)
             
     def setWorldMap(self, img_name):
-        """
-        Change world map picture.
+        """Change world map picture.
         
         Args:
             img_name: A string containg the worldmap image name.
@@ -77,7 +72,6 @@ class ControlTabFlight(object):
         self.ui.Lworldmap.setPixmap(pixmap)
     
     def superSecretWorldMap(self):
-        """
-        Change world map to Super Mario World map as an easter egg.
+        """Change world map to Super Mario World map as an easter egg.
         """
         self.setWorldMap("worldmap-smw")
