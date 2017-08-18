@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Wed Aug  9 13:15:26 2017
+# Created: Fri Aug 18 09:39:20 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -91,6 +91,11 @@ class Ui_MainWindow(object):
         self.TBsendreq.setAutoRaise(True)
         self.TBsendreq.setObjectName("TBsendreq")
         self.horizontalLayout.addWidget(self.TBsendreq)
+        self.TBshutdown = QtGui.QToolButton(self.Toolbar)
+        self.TBshutdown.setIconSize(QtCore.QSize(32, 32))
+        self.TBshutdown.setAutoRaise(True)
+        self.TBshutdown.setObjectName("TBshutdown")
+        self.horizontalLayout.addWidget(self.TBshutdown)
         self.space2 = QtGui.QLabel(self.Toolbar)
         self.space2.setText("")
         self.space2.setObjectName("space2")
@@ -166,7 +171,7 @@ class Ui_MainWindow(object):
         self.SBtltcfreq.setSizePolicy(sizePolicy)
         self.SBtltcfreq.setDecimals(4)
         self.SBtltcfreq.setMinimum(1.0)
-        self.SBtltcfreq.setMaximum(999.99)
+        self.SBtltcfreq.setMaximum(999.999)
         self.SBtltcfreq.setProperty("value", 1.0)
         self.SBtltcfreq.setObjectName("SBtltcfreq")
         self.horizontalLayout_3.addWidget(self.SBtltcfreq)
@@ -435,7 +440,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.TWmain.setCurrentIndex(3)
+        self.TWmain.setCurrentIndex(4)
         self.TWsignal.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -453,6 +458,7 @@ class Ui_MainWindow(object):
         self.TBping.setText(QtGui.QApplication.translate("MainWindow", "Ping", None, QtGui.QApplication.UnicodeUTF8))
         self.TBsendreq.setToolTip(QtGui.QApplication.translate("MainWindow", "Send request", None, QtGui.QApplication.UnicodeUTF8))
         self.TBsendreq.setText(QtGui.QApplication.translate("MainWindow", "Send request", None, QtGui.QApplication.UnicodeUTF8))
+        self.TBshutdown.setText(QtGui.QApplication.translate("MainWindow", "Shutdown", None, QtGui.QApplication.UnicodeUTF8))
         self.Lbeaconfreq.setText(QtGui.QApplication.translate("MainWindow", "Beacon:", None, QtGui.QApplication.UnicodeUTF8))
         self.SBbeaconfreq.setSuffix(QtGui.QApplication.translate("MainWindow", " MHz", None, QtGui.QApplication.UnicodeUTF8))
         self.Ltltc.setText(QtGui.QApplication.translate("MainWindow", "TLTC:   ", None, QtGui.QApplication.UnicodeUTF8))

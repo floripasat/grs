@@ -83,7 +83,6 @@ class SpectrumPlot(pg.PlotItem):
         center_freq = self.ctrl_signal.center_freq
         freq_scale = freq + center_freq
         self.redefineScale(amplitude, freq_scale, center_freq)
-        self.
         self.plot.setData(x = freq_scale, y = amplitude)
     
     def redefineScale(self, amplitude, freq_scale, center_freq):

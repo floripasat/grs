@@ -79,25 +79,30 @@ class ControlMainWindow(QtGui.QMainWindow):
         
     def setupButtons(self):
         """Connects all main window buttons to functions."""
-        self.ui.TBstartsdr.clicked.connect(self.ctrl_tab_signal.toggleSDR)
+        self.ui.TBstartsdr.clicked.connect(self.toggleSDR)
     
     def setupIcons(self):
         """Sets toolbar buttons icon and connects them to functions."""
         self.icon_start = QtGui.QIcon()
         self.icon_start.addPixmap(QtGui.QPixmap("../img/icon/media-playback-start.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBstartsdr.setIcon(self.icon_start)
+        self.icon_stop = QtGui.QIcon()
+        self.icon_stop.addPixmap(QtGui.QPixmap("../img/icon/media-playback-stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.icon_ping = QtGui.QIcon()
-        self.icon_ping.addPixmap(QtGui.QPixmap("../img/icon/reload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBping.setIcon(self.icon_ping)
+        self.icon_ping.addPixmap(QtGui.QPixmap("../img/icon/ping.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.icon_send_request = QtGui.QIcon()
         self.icon_send_request.addPixmap(QtGui.QPixmap("../img/icon/go-up.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBsendreq.setIcon(self.icon_send_request)
         self.icon_send_data_read = QtGui.QIcon()
         self.icon_send_data_read.addPixmap(QtGui.QPixmap("../img/icon/go-home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ui.TBsenddataread.setIcon(self.icon_send_data_read)
         self.icon_config = QtGui.QIcon()
         self.icon_config.addPixmap(QtGui.QPixmap("../img/icon/document-properties.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.icon_shutdown = QtGui.QIcon()
+        self.icon_shutdown.addPixmap(QtGui.QPixmap("../img/icon/system-shutdown.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ui.TBstartsdr.setIcon(self.icon_start)
+        self.ui.TBping.setIcon(self.icon_ping)
+        self.ui.TBsendreq.setIcon(self.icon_send_request)
+        self.ui.TBsenddataread.setIcon(self.icon_send_data_read)
         self.ui.TBconfig.setIcon(self.icon_config)
+        self.ui.TBshutdown.setIcon(self.icon_shutdown)
     
     def setupMenuActions(self):
         """Connects all menu actions (options) to functions."""
@@ -132,6 +137,14 @@ class ControlMainWindow(QtGui.QMainWindow):
             self.ui.Toolbar.show()
         else:
             self.ui.Toolbar.hide()
+            
+    def toggleSDR(self):
+        self.ctrl_tab_signal.toggleSDR()
+        if self.ctrl_signal.isRunning():
+            self.ui.TBstartsdr.setIcon(self.icon_stop)
+        else:
+            self.ui.TBstartsdr.setIcon(self.icon_start)
+            
             
     def exit(self):
         """Exits the program."""

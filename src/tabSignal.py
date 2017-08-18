@@ -103,7 +103,6 @@ class ControlTabSignal(object):
     
     def toggleSDR(self):
         """Open/close SDRa and stops plotting graphs."""
-
         if self.ctrl_signal.isRunning():
             self.gw_beacon.stopPlot()
             self.gw_tltc.stopPlot()

@@ -30,7 +30,7 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>6</number>
        </property>
@@ -224,6 +224,22 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="TBshutdown">
+         <property name="text">
+          <string>Shutdown</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="space2">
          <property name="text">
           <string/>
@@ -341,7 +357,7 @@
                 <double>1.000000000000000</double>
                </property>
                <property name="maximum">
-                <double>999.990000000000009</double>
+                <double>999.999000000000024</double>
                </property>
                <property name="value">
                 <double>1.000000000000000</double>
@@ -368,7 +384,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tabFlight">
        <attribute name="title">
