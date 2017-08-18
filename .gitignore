@@ -35,3 +35,6 @@
 *.fsat
 layout.txt
 
+# Compiled project
+fsat-grs
+
