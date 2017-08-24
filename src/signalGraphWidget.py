@@ -37,7 +37,7 @@ from PySide import QtCore, QtGui
 from pyqtgraph.Qt import QtGui, QtCore
 import numpy as np
 import pyqtgraph as pg
-from signalPlot import SpectrumPlot, WaterfallPlot
+from signalPlot import SpectrumPlot, WaterfallPlot, FilterPlot
 
 
 class SignalGraphWidget(pg.GraphicsLayoutWidget):
@@ -65,7 +65,10 @@ class SignalGraphWidget(pg.GraphicsLayoutWidget):
         pg.setConfigOptions(antialias=True)
         self.spectrum = SpectrumPlot(self.ctrl_signal)
         self.waterfall = WaterfallPlot(self.ctrl_signal, self.timer_period)
+        self.filter = FilterPlot(self.ctrl_signal)
         self.addItem(self.spectrum)
+        self.nextRow()
+        self.addItem(self.filter)
         self.nextRow()
         self.addItem(self.waterfall)
         
@@ -76,6 +79,8 @@ class SignalGraphWidget(pg.GraphicsLayoutWidget):
         """Update plots, triggered when timer ends."""
         self.spectrum.update()
         self.waterfall.update()
+        lowcut, highcut = self.spectrum.bw_region.getRegion()
+        self.filter.update(lowcut, highcut)
     
     def startPlot(self):
         """Start timer at timer_period to trigger updatePlot for plot updating."""

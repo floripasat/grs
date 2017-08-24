@@ -68,11 +68,12 @@ class SpectrumPlot(pg.PlotItem):
         self.setLabel('bottom', 'Frequency', units='Hz')
         self.setYRange(self.power_min,self.power_max)
         self.autoRange()
-        #self.setXRange(center_freq - sample_rate/2, center_freq + sample_rate/2)
         self.setMouseEnabled(x=False, y=False)
         self.bw_region = pg.LinearRegionItem([center_freq-sample_rate/8,center_freq+sample_rate/8])
         self.bw_region.setZValue(-10)
-        self.addItem(self.bw_region)        
+        self.bw_region.sigRegionChanged.connect(self.changeBandwidthRegion)
+        self.addItem(self.bw_region)
+        self.changeBandwidthRegion()
     
     def update(self):
         """Update plot and redefine scale from both axis"""
@@ -106,14 +107,17 @@ class SpectrumPlot(pg.PlotItem):
         freq_max = freq_scale[-1]
         freq_min = freq_scale[0]
         self.setXRange(freq_min,freq_max)
-        # Low pass filter bandwidth selector relocate
-        bw_begin,bw_end = self.bw_region.getRegion()
-        if bw_begin < freq_min or bw_end > freq_max:
-            begin = (3*center_freq+freq_min)/4
-            end = (3*center_freq+freq_max)/4
-            self.bw_region.setRegion((begin,end))
-            
-    
+        # Set bandwidth region bounds
+        self.bw_region.setBounds([freq_min, freq_max])
+        
+    def changeBandwidthRegion(self):
+        bw_begin,_ = self.bw_region.getRegion()
+        center_freq = self.ctrl_signal.center_freq
+        sample_rate = self.ctrl_signal.sample_rate
+        low = (bw_begin - center_freq + sample_rate/2) / sample_rate
+        self.ctrl_signal.signal_proc.cutoff = low
+        
+        
 class WaterfallPlot(pg.PlotItem):
     """Pyqtgraph PlotItem that shows spectrum waterfall throught a imagem plotted.
     
@@ -193,3 +197,73 @@ class WaterfallPlot(pg.PlotItem):
         self.imgArray = np.roll(self.imgArray, -1, axis=0)
         self.imgArray[-1] = amplitude
         self.img.setImage(self.imgArray.T, autoLevels=True, autoRange=True)
+
+
+class FilterPlot(pg.PlotItem):
+    """Pyqtgraph PlotItem that shows frequency spectrum and a low pass filter bandwidth selector.
+    
+    Attributes:
+        ctrl_signal: ControlSignal object.
+        power_max: Int value of maximum signal power (Y axis).
+        power_min: Int value of minimum signal power (Y axis).
+        plot: This class plot object.
+        bw_region: Pyqtgraph LinearRegionItem that selects a low pass filter bandwidth.
+    """
+    def __init__(self, ctrl_signal):
+        """Default variables definition, plot initialization, low pass filter bandwidth selector initialization.
+        
+        Args:
+            ctrl_signal: ControlSignal object.
+        """
+        super(FilterPlot, self).__init__()
+        self.ctrl_signal = ctrl_signal
+        self.power_max = 1
+        self.power_min = -1
+        # Plot initialization
+        center_freq = self.ctrl_signal.center_freq
+        sample_rate = self.ctrl_signal.sample_rate
+        self.plot = self.plot()
+        self.setTitle('Filtered Spectrum')
+        self.setLabel('left', 'Relative Power', units='')
+        self.setLabel('bottom', 'Frequency', units='Hz')
+        self.setYRange(self.power_min,self.power_max)
+        self.autoRange()
+        #self.setXRange(center_freq - sample_rate/2, center_freq + sample_rate/2)
+        self.setMouseEnabled(x=False, y=False)      
+    
+    def update(self, lowcut, highcut):
+        """Update plot and redefine scale from both axis"""
+        sample_rate = self.ctrl_signal.sample_rate
+        center_freq = self.ctrl_signal.center_freq
+        sample_size = self.ctrl_signal.sample_size
+        """Update plot and redefine scale from both axis"""
+        amplitude = self.ctrl_signal.filtered_amplitude
+        freq = self.ctrl_signal.freq
+        if amplitude is None or freq is None:
+            return
+        center_freq = self.ctrl_signal.center_freq
+        freq_scale = freq + center_freq
+        self.redefineScale(amplitude, freq_scale, center_freq)
+        self.plot.setData(x = freq_scale, y = amplitude)
+    
+    def redefineScale(self, amplitude, freq_scale, center_freq):
+        """Redefine scale from both axis and relocate region selector if it isn't at the graph.
+        
+        Args:
+            amplitude: Numpy array of floats containing samples amplitudes got after fft.
+            freq_scale: Numpy array of floats containing samples frequencies got after fft.
+            center_freq: Int value of SDR center frequency.
+        """
+        # Y Axis
+        power_max = max(amplitude)
+        power_min = min(amplitude)
+        if self.power_min > power_min:
+            self.power_min = power_min
+            self.setYRange(self.power_min,self.power_max)
+        if self.power_max < power_max:
+            self.power_max = power_max
+            self.setYRange(self.power_min,self.power_max)
+        # X Axis
+        freq_max = freq_scale[-1]
+        freq_min = freq_scale[0]
+        self.setXRange(freq_min,freq_max)

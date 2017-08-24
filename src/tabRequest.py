@@ -80,6 +80,7 @@ class ControlTabRequest(object):
         max_checkbox_height = 20
         max_label_height = 20
         max_width = 16777215
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         widget_layout = QtGui.QHBoxLayout(self.ui.Wrequestdata)
         widget_layout.setSpacing(6)
         widget_layout.setContentsMargins(9, 9, 9, 9)
@@ -97,12 +98,14 @@ class ControlTabRequest(object):
                 content = group[1]
                 label_title = QtGui.QLabel(groupbox)
                 label_title.setText(u"<html><em><strong>%s:</strong></em></html>" % title)
-                label_title.setMaximumSize(QtCore.QSize(max_width, max_label_height))
+                #label_title.setMaximumSize(QtCore.QSize(max_width, max_label_height))
+                label_title.setSizePolicy(sizePolicy)
                 groupbox_layout.addWidget(label_title)
                 for option in content:
                     checkBox = QtGui.QCheckBox(groupbox)
                     checkBox.setText(u"%s" % option)
-                    checkBox.setMaximumSize(QtCore.QSize(max_width, max_checkbox_height))
+                    #checkBox.setMaximumSize(QtCore.QSize(max_width, max_checkbox_height))
+                    checkBox.setSizePolicy(sizePolicy)
                     groupbox_layout.addWidget(checkBox)
             spacer = QtGui.QLabel(groupbox)
             groupbox_layout.addWidget(spacer)

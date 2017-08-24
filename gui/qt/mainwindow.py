@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Aug 18 11:31:16 2017
+# Created: Fri Aug 18 13:41:08 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -187,7 +187,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.tabFlight)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.Lworldmap = QtGui.QLabel(self.tabFlight)
-        self.Lworldmap.setMinimumSize(QtCore.QSize(640, 360))
+        self.Lworldmap.setMinimumSize(QtCore.QSize(256, 144))
         self.Lworldmap.setText("")
         self.Lworldmap.setScaledContents(True)
         self.Lworldmap.setObjectName("Lworldmap")
@@ -212,7 +212,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.Lradar.sizePolicy().hasHeightForWidth())
         self.Lradar.setSizePolicy(sizePolicy)
-        self.Lradar.setMinimumSize(QtCore.QSize(200, 200))
+        self.Lradar.setMinimumSize(QtCore.QSize(200, 0))
         self.Lradar.setMaximumSize(QtCore.QSize(400, 400))
         self.Lradar.setText("")
         self.Lradar.setObjectName("Lradar")
@@ -224,6 +224,7 @@ class Ui_MainWindow(object):
         self.Lsalelliteinfo.setObjectName("Lsalelliteinfo")
         self.VLsatinfo.addWidget(self.Lsalelliteinfo)
         self.TEsatelliteinfo = QtGui.QTextEdit(self.Wflightunder)
+        self.TEsatelliteinfo.setMinimumSize(QtCore.QSize(0, 0))
         self.TEsatelliteinfo.setMaximumSize(QtCore.QSize(10000000, 300))
         self.TEsatelliteinfo.setReadOnly(True)
         self.TEsatelliteinfo.setObjectName("TEsatelliteinfo")
@@ -440,7 +441,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.TWmain.setCurrentIndex(3)
+        self.TWmain.setCurrentIndex(0)
         self.TWsignal.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

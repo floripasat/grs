@@ -384,7 +384,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabFlight">
        <attribute name="title">
@@ -395,8 +395,8 @@
          <widget class="QLabel" name="Lworldmap">
           <property name="minimumSize">
            <size>
-            <width>640</width>
-            <height>360</height>
+            <width>256</width>
+            <height>144</height>
            </size>
           </property>
           <property name="text">
@@ -443,7 +443,7 @@
              <property name="minimumSize">
               <size>
                <width>200</width>
-               <height>200</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -471,6 +471,12 @@
              </item>
              <item>
               <widget class="QTextEdit" name="TEsatelliteinfo">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="maximumSize">
                 <size>
                  <width>10000000</width>

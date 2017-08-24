@@ -101,6 +101,7 @@ class ControlTabReceived(object):
         self.clearTabWidget()
         max_height = 20
         max_width = 16777215
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Maximum)
         widget_layout = QtGui.QHBoxLayout(self.ui.Wreceiveddata)
         widget_layout.setSpacing(6)
         widget_layout.setContentsMargins(9, 9, 9, 9)
@@ -108,7 +109,7 @@ class ControlTabReceived(object):
             groupbox_data = GB[1]
             groupbox = QtGui.QGroupBox(self.ui.Wreceiveddata)
             groupbox.setTitle(u"%s" % GB[0])
-            groupbox.setAlignment(QtCore.Qt.AlignCenter)
+            groupbox.setAlignment(QtCore.Qt.AlignLeft)
             widget_layout.addWidget(groupbox)
             groupbox_layout = QtGui.QVBoxLayout(groupbox)
             groupbox_layout.setSpacing(6)
@@ -118,7 +119,8 @@ class ControlTabReceived(object):
                 content = group[1] 
                 label_title = QtGui.QLabel(groupbox) 
                 label_title.setText(u"<html><em><strong>%s</strong></em></html>" % title) 
-                label_title.setMaximumSize(QtCore.QSize(max_width, max_height)) 
+                #label_title.setMaximumSize(QtCore.QSize(max_width, max_height))
+                label_title.setSizePolicy(sizePolicy)
                 groupbox_layout.addWidget(label_title)
                 for option in content: 
                     horizontal_layout_content = QtGui.QHBoxLayout() 
@@ -127,15 +129,18 @@ class ControlTabReceived(object):
                     label_option = QtGui.QLabel(groupbox) 
                     label_option.setText(u"%s:" % option) 
                     label_option.setAlignment(QtCore.Qt.AlignLeft) 
-                    label_option.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    #label_option.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    label_option.setSizePolicy(sizePolicy)
                     label_value = QtGui.QLabel(groupbox)
                     label_value.setAlignment(QtCore.Qt.AlignLeft) 
-                    label_value.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    #label_value.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    label_value.setSizePolicy(sizePolicy)
                     horizontal_layout_content.addWidget(label_option) 
                     horizontal_layout_content.addWidget(label_value) 
                     widget = QtGui.QWidget(groupbox) 
                     widget.setLayout(horizontal_layout_content) 
-                    widget.setMaximumSize(QtCore.QSize(max_width, max_height)) 
+                    #widget.setMaximumSize(QtCore.QSize(max_width, max_height))
+                    #widget.setSizePolicy(sizePolicy) 
                     groupbox_layout.addWidget(widget) 
             spacer = QtGui.QLabel(groupbox) 
             groupbox_layout.addWidget(spacer)

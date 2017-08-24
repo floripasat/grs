@@ -36,6 +36,7 @@ __status__      = "Prototype"
 from PySide import QtCore, QtGui
 from rtlsdr import RtlSdr
 import numpy as np
+from signalProcessing import SignalProcessing
 
 
 class ControlSignal(QtCore.QObject):
@@ -48,6 +49,7 @@ class ControlSignal(QtCore.QObject):
         gain: Int value of SDR gain.
         sample_size: Int value of fft sample size.
         samples: Numpy array of complex floats containing whats read at SDR.
+        spectrum: Numpy array of frequency spectrum of the signal.
         amplitude: Numpy array of floats containing samples amplitudes got after fft.
         freq: Numpy array of floats containing samples frequencies got after fft.
         running: Bool value to identify if SDR is running.
@@ -68,11 +70,13 @@ class ControlSignal(QtCore.QObject):
         self.gain = None
         self.samples = None
         self.amplitude = None
+        self.filtered_amplitude = None
         self.freq = None
         self.running = False
         self.timer_period = None
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.updateData)
+        self.signal_proc = SignalProcessing()
     
     def open(self):
         """Opens SDR and run."""
@@ -99,15 +103,22 @@ class ControlSignal(QtCore.QObject):
             A list of values (complex).
         """
         self.samples = self.sdr.read_samples(self.sample_size)
-        fft = np.fft.fft(self.samples, self.sample_size)
-        amplitude = np.absolute(fft)
+        self.spectrum = np.fft.fft(self.samples, self.sample_size)
+        spec_amplitude = np.absolute(self.spectrum)
         sample_spacing = 1/self.sample_rate
         freq = np.fft.fftfreq(self.sample_size,sample_spacing)
         argsort = freq.argsort()
         freq_sorted = freq[argsort]
-        amplitude_sorted = amplitude[argsort]
-        self.amplitude = amplitude_sorted
+        spec_amplitude_sorted = spec_amplitude[argsort]
+        self.amplitude = spec_amplitude_sorted
         self.freq = freq_sorted
+        
+        self.filtered_samples = self.signal_proc.bandFiltering(self.samples, self.sample_rate)
+        self.filtered_spectrum = np.fft.fft(self.filtered_samples, self.sample_size)
+        filt_amplitude = np.absolute(self.filtered_spectrum)
+        filt_amplitude_sorted = filt_amplitude[argsort]
+        self.filtered_amplitude = filt_amplitude_sorted
+        
     
     def setIndex(self, value):
         """Set a new index for loading SDR device.
