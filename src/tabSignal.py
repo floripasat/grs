@@ -40,9 +40,11 @@ from signalGraphWidget import SignalGraphWidget
 BEACON_FREQ = 145.9e6
 TLTC_FREQ = 437.9e6
 SAMPLE_RATE = 1e6
-SAMPLE_SIZE = 1024
+SAMPLE_SIZE = 4*1024
+FFT_SIZE = 1024
 GAIN = 4
-TIMER_PERIOD = 100
+SDR_TIMER_PERIOD = 50
+GRAPH_TIMER_PERIOD = 100
 
 
 class ControlTabSignal(object):
@@ -76,10 +78,11 @@ class ControlTabSignal(object):
         self.ctrl_signal.setCenterFreq(BEACON_FREQ)
         self.ctrl_signal.setSampleRate(SAMPLE_RATE)
         self.ctrl_signal.setSampleSize(SAMPLE_SIZE)
+        self.ctrl_signal.setFFTSize(FFT_SIZE)
         self.ctrl_signal.setGain(GAIN)
-        self.ctrl_signal.setTimerPeriod(TIMER_PERIOD)
-        self.gw_beacon = SignalGraphWidget(self.ctrl_signal, TIMER_PERIOD)
-        self.gw_tltc = SignalGraphWidget(self.ctrl_signal, TIMER_PERIOD)
+        self.ctrl_signal.setTimerPeriod(SDR_TIMER_PERIOD)
+        self.gw_beacon = SignalGraphWidget(self.ctrl_signal, GRAPH_TIMER_PERIOD)
+        self.gw_tltc = SignalGraphWidget(self.ctrl_signal, GRAPH_TIMER_PERIOD)
         beaconLayout = QtGui.QVBoxLayout()
         beaconLayout.addWidget(self.gw_beacon)
         tltcLayout = QtGui.QVBoxLayout()

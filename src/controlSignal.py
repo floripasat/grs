@@ -47,11 +47,13 @@ class ControlSignal(QtCore.QObject):
         sample_rate: Int value of SDR sampple rate.
         center_freq: Int value of SDR center frequency.
         gain: Int value of SDR gain.
-        sample_size: Int value of fft sample size.
+        sample_size: Int value of SDR sample size.
         samples: Numpy array of complex floats containing whats read at SDR.
         spectrum: Numpy array of frequency spectrum of the signal.
         amplitude: Numpy array of floats containing samples amplitudes got after fft.
         freq: Numpy array of floats containing samples frequencies got after fft.
+        fft_size: Int value of fft sample size.
+        sample_bits: Numpy binary array of demodulated bits read on SDR.
         running: Bool value to identify if SDR is running.
         timer_period: Int value of timer period in miliseconds.
         timer: QTimer object timer that calls for data updating.
@@ -72,6 +74,8 @@ class ControlSignal(QtCore.QObject):
         self.amplitude = None
         self.filtered_amplitude = None
         self.freq = None
+        self.samples_bits = None
+        self.fft_size = None
         self.running = False
         self.timer_period = None
         self.timer = QtCore.QTimer()
@@ -103,21 +107,33 @@ class ControlSignal(QtCore.QObject):
             A list of values (complex).
         """
         self.samples = self.sdr.read_samples(self.sample_size)
-        self.spectrum = np.fft.fft(self.samples, self.sample_size)
+        self.spectrum = np.fft.fft(self.samples, self.fft_size)
         spec_amplitude = np.absolute(self.spectrum)
         sample_spacing = 1/self.sample_rate
-        freq = np.fft.fftfreq(self.sample_size,sample_spacing)
+        freq = np.fft.fftfreq(self.fft_size,sample_spacing)
         argsort = freq.argsort()
         freq_sorted = freq[argsort]
         spec_amplitude_sorted = spec_amplitude[argsort]
         self.amplitude = spec_amplitude_sorted
         self.freq = freq_sorted
         
-        self.filtered_samples = self.signal_proc.bandFiltering(self.samples, self.sample_rate)
-        self.filtered_spectrum = np.fft.fft(self.filtered_samples, self.sample_size)
+        self.filtered_samples = self.signal_proc.lowPassFiltering(self.samples, self.sample_rate)
+        self.filtered_spectrum = np.fft.fft(self.filtered_samples, self.fft_size)
         filt_amplitude = np.absolute(self.filtered_spectrum)
         filt_amplitude_sorted = filt_amplitude[argsort]
         self.filtered_amplitude = filt_amplitude_sorted
+        self.readBits()
+        
+    def readBits(self):
+        """GFSK demodulation and then bits generation."""
+        fil = self.signal_proc.demodulator(self.filtered_samples, self.sample_rate)
+        self.samples_bits = self.signal_proc.samplesBits(fil)
+        binstr = "".join([str(x) for x in list(self.samples_bits)])
+        preamb = "1011101111001100010101001111110"##"
+        AAAAAAAA = "1010101010101010"#1010101010101010"
+        if AAAAAAAA in binstr:
+            print self.samples_bits
+            print len(binstr)
         
     
     def setIndex(self, value):
@@ -165,10 +181,10 @@ class ControlSignal(QtCore.QObject):
             self.sdr.gain = value
     
     def setSampleSize(self, value):
-        """Set sample size (fft length).
+        """Set sample size (SDR sample length).
         
         Args:
-            value: Int value of Set sample size (fft length).
+            value: Int value of sample size (SDR sample length).
         """
         self.sample_size = value
         
@@ -179,3 +195,11 @@ class ControlSignal(QtCore.QObject):
             value: Int value of timer period (time between each sample processing) in miliseconds.
         """
         self.timer_period = value
+    
+    def setFFTSize(self, value):
+        """Set fft length.
+        
+        Args:
+            value: Int value of fft length.
+        """
+        self.fft_size = value

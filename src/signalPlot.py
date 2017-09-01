@@ -112,10 +112,8 @@ class SpectrumPlot(pg.PlotItem):
         
     def changeBandwidthRegion(self):
         bw_begin,_ = self.bw_region.getRegion()
-        center_freq = self.ctrl_signal.center_freq
-        sample_rate = self.ctrl_signal.sample_rate
-        low = (bw_begin - center_freq + sample_rate/2) / sample_rate
-        self.ctrl_signal.signal_proc.cutoff = low
+        dist = abs(self.ctrl_signal.center_freq - bw_begin)
+        self.ctrl_signal.signal_proc.lpf_cutoff = dist
         
         
 class WaterfallPlot(pg.PlotItem):
@@ -157,13 +155,13 @@ class WaterfallPlot(pg.PlotItem):
         """
         # Get actual values
         sample_rate = self.ctrl_signal.sample_rate
-        sample_size = self.ctrl_signal.sample_size
+        fft_size = self.ctrl_signal.fft_size
         center_freq = self.ctrl_signal.center_freq
         # Set img and its array
         self.img = pg.ImageItem()
         self.clear()
         self.addItem(self.img)
-        self.imgArray = np.zeros((self.history_size, sample_size))
+        self.imgArray = np.zeros((self.history_size, fft_size))
         # Calculate parameters
         window_size = self.width()
         nyquist = sample_rate / 2
@@ -200,14 +198,13 @@ class WaterfallPlot(pg.PlotItem):
 
 
 class FilterPlot(pg.PlotItem):
-    """Pyqtgraph PlotItem that shows frequency spectrum and a low pass filter bandwidth selector.
+    """Pyqtgraph PlotItem that shows filtered frequency spectrum.
     
     Attributes:
         ctrl_signal: ControlSignal object.
         power_max: Int value of maximum signal power (Y axis).
         power_min: Int value of minimum signal power (Y axis).
         plot: This class plot object.
-        bw_region: Pyqtgraph LinearRegionItem that selects a low pass filter bandwidth.
     """
     def __init__(self, ctrl_signal):
         """Default variables definition, plot initialization, low pass filter bandwidth selector initialization.
@@ -220,22 +217,15 @@ class FilterPlot(pg.PlotItem):
         self.power_max = 1
         self.power_min = -1
         # Plot initialization
-        center_freq = self.ctrl_signal.center_freq
-        sample_rate = self.ctrl_signal.sample_rate
         self.plot = self.plot()
         self.setTitle('Filtered Spectrum')
         self.setLabel('left', 'Relative Power', units='')
         self.setLabel('bottom', 'Frequency', units='Hz')
         self.setYRange(self.power_min,self.power_max)
         self.autoRange()
-        #self.setXRange(center_freq - sample_rate/2, center_freq + sample_rate/2)
         self.setMouseEnabled(x=False, y=False)      
     
     def update(self, lowcut, highcut):
-        """Update plot and redefine scale from both axis"""
-        sample_rate = self.ctrl_signal.sample_rate
-        center_freq = self.ctrl_signal.center_freq
-        sample_size = self.ctrl_signal.sample_size
         """Update plot and redefine scale from both axis"""
         amplitude = self.ctrl_signal.filtered_amplitude
         freq = self.ctrl_signal.freq
