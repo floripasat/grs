@@ -1,0 +1,192 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>This is Intro &#8212; GroundstationFloripasat Groundstation  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to GroundstationFloripasat Groundstation’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="this-is-intro">
+<h1>This is Intro<a class="headerlink" href="#this-is-intro" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Fsat project is this because it is.</li>
+</ul>
+<p>Here there’s a link:
+See <a class="reference download internal" href="_downloads/main.py" download=""><code class="xref download docutils literal"><span class="pre">this</span> <span class="pre">example</span> <span class="pre">script</span></code></a>.</p>
+<p>Here there’s a filé:</p>
+<span class="target" id="module-tabReceived"></span><p>Tab received initialization, actions (buttons, comboboxes, etc) setups, layout management, openning DATA files.</p>
+<dl class="class">
+<dt id="tabReceived.ControlTabReceived">
+<em class="property">class </em><code class="descclassname">tabReceived.</code><code class="descname">ControlTabReceived</code><span class="sig-paren">(</span><em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controls all tab received interface features.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>ui: UI instance from the class instancer.
+OPTIONS_DATA: A list that represents what where at received combobox DATA type selector.
+DATA: A list of lists of ordered requestable DATA.
+data_show_mode: A string representing the current DATA show mode.
+last_received_data: A string containing last received DATA from satellite.</dd>
+</dl>
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.changeDataShowMode">
+<code class="descname">changeDataShowMode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.changeDataShowMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes DATA show mode, enabling/disabling file open button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.changeDataType">
+<code class="descname">changeDataType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.changeDataType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes received DATA type, calling createReceivedDataLabels() for the selected DATA type (beacon, tltc, etc.).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.clearLayout">
+<code class="descname">clearLayout</code><span class="sig-paren">(</span><em>layout</em><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.clearLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear this widget layout.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.clearTabWidget">
+<code class="descname">clearTabWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.clearTabWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears (deletes) all QtGui objects from this tab main widget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.createReceivedDataLabels">
+<code class="descname">createReceivedDataLabels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.createReceivedDataLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates interface, labels and groupboxes, for received DATA for the selected DATA type (beacon, tltc, etc.).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.openReceivedData">
+<code class="descname">openReceivedData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.openReceivedData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads received DATA from a file, reading its content and showing it in the tab.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.setupActions">
+<code class="descname">setupActions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.setupActions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setups button, signal actions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.setupTab">
+<code class="descname">setupTab</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.setupTab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setups tab content.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tabReceived.ControlTabReceived.showData">
+<code class="descname">showData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.ControlTabReceived.showData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows “Current” or “From file” DATA in the tab.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="tabReceived.getFolderFiles">
+<code class="descclassname">tabReceived.</code><code class="descname">getFolderFiles</code><span class="sig-paren">(</span><em>folder_path</em><span class="sig-paren">)</span><a class="headerlink" href="#tabReceived.getFolderFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches a list of path to files (string) from a folder.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>folder_path: a string representing the path to the folder</dd>
+<dt>Returns:</dt>
+<dd>A list of path to files in the folder</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">GroundstationFloripasat Groundstation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">This is Intro</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to GroundstationFloripasat Groundstation’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Samuel Noll.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
