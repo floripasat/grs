@@ -52,6 +52,7 @@ class ControlSignal(QtCore.QObject):
         spectrum: Numpy array of frequency spectrum of the signal.
         amplitude: Numpy array of floats containing samples amplitudes got after fft.
         freq: Numpy array of floats containing samples frequencies got after fft.
+        samples_bits: List of bits read from SDR after filtering and demodulating.
         fft_size: Int value of fft sample size.
         sample_bits: Numpy binary array of demodulated bits read on SDR.
         running: Bool value to identify if SDR is running.
@@ -127,14 +128,7 @@ class ControlSignal(QtCore.QObject):
     def readBits(self):
         """GFSK demodulation and then bits generation."""
         fil = self.signal_proc.demodulator(self.filtered_samples, self.sample_rate)
-        self.samples_bits = self.signal_proc.samplesBits(fil)
-        binstr = "".join([str(x) for x in list(self.samples_bits)])
-        preamb = "1011101111001100010101001111110"##"
-        AAAAAAAA = "1010101010101010"#1010101010101010"
-        if AAAAAAAA in binstr:
-            print self.samples_bits
-            print len(binstr)
-        
+        self.samples_bits = self.signal_proc.binarySlicer(fil, self.sample_rate)        
     
     def setIndex(self, value):
         """Set a new index for loading SDR device.

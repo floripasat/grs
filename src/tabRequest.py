@@ -43,7 +43,7 @@ class ControlTabRequest(object):
     Attributes:
         ui: UI instance from the class instancer.
         OPTIONS_DATA: A list that represents what where at request combobox DATA type selector.
-        DATA: A list of lists of ordered requestable DATA.
+        data: A list of lists of ordered requestable DATA.
         request_data: A list of request DATA gathered from checkboxes.
     """
     def __init__(self, ui):

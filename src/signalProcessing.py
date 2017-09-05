@@ -73,6 +73,49 @@ class SignalProcessing(QtCore.QObject):
         filtered = signal.lfilter(b, a, samples)
         return filtered
     
+    def demodulator(self, samples, sample_rate):
+        """GSFK samples demodulator.
+        
+        Args:
+            samples: Array, tuple or list of samples.
+            sample_rate: Signal sample rate.
+        
+        Returns:
+            Numpy array type demodulated signal to a NRZ-like waveform.
+        """
+        abs_samples = np.absolute(samples)
+        y_diff = np.diff(abs_samples,1)
+        #create an envelope detector and then low-pass filter
+        y_env = np.abs(sigtool.hilbert(y_diff))
+        h=signal.firwin( numtaps=100, cutoff=self.bit_rate*2, nyq=sample_rate/2)
+        y_filtered=signal.lfilter( h, 1.0, y_env)
+        return y_filtered
+    
+    def binarySlicer(self, demod_samples, sample_rate):
+        """Generate a bit sequence from demodulated semples
+        
+        Args:
+            demod_samples: Demodulated samples.
+            sample_rate: Signal sample rate.
+        
+        Returns:
+            A list of bits.
+        """
+        mean = np.mean(demod_samples)
+        #if the mean of the bit period is higher than the mean, the data is a 0
+        rx_data = []
+        sampled_signal = demod_samples[sample_rate/self.bit_rate/2:len(demod_samples):sample_rate/self.bit_rate]
+        for bit in sampled_signal:
+            if bit > mean:
+                rx_data.append(0)
+            else:
+                rx_data.append(1)
+        return rx_data
+    
+    
+    # Nothing below are used now. The function called "sampleBits" calls the others bellow, and it is used to read
+    # the SDR samples and convert to bits an NRZ-like waveform (not GFSK modulated).
+        
     def findClockFrequency(self, spectrum):
         """Determine the clock frequency.
         
@@ -163,21 +206,3 @@ class SignalProcessing(QtCore.QObject):
         symbols = self.clockRecovery(samples)
         bits = self.sliceBits(symbols)
         return bits
-    
-    def demodulator(self, samples, sample_rate):
-        """GSFK samples demodulator.
-        
-        Args:
-            samples: Array, tuple or list of samples.
-            sample_rate: Signal sample rate.
-        
-        Returns:
-            Numpy array type demodulated signal.
-        """
-        abs_samples = np.absolute(samples)
-        y_diff = np.diff(abs_samples,1)
-        #create an envelope detector and then low-pass filter
-        y_env = np.abs(sigtool.hilbert(y_diff))
-        h=signal.firwin( numtaps=100, cutoff=self.bit_rate*2, nyq=sample_rate/2)
-        y_filtered=signal.lfilter( h, 1.0, y_env)
-        return y_filtered

@@ -40,7 +40,7 @@ from signalGraphWidget import SignalGraphWidget
 BEACON_FREQ = 145.9e6
 TLTC_FREQ = 437.9e6
 SAMPLE_RATE = 1e6
-SAMPLE_SIZE = 4*1024
+SAMPLE_SIZE = 8*1024
 FFT_SIZE = 1024
 GAIN = 4
 SDR_TIMER_PERIOD = 50
@@ -55,8 +55,8 @@ class ControlTabSignal(object):
         ctrl_tab_signal: control signal object.
         signal_type: string containing signal type.
         ctrl_sdr: ControlSDR object to control sdr parameters and read data.
-        csg_beacon: ControlSignalGraph object that controls tabBeacon graphs: signal spectrum and watefall.
-        csg_tltc: ControlSignalGraph object that controls tabTLTC graphs: signal spectrum and watefall.
+        gw_beacon: SignalGraphWidget object that contains tabBeacon graphs: signal spectrum and watefall.
+        gw_tltc: SignalGraphWidget object that contains tabTLTC graphs: signal spectrum and watefall.
     """
     def __init__(self, ui, ctrl_signal):
         """Initializes tab features.
