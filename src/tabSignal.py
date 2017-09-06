@@ -54,7 +54,7 @@ class ControlTabSignal(object):
         ui: UI instance from the class instancer.
         ctrl_tab_signal: control signal object.
         signal_type: string containing signal type.
-        ctrl_sdr: ControlSDR object to control sdr parameters and read data.
+        ctrl_signal: ControlSDR object to control sdr parameters and read data.
         gw_beacon: SignalGraphWidget object that contains tabBeacon graphs: signal spectrum and watefall.
         gw_tltc: SignalGraphWidget object that contains tabTLTC graphs: signal spectrum and watefall.
     """
@@ -63,6 +63,7 @@ class ControlTabSignal(object):
         
         Args:
             ui: UI interface instance.
+            ctrl_signal: ControlSDR object to control sdr parameters and read data.
         """
         super(ControlTabSignal, self).__init__()
         self.ui = ui
