@@ -84,6 +84,83 @@ const char* ToConstChar(T input)
     return output.c_str();
 }
 
+/**
+ * \fn BatVoltConv
+ * 
+ * \brief 
+ * 
+ * \param val
+ * 
+ * \return 
+ */
+double BatVoltConv(uint16_t val);
+
+/**
+ * \fn BatTempConv
+ * 
+ * \brief 
+ * 
+ * \param 
+ * 
+ * \return 
+ */
+double BatTempConv(uint16_t val);
+
+/**
+ * \fn BatChargeConv
+ * 
+ * \brief 
+ * 
+ * \param val
+ * 
+ * \return 
+ */
+double BatChargeConv(uint16_t val);
+
+/**
+ * \fn SolarPanelCurrentConv
+ * 
+ * \brief 
+ * 
+ * \param val
+ * 
+ * \return 
+ */
+double SolarPanelCurrentConv(uint16_t val);
+
+/**
+ * \fn SolarPanelVoltageConv
+ * 
+ * \brief 
+ * 
+ * \param val
+ * 
+ * \return 
+ */
+double SolarPanelVoltageConv(uint16_t val);
+
+/**
+ * \fn IMUAccelConv
+ * 
+ * \brief 
+ * 
+ * \param val
+ * 
+ * \return 
+ */
+double IMUAccelConv(uint16_t val);
+
+/**
+ * \fn IMUGyroConv
+ * 
+ * \brief 
+ * 
+ * \param val
+ * 
+ * \return 
+ */
+double IMUGyroConv(uint16_t val);
+
 #endif // AUX_HPP_
 
 //! \} End of aux group

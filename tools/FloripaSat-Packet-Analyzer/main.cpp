@@ -43,6 +43,8 @@
 #include "inc/signals.h"
 #include "inc/error.h"
 
+#define GLADE_UI_FILE       "glade/MainWindow.glade"
+
 /**
  * \fn main
  * 
@@ -61,7 +63,7 @@ int main(int argc, char *argv[])
     auto refBuilder = Gtk::Builder::create();
     try
     {
-        refBuilder->add_from_file("glade/MainWindow.glade");
+        refBuilder->add_from_file(GLADE_UI_FILE);
     }
     catch(const Glib::FileError& ex)
     {
@@ -159,11 +161,6 @@ int main(int argc, char *argv[])
             widgets.button_clear_all->signal_clicked().connect(sigc::ptr_fun(on_button_clear_all_clicked));
         }
         
-        // EPS data
-        refBuilder->get_widget("label_battery1_value", widgets.label_battery1_value);
-        refBuilder->get_widget("label_battery2_value", widgets.label_battery2_value);
-        refBuilder->get_widget("label_valid_data_value", widgets.label_valid_data_value);
-        
         // NGHam statistic
         refBuilder->get_widget("label_ngham_valid_value", widgets.label_ngham_valid_value);
         refBuilder->get_widget("label_ngham_invalid_value", widgets.label_ngham_invalid_value);
@@ -175,6 +172,21 @@ int main(int argc, char *argv[])
         refBuilder->get_widget("label_ax25_invalid_value", widgets.label_ax25_invalid_value);
         refBuilder->get_widget("label_ax25_total_value", widgets.label_ax25_total_value);
         refBuilder->get_widget("label_ax25_lost_value", widgets.label_ax25_lost_value);
+        
+        // Beacon Data
+        refBuilder->get_widget("label_beacon_data_bat1_v_value", widgets.label_beacon_data_bat1_v_value);
+        refBuilder->get_widget("label_beacon_data_bat2_v_value", widgets.label_beacon_data_bat2_v_value);
+        refBuilder->get_widget("label_beacon_data_bat1_t_value", widgets.label_beacon_data_bat1_t_value);
+        refBuilder->get_widget("label_beacon_data_bat2_t_value", widgets.label_beacon_data_bat2_t_value);
+        refBuilder->get_widget("label_beacon_data_bat_c_value", widgets.label_beacon_data_bat_c_value);
+        refBuilder->get_widget("label_beacon_data_solar_panel_i_value1", widgets.label_beacon_data_solar_panel_i_value1);
+        refBuilder->get_widget("label_beacon_data_solar_panel_i_value2", widgets.label_beacon_data_solar_panel_i_value2);
+        refBuilder->get_widget("label_beacon_data_solar_panel_v_value", widgets.label_beacon_data_solar_panel_v_value);
+        refBuilder->get_widget("label_beacon_data_sat_status_value", widgets.label_beacon_data_sat_status_value);
+        refBuilder->get_widget("label_beacon_data_imu_data_value1", widgets.label_beacon_data_imu_data_value1);
+        refBuilder->get_widget("label_beacon_data_imu_data_value2", widgets.label_beacon_data_imu_data_value2);
+        refBuilder->get_widget("label_beacon_data_system_time_value", widgets.label_beacon_data_system_time_value);
+        refBuilder->get_widget("label_beacon_data_obdh_rst_value", widgets.label_beacon_data_obdh_rst_value);
         
         // About
         refBuilder->get_widget("button_about", widgets.button_about);

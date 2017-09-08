@@ -39,11 +39,13 @@
 #include <gtkmm.h>
 
 #include "../inc/error.h"
+#include "../inc/global_var.h"
 
 void Error(const char* error_title, const char* error_text)
 {
     Gtk::MessageDialog messagedialog_error(error_title, false, Gtk::MESSAGE_ERROR);
     messagedialog_error.set_secondary_text(error_text);
+    messagedialog_error.set_transient_for(*widgets.main_window);
 
     messagedialog_error.run();
 }
@@ -52,6 +54,7 @@ void Info(const char* info_title, const char* info_text)
 {
     Gtk::MessageDialog messagedialog_info(info_title, false, Gtk::MESSAGE_INFO);
     messagedialog_info.set_secondary_text(info_text);
+    messagedialog_info.set_transient_for(*widgets.main_window);
 
     messagedialog_info.run();
 }
@@ -60,6 +63,7 @@ void Warning(const char* warning_title, const char* warning_text)
 {
     Gtk::MessageDialog messagedialog_warning(warning_title, false, Gtk::MESSAGE_WARNING);
     messagedialog_warning.set_secondary_text(warning_text);
+    messagedialog_warning.set_transient_for(*widgets.main_window);
 
     messagedialog_warning.run();
 }

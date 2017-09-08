@@ -74,4 +74,39 @@ std::string HexToStr(uint8_t byte)
     return output;
 }
 
+double BatVoltConv(uint16_t val)
+{
+    return (val/32)*4.883e-3;
+}
+
+double BatTempConv(uint16_t val)
+{
+    return val*0.125/32;
+}
+
+double BatChargeConv(uint16_t val)
+{
+    return 0;
+}
+
+double SolarPanelCurrentConv(uint16_t val)
+{
+    return val*(2.5/4095)*(1/(0.05*0.025*3300));
+}
+
+double SolarPanelVoltageConv(uint16_t val)
+{
+    return val*(2.5/4095)*(100e3 + 93.1e3)/100e3;
+}
+
+double IMUAccelConv(uint16_t val)
+{
+    return int16_t(val)*16/32768;
+}
+
+double IMUGyroConv(uint16_t val)
+{
+    return int16_t(val)*250/32768;
+}
+
 //! \} End of aux group implementation

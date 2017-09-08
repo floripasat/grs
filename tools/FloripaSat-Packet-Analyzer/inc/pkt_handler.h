@@ -43,7 +43,28 @@
 #include <vector>
 #include <stdint.h>
 
+/**
+ * \fn process_byte
+ * 
+ * \brief 
+ * 
+ * \param byte
+ * 
+ * \return 
+ */
 std::vector<uint8_t> proccess_byte(uint8_t byte);
+
+/**
+ * \fn display_beacon_data
+ * 
+ * \brief 
+ * 
+ * \param data
+ * \param len
+ * 
+ * \return None
+ */
+void display_beacon_data(uint8_t *data, uint8_t len);
 
 #endif // PKT_HANDLER_H_
 

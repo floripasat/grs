@@ -108,4 +108,44 @@ std::vector<uint8_t> proccess_byte(uint8_t byte)
     return result;
 }
 
+void display_beacon_data(uint8_t *data, uint8_t len)
+{
+    if (len > 10)
+    {
+        widgets.label_beacon_data_bat1_v_value->set_text(ToConstChar(BatVoltConv((data[10] << 8) | data[11])));
+        widgets.label_beacon_data_bat2_v_value->set_text(ToConstChar(BatVoltConv((data[12] << 8) | data[13])));
+        widgets.label_beacon_data_bat1_t_value->set_text(ToConstChar(BatTempConv(0xFFFF)));
+        widgets.label_beacon_data_bat2_t_value->set_text(ToConstChar(BatTempConv(0xFFFF)));
+        widgets.label_beacon_data_bat_c_value->set_text(ToConstChar(BatChargeConv((data[20] << 8) | data[21])));
+        widgets.label_beacon_data_solar_panel_i_value1->set_text(ToConstChar(SolarPanelCurrentConv((data[22] << 8) | data[23])) );// "/" ToConstChar(SolarPanelCurrentConv((data[24] << 8) | data[25]))) "/" ToConstChar(SolarPanelCurrentConv((data[26] << 8) | data[27]))));
+        widgets.label_beacon_data_solar_panel_i_value2->set_text(ToConstChar(SolarPanelCurrentConv((data[28] << 8) | data[29])) );//"/" ToConstChar(SolarPanelCurrentConv((data[30] << 8) | data[31]))) "/" ToConstChar(SolarPanelCurrentConv((data[32] << 8) | data[33]))));
+        widgets.label_beacon_data_solar_panel_v_value->set_text(ToConstChar(SolarPanelVoltageConv((data[34] << 8) | data[35])) );//"/" ToConstChar(SolarPanelVoltageConv((data[36] << 8) | data[37])) "/" ToConstChar(SolarPanelVoltageConv((data[38] << 8) | data[39])));
+        
+        if (len > 40)
+        {
+            widgets.label_beacon_data_sat_status_value->set_text(ToConstChar((data[40] << 8) | data[41]));
+            widgets.label_beacon_data_imu_data_value1->set_text(ToConstChar(IMUAccelConv((data[42] << 8) | data[43])) );//"/" ToConstChar(IMUAccelConv((data[44] << 8) | data[45])) "/" ToConstChar(IMUAccelConv((data[46] << 8) | data[47])));
+            widgets.label_beacon_data_imu_data_value2->set_text(ToConstChar(IMUGyroConv((data[48] << 8) | data[49])) );//"/" ToConstChar(IMUGyroConv((data[50] << 8) | data[51])) "/" ToConstChar(IMUGyroConv((data[52] << 8) | data[53])));
+            widgets.label_beacon_data_system_time_value->set_text(ToConstChar((data[54] << 24) | (data[55] << 16) | (data[56] << 8) | data[57]));
+            widgets.label_beacon_data_obdh_rst_value->set_text(ToConstChar((data[58] << 8) | data[59]));
+        }
+        else
+        {
+            widgets.label_beacon_data_sat_status_value->set_text("-");
+            widgets.label_beacon_data_imu_data_value1->set_text("-");
+            widgets.label_beacon_data_imu_data_value2->set_text("-");
+            widgets.label_beacon_data_system_time_value->set_text("-");
+            widgets.label_beacon_data_obdh_rst_value->set_text("-");
+        }
+    }
+    else
+    {
+        widgets.label_beacon_data_sat_status_value->set_text("-");
+        widgets.label_beacon_data_imu_data_value1->set_text("-");
+        widgets.label_beacon_data_imu_data_value2->set_text("-");
+        widgets.label_beacon_data_system_time_value->set_text("-");
+        widgets.label_beacon_data_obdh_rst_value->set_text("-");
+    }
+}
+
 //! \} End of pkt_hdl implementation group

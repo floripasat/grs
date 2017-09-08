@@ -163,13 +163,15 @@ void on_button_load_raw_packets_clicked()
     else
     {
         std::vector<uint8_t> sync_bytes;
-
+        
         sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s3->get_text()));
         sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s2->get_text()));
         sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s1->get_text()));
         sync_bytes.push_back(EntryToHex(widgets.entry_ngham_sync_bytes_s0->get_text()));
         
         std::vector<uint8_t> sync_bits_buffer;
+        
+        uint32_t byte_counter = 0;
         
         while(!fin.eof())
         {
@@ -220,51 +222,66 @@ void on_button_load_raw_packets_clicked()
                         k--;
                     }
                     
-                    uint8_t data[256];
-                    uint8_t data_len;
-                    switch(ngham_Decode(byte, data, &data_len))
+                    if ((byte == 125) and (byte_counter == 0))
                     {
-                        case PKT_CONDITION_OK:
-                            receive_pkt = false;
-                            for(unsigned int j=0;j<data_len;j++)
-                            {
-                                std::stringstream byte_str;
-                                byte_str << (char)data[j];
-                                std::string b = byte_str.str();
-                                if (widgets.checkbutton_ngham_hex_output->get_active())
+                        receive_pkt = false;
+                    }
+                    else
+                    {
+                        byte_counter++;
+                        
+                        uint8_t data[256];
+                        uint8_t data_len;
+                        switch(ngham_Decode(byte, data, &data_len))
+                        {
+                            case PKT_CONDITION_OK:
+                                receive_pkt = false;
+                                for(unsigned int j=0;j<data_len;j++)
                                 {
-                                    widgets.textview_ngham_packets_buffer->insert_at_cursor(HexToStr(data[j]).c_str());
-                                    widgets.textview_ngham_packets_buffer->insert_at_cursor(" ");
+                                    std::stringstream byte_str;
+                                    byte_str << (char)data[j];
+                                    std::string b = byte_str.str();
+                                    if (widgets.checkbutton_ngham_hex_output->get_active())
+                                    {
+                                        widgets.textview_ngham_packets_buffer->insert_at_cursor(HexToStr(data[j]).c_str());
+                                        widgets.textview_ngham_packets_buffer->insert_at_cursor(" ");
+                                    }
+                                    else
+                                    {
+                                        widgets.textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
+                                    }
+                                    if (widgets.checkbutton_log_ngham_packets->get_active())
+                                    {
+                                        log_ngham_pkts << b;
+                                    }
                                 }
-                                else
-                                {
-                                    widgets.textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
-                                }
+                                widgets.textview_ngham_packets_buffer->insert_at_cursor("\n");
+                                
                                 if (widgets.checkbutton_log_ngham_packets->get_active())
                                 {
-                                    log_ngham_pkts << b;
+                                    log_ngham_pkts << "\n";
                                 }
-                            }
-                            widgets.textview_ngham_packets_buffer->insert_at_cursor("\n");
-                    
-                            if (widgets.checkbutton_log_ngham_packets->get_active())
-                            {
-                                log_ngham_pkts << "\n";
-                            }
-                            
-                            receive_pkt = false;
-                            break;
-                        case PKT_CONDITION_PREFAIL:
-                            break;
-                        case PKT_CONDITION_FAIL:
-                            widgets.textview_ngham_packets_buffer->insert_at_cursor("ERROR!\n");
-                            if (widgets.checkbutton_log_ngham_packets->get_active())
-                            {
-                                log_ngham_pkts << "ERROR!\n";
-                            }
-                            receive_pkt = false;
-                            ngham_lost_pkts++;
-                            break;
+                                
+                                display_beacon_data(data, data_len);
+                                
+                                receive_pkt = false;
+                                
+                                byte_counter = 0;
+                                
+                                break;
+                            case PKT_CONDITION_PREFAIL:
+                                break;
+                            case PKT_CONDITION_FAIL:
+                                widgets.textview_ngham_packets_buffer->insert_at_cursor("ERROR!\n");
+                                if (widgets.checkbutton_log_ngham_packets->get_active())
+                                {
+                                    log_ngham_pkts << "ERROR!\n";
+                                }
+                                receive_pkt = false;
+                                ngham_lost_pkts++;
+                                byte_counter = 0;
+                                break;
+                        }
                     }
                     
                     byte_buffer.clear();
@@ -291,10 +308,6 @@ void on_button_clear_all_clicked()
     widgets.textview_ngham_packets_buffer->set_text("");
     widgets.textview_ax25_packets_buffer->set_text("");
     
-    widgets.label_battery1_value->set_text("0 V");
-    widgets.label_battery2_value->set_text("0 V");
-    widgets.label_valid_data_value->set_text("-");
-    
     widgets.label_ngham_valid_value->set_text("0");
     widgets.label_ngham_invalid_value->set_text("0");
     widgets.label_ngham_total_value->set_text("0");
@@ -307,11 +320,32 @@ void on_button_clear_all_clicked()
     
     ngham_pkt_counter = 0;
     ngham_lost_pkts = 0;
+    
+    widgets.label_beacon_data_bat1_v_value->set_text("-");
+    widgets.label_beacon_data_bat2_v_value->set_text("-");
+    widgets.label_beacon_data_bat1_t_value->set_text("-");
+    widgets.label_beacon_data_bat2_t_value->set_text("-");
+    widgets.label_beacon_data_bat_c_value->set_text("-");
+    widgets.label_beacon_data_solar_panel_i_value1->set_text("-");
+    widgets.label_beacon_data_solar_panel_i_value2->set_text("-");
+    widgets.label_beacon_data_solar_panel_v_value->set_text("-");
+    widgets.label_beacon_data_sat_status_value->set_text("-");
+    widgets.label_beacon_data_imu_data_value1->set_text("-");
+    widgets.label_beacon_data_imu_data_value2->set_text("-");
+    widgets.label_beacon_data_system_time_value->set_text("-");
+    widgets.label_beacon_data_obdh_rst_value->set_text("-");
 }
 
 void on_button_about_clicked()
 {
-    widgets.aboutdialog->run();
+    widgets.aboutdialog->set_transient_for(*widgets.main_window);
+    
+    int response = widgets.aboutdialog->run();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        widgets.aboutdialog->hide();
+    }
 }
 
 bool timer_handler()
