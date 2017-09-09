@@ -1,5 +1,5 @@
 SOURCE=main.cpp
-TARGET=fsat-grs
+TARGET=fsat-grs.x
 BUILD_FOLDER=build
 
 CPP=g++

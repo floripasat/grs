@@ -11,7 +11,7 @@
     <property name="icon">../icon.png</property>
     <property name="type_hint">normal</property>
     <property name="program_name">FloripaSat Packet Analyzer</property>
-    <property name="version">1.1</property>
+    <property name="version">1.2</property>
     <property name="copyright" translatable="yes">Copyright (c) 2017, Federal University of Santa Catarina</property>
     <property name="website">https://github.com/floripasat/grs</property>
     <property name="website_label" translatable="yes">https://github.com/floripasat/grs</property>
@@ -39,6 +39,16 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image_play_button">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-media-play</property>
+  </object>
+  <object class="GtkImage" id="image_stop_button">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-media-stop</property>
   </object>
   <object class="GtkListStore" id="liststore_baudrates">
     <columns>
@@ -971,8 +981,23 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkToggleButton" id="togglebutton_play_stream">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">image_play_button</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="toggled" handler="on_togglebutton_play_stream_toggled" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="button_load_raw_packets">
-                    <property name="label" translatable="yes">Load Raw Packets</property>
+                    <property name="label" translatable="yes">Load Packets</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -981,7 +1006,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -995,7 +1020,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
@@ -1375,7 +1400,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
-                        <property name="label" translatable="yes">Bats. Tot. Charge:</property>
+                        <property name="label" translatable="yes">Bats. Total C.:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

@@ -97,6 +97,9 @@ struct Widgets
     
     // Raw Packets File
     Gtk::FileChooserButton          *filechooserbutton_raw_packets;
+    Gtk::ToggleButton               *togglebutton_play_stream;
+    Gtk::Image                      *image_play_button;
+    Gtk::Image                      *image_stop_button;
     Gtk::Button                     *button_load_raw_packets;
     
     // Clear Button

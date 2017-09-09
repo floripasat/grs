@@ -159,6 +159,11 @@ void on_button_load_raw_packets_clicked()
     if (!fin.is_open())
     {
         Error("Error opening this file!", "Maybe the current file is not valid!");
+        
+        if (widgets.togglebutton_play_stream->get_active())
+        {
+            widgets.togglebutton_play_stream->set_active(false);
+        }
     }
     else
     {
@@ -225,6 +230,7 @@ void on_button_load_raw_packets_clicked()
                     if ((byte == 125) and (byte_counter == 0))
                     {
                         receive_pkt = false;
+                        ngham_pkt_counter--;
                     }
                     else
                     {
@@ -432,7 +438,39 @@ bool timer_handler()
         }
     }
     
+    if (widgets.togglebutton_play_stream->get_active())
+    {
+        on_button_clear_all_clicked();
+        on_button_load_raw_packets_clicked();
+    }
+    
 	return true;
+}
+
+void on_togglebutton_play_stream_toggled()
+{
+    if (widgets.togglebutton_play_stream->get_active())
+    {
+        widgets.togglebutton_play_stream->set_image(*widgets.image_stop_button);
+        
+        widgets.entry_serial_port->set_sensitive(false);
+        widgets.combobox_baudrate->set_sensitive(false);
+        widgets.togglebutton_open_close_port->set_sensitive(false);
+        widgets.filechooserbutton_raw_packets->set_sensitive(false);
+        widgets.button_load_raw_packets->set_sensitive(false);
+        widgets.button_clear_all->set_sensitive(false);
+    }
+    else
+    {
+        widgets.togglebutton_play_stream->set_image(*widgets.image_play_button);
+        
+        widgets.entry_serial_port->set_sensitive(true);
+        widgets.combobox_baudrate->set_sensitive(true);
+        widgets.togglebutton_open_close_port->set_sensitive(true);
+        widgets.filechooserbutton_raw_packets->set_sensitive(true);
+        widgets.button_load_raw_packets->set_sensitive(true);
+        widgets.button_clear_all->set_sensitive(true);
+    }
 }
 
 //! \} End of signals implementation group

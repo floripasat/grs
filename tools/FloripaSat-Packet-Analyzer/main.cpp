@@ -148,6 +148,15 @@ int main(int argc, char *argv[])
         // Load raw packets
         refBuilder->get_widget("filechooserbutton_raw_packets", widgets.filechooserbutton_raw_packets);
         
+        refBuilder->get_widget("togglebutton_play_stream", widgets.togglebutton_play_stream);
+        if (widgets.togglebutton_play_stream)
+        {
+            widgets.togglebutton_play_stream->signal_toggled().connect(sigc::ptr_fun(on_togglebutton_play_stream_toggled));
+        }
+        
+        refBuilder->get_widget("image_play_button", widgets.image_play_button);
+        refBuilder->get_widget("image_stop_button", widgets.image_stop_button);
+        
         refBuilder->get_widget("button_load_raw_packets", widgets.button_load_raw_packets);
         if (widgets.button_load_raw_packets)
         {

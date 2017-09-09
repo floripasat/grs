@@ -94,6 +94,15 @@ void on_button_about_clicked();
  */
 bool timer_handler();
 
+/**
+ * \fn on_togglebutton_play_stream_toggled
+ * 
+ * \brief 
+ * 
+ * \return None
+ */
+void on_togglebutton_play_stream_toggled();
+
 #endif // SIGNALS_H_
 
 //! \} End of signals group
