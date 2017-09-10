@@ -41,6 +41,20 @@
 #define SIGNALS_H_
 
 /**
+ * \var
+ * 
+ * \brief
+ */
+extern uint64_t prev_fin_byte_counter;
+
+/**
+ * \var
+ * 
+ * \brief 
+ */
+extern uint64_t fin_byte_counter;
+
+/**
  * \fn on_MainWindow_show
  * 
  * \brief 

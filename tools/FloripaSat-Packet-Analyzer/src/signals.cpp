@@ -54,6 +54,9 @@ extern "C"
     #include "../ngham/ngham.h"
 }
 
+uint64_t prev_fin_byte_counter = 0;
+uint64_t fin_byte_counter = 0;
+
 void on_MainWindow_show()
 {
     ngham_Init();
@@ -182,6 +185,16 @@ void on_button_load_raw_packets_clicked()
         {
             uint8_t byte;
             fin >> byte;
+            fin_byte_counter++;
+            
+            if (fin_byte_counter <= prev_fin_byte_counter)
+            {                
+                continue;
+            }
+            else
+            {
+                prev_fin_byte_counter = fin_byte_counter;
+            }
             
             if (!receive_pkt)
             {
@@ -300,6 +313,8 @@ void on_button_load_raw_packets_clicked()
         widgets.label_ngham_total_value->set_text(ToConstChar(ngham_pkt_counter));
         widgets.label_ngham_lost_value->set_text(ToConstChar((float)(ngham_lost_pkts*100.0/ngham_pkt_counter)));
         
+        fin_byte_counter = 0;
+        
         fin.close();
         
         log_raw_pkts.close();
@@ -326,6 +341,9 @@ void on_button_clear_all_clicked()
     
     ngham_pkt_counter = 0;
     ngham_lost_pkts = 0;
+    
+    prev_fin_byte_counter = 0;
+    fin_byte_counter = 0;
     
     widgets.label_beacon_data_bat1_v_value->set_text("-");
     widgets.label_beacon_data_bat2_v_value->set_text("-");
@@ -440,7 +458,7 @@ bool timer_handler()
     
     if (widgets.togglebutton_play_stream->get_active())
     {
-        on_button_clear_all_clicked();
+        //on_button_clear_all_clicked();
         on_button_load_raw_packets_clicked();
     }
     

@@ -47,7 +47,7 @@
 #include "uart.h"
 #include "log.h"
 
-#define DATA_RECEPTION_SAMPLE_RATE  500
+#define DATA_RECEPTION_SAMPLE_RATE  1000
 
 extern Widgets widgets;
 
