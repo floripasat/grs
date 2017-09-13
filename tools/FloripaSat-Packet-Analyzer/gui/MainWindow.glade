@@ -309,7 +309,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_log_eps_data">
-                        <property name="label" translatable="yes">EPS data</property>
+                        <property name="label" translatable="yes">Beacon data</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

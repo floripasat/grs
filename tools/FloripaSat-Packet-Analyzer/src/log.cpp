@@ -41,7 +41,7 @@
 #include <ctime>
 #include <stdexcept>
 
-#include "../inc/log.h"
+#include "log.h"
 
 Log::Log()
 {
@@ -72,7 +72,7 @@ bool Log::VerifyDirectory(const char *folder)
 
 void Log::CreateDirectory(const char* folder)
 {
-    if (mkdir(folder, ACCESSPERMS) == -1)
+    if (mkdir(folder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
     {
         throw std::runtime_error("It is not possible to create a new log folder!");
     }
@@ -92,6 +92,27 @@ std::string Log::CurrentDateTime(int output_format)
         case LOG_DATA_TIME_FOR_LOG:
             strftime(buf, sizeof(buf), "%d/%m/%Y-%H:%M:%S", &tstruct);
             break;
+        case LOG_DATA_TIME_FOR_LOG_CSV:
+            strftime(buf, sizeof(buf), "%Y,%m,%d,%H,%M,%S,", &tstruct);
+            break;
+        case LOG_YEAR:
+            strftime(buf, sizeof(buf), "%Y", &tstruct);
+            break;
+        case LOG_MONTH:
+            strftime(buf, sizeof(buf), "%m", &tstruct);
+            break;
+        case LOG_DAY:
+            strftime(buf, sizeof(buf), "%d", &tstruct);
+            break;
+        case LOG_HOUR:
+            strftime(buf, sizeof(buf), "%H", &tstruct);
+            break;
+        case LOG_MINUTE:
+            strftime(buf, sizeof(buf), "%M", &tstruct);
+            break;
+        case LOG_SECOND:
+            strftime(buf, sizeof(buf), "%S", &tstruct);
+            break;
         default:
             strftime(buf, sizeof(buf), "%d-%m-%Y_%H-%M-%S", &tstruct);
     }
@@ -99,4 +120,4 @@ std::string Log::CurrentDateTime(int output_format)
     return buf;
 }
 
-//! \} End of log implementation group
+//! \} End of log group

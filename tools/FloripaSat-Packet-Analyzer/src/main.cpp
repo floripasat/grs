@@ -1,7 +1,7 @@
 /*
- * pkt_handler.h
+ * main.cpp
  * 
- * Copyright (C) 2017, Universidade Federal de Santa Catarina
+ * Copyright (C) 2017, Federal University of Santa Catarina.
  * 
  * This file is part of FloripaSat-Packet-Analyzer.
  * 
@@ -22,50 +22,47 @@
  */
 
 /**
- * \file pkt_handler.h
+ * \file main.cpp
  * 
- * \brief .
+ * \brief Main file.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
  * \version 1.0
  * 
- * \date 07/05/2017
+ * \date 05/05/2017
  * 
- * \defgroup pkt_hdl Packet handler
- * \ingroup fsat_pkt_ana
+ * \defgroup fsat_pkt_ana FloripaSat Packet Analyzer
  * \{
  */
 
-#ifndef PKT_HANDLER_H_
-#define PKT_HANDLER_H_
+#include <gtkmm.h>
 
-#include <vector>
-#include <stdint.h>
+#include "fsat-pkt-ana.h"
 
-/**
- * \fn process_byte
- * 
- * \brief 
- * 
- * \param byte
- * 
- * \return 
- */
-std::vector<uint8_t> proccess_byte(uint8_t byte);
+#define GLADE_UI_FILE       "glade/MainWindow.glade"
 
 /**
- * \fn display_beacon_data
+ * \fn main
  * 
- * \brief 
+ * \brief The main function.
  * 
- * \param data
- * \param len
+ * \param argc Number of arguments passed in on the command line.
+ * \param argv A pointer to an array of pointers to the arguments.
  * 
- * \return None
+ * \return Returns the error code upon termination.
  */
-void display_beacon_data(uint8_t *data, uint8_t len);
+int main(int argc, char *argv[])
+{
+    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.floripasat");
+    
+    auto ref_builder = Gtk::Builder::create();
 
-#endif // PKT_HANDLER_H_
+    FSatPktAna fsat_pkt_ana;
+    
+    fsat_pkt_ana.BuildWidgets(ref_builder, GLADE_UI_FILE);
+    
+    return fsat_pkt_ana.Run(app);
+}
 
-//! \} End of pkt_hdl group
+//! \} End of fsat_pkt_ana group

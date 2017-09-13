@@ -36,7 +36,7 @@
  * \{ 
  */
 
-#include "../inc/uart.h"
+#include "uart.h"
 
 #include <stdio.h>
 #include <stdlib.h>

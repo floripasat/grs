@@ -47,6 +47,13 @@
 
 #define LOG_DATA_TIME_FOR_FILE      0
 #define LOG_DATA_TIME_FOR_LOG       1
+#define LOG_DATA_TIME_FOR_LOG_CSV   2
+#define LOG_YEAR                    3
+#define LOG_MONTH                   4
+#define LOG_DAY                     5
+#define LOG_HOUR                    6
+#define LOG_MINUTE                  7
+#define LOG_SECOND                  8
 
 /**
  * \class Log
@@ -94,4 +101,3 @@ class Log: public std::ofstream
 #endif // LOG_H_
 
 //! \} End of log group
-
