@@ -46,6 +46,7 @@
 #include "uart.h"
 #include "log.h"
 #include "protocol_statistic.h"
+#include "beacon_data.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/MainWindow.glade"
 
@@ -109,7 +110,6 @@ class FSatPktAna
         Gtk::ToggleButton               *togglebutton_play_stream;
         Gtk::Image                      *image_play_button;
         Gtk::Image                      *image_stop_button;
-        Gtk::Button                     *button_load_raw_packets;
 
         // Clear Button
         Gtk::Button                     *button_clear_all;
@@ -164,6 +164,7 @@ class FSatPktAna
         Log                             *log_data_pkts;         /**< . */
         ProtocolStatistic               *ngham_statistic;       /**< . */
         ProtocolStatistic               *ax25_statistic;        /**< . */
+        BeaconData                      *beacon_data;           /**< . */
         
         /**
          * \brief 
@@ -189,12 +190,6 @@ class FSatPktAna
          * \return None
          */
         void OnToggleButtonPlayStreamToggled();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnButtonLoadRawPacketsClicked();
         /**
          * \brief 
          * 
@@ -278,15 +273,6 @@ class FSatPktAna
          * \return 
          */
         std::vector<uint8_t> ProccessByte(uint8_t byte);
-        /**
-         * \brief 
-         * 
-         * \param data
-         * \param len
-         * 
-         * \return None
-         */
-        void DisplayBeaconData(uint8_t *data, uint8_t len);
 };
 
 #endif // FSAT_PKT_ANA_H_

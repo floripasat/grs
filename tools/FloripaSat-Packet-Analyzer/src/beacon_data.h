@@ -40,7 +40,7 @@
 #define BEACON_DATA_H_
 
 #include <gtkmm.h>
-#include <stdint.hs>
+#include <stdint.h>
 
 #define BEACON_DATA_SAT_ID_PKT          0
 #define BEACON_DATA_EPS_PKT             1
@@ -93,6 +93,8 @@ class BeaconData
         uint32_t system_time_sec;           /**< . */
         uint16_t obdh_resets;               /**< . */
         
+        uint8_t type_last_pkt;              /**< . */
+        
         /**
          * \brief 
          * 
@@ -108,7 +110,7 @@ class BeaconData
          * 
          * \return 
          */
-        double BatTempConv(uint16_t val);
+        double BatTempConv(uint32_t val);
         /**
          * \brief 
          * 
@@ -197,18 +199,24 @@ class BeaconData
         /**
          * \brief 
          * 
-         * \param pkt
+         * \param data
          * \param len
          * 
          * \return None
          */
-        void Update(uint8_t *pkt, uint8_t len);
+        void Update(uint8_t *data, uint8_t len);
         /**
          * \brief 
          * 
          * \return None
          */
         void Clear();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
+        const char* Log();
 };
 
 #endif // BEACON_DATA_H_

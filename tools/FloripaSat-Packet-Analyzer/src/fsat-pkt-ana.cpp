@@ -69,6 +69,7 @@ FSatPktAna::~FSatPktAna()
 {
     delete ngham_statistic;
     delete ax25_statistic;
+    delete beacon_data;
     
     delete main_window;
 }
@@ -175,12 +176,6 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     ref_builder->get_widget("image_play_button", image_play_button);
     ref_builder->get_widget("image_stop_button", image_stop_button);
     
-    ref_builder->get_widget("button_load_raw_packets", button_load_raw_packets);
-    if (button_load_raw_packets)
-    {
-        button_load_raw_packets->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonLoadRawPacketsClicked));
-    }
-    
     // Clear all
     ref_builder->get_widget("button_clear_all", button_clear_all);
     if (button_clear_all)
@@ -275,8 +270,16 @@ std::vector<uint8_t> FSatPktAna::ProccessByte(uint8_t byte)
                 {
                     result.push_back(data[j]);
                 }
-                receive_pkt = false;
+                
                 ngham_statistic->AddValidPkt();
+                
+                beacon_data->Update(data, data_len);
+                
+                if (checkbutton_log_data->get_active())
+                {
+                    *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << beacon_data->Log() << "\n";
+                }
+                
                 break;
             case PKT_CONDITION_PREFAIL:
                 break;
@@ -287,53 +290,15 @@ std::vector<uint8_t> FSatPktAna::ProccessByte(uint8_t byte)
                 result.push_back((uint8_t('O')));
                 result.push_back((uint8_t('R')));
                 result.push_back((uint8_t('!')));
+                
                 receive_pkt = false;
                 ngham_statistic->AddInvalidPkt();
+                
                 break;
         }
     }
     
     return result;
-}
-
-void FSatPktAna::DisplayBeaconData(uint8_t *data, uint8_t len)
-{
-    /*if (len > 10)
-    {
-        label_beacon_data_bat1_v_value->set_text(ToConstChar(BatVoltConv((data[10] << 8) | data[11])));
-        label_beacon_data_bat2_v_value->set_text(ToConstChar(BatVoltConv((data[12] << 8) | data[13])));
-        label_beacon_data_bat1_t_value->set_text(ToConstChar(BatTempConv(0xFFFF)));
-        label_beacon_data_bat2_t_value->set_text(ToConstChar(BatTempConv(0xFFFF)));
-        label_beacon_data_bat_c_value->set_text(ToConstChar(BatChargeConv((data[20] << 8) | data[21])));
-        label_beacon_data_solar_panel_i_value1->set_text(ToConstChar(SolarPanelCurrentConv((data[22] << 8) | data[23])) );// "/" ToConstChar(SolarPanelCurrentConv((data[24] << 8) | data[25]))) "/" ToConstChar(SolarPanelCurrentConv((data[26] << 8) | data[27]))));
-        label_beacon_data_solar_panel_i_value2->set_text(ToConstChar(SolarPanelCurrentConv((data[28] << 8) | data[29])) );//"/" ToConstChar(SolarPanelCurrentConv((data[30] << 8) | data[31]))) "/" ToConstChar(SolarPanelCurrentConv((data[32] << 8) | data[33]))));
-        label_beacon_data_solar_panel_v_value->set_text(ToConstChar(SolarPanelVoltageConv((data[34] << 8) | data[35])) );//"/" ToConstChar(SolarPanelVoltageConv((data[36] << 8) | data[37])) "/" ToConstChar(SolarPanelVoltageConv((data[38] << 8) | data[39])));
-        
-        if (len > 40)
-        {
-            label_beacon_data_sat_status_value->set_text(ToConstChar((data[40] << 8) | data[41]));
-            label_beacon_data_imu_data_value1->set_text(ToConstChar(IMUAccelConv((data[42] << 8) | data[43])) );//"/" ToConstChar(IMUAccelConv((data[44] << 8) | data[45])) "/" ToConstChar(IMUAccelConv((data[46] << 8) | data[47])));
-            label_beacon_data_imu_data_value2->set_text(ToConstChar(IMUGyroConv((data[48] << 8) | data[49])) );//"/" ToConstChar(IMUGyroConv((data[50] << 8) | data[51])) "/" ToConstChar(IMUGyroConv((data[52] << 8) | data[53])));
-            label_beacon_data_system_time_value->set_text(ToConstChar((data[54] << 24) | (data[55] << 16) | (data[56] << 8) | data[57]));
-            label_beacon_data_obdh_rst_value->set_text(ToConstChar((data[58] << 8) | data[59]));
-        }
-        else
-        {
-            label_beacon_data_sat_status_value->set_text("-");
-            label_beacon_data_imu_data_value1->set_text("-");
-            label_beacon_data_imu_data_value2->set_text("-");
-            label_beacon_data_system_time_value->set_text("-");
-            label_beacon_data_obdh_rst_value->set_text("-");
-        }
-    }
-    else
-    {
-        label_beacon_data_sat_status_value->set_text("-");
-        label_beacon_data_imu_data_value1->set_text("-");
-        label_beacon_data_imu_data_value2->set_text("-");
-        label_beacon_data_system_time_value->set_text("-");
-        label_beacon_data_obdh_rst_value->set_text("-");
-    }*/
 }
 
 bool FSatPktAna::Timer()
@@ -429,6 +394,10 @@ void FSatPktAna::OnMainWindowShow()
     
     ngham_statistic = new ProtocolStatistic(label_ngham_valid_value, label_ngham_invalid_value, label_ngham_total_value, label_ngham_lost_value);
     ax25_statistic = new ProtocolStatistic(label_ax25_valid_value, label_ax25_invalid_value, label_ax25_total_value, label_ax25_lost_value);
+    beacon_data = new BeaconData(label_beacon_data_bat1_v_value, label_beacon_data_bat2_v_value, label_beacon_data_bat1_t_value, label_beacon_data_bat2_t_value,
+                                 label_beacon_data_bat_c_value, label_beacon_data_solar_panel_i_value1, label_beacon_data_solar_panel_i_value2, label_beacon_data_solar_panel_v_value,
+                                 label_beacon_data_sat_status_value, label_beacon_data_imu_data_value1, label_beacon_data_imu_data_value2, label_beacon_data_system_time_value,
+                                 label_beacon_data_obdh_rst_value);
 }
 
 void FSatPktAna::OnToggleButtonOpenClosePortToggled()
@@ -472,7 +441,6 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
             checkbutton_log_data->set_sensitive(false);
             filechooserbutton_raw_packets->set_sensitive(false);
             togglebutton_play_stream->set_sensitive(false);
-            button_load_raw_packets->set_sensitive(false);
             
             this->OpenLogFiles();
             
@@ -507,7 +475,6 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
         checkbutton_log_data->set_sensitive(true);
         filechooserbutton_raw_packets->set_sensitive(true);
         togglebutton_play_stream->set_sensitive(true);
-        button_load_raw_packets->set_sensitive(true);
     }
 }
 
@@ -525,7 +492,6 @@ void FSatPktAna::OnToggleButtonPlayStreamToggled()
         checkbutton_log_ax25_packets->set_sensitive(false);
         checkbutton_log_data->set_sensitive(false);
         filechooserbutton_raw_packets->set_sensitive(false);
-        button_load_raw_packets->set_sensitive(false);
         button_clear_all->set_sensitive(false);
         
         this->OpenLogFiles();
@@ -544,14 +510,8 @@ void FSatPktAna::OnToggleButtonPlayStreamToggled()
         checkbutton_log_ax25_packets->set_sensitive(true);
         checkbutton_log_data->set_sensitive(true);
         filechooserbutton_raw_packets->set_sensitive(true);
-        button_load_raw_packets->set_sensitive(true);
         button_clear_all->set_sensitive(true);
     }
-}
-
-void FSatPktAna::OnButtonLoadRawPacketsClicked()
-{
-    this->SearchPackets();
 }
 
 void FSatPktAna::OnButtonClearAllClicked()
@@ -561,24 +521,11 @@ void FSatPktAna::OnButtonClearAllClicked()
     
     ngham_statistic->Clear();
     ax25_statistic->Clear();
+    beacon_data->Clear();
     
     textview_raw_packets_buffer->set_text("");
     textview_ngham_packets_buffer->set_text("");
     textview_ax25_packets_buffer->set_text("");
-    
-    label_beacon_data_bat1_v_value->set_text("-");
-    label_beacon_data_bat2_v_value->set_text("-");
-    label_beacon_data_bat1_t_value->set_text("-");
-    label_beacon_data_bat2_t_value->set_text("-");
-    label_beacon_data_bat_c_value->set_text("-");
-    label_beacon_data_solar_panel_i_value1->set_text("-");
-    label_beacon_data_solar_panel_i_value2->set_text("-");
-    label_beacon_data_solar_panel_v_value->set_text("-");
-    label_beacon_data_sat_status_value->set_text("-");
-    label_beacon_data_imu_data_value1->set_text("-");
-    label_beacon_data_imu_data_value2->set_text("-");
-    label_beacon_data_system_time_value->set_text("-");
-    label_beacon_data_obdh_rst_value->set_text("-");
 }
 
 void FSatPktAna::OnButtonAboutClicked()
@@ -724,7 +671,13 @@ void FSatPktAna::SearchPackets()
                                 }
                                 
                                 ngham_statistic->AddValidPkt();
-                                this->DisplayBeaconData(data, data_len);
+                                
+                                beacon_data->Update(data, data_len);
+                                
+                                if (checkbutton_log_data->get_active())
+                                {
+                                    *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << beacon_data->Log() << "\n";
+                                }
                                 
                                 receive_pkt = false;
                                 
@@ -804,7 +757,7 @@ void FSatPktAna::CloseLogFiles()
         delete log_ax25_pkts;
     }*/
     
-    if (checkbutton_log_ngham_packets->get_active())
+    if (checkbutton_log_data->get_active())
     {
         delete log_data_pkts;
     }
