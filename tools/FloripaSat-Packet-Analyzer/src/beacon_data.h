@@ -41,6 +41,7 @@
 
 #include <gtkmm.h>
 #include <stdint.h>
+#include <string.h>
 
 #define BEACON_DATA_SAT_ID_PKT          0
 #define BEACON_DATA_EPS_PKT             1
@@ -227,7 +228,7 @@ class BeaconData
          * 
          * \return 
          */
-        const char* Log();
+        std::string Log();
 };
 
 #endif // BEACON_DATA_H_

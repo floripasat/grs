@@ -37,7 +37,6 @@
  */
 
 #include <cmath>
-#include <string>
 #include <iomanip>
 
 #include "beacon_data.h"
@@ -157,7 +156,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             imu_gyro_x          = IMUGyroConv((data[48] << 8) | data[49]);
             imu_gyro_y          = IMUGyroConv((data[50] << 8) | data[51]);
             imu_gyro_z          = IMUGyroConv((data[52] << 8) | data[53]);
-            system_time_sec     = data[54] + (60*data[55]);
+            system_time_sec     = data[54];
             obdh_resets         = (data[58] << 8) | data[59];
             
             type_last_pkt = BEACON_DATA_OBDH_PKT;
@@ -205,93 +204,93 @@ void BeaconData::Clear()
     this->Display(BEACON_DATA_SAT_ID_PKT);
 }
 
-const char* BeaconData::Log()
+std::string BeaconData::Log()
 {
     std::string log_entry = "";
     
     switch(type_last_pkt)
     {
         case BEACON_DATA_EPS_PKT:
-            log_entry += bat1_voltage;
+            log_entry += ToString(bat1_voltage);
             log_entry += ",";
-            log_entry += bat2_voltage;
+            log_entry += ToString(bat2_voltage);
             log_entry += ",";
-            log_entry += bat1_temp;
+            log_entry += ToString(bat1_temp);
             log_entry += ",";
-            log_entry += bat2_temp;
+            log_entry += ToString(bat2_temp);
             log_entry += ",";
-            log_entry += bat_charge;
+            log_entry += ToString(bat_charge);
             log_entry += ",";
-            log_entry += solar_current_1;
+            log_entry += ToString(solar_current_1);
             log_entry += ",";
-            log_entry += solar_current_2;
+            log_entry += ToString(solar_current_2);
             log_entry += ",";
-            log_entry += solar_current_3;
+            log_entry += ToString(solar_current_3);
             log_entry += ",";
-            log_entry += solar_current_4;
+            log_entry += ToString(solar_current_4);
             log_entry += ",";
-            log_entry += solar_current_5;
+            log_entry += ToString(solar_current_5);
             log_entry += ",";
-            log_entry += solar_current_6;
+            log_entry += ToString(solar_current_6);
             log_entry += ",";
-            log_entry += solar_voltage_1;
+            log_entry += ToString(solar_voltage_1);
             log_entry += ",";
-            log_entry += solar_voltage_2;
+            log_entry += ToString(solar_voltage_2);
             log_entry += ",";
-            log_entry += solar_voltage_3;
+            log_entry += ToString(solar_voltage_3);
             log_entry += ",,,,,,,,";
             break;
         case BEACON_DATA_OBDH_PKT:
-            log_entry += bat1_voltage;
+            log_entry += ToString(bat1_voltage);
             log_entry += ",";
-            log_entry += bat2_voltage;
+            log_entry += ToString(bat2_voltage);
             log_entry += ",";
-            log_entry += bat1_temp;
+            log_entry += ToString(bat1_temp);
             log_entry += ",";
-            log_entry += bat2_temp;
+            log_entry += ToString(bat2_temp);
             log_entry += ",";
-            log_entry += bat_charge;
+            log_entry += ToString(bat_charge);
             log_entry += ",";
-            log_entry += solar_current_1;
+            log_entry += ToString(solar_current_1);
             log_entry += ",";
-            log_entry += solar_current_2;
+            log_entry += ToString(solar_current_2);
             log_entry += ",";
-            log_entry += solar_current_3;
+            log_entry += ToString(solar_current_3);
             log_entry += ",";
-            log_entry += solar_current_4;
+            log_entry += ToString(solar_current_4);
             log_entry += ",";
-            log_entry += solar_current_5;
+            log_entry += ToString(solar_current_5);
             log_entry += ",";
-            log_entry += solar_current_6;
+            log_entry += ToString(solar_current_6);
             log_entry += ",";
-            log_entry += solar_voltage_1;
+            log_entry += ToString(solar_voltage_1);
             log_entry += ",";
-            log_entry += solar_voltage_2;
+            log_entry += ToString(solar_voltage_2);
             log_entry += ",";
-            log_entry += solar_voltage_3;
+            log_entry += ToString(solar_voltage_3);
             log_entry += ",";
-            log_entry += imu_accel_x;
+            log_entry += ToString(imu_accel_x);
             log_entry += ",";
-            log_entry += imu_accel_y;
+            log_entry += ToString(imu_accel_y);
             log_entry += ",";
-            log_entry += imu_accel_z;
+            log_entry += ToString(imu_accel_z);
             log_entry += ",";
-            log_entry += imu_gyro_x;
+            log_entry += ToString(imu_gyro_x);
             log_entry += ",";
-            log_entry += imu_gyro_y;
+            log_entry += ToString(imu_gyro_y);
             log_entry += ",";
-            log_entry += imu_gyro_z;
+            log_entry += ToString(imu_gyro_z);
             log_entry += ",";
-            log_entry += system_time_sec;
+            log_entry += ToString(system_time_sec);
             log_entry += ",";
-            log_entry += obdh_resets;
+            log_entry += ToString(obdh_resets);
             break;
         default:
             log_entry += ",,,,,,,,,,,,,,,,,,,,,";
             break;
     };
     
-    return log_entry.c_str();
+    return log_entry;
 }
 
 double BeaconData::BatVoltConv(uint16_t val)

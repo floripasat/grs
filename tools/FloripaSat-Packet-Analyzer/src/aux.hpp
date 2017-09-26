@@ -42,6 +42,7 @@
 #include <gtkmm.h>
 #include <stdint.h>
 #include <string>
+#include <sstream>
 
 /**
  * \fn EntryToHex
@@ -82,6 +83,25 @@ const char* ToConstChar(T input)
     std::string output = input_str.str();
     
     return output.c_str();
+}
+
+/**
+ * \fn ToString
+ * 
+ * \brief 
+ * 
+ * \param input
+ * 
+ * \return 
+ */
+template <typename T>
+std::string ToString(T input)
+{
+    std::ostringstream out;
+    
+    out << input;
+    
+    return out.str();
 }
 
 #endif // AUX_HPP_

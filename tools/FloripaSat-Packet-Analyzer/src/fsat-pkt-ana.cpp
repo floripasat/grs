@@ -354,7 +354,7 @@ bool FSatPktAna::Timer()
                         }
                         if (checkbutton_log_ngham_packets->get_active())
                         {
-                            *log_ngham_pkts << b_ngham;
+                            *log_ngham_pkts << HexToStr(r[i]);
                         }
                     }
                     
@@ -660,7 +660,7 @@ void FSatPktAna::SearchPackets()
                                     }
                                     if (checkbutton_log_ngham_packets->get_active())
                                     {
-                                        *log_ngham_pkts << b;
+                                        *log_ngham_pkts << HexToStr(data[j]) << " ";
                                     }
                                 }
                                 textview_ngham_packets_buffer->insert_at_cursor("\n");
