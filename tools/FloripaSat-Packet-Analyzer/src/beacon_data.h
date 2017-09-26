@@ -151,6 +151,17 @@ class BeaconData
          * \return 
          */
         double IMUGyroConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param x
+         * \param y
+         * \param z
+         * \param dig
+         * 
+         * \return 
+         */
+        const char* PrintAxisData(double x, double y, double z, uint8_t dig=2);
     public:
         /**
          * \brief 

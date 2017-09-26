@@ -38,6 +38,7 @@
 
 #include <cmath>
 #include <string>
+#include <iomanip>
 
 #include "beacon_data.h"
 #include "aux.hpp"
@@ -85,9 +86,9 @@ void BeaconData::Display(uint8_t pkt_type)
             label_bat1_t->set_text(ToConstChar(bat1_temp));
             label_bat2_t->set_text(ToConstChar(bat2_temp));
             label_bat_c->set_text(ToConstChar(bat_charge));
-            label_solar_i_1->set_text("NULL");
-            label_solar_i_2->set_text("NULL");
-            label_solar_v->set_text("NULL");
+            label_solar_i_1->set_text(PrintAxisData(solar_current_1, solar_current_2, solar_current_3));
+            label_solar_i_2->set_text(PrintAxisData(solar_current_4, solar_current_5, solar_current_6));
+            label_solar_v->set_text(PrintAxisData(solar_voltage_1, solar_voltage_2, solar_voltage_3));
             label_status->set_text(BEACON_DATA_UNKNOWN_VALUE);
             label_imu_data1->set_text(BEACON_DATA_UNKNOWN_VALUE);
             label_imu_data2->set_text(BEACON_DATA_UNKNOWN_VALUE);
@@ -100,12 +101,12 @@ void BeaconData::Display(uint8_t pkt_type)
             label_bat1_t->set_text(ToConstChar(bat1_temp));
             label_bat2_t->set_text(ToConstChar(bat2_temp));
             label_bat_c->set_text(ToConstChar(bat_charge));
-            label_solar_i_1->set_text("NULL");
-            label_solar_i_2->set_text("NULL");
-            label_solar_v->set_text("NULL");
-            label_status->set_text("NULL");
-            label_imu_data1->set_text("NULL");
-            label_imu_data2->set_text("NULL");
+            label_solar_i_1->set_text(PrintAxisData(solar_current_1, solar_current_2, solar_current_3));
+            label_solar_i_2->set_text(PrintAxisData(solar_current_4, solar_current_5, solar_current_6));
+            label_solar_v->set_text(PrintAxisData(solar_voltage_1, solar_voltage_2, solar_voltage_3));
+            label_status->set_text(BEACON_DATA_UNKNOWN_VALUE);
+            label_imu_data1->set_text(PrintAxisData(imu_accel_x, imu_accel_y, imu_accel_z));
+            label_imu_data2->set_text(PrintAxisData(imu_gyro_x, imu_gyro_y, imu_gyro_z));
             label_system_time->set_text(ToConstChar(system_time_sec));
             label_obdh_rst->set_text(ToConstChar(obdh_resets));
             break;
@@ -156,7 +157,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             imu_gyro_x          = IMUGyroConv((data[48] << 8) | data[49]);
             imu_gyro_y          = IMUGyroConv((data[50] << 8) | data[51]);
             imu_gyro_z          = IMUGyroConv((data[52] << 8) | data[53]);
-            system_time_sec     = (data[54] << 24) | (data[55] << 16) | (data[56] << 8) | data[57];
+            system_time_sec     = data[54] + (60*data[55]);
             obdh_resets         = (data[58] << 8) | data[59];
             
             type_last_pkt = BEACON_DATA_OBDH_PKT;
@@ -320,12 +321,27 @@ double BeaconData::SolarPanelVoltageConv(uint16_t val)
 
 double BeaconData::IMUAccelConv(uint16_t val)
 {
-    return int16_t(val)*16/32768;
+    return int16_t(val)*16.0/32768.0;
 }
 
 double BeaconData::IMUGyroConv(uint16_t val)
 {
-    return int16_t(val)*250/32768;
+    return int16_t(val)*250.0/32768.0;
+}
+
+const char* BeaconData::PrintAxisData(double x, double y, double z, uint8_t dig)
+{
+    std::stringstream input_str;
+    
+    input_str << std::fixed << std::setprecision(dig) << x;
+    input_str << "/";
+    input_str << std::fixed << std::setprecision(dig) << y;
+    input_str << "/";
+    input_str << std::fixed << std::setprecision(dig) << z;
+    
+    std::string output = input_str.str();
+    
+    return output.c_str();
 }
 
 //! \} End of beacon_data group
