@@ -13,11 +13,13 @@ all:
 	mkdir -p $(BUILD_DIR)
 	$(MAKE) BUILD_DIR=$(CURDIR)/$(BUILD_DIR) -C libs
 	$(MAKE) BUILD_DIR=$(CURDIR)/$(BUILD_DIR) -C src
-	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/aux.o $(BUILD_DIR)/fsat-pkt-ana.o $(BUILD_DIR)/log.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/protocol_statistic.o $(BUILD_DIR)/beacon_data.o $(BUILD_DIR)/libngham.a -o $(BUILD_DIR)/$(TARGET).x $(GTKMM_FLAGS)
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/*.o $(BUILD_DIR)/*.a -o $(BUILD_DIR)/$(TARGET).x $(GTKMM_FLAGS)
 	mkdir -p $(BUILD_DIR)/glade
+	mkdir -p $(BUILD_DIR)/gnuradio
 	cp gui/MainWindow.glade $(BUILD_DIR)/glade/
 	cp img/icon.png $(BUILD_DIR)/
+	cp gnuradio/fsat_grs.py $(BUILD_DIR)/gnuradio/
 
 clean:
-	rm -r $(BUILD_DIR)
+	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/*.x $(BUILD_DIR)/*.a
 

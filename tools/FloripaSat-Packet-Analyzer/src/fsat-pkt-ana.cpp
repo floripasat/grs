@@ -28,7 +28,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.2
+ * \version 2.0
  * 
  * \date 10/09/2017
  * 
@@ -36,17 +36,13 @@
  * \{
  */
 
-#include <sstream>
 #include <fstream>
 #include <string>
+#include <cstdio>
+#include <thread>
 
 #include "fsat-pkt-ana.h"
 #include "aux.hpp"
-
-extern "C"
-{
-    #include <libs/ngham/ngham.h>
-}
 
 FSatPktAna::FSatPktAna()
 {
@@ -55,22 +51,16 @@ FSatPktAna::FSatPktAna()
 
 FSatPktAna::FSatPktAna(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
 {
-    receive_pkt = false;
-    
-    prev_fin_byte_counter = 0;
-    fin_byte_counter = 0;
-    
-    serial_is_opened = false;
-    
     this->BuildWidgets(ref_builder, ui_file);
 }
 
 FSatPktAna::~FSatPktAna()
 {
-    delete ngham_statistic;
-    delete ax25_statistic;
-    delete beacon_data;
-    
+    //delete ngham_statistic;
+    //delete ax25_statistic;
+    //delete beacon_data;
+    //delete telemetry_data;
+    delete event_log;
     delete main_window;
 }
 
@@ -106,7 +96,96 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
         return -1;
     }
     
-    main_window->signal_show().connect(sigc::mem_fun(*this, &FSatPktAna::OnMainWindowShow));
+    // Toolbar
+    ref_builder->get_widget("toolbutton_open_log_file", toolbutton_open_log_file);
+    if (toolbutton_open_log_file)
+    {
+        toolbutton_open_log_file->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonOpenClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_config", toolbutton_config);
+    if (toolbutton_config)
+    {
+        toolbutton_config->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonConfigClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_statistics", toolbutton_statistics);
+    if (toolbutton_statistics)
+    {
+        toolbutton_statistics->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonStatisticsClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_gnuradio", toolbutton_gnuradio);
+    if (toolbutton_gnuradio)
+    {
+        toolbutton_gnuradio->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonRunClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_about", toolbutton_about);
+    if (toolbutton_about)
+    {
+        toolbutton_about->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonAboutClicked));
+    }
+    
+    // Beacon stream
+    ref_builder->get_widget("filechooserbutton_beacon", filechooserbutton_beacon);
+    
+    ref_builder->get_widget("togglebutton_play_beacon", togglebutton_play_beacon);
+    if (togglebutton_play_beacon)
+    {
+        togglebutton_play_beacon->signal_toggled().connect(sigc::mem_fun(*this, &FSatPktAna::OnToggleButtonPlayBeaconToggled));
+    }
+    
+    ref_builder->get_widget("togglebutton_pause_beacon", togglebutton_pause_beacon);
+    if (togglebutton_pause_beacon)
+    {
+        togglebutton_pause_beacon->signal_toggled().connect(sigc::mem_fun(*this, &FSatPktAna::OnToggleButtonPauseBeaconToggled));
+    }
+    
+    ref_builder->get_widget("button_stop_beacon", button_stop_beacon);
+    if (button_stop_beacon)
+    {
+        button_stop_beacon->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonStopBeaconClicked));
+    }
+    
+    ref_builder->get_widget("button_clear_all_beacon", button_clear_all_beacon);
+    if (button_clear_all_beacon)
+    {
+        button_clear_all_beacon->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonClearAllBeaconClicked));
+    }
+    
+    // Telemetry stream
+    ref_builder->get_widget("filechooserbutton_telemetry", filechooserbutton_telemetry);
+    
+    ref_builder->get_widget("togglebutton_play_telemetry", togglebutton_play_telemetry);
+    if (togglebutton_play_telemetry)
+    {
+        togglebutton_play_telemetry->signal_toggled().connect(sigc::mem_fun(*this, &FSatPktAna::OnToggleButtonPlayTelemetryToggled));
+    }
+    
+    ref_builder->get_widget("togglebutton_pause_telemetry", togglebutton_pause_telemetry);
+    if (togglebutton_pause_telemetry)
+    {
+        togglebutton_pause_telemetry->signal_toggled().connect(sigc::mem_fun(*this, &FSatPktAna::OnToggleButtonPlayTelemetryToggled));
+    }
+    
+    ref_builder->get_widget("button_stop_telemetry", button_stop_telemetry);
+    if (button_stop_telemetry)
+    {
+        button_stop_telemetry->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonStopTelemetryClicked));
+    }
+    
+    ref_builder->get_widget("button_clear_all_telemetry", button_clear_all_telemetry);
+    if (button_clear_all_telemetry)
+    {
+        button_clear_all_telemetry->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonClearAllTelemetryClicked));
+    }
+    
+    // Log checkbuttons
+    ref_builder->get_widget("checkbutton_log_ngham_packets", checkbutton_log_ngham_packets);
+    ref_builder->get_widget("checkbutton_log_ax25_packets", checkbutton_log_ax25_packets);
+    ref_builder->get_widget("checkbutton_log_beacon_data", checkbutton_log_beacon_data);
+    ref_builder->get_widget("checkbutton_log_telemetry_data", checkbutton_log_telemetry_data);
     
     // Serial port
     ref_builder->get_widget("entry_serial_port", entry_serial_port);
@@ -118,11 +197,13 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
         togglebutton_open_close_port->signal_toggled().connect(sigc::mem_fun(*this, &FSatPktAna::OnToggleButtonOpenClosePortToggled));
     }
     
-    // Log checkbuttons
-    ref_builder->get_widget("checkbutton_log_raw_packets", checkbutton_log_raw_packets);
-    ref_builder->get_widget("checkbutton_log_ngham_packets", checkbutton_log_ngham_packets);
-    ref_builder->get_widget("checkbutton_log_ax25_packets", checkbutton_log_ax25_packets);
-    ref_builder->get_widget("checkbutton_log_eps_data", checkbutton_log_data);
+    // Event log
+    ref_builder->get_widget("textview_event_log", textview_event_log);
+    if (textview_event_log)
+    {
+        event_log = new EventLog(textview_event_log);
+        event_log->open((LOG_DEFAULT_DIR "/EVENTS_" + event_log->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
+    }
     
     // NGHam packet configuration preamble
     ref_builder->get_widget("entry_ngham_config_preamble_byte", entry_ngham_config_preamble_byte);
@@ -144,56 +225,21 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     ref_builder->get_widget("entry_ax25_sync_bytes_s2", entry_ax25_sync_bytes_s2);
     ref_builder->get_widget("entry_ax25_sync_bytes_s3", entry_ax25_sync_bytes_s3);
     
-    // Packets
-    ref_builder->get_widget("textview_raw_packets", textview_raw_packets);
-    if (textview_raw_packets)
-    {
-        textview_raw_packets_buffer = textview_raw_packets->get_buffer();
-    }
-    
-    ref_builder->get_widget("checkbutton_ngham_hex_output", checkbutton_ngham_hex_output);
-    ref_builder->get_widget("textview_ngham_packets", textview_ngham_packets);
-    if (textview_ngham_packets)
-    {
-        textview_ngham_packets_buffer = textview_ngham_packets->get_buffer();
-    }
-    
-    ref_builder->get_widget("textview_ax25_packets", textview_ax25_packets);
-    if (textview_ax25_packets)
-    {
-        textview_ax25_packets_buffer = textview_ax25_packets->get_buffer();
-    }
-    
-    // Load raw packets
-    ref_builder->get_widget("filechooserbutton_raw_packets", filechooserbutton_raw_packets);
-    
-    ref_builder->get_widget("togglebutton_play_stream", togglebutton_play_stream);
-    if (togglebutton_play_stream)
-    {
-        togglebutton_play_stream->signal_toggled().connect(sigc::mem_fun(*this, &FSatPktAna::OnToggleButtonPlayStreamToggled));
-    }
-    
-    ref_builder->get_widget("image_play_button", image_play_button);
-    ref_builder->get_widget("image_stop_button", image_stop_button);
-    
-    // Clear all
-    ref_builder->get_widget("button_clear_all", button_clear_all);
-    if (button_clear_all)
-    {
-        button_clear_all->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonClearAllClicked));
-    }
-    
     // NGHam statistic
     ref_builder->get_widget("label_ngham_valid_value", label_ngham_valid_value);
     ref_builder->get_widget("label_ngham_invalid_value", label_ngham_invalid_value);
     ref_builder->get_widget("label_ngham_total_value", label_ngham_total_value);
     ref_builder->get_widget("label_ngham_lost_value", label_ngham_lost_value);
     
+    ngham_statistic = new ProtocolStatistic(label_ngham_valid_value, label_ngham_invalid_value, label_ngham_total_value, label_ngham_lost_value);
+    
     // AX25 statistic
     ref_builder->get_widget("label_ax25_valid_value", label_ax25_valid_value);
     ref_builder->get_widget("label_ax25_invalid_value", label_ax25_invalid_value);
     ref_builder->get_widget("label_ax25_total_value", label_ax25_total_value);
     ref_builder->get_widget("label_ax25_lost_value", label_ax25_lost_value);
+    
+    ax25_statistic = new ProtocolStatistic(label_ax25_valid_value, label_ax25_invalid_value, label_ax25_total_value, label_ax25_lost_value);
     
     // Beacon Data
     ref_builder->get_widget("label_beacon_data_bat1_v_value", label_beacon_data_bat1_v_value);
@@ -210,13 +256,18 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     ref_builder->get_widget("label_beacon_data_system_time_value", label_beacon_data_system_time_value);
     ref_builder->get_widget("label_beacon_data_obdh_rst_value", label_beacon_data_obdh_rst_value);
     
-    // About
-    ref_builder->get_widget("button_about", button_about);
-    if (button_about)
-    {
-        button_about->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonAboutClicked));
-    }
+    beacon_data = new BeaconData(label_beacon_data_bat1_v_value, label_beacon_data_bat2_v_value, label_beacon_data_bat1_t_value, label_beacon_data_bat2_t_value,
+                                 label_beacon_data_bat_c_value, label_beacon_data_solar_panel_i_value1, label_beacon_data_solar_panel_i_value2, label_beacon_data_solar_panel_v_value,
+                                 label_beacon_data_sat_status_value, label_beacon_data_imu_data_value1, label_beacon_data_imu_data_value2, label_beacon_data_system_time_value,
+                                 label_beacon_data_obdh_rst_value);
     
+    // Telemetry data
+    //telemetry_data = new TelemetryData();
+    
+    // Preferences window
+    ref_builder->get_widget("window_config", window_config);
+    
+    // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
     
     return 0;
@@ -229,7 +280,7 @@ int FSatPktAna::Run(Glib::RefPtr<Gtk::Application> app)
     
     return app->run(*main_window);
 }
-
+/*
 std::vector<uint8_t> FSatPktAna::ProccessByte(uint8_t byte)
 {
     std::vector<uint8_t> sync_bytes;
@@ -275,9 +326,9 @@ std::vector<uint8_t> FSatPktAna::ProccessByte(uint8_t byte)
                 
                 beacon_data->Update(data, data_len);
                 
-                if (checkbutton_log_data->get_active())
+                if (checkbutton_log_beacon_data->get_active())
                 {
-                    *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << beacon_data->Log() << "\n";
+                    *log_beacon_data << log_beacon_data->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << beacon_data->Log() << "\n";
                 }
                 
                 break;
@@ -299,36 +350,18 @@ std::vector<uint8_t> FSatPktAna::ProccessByte(uint8_t byte)
     }
     
     return result;
-}
+}*/
 
 bool FSatPktAna::Timer()
 {
     if (togglebutton_open_close_port->get_active())
     {
-        int bytes_buf = uart->DataAvailable();
+        /*int bytes_buf = uart->DataAvailable();
         if (bytes_buf > 0)
         {
-            if (checkbutton_log_raw_packets->get_active())
-            {
-                *log_raw_pkts << log_raw_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV);
-            }
-            
             while(bytes_buf--)
             {
                 uint8_t byte = uart->GetByte();
-                
-                std::string b = HexToStr(byte);
-                
-                textview_raw_packets_buffer->insert_at_cursor(b.c_str());
-                textview_raw_packets_buffer->insert_at_cursor(", ");
-                
-                if (checkbutton_log_raw_packets->get_active())
-                {
-                    *log_raw_pkts << b << ",";
-                }
-                
-                auto iter_raw = textview_raw_packets_buffer->end();
-                textview_raw_packets->scroll_to(iter_raw);
                 
                 std::vector<uint8_t> r = this->ProccessByte(byte);
                 if (!r.empty())
@@ -343,61 +376,247 @@ bool FSatPktAna::Timer()
                         std::stringstream byte_str;
                         byte_str << (char)r[i];
                         std::string b_ngham = byte_str.str();
-                        if (checkbutton_ngham_hex_output->get_active())
-                        {
-                            textview_ngham_packets_buffer->insert_at_cursor(HexToStr(r[i]).c_str());
-                            textview_ngham_packets_buffer->insert_at_cursor(" ");
-                        }
-                        else
-                        {
-                            textview_ngham_packets_buffer->insert_at_cursor(b_ngham.c_str());
-                        }
+                        
                         if (checkbutton_log_ngham_packets->get_active())
                         {
                             *log_ngham_pkts << HexToStr(r[i]);
                         }
                     }
                     
-                    textview_ngham_packets_buffer->insert_at_cursor("\n");
+                    textview_event_log_buffer->insert_at_cursor("\n");
                     
                     if (checkbutton_log_ngham_packets->get_active())
                     {
                         *log_ngham_pkts << "\n";
                     }
                     
-                    auto iter_ngham = textview_ngham_packets_buffer->end();
-                    textview_ngham_packets->scroll_to(iter_ngham);
+                    auto iter_ngham = textview_event_log_buffer->end();
+                    textview_event_log->scroll_to(iter_ngham);
                 }
                 
                 // AX25 packets  >>>>>>>>> TO BE IMPLEMENTED
             }
-            
-            textview_raw_packets_buffer->insert_at_cursor("\n\n");
-            if (checkbutton_log_raw_packets->get_active())
-            {
-                *log_raw_pkts << "\n";
-            }
+        }*/
+    }
+    
+    if (togglebutton_play_beacon->get_active())
+    {
+        if (!togglebutton_pause_beacon->get_active())
+        {
+            ngham_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
+            //ax25_pkts_beacon->Search();
         }
     }
     
-    if (togglebutton_play_stream->get_active())
+    if (togglebutton_play_telemetry->get_active())
     {
-        this->SearchPackets();
+        if (!togglebutton_pause_telemetry->get_active())
+        {
+            ngham_pkts_telemetry->Search(filechooserbutton_telemetry->get_filename().c_str());
+        }
     }
     
 	return true;
 }
 
-void FSatPktAna::OnMainWindowShow()
+void FSatPktAna::OnToolButtonOpenClicked()
 {
-    ngham_Init();
     
-    ngham_statistic = new ProtocolStatistic(label_ngham_valid_value, label_ngham_invalid_value, label_ngham_total_value, label_ngham_lost_value);
-    ax25_statistic = new ProtocolStatistic(label_ax25_valid_value, label_ax25_invalid_value, label_ax25_total_value, label_ax25_lost_value);
-    beacon_data = new BeaconData(label_beacon_data_bat1_v_value, label_beacon_data_bat2_v_value, label_beacon_data_bat1_t_value, label_beacon_data_bat2_t_value,
-                                 label_beacon_data_bat_c_value, label_beacon_data_solar_panel_i_value1, label_beacon_data_solar_panel_i_value2, label_beacon_data_solar_panel_v_value,
-                                 label_beacon_data_sat_status_value, label_beacon_data_imu_data_value1, label_beacon_data_imu_data_value2, label_beacon_data_system_time_value,
-                                 label_beacon_data_obdh_rst_value);
+}
+
+void FSatPktAna::OnToolButtonConfigClicked()
+{
+    /*window_config->set_transient_for(*main_window);
+    
+    int response = window_config->show();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        window_config->hide();
+    }*/
+}
+
+void FSatPktAna::OnToolButtonStatisticsClicked()
+{
+    
+}
+
+void FSatPktAna::OnToolButtonRunClicked()
+{
+    std::thread thread_gnuradio(&FSatPktAna::RunGNURadioReceiver, this);
+    
+    thread_gnuradio.detach();
+}
+
+void FSatPktAna::OnToolButtonAboutClicked()
+{
+    aboutdialog->set_transient_for(*main_window);
+    
+    int response = aboutdialog->run();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        aboutdialog->hide();
+    }
+}
+
+void FSatPktAna::OnToggleButtonPlayBeaconToggled()
+{
+    if (togglebutton_play_beacon->get_active())
+    {
+        ngham_pkts_beacon = new NGHamPkts(event_log, beacon_data, ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_beacon_data->get_active());
+        
+        ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), std::ifstream::in);
+        
+        if (ngham_pkts_beacon->is_open())
+        {
+            filechooserbutton_beacon->set_sensitive(false);
+            
+            togglebutton_play_beacon->set_sensitive(false);
+            togglebutton_pause_beacon->set_sensitive(true);
+            button_stop_beacon->set_sensitive(true);
+            
+            button_clear_all_beacon->set_sensitive(false);
+            
+            checkbutton_log_ngham_packets->set_sensitive(false);
+            checkbutton_log_ax25_packets->set_sensitive(false);
+            checkbutton_log_beacon_data->set_sensitive(false);
+            
+            entry_serial_port->set_sensitive(false);
+            combobox_baudrate->set_sensitive(false);
+            togglebutton_open_close_port->set_sensitive(false);
+            
+            event_log->AddNewEvent("New beacon stream started");
+        }
+        else
+        {
+            togglebutton_play_beacon->set_active(false);
+            
+            this->RaiseErrorMessage("Error opening this file!", "Maybe the current file is not valid!");
+        }
+    }
+    else
+    {
+        delete ngham_pkts_beacon;
+        
+        filechooserbutton_beacon->set_sensitive(true);
+        
+        togglebutton_play_beacon->set_sensitive(true);
+        togglebutton_pause_beacon->set_sensitive(false);
+        button_stop_beacon->set_sensitive(false);
+        
+        button_clear_all_beacon->set_sensitive(true);
+        
+        if (!togglebutton_play_telemetry->get_active())
+        {
+            checkbutton_log_ngham_packets->set_sensitive(true);
+            checkbutton_log_ax25_packets->set_sensitive(true);
+            entry_serial_port->set_sensitive(true);
+            combobox_baudrate->set_sensitive(true);
+            togglebutton_open_close_port->set_sensitive(true);
+        }
+        
+        checkbutton_log_beacon_data->set_sensitive(true);
+        
+        event_log->AddNewEvent("Beacon stream finished");
+    }
+}
+
+void FSatPktAna::OnToggleButtonPauseBeaconToggled()
+{
+    if (togglebutton_pause_beacon->get_active())
+    {
+        togglebutton_play_beacon->set_sensitive(false);
+    }
+    else
+    {
+        togglebutton_play_beacon->set_sensitive(true);
+    }
+}
+
+void FSatPktAna::OnButtonStopBeaconClicked()
+{
+    togglebutton_play_beacon->set_active(false);
+    togglebutton_pause_beacon->set_active(false);
+}
+
+void FSatPktAna::OnButtonClearAllBeaconClicked()
+{
+    ngham_statistic->Clear();
+    ax25_statistic->Clear();
+    beacon_data->Clear();
+}
+
+void FSatPktAna::OnToggleButtonPlayTelemetryToggled()
+{
+    if (togglebutton_play_telemetry->get_active())
+    {
+        filechooserbutton_telemetry->set_sensitive(false);
+        
+        togglebutton_play_telemetry->set_sensitive(false);
+        togglebutton_pause_telemetry->set_sensitive(true);
+        button_stop_telemetry->set_sensitive(true);
+        
+        button_clear_all_telemetry->set_sensitive(false);
+        
+        checkbutton_log_ngham_packets->set_sensitive(false);
+        checkbutton_log_telemetry_data->set_sensitive(false);
+        
+        entry_serial_port->set_sensitive(false);
+        combobox_baudrate->set_sensitive(false);
+        togglebutton_open_close_port->set_sensitive(false);
+        
+        //ngham_pkts_telemetry = new NGHamPkts(event_log, telemetry_data);
+    }
+    else
+    {
+        filechooserbutton_telemetry->set_sensitive(true);
+        
+        togglebutton_play_telemetry->set_sensitive(true);
+        togglebutton_pause_telemetry->set_sensitive(false);
+        button_stop_telemetry->set_sensitive(false);
+        
+        button_clear_all_telemetry->set_sensitive(true);
+        
+        if (!togglebutton_play_beacon->get_active())
+        {
+            checkbutton_log_ngham_packets->set_sensitive(true);
+        }
+        
+        checkbutton_log_telemetry_data->set_sensitive(true);
+        
+        if (!togglebutton_play_beacon->get_active())
+        {
+            entry_serial_port->set_sensitive(true);
+            combobox_baudrate->set_sensitive(true);
+            togglebutton_open_close_port->set_sensitive(true);
+        }
+        
+        //delete ngham_pkts_telemetry;
+    }
+}
+
+void FSatPktAna::OnToggleButtonPauseTelemetryToggled()
+{
+    if (togglebutton_pause_telemetry->get_active())
+    {
+        togglebutton_play_telemetry->set_sensitive(false);
+    }
+    else
+    {
+        togglebutton_play_telemetry->set_sensitive(true);
+    }
+}
+
+void FSatPktAna::OnButtonStopTelemetryClicked()
+{
+    togglebutton_play_telemetry->set_active(false);
+    togglebutton_pause_telemetry->set_active(false);
+}
+
+void FSatPktAna::OnButtonClearAllTelemetryClicked()
+{
+    //telemetry_data->Clear();
 }
 
 void FSatPktAna::OnToggleButtonOpenClosePortToggled()
@@ -435,331 +654,56 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
         {
             entry_serial_port->set_sensitive(false);
             combobox_baudrate->set_sensitive(false);
-            checkbutton_log_raw_packets->set_sensitive(false);
             checkbutton_log_ngham_packets->set_sensitive(false);
             checkbutton_log_ax25_packets->set_sensitive(false);
-            checkbutton_log_data->set_sensitive(false);
-            filechooserbutton_raw_packets->set_sensitive(false);
-            togglebutton_play_stream->set_sensitive(false);
+            checkbutton_log_beacon_data->set_sensitive(false);
+            checkbutton_log_telemetry_data->set_sensitive(false);
+            filechooserbutton_beacon->set_sensitive(false);
+            togglebutton_play_beacon->set_sensitive(false);
             
             this->OpenLogFiles();
-            
-            serial_is_opened = true;
         }
         else
         {
-            delete uart;
-            
             this->RaiseErrorMessage("Error opening the serial port!", "Verify if the device is connected or the address is correct!");
-            
-            serial_is_opened = false;
             
             togglebutton_open_close_port->set_active(false);
         }
     }
     else
     {
-        if (serial_is_opened)
+        if (uart->isOpened())
         {
-            delete uart;
             this->CloseLogFiles();
         }
         
-        serial_is_opened = false;
-        
         entry_serial_port->set_sensitive(true);
         combobox_baudrate->set_sensitive(true);
-        checkbutton_log_raw_packets->set_sensitive(true);
         checkbutton_log_ngham_packets->set_sensitive(true);
         checkbutton_log_ax25_packets->set_sensitive(true);
-        checkbutton_log_data->set_sensitive(true);
-        filechooserbutton_raw_packets->set_sensitive(true);
-        togglebutton_play_stream->set_sensitive(true);
-    }
-}
-
-void FSatPktAna::OnToggleButtonPlayStreamToggled()
-{
-    if (togglebutton_play_stream->get_active())
-    {
-        togglebutton_play_stream->set_image(*image_stop_button);
+        checkbutton_log_beacon_data->set_sensitive(true);
+        checkbutton_log_telemetry_data->set_sensitive(true);
+        filechooserbutton_beacon->set_sensitive(true);
+        togglebutton_play_beacon->set_sensitive(true);
         
-        entry_serial_port->set_sensitive(false);
-        combobox_baudrate->set_sensitive(false);
-        togglebutton_open_close_port->set_sensitive(false);
-        checkbutton_log_raw_packets->set_sensitive(false);
-        checkbutton_log_ngham_packets->set_sensitive(false);
-        checkbutton_log_ax25_packets->set_sensitive(false);
-        checkbutton_log_data->set_sensitive(false);
-        filechooserbutton_raw_packets->set_sensitive(false);
-        button_clear_all->set_sensitive(false);
-        
-        this->OpenLogFiles();
-    }
-    else
-    {
-        this->CloseLogFiles();
-        
-        togglebutton_play_stream->set_image(*image_play_button);
-        
-        entry_serial_port->set_sensitive(true);
-        combobox_baudrate->set_sensitive(true);
-        togglebutton_open_close_port->set_sensitive(true);
-        checkbutton_log_raw_packets->set_sensitive(true);
-        checkbutton_log_ngham_packets->set_sensitive(true);
-        checkbutton_log_ax25_packets->set_sensitive(true);
-        checkbutton_log_data->set_sensitive(true);
-        filechooserbutton_raw_packets->set_sensitive(true);
-        button_clear_all->set_sensitive(true);
-    }
-}
-
-void FSatPktAna::OnButtonClearAllClicked()
-{
-    prev_fin_byte_counter = 0;
-    fin_byte_counter = 0;
-    
-    ngham_statistic->Clear();
-    ax25_statistic->Clear();
-    beacon_data->Clear();
-    
-    textview_raw_packets_buffer->set_text("");
-    textview_ngham_packets_buffer->set_text("");
-    textview_ax25_packets_buffer->set_text("");
-}
-
-void FSatPktAna::OnButtonAboutClicked()
-{
-    aboutdialog->set_transient_for(*main_window);
-    
-    int response = aboutdialog->run();
-    
-    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
-    {
-        aboutdialog->hide();
-    }
-}
-
-void FSatPktAna::SearchPackets()
-{
-    std::ifstream fin;
-    
-    fin.open(filechooserbutton_raw_packets->get_filename().c_str(), std::ifstream::in);
-    
-    if (!fin.is_open())
-    {
-        this->RaiseErrorMessage("Error opening this file!", "Maybe the current file is not valid!");
-        
-        if (togglebutton_play_stream->get_active())
-        {
-            togglebutton_play_stream->set_active(false);
-        }
-    }
-    else
-    {
-        std::vector<uint8_t> sync_bytes;
-        
-        sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s3->get_text()));
-        sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s2->get_text()));
-        sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s1->get_text()));
-        sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s0->get_text()));
-        
-        std::vector<uint8_t> sync_bits_buffer;
-        
-        uint32_t byte_counter = 0;
-        
-        while(!fin.eof())
-        {
-            uint8_t byte;
-            fin >> byte;
-            fin_byte_counter++;
-            
-            if (fin_byte_counter <= prev_fin_byte_counter)
-            {                
-                continue;
-            }
-            else
-            {
-                prev_fin_byte_counter = fin_byte_counter;
-            }
-            
-            if (!receive_pkt)
-            {
-                sync_bits_buffer.push_back(byte);
-                if (sync_bits_buffer.size() == sync_bytes.size()*8)  // 1 byte = 8 bits
-                {
-                    std::vector<uint8_t> sync_bytes_buffer(sync_bytes.size(), 0x00);
-                    unsigned int j = 7;
-                    unsigned int k = 0;
-                    for(unsigned int l=0;l<sync_bits_buffer.size();l++)
-                    {
-                        sync_bytes_buffer[k] |= (uint8_t)(sync_bits_buffer[l] << j);
-                        if (j == 0)
-                        {
-                            j = 7;
-                            k++;
-                        }
-                        else
-                        {
-                            j--;
-                        }
-                    }
-                    
-                    if (sync_bytes_buffer == sync_bytes)
-                    {
-                        receive_pkt = true;
-                    }
-                    
-                    sync_bits_buffer.erase(sync_bits_buffer.begin());
-                }
-            }
-            else
-            {
-                byte_buffer.push_back(byte);
-                if (byte_buffer.size() == 8)
-                {
-                    uint8_t byte = 0x00;
-                    unsigned int k = 8-1;
-                    for(unsigned int j=0;j<byte_buffer.size();j++)
-                    {
-                        byte |= (uint8_t)(byte_buffer[j] << k);
-                        k--;
-                    }
-                    
-                    if ((byte == 125) and (byte_counter == 0))
-                    {
-                        receive_pkt = false;
-                    }
-                    else
-                    {
-                        byte_counter++;
-                        
-                        uint8_t data[256];
-                        uint8_t data_len;
-                        switch(ngham_Decode(byte, data, &data_len))
-                        {
-                            case PKT_CONDITION_OK:                                
-                                if (checkbutton_log_ngham_packets->get_active())
-                                {
-                                    *log_ngham_pkts << "V," << log_ngham_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV);
-                                }
-                                
-                                for(unsigned int j=0; j<data_len; j++)
-                                {
-                                    std::stringstream byte_str;
-                                    byte_str << (char)data[j];
-                                    std::string b = byte_str.str();
-                                    if (checkbutton_ngham_hex_output->get_active())
-                                    {
-                                        textview_ngham_packets_buffer->insert_at_cursor(HexToStr(data[j]).c_str());
-                                        textview_ngham_packets_buffer->insert_at_cursor(" ");
-                                    }
-                                    else
-                                    {
-                                        textview_ngham_packets_buffer->insert_at_cursor(b.c_str());
-                                    }
-                                    if (checkbutton_log_ngham_packets->get_active())
-                                    {
-                                        *log_ngham_pkts << HexToStr(data[j]) << " ";
-                                    }
-                                }
-                                textview_ngham_packets_buffer->insert_at_cursor("\n");
-                                
-                                if (checkbutton_log_ngham_packets->get_active())
-                                {
-                                    *log_ngham_pkts << "\n";
-                                }
-                                
-                                ngham_statistic->AddValidPkt();
-                                
-                                beacon_data->Update(data, data_len);
-                                
-                                if (checkbutton_log_data->get_active())
-                                {
-                                    *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << beacon_data->Log() << "\n";
-                                }
-                                
-                                receive_pkt = false;
-                                
-                                byte_counter = 0;
-                                
-                                break;
-                            case PKT_CONDITION_PREFAIL:
-                                break;
-                            case PKT_CONDITION_FAIL:
-                                textview_ngham_packets_buffer->insert_at_cursor("ERROR!\n");
-                                
-                                if (checkbutton_log_ngham_packets->get_active())
-                                {
-                                    *log_ngham_pkts << "I," << log_ngham_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << ",\n";
-                                }
-                                
-                                ngham_statistic->AddInvalidPkt();
-                                
-                                receive_pkt = false;
-                                byte_counter = 0;
-                                break;
-                        }
-                    }
-                    
-                    byte_buffer.clear();
-                }
-            }
-        }
-        
-        fin_byte_counter = 0;
-        
-        fin.close();
+        delete uart;
     }
 }
 
 void FSatPktAna::OpenLogFiles()
 {
-    /*if (checkbutton_log_raw_packets->get_active())
+    if (checkbutton_log_beacon_data->get_active())
     {
-        log_raw_pkts = new Log;
-        log_raw_pkts->open((LOG_DEFAULT_DIR "/RAW_" + log_raw_pkts->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
-    }*/
-    
-    if (checkbutton_log_ngham_packets->get_active())
-    {
-        log_ngham_pkts = new Log;
-        log_ngham_pkts->open((LOG_DEFAULT_DIR "/NGHAM_" + log_ngham_pkts->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
-    }
-    
-    /*if (widgets.checkbutton_log_ax25_packets->get_active())
-    {
-        log_ax25_pkts = new Log;
-        log_ax25_pkts->open((LOG_DEFAULT_DIR "/AX25_" + log_ax25_pkts->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
-    }*/
-    
-    if (checkbutton_log_data->get_active())
-    {
-        log_data_pkts = new Log;
-        log_data_pkts->open((LOG_DEFAULT_DIR "/DATA_" + log_data_pkts->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
+        log_beacon_data = new Log;
+        log_beacon_data->open((LOG_DEFAULT_DIR "/BEACON_DATA_" + log_beacon_data->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
     }
 }
 
 void FSatPktAna::CloseLogFiles()
-{
-    /*if (checkbutton_log_raw_packets->get_active())
+{    
+    if (checkbutton_log_beacon_data->get_active())
     {
-        delete log_raw_pkts;
-    }*/
-    
-    if (checkbutton_log_ngham_packets->get_active())
-    {
-        delete log_ngham_pkts;
-    }
-    
-    /*if (widgets.checkbutton_log_ax25_packets->get_active())
-    {
-        delete log_ax25_pkts;
-    }*/
-    
-    if (checkbutton_log_data->get_active())
-    {
-        delete log_data_pkts;
+        delete log_beacon_data;
     }
 }
 
@@ -768,10 +712,15 @@ void FSatPktAna::RaiseErrorMessage(const char* error_title, const char* error_te
     msg_dialog = new Gtk::MessageDialog(error_title, false, Gtk::MESSAGE_ERROR);
     msg_dialog->set_secondary_text(error_text);
     msg_dialog->set_transient_for(*main_window);
-
+    
     msg_dialog->run();
-
+    
     delete msg_dialog;
+}
+
+void FSatPktAna::RunGNURadioReceiver()
+{
+    system("python gnuradio/fsat_grs.py");
 }
 
 //! \} End of fsat_pkt_ana group

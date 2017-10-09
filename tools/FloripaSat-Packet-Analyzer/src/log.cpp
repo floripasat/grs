@@ -53,7 +53,10 @@ Log::Log()
 
 Log::~Log()
 {
-	close();
+    if (this->is_open())
+    {
+        this->close();
+    }
 }
 
 bool Log::VerifyDirectory(const char *folder)
@@ -90,7 +93,7 @@ std::string Log::CurrentDateTime(int output_format)
             strftime(buf, sizeof(buf), "%d-%m-%Y_%H-%M-%S", &tstruct);
             break;
         case LOG_DATA_TIME_FOR_LOG:
-            strftime(buf, sizeof(buf), "%d/%m/%Y-%H:%M:%S", &tstruct);
+            strftime(buf, sizeof(buf), "%d/%m/%Y - %H:%M:%S", &tstruct);
             break;
         case LOG_DATA_TIME_FOR_LOG_CSV:
             strftime(buf, sizeof(buf), "%Y,%m,%d,%H,%M,%S,", &tstruct);

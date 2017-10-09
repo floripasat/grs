@@ -56,7 +56,7 @@ ProtocolStatistic::ProtocolStatistic(Gtk::Label *valid, Gtk::Label *invalid, Gtk
 
 ProtocolStatistic::~ProtocolStatistic()
 {
-    this->Clear();
+    //this->Clear();
 }
 
 void ProtocolStatistic::AddValidPkt()

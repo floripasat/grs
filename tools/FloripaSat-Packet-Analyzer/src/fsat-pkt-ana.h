@@ -44,9 +44,11 @@
 #include <stdint.h>
 
 #include "uart.h"
+#include "event_log.h"
 #include "log.h"
 #include "protocol_statistic.h"
 #include "beacon_data.h"
+#include "ngham_pkts.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/MainWindow.glade"
 
@@ -59,73 +61,76 @@
  */
 class FSatPktAna
 {
+        // Main window
         Gtk::Window                     *main_window;
-
+        
+        // Toolbar
+        Gtk::ToolButton                 *toolbutton_open_log_file;
+        Gtk::ToolButton                 *toolbutton_config;
+        Gtk::ToolButton                 *toolbutton_statistics;
+        Gtk::ToolButton                 *toolbutton_gnuradio;
+        Gtk::ToolButton                 *toolbutton_about;
+        
+        // Beacon stream
+        Gtk::FileChooserButton          *filechooserbutton_beacon;
+        Gtk::ToggleButton               *togglebutton_play_beacon;
+        Gtk::ToggleButton               *togglebutton_pause_beacon;
+        Gtk::Button                     *button_stop_beacon;
+        Gtk::Button                     *button_clear_all_beacon;
+        
+        // Telemetry stream
+        Gtk::FileChooserButton          *filechooserbutton_telemetry;
+        Gtk::ToggleButton               *togglebutton_play_telemetry;
+        Gtk::ToggleButton               *togglebutton_pause_telemetry;
+        Gtk::Button                     *button_stop_telemetry;
+        Gtk::Button                     *button_clear_all_telemetry;
+        
+        // Log
+        Gtk::CheckButton                *checkbutton_log_ngham_packets;
+        Gtk::CheckButton                *checkbutton_log_ax25_packets;
+        Gtk::CheckButton                *checkbutton_log_beacon_data;
+        Gtk::CheckButton                *checkbutton_log_telemetry_data;
+        
         // Serial Port
         Gtk::Entry                      *entry_serial_port;
         Gtk::ComboBox                   *combobox_baudrate;
         Gtk::ToggleButton               *togglebutton_open_close_port;
-
-        // Log
-        Gtk::CheckButton                *checkbutton_log_raw_packets;
-        Gtk::CheckButton                *checkbutton_log_ngham_packets;
-        Gtk::CheckButton                *checkbutton_log_ax25_packets;
-        Gtk::CheckButton                *checkbutton_log_data;
-
+        
+        // Event log
+        Gtk::TextView                   *textview_event_log;
+        
         // NGHam Preamble
         Gtk::Entry                      *entry_ngham_config_preamble_byte;
         Gtk::Entry                      *entry_ngham_config_preamble_quant;
-
+        
         // NGHam Sync. Bytes
         Gtk::Entry                      *entry_ngham_sync_bytes_s0;
         Gtk::Entry                      *entry_ngham_sync_bytes_s1;
         Gtk::Entry                      *entry_ngham_sync_bytes_s2;
         Gtk::Entry                      *entry_ngham_sync_bytes_s3;
-
+        
         // AX25 Preamble
         Gtk::Entry                      *entry_ax25_config_preamble_byte;
         Gtk::Entry                      *entry_ax25_config_preamble_quant;
-
+        
         // AX25 Sync. Bytes
         Gtk::Entry                      *entry_ax25_sync_bytes_s0;
         Gtk::Entry                      *entry_ax25_sync_bytes_s1;
         Gtk::Entry                      *entry_ax25_sync_bytes_s2;
         Gtk::Entry                      *entry_ax25_sync_bytes_s3;
-
-        // Raw Packets
-        Gtk::TextView                   *textview_raw_packets;
-        Glib::RefPtr<Gtk::TextBuffer>   textview_raw_packets_buffer;
-
-        // NGHam Packets
-        Gtk::CheckButton                *checkbutton_ngham_hex_output;
-        Gtk::TextView                   *textview_ngham_packets;
-        Glib::RefPtr<Gtk::TextBuffer>   textview_ngham_packets_buffer;
-
-        // AX25 Packets
-        Gtk::TextView                   *textview_ax25_packets;
-        Glib::RefPtr<Gtk::TextBuffer>   textview_ax25_packets_buffer;
-
-        // Raw Packets File
-        Gtk::FileChooserButton          *filechooserbutton_raw_packets;
-        Gtk::ToggleButton               *togglebutton_play_stream;
-        Gtk::Image                      *image_play_button;
-        Gtk::Image                      *image_stop_button;
-
-        // Clear Button
-        Gtk::Button                     *button_clear_all;
-
+        
         // NGHam Statistics
         Gtk::Label                      *label_ngham_valid_value;
         Gtk::Label                      *label_ngham_invalid_value;
         Gtk::Label                      *label_ngham_total_value;
         Gtk::Label                      *label_ngham_lost_value;
-
+        
         // AX25 Statistics
         Gtk::Label                      *label_ax25_valid_value;
         Gtk::Label                      *label_ax25_invalid_value;
         Gtk::Label                      *label_ax25_total_value;
         Gtk::Label                      *label_ax25_lost_value;
-
+        
         // Beacon Data
         Gtk::Label                      *label_beacon_data_bat1_v_value;
         Gtk::Label                      *label_beacon_data_bat2_v_value;
@@ -140,38 +145,32 @@ class FSatPktAna
         Gtk::Label                      *label_beacon_data_imu_data_value2;
         Gtk::Label                      *label_beacon_data_system_time_value;
         Gtk::Label                      *label_beacon_data_obdh_rst_value;
-
+        
+        // Preferences window
+        Gtk::Window                     *window_config;
+        
         // About Dialog
-        Gtk::Button                     *button_about;
         Gtk::AboutDialog                *aboutdialog;
         
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
         
-        bool receive_pkt;
-        std::vector<uint8_t> sync_bytes_buffer;
-        std::vector<uint8_t> byte_buffer;
-        
-        uint64_t prev_fin_byte_counter;
-        uint64_t fin_byte_counter;
-        
-        bool serial_is_opened;
-        
         UART                            *uart;                  /**< . */
-        Log                             *log_raw_pkts;          /**< . */
-        Log                             *log_ngham_pkts;        /**< . */
+        EventLog                        *event_log;             /**< . */
         //Log                             *log_ax25_pkts;         /**< . */
-        Log                             *log_data_pkts;         /**< . */
+        Log                             *log_beacon_data;       /**< . */
+        Log                             *log_telemetry_data;    /**< . */
         ProtocolStatistic               *ngham_statistic;       /**< . */
         ProtocolStatistic               *ax25_statistic;        /**< . */
-        BeaconData                      *beacon_data;           /**< . */
+        //BeaconData                      *beacon_data;           /**< . */
+        PacketData                      *beacon_data;           /**< . */
+        //TelemetryData                   *telemetry_data;        /**< . */
+        PacketData                      *telemetry_data;        /**< . */
         
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnMainWindowShow();
+        NGHamPkts                       *ngham_pkts_beacon;     /**< . */
+        NGHamPkts                       *ngham_pkts_telemetry;  /**< . */
+        //AX25Pkts                        *ax25_pkts_beacon;
+        
         /**
          * \brief 
          * 
@@ -187,27 +186,81 @@ class FSatPktAna
         /**
          * \brief 
          * 
-         * \return None
+         * \return 
          */
-        void OnToggleButtonPlayStreamToggled();
+        void OnToolButtonOpenClicked();
         /**
          * \brief 
          * 
          * \return None
          */
-        void OnButtonClearAllClicked();
+        void OnToolButtonConfigClicked();
         /**
          * \brief 
          * 
          * \return None
          */
-        void OnButtonAboutClicked();
+        void OnToolButtonStatisticsClicked();
         /**
          * \brief 
          * 
          * \return None
          */
-        void SearchPackets();
+        void OnToolButtonRunClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToolButtonAboutClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToggleButtonPlayBeaconToggled();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToggleButtonPauseBeaconToggled();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonStopBeaconClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonClearAllBeaconClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToggleButtonPlayTelemetryToggled();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToggleButtonPauseTelemetryToggled();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonStopTelemetryClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonClearAllTelemetryClicked();
         /**
          * \brief 
          * 
@@ -226,6 +279,12 @@ class FSatPktAna
          * \return None
          */
         void RaiseErrorMessage(const char* error_title, const char* error_text);
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void RunGNURadioReceiver();
     public:
         /**
          * \brief 

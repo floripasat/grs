@@ -70,11 +70,6 @@ BeaconData::BeaconData(Gtk::Label *bat1_v, Gtk::Label *bat2_v, Gtk::Label *bat1_
     this->Clear();
 }
 
-BeaconData::~BeaconData()
-{
-    
-}
-
 void BeaconData::Display(uint8_t pkt_type)
 {
     switch(pkt_type)
@@ -291,6 +286,11 @@ std::string BeaconData::Log()
     };
     
     return log_entry;
+}
+
+const char* BeaconData::getLabel()
+{
+    return "BEACON";
 }
 
 double BeaconData::BatVoltConv(uint16_t val)

@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "packet_data.h"
+
 #define BEACON_DATA_SAT_ID_PKT          0
 #define BEACON_DATA_EPS_PKT             1
 #define BEACON_DATA_OBDH_PKT            2
@@ -54,7 +56,7 @@
  * 
  * \brief 
  */
-class BeaconData
+class BeaconData: public PacketData
 {
     private:
         Gtk::Label      *label_bat1_v;      /**< . */
@@ -197,12 +199,6 @@ class BeaconData
         /**
          * \brief 
          * 
-         * \return None
-         */
-        ~BeaconData();
-        /**
-         * \brief 
-         * 
          * \param pkt_type
          * 
          * \return None
@@ -229,6 +225,12 @@ class BeaconData
          * \return 
          */
         std::string Log();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        const char* getLabel();
 };
 
 #endif // BEACON_DATA_H_
