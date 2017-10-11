@@ -43,6 +43,8 @@
 
 #include "fsat-pkt-ana.h"
 #include "aux.hpp"
+#include "beacon_data.h"
+#include "telemetry_data.h"
 
 FSatPktAna::FSatPktAna()
 {
@@ -58,6 +60,7 @@ FSatPktAna::~FSatPktAna()
 {
     //delete ngham_statistic;
     //delete ax25_statistic;
+    //delete telemetry_ngham_statistic;
     //delete beacon_data;
     //delete telemetry_data;
     delete event_log;
@@ -239,7 +242,7 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     ref_builder->get_widget("label_ax25_total_value", label_ax25_total_value);
     ref_builder->get_widget("label_ax25_lost_value", label_ax25_lost_value);
     
-    ax25_statistic = new ProtocolStatistic(label_ax25_valid_value, label_ax25_invalid_value, label_ax25_total_value, label_ax25_lost_value);
+    //ax25_statistic = new ProtocolStatistic(label_ax25_valid_value, label_ax25_invalid_value, label_ax25_total_value, label_ax25_lost_value);
     
     // Beacon Data
     ref_builder->get_widget("label_beacon_data_bat1_v_value", label_beacon_data_bat1_v_value);
@@ -247,22 +250,177 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     ref_builder->get_widget("label_beacon_data_bat1_t_value", label_beacon_data_bat1_t_value);
     ref_builder->get_widget("label_beacon_data_bat2_t_value", label_beacon_data_bat2_t_value);
     ref_builder->get_widget("label_beacon_data_bat_c_value", label_beacon_data_bat_c_value);
-    ref_builder->get_widget("label_beacon_data_solar_panel_i_value1", label_beacon_data_solar_panel_i_value1);
-    ref_builder->get_widget("label_beacon_data_solar_panel_i_value2", label_beacon_data_solar_panel_i_value2);
-    ref_builder->get_widget("label_beacon_data_solar_panel_v_value", label_beacon_data_solar_panel_v_value);
-    ref_builder->get_widget("label_beacon_data_sat_status_value", label_beacon_data_sat_status_value);
-    ref_builder->get_widget("label_beacon_data_imu_data_value1", label_beacon_data_imu_data_value1);
-    ref_builder->get_widget("label_beacon_data_imu_data_value2", label_beacon_data_imu_data_value2);
-    ref_builder->get_widget("label_beacon_data_system_time_value", label_beacon_data_system_time_value);
+    ref_builder->get_widget("label_beacon_data_sp_i_my", label_beacon_data_sp_i_my);
+    ref_builder->get_widget("label_beacon_data_sp_i_px", label_beacon_data_sp_i_px);
+    ref_builder->get_widget("label_beacon_data_sp_i_mx", label_beacon_data_sp_i_mx);
+    ref_builder->get_widget("label_beacon_data_sp_i_pz", label_beacon_data_sp_i_pz);
+    ref_builder->get_widget("label_beacon_data_sp_i_mz", label_beacon_data_sp_i_mz);
+    ref_builder->get_widget("label_beacon_data_sp_i_py", label_beacon_data_sp_i_py);
+    ref_builder->get_widget("label_beacon_data_sp_v_mypx", label_beacon_data_sp_v_mypx);
+    ref_builder->get_widget("label_beacon_data_sp_v_mxpz", label_beacon_data_sp_v_mxpz);
+    ref_builder->get_widget("label_beacon_data_sp_v_mzpy", label_beacon_data_sp_v_mzpy);
+    ref_builder->get_widget("label_beacon_data_status_energy_level", label_beacon_data_status_energy_level);
+    ref_builder->get_widget("label_beacon_data_status_imu", label_beacon_data_status_imu);
+    ref_builder->get_widget("label_beacon_data_status_usd", label_beacon_data_status_usd);
+    ref_builder->get_widget("label_beacon_data_status_rush", label_beacon_data_status_rush);
+    ref_builder->get_widget("label_beacon_data_status_eps", label_beacon_data_status_eps);
+    ref_builder->get_widget("label_beacon_data_status_antenna", label_beacon_data_status_antenna);
+    ref_builder->get_widget("label_beacon_data_imu_accel_x", label_beacon_data_imu_accel_x);
+    ref_builder->get_widget("label_beacon_data_imu_accel_y", label_beacon_data_imu_accel_y);
+    ref_builder->get_widget("label_beacon_data_imu_accel_z", label_beacon_data_imu_accel_z);
+    ref_builder->get_widget("label_beacon_data_imu_gyro_x", label_beacon_data_imu_gyro_x);
+    ref_builder->get_widget("label_beacon_data_imu_gyro_y", label_beacon_data_imu_gyro_y);
+    ref_builder->get_widget("label_beacon_data_imu_gyro_z", label_beacon_data_imu_gyro_z);
     ref_builder->get_widget("label_beacon_data_obdh_rst_value", label_beacon_data_obdh_rst_value);
+    ref_builder->get_widget("label_beacon_data_system_time_value", label_beacon_data_system_time_value);
     
-    beacon_data = new BeaconData(label_beacon_data_bat1_v_value, label_beacon_data_bat2_v_value, label_beacon_data_bat1_t_value, label_beacon_data_bat2_t_value,
-                                 label_beacon_data_bat_c_value, label_beacon_data_solar_panel_i_value1, label_beacon_data_solar_panel_i_value2, label_beacon_data_solar_panel_v_value,
-                                 label_beacon_data_sat_status_value, label_beacon_data_imu_data_value1, label_beacon_data_imu_data_value2, label_beacon_data_system_time_value,
-                                 label_beacon_data_obdh_rst_value);
+    std::vector<Gtk::Label *> beacon_data_labels;
+    beacon_data_labels.push_back(label_beacon_data_bat1_v_value);
+    beacon_data_labels.push_back(label_beacon_data_bat2_v_value);
+    beacon_data_labels.push_back(label_beacon_data_bat1_t_value);
+    beacon_data_labels.push_back(label_beacon_data_bat2_t_value);
+    beacon_data_labels.push_back(label_beacon_data_bat_c_value);
+    beacon_data_labels.push_back(label_beacon_data_sp_i_my);
+    beacon_data_labels.push_back(label_beacon_data_sp_i_px);
+    beacon_data_labels.push_back(label_beacon_data_sp_i_mx);
+    beacon_data_labels.push_back(label_beacon_data_sp_i_pz);
+    beacon_data_labels.push_back(label_beacon_data_sp_i_mz);
+    beacon_data_labels.push_back(label_beacon_data_sp_i_py);
+    beacon_data_labels.push_back(label_beacon_data_sp_v_mypx);
+    beacon_data_labels.push_back(label_beacon_data_sp_v_mxpz);
+    beacon_data_labels.push_back(label_beacon_data_sp_v_mzpy);
+    beacon_data_labels.push_back(label_beacon_data_status_energy_level);
+    beacon_data_labels.push_back(label_beacon_data_status_imu);
+    beacon_data_labels.push_back(label_beacon_data_status_usd);
+    beacon_data_labels.push_back(label_beacon_data_status_rush);
+    beacon_data_labels.push_back(label_beacon_data_status_eps);
+    beacon_data_labels.push_back(label_beacon_data_status_antenna);
+    beacon_data_labels.push_back(label_beacon_data_imu_accel_x);
+    beacon_data_labels.push_back(label_beacon_data_imu_accel_y);
+    beacon_data_labels.push_back(label_beacon_data_imu_accel_z);
+    beacon_data_labels.push_back(label_beacon_data_imu_gyro_x);
+    beacon_data_labels.push_back(label_beacon_data_imu_gyro_y);
+    beacon_data_labels.push_back(label_beacon_data_imu_gyro_z);
+    beacon_data_labels.push_back(label_beacon_data_obdh_rst_value);
+    beacon_data_labels.push_back(label_beacon_data_system_time_value);
+    
+    beacon_data = new BeaconData(beacon_data_labels);
     
     // Telemetry data
-    //telemetry_data = new TelemetryData();
+    ref_builder->get_widget("label_telemetry_data_status_reset_counter", label_telemetry_data_status_reset_counter);
+    ref_builder->get_widget("label_telemetry_data_status_reset_cause", label_telemetry_data_status_reset_cause);
+    ref_builder->get_widget("label_telemetry_data_status_clock", label_telemetry_data_status_clock);
+    ref_builder->get_widget("label_telemetry_data_status_modules", label_telemetry_data_status_modules);
+    ref_builder->get_widget("label_telemetry_data_status_imu", label_telemetry_data_status_imu);
+    ref_builder->get_widget("label_telemetry_data_status_rush", label_telemetry_data_status_rush);
+    ref_builder->get_widget("label_telemetry_data_status_eps", label_telemetry_data_status_eps);
+    ref_builder->get_widget("label_telemetry_data_status_antenna", label_telemetry_data_status_antenna);
+    ref_builder->get_widget("label_telemetry_data_uc_temp", label_telemetry_data_uc_temp);
+    ref_builder->get_widget("label_telemetry_data_uc_voltage", label_telemetry_data_uc_voltage);
+    ref_builder->get_widget("label_telemetry_data_uc_current", label_telemetry_data_uc_current);
+    ref_builder->get_widget("label_telemetry_data_time_system", label_telemetry_data_time_system);
+    ref_builder->get_widget("label_telemetry_data_time_system_up", label_telemetry_data_time_system_up);
+    ref_builder->get_widget("label_telemetry_data_imu_accel_x", label_telemetry_data_imu_accel_x);
+    ref_builder->get_widget("label_telemetry_data_imu_accel_y", label_telemetry_data_imu_accel_y);
+    ref_builder->get_widget("label_telemetry_data_imu_accel_z", label_telemetry_data_imu_accel_z);
+    ref_builder->get_widget("label_telemetry_data_imu_gyro_x", label_telemetry_data_imu_gyro_x);
+    ref_builder->get_widget("label_telemetry_data_imu_gyro_y", label_telemetry_data_imu_gyro_y);
+    ref_builder->get_widget("label_telemetry_data_imu_gyro_z", label_telemetry_data_imu_gyro_z);
+    ref_builder->get_widget("label_telemetry_data_sp_sun_p1", label_telemetry_data_sp_sun_p1);
+    ref_builder->get_widget("label_telemetry_data_sp_sun_p2", label_telemetry_data_sp_sun_p2);
+    ref_builder->get_widget("label_telemetry_data_sp_sun_p3", label_telemetry_data_sp_sun_p3);
+    ref_builder->get_widget("label_telemetry_data_sp_temp_p1", label_telemetry_data_sp_temp_p1);
+    ref_builder->get_widget("label_telemetry_data_sp_temp_p2", label_telemetry_data_sp_temp_p2);
+    ref_builder->get_widget("label_telemetry_data_sp_temp_p3", label_telemetry_data_sp_temp_p3);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_mean_i", label_telemetry_data_eps_bat_mean_i);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_temp", label_telemetry_data_eps_bat_temp);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_1_volt", label_telemetry_data_eps_bat_1_volt);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_2_volt", label_telemetry_data_eps_bat_2_volt);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_current", label_telemetry_data_eps_bat_current);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_charge", label_telemetry_data_eps_bat_charge);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_protection", label_telemetry_data_eps_bat_protection);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_status", label_telemetry_data_eps_bat_status);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_cycles", label_telemetry_data_eps_bat_cycles);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_raac", label_telemetry_data_eps_bat_raac);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_rsac", label_telemetry_data_eps_bat_rsac);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_rarc", label_telemetry_data_eps_bat_rarc);
+    ref_builder->get_widget("label_telemetry_data_eps_bat_rsrc", label_telemetry_data_eps_bat_rsrc);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_i_my", label_telemetry_data_eps_sp_i_my);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_i_px", label_telemetry_data_eps_sp_i_px);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_i_mx", label_telemetry_data_eps_sp_i_mx);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_i_pz", label_telemetry_data_eps_sp_i_pz);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_i_mz", label_telemetry_data_eps_sp_i_mz);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_i_py", label_telemetry_data_eps_sp_i_py);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_v_mypx", label_telemetry_data_eps_sp_v_mypx);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_v_mxpz", label_telemetry_data_eps_sp_v_mxpz);
+    ref_builder->get_widget("label_telemetry_data_eps_sp_v_mzpy", label_telemetry_data_eps_sp_v_mzpy);
+    ref_builder->get_widget("label_telemetry_data_eps_misc_boost_v", label_telemetry_data_eps_misc_boost_v);
+    ref_builder->get_widget("label_telemetry_data_eps_misc_main_bus_v", label_telemetry_data_eps_misc_main_bus_v);
+    ref_builder->get_widget("label_telemetry_data_eps_misc_beacon_i", label_telemetry_data_eps_misc_beacon_i);
+    ref_builder->get_widget("label_telemetry_data_eps_misc_uc_temp", label_telemetry_data_eps_misc_uc_temp);
+    ref_builder->get_widget("label_telemetry_data_eps_misc_energy_level", label_telemetry_data_eps_misc_energy_level);
+    
+    std::vector<Gtk::Label *> telemetry_data_labels;
+    telemetry_data_labels.push_back(label_telemetry_data_status_reset_counter);
+    telemetry_data_labels.push_back(label_telemetry_data_status_reset_cause);
+    telemetry_data_labels.push_back(label_telemetry_data_status_clock);
+    telemetry_data_labels.push_back(label_telemetry_data_status_modules);
+    telemetry_data_labels.push_back(label_telemetry_data_status_imu);
+    telemetry_data_labels.push_back(label_telemetry_data_status_rush);
+    telemetry_data_labels.push_back(label_telemetry_data_status_eps);
+    telemetry_data_labels.push_back(label_telemetry_data_status_antenna);
+    telemetry_data_labels.push_back(label_telemetry_data_uc_temp);
+    telemetry_data_labels.push_back(label_telemetry_data_uc_voltage);
+    telemetry_data_labels.push_back(label_telemetry_data_uc_current);
+    telemetry_data_labels.push_back(label_telemetry_data_time_system);
+    telemetry_data_labels.push_back(label_telemetry_data_time_system_up);
+    telemetry_data_labels.push_back(label_telemetry_data_imu_accel_x);
+    telemetry_data_labels.push_back(label_telemetry_data_imu_accel_y);
+    telemetry_data_labels.push_back(label_telemetry_data_imu_accel_z);
+    telemetry_data_labels.push_back(label_telemetry_data_imu_gyro_x);
+    telemetry_data_labels.push_back(label_telemetry_data_imu_gyro_y);
+    telemetry_data_labels.push_back(label_telemetry_data_imu_gyro_z);
+    telemetry_data_labels.push_back(label_telemetry_data_sp_sun_p1);
+    telemetry_data_labels.push_back(label_telemetry_data_sp_sun_p2);
+    telemetry_data_labels.push_back(label_telemetry_data_sp_sun_p3);
+    telemetry_data_labels.push_back(label_telemetry_data_sp_temp_p1);
+    telemetry_data_labels.push_back(label_telemetry_data_sp_temp_p2);
+    telemetry_data_labels.push_back(label_telemetry_data_sp_temp_p3);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_mean_i);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_temp);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_1_volt);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_2_volt);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_current);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_charge);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_protection);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_status);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_cycles);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_raac);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_rsac);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_rarc);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_bat_rsrc);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_i_my);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_i_px);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_i_mx);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_i_pz);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_i_mz);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_i_py);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_v_mypx);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_v_mxpz);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_sp_v_mzpy);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_misc_boost_v);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_misc_main_bus_v);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_misc_beacon_i);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_misc_uc_temp);
+    telemetry_data_labels.push_back(label_telemetry_data_eps_misc_energy_level);
+    
+    telemetry_data = new TelemetryData(telemetry_data_labels);
+    
+    // Telemtry Packets Statistic
+    ref_builder->get_widget("label_telemetry_pkt_statistic_total", label_telemetry_pkt_statistic_total);
+    ref_builder->get_widget("label_telemetry_pkt_statistic_lost", label_telemetry_pkt_statistic_lost);
+    
+    telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
     
     // Preferences window
     ref_builder->get_widget("window_config", window_config);
@@ -426,7 +584,7 @@ void FSatPktAna::OnToolButtonOpenClicked()
 
 void FSatPktAna::OnToolButtonConfigClicked()
 {
-    /*window_config->set_transient_for(*main_window);
+/*    window_config->set_transient_for(*main_window);
     
     int response = window_config->show();
     
@@ -543,33 +701,49 @@ void FSatPktAna::OnButtonStopBeaconClicked()
 void FSatPktAna::OnButtonClearAllBeaconClicked()
 {
     ngham_statistic->Clear();
-    ax25_statistic->Clear();
+    //ax25_statistic->Clear();
     beacon_data->Clear();
+    beacon_data->Display();
 }
 
 void FSatPktAna::OnToggleButtonPlayTelemetryToggled()
 {
     if (togglebutton_play_telemetry->get_active())
     {
-        filechooserbutton_telemetry->set_sensitive(false);
+        ngham_pkts_telemetry = new NGHamPkts(event_log, telemetry_data, telemetry_ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_telemetry_data->get_active());
         
-        togglebutton_play_telemetry->set_sensitive(false);
-        togglebutton_pause_telemetry->set_sensitive(true);
-        button_stop_telemetry->set_sensitive(true);
+        ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), std::ifstream::in);
         
-        button_clear_all_telemetry->set_sensitive(false);
-        
-        checkbutton_log_ngham_packets->set_sensitive(false);
-        checkbutton_log_telemetry_data->set_sensitive(false);
-        
-        entry_serial_port->set_sensitive(false);
-        combobox_baudrate->set_sensitive(false);
-        togglebutton_open_close_port->set_sensitive(false);
-        
-        //ngham_pkts_telemetry = new NGHamPkts(event_log, telemetry_data);
+        if (ngham_pkts_telemetry->is_open())
+        {
+            filechooserbutton_telemetry->set_sensitive(false);
+            
+            togglebutton_play_telemetry->set_sensitive(false);
+            togglebutton_pause_telemetry->set_sensitive(true);
+            button_stop_telemetry->set_sensitive(true);
+            
+            button_clear_all_telemetry->set_sensitive(false);
+            
+            checkbutton_log_ngham_packets->set_sensitive(false);
+            checkbutton_log_telemetry_data->set_sensitive(false);
+            
+            entry_serial_port->set_sensitive(false);
+            combobox_baudrate->set_sensitive(false);
+            togglebutton_open_close_port->set_sensitive(false);
+            
+            event_log->AddNewEvent("New telemetry stream started");
+        }
+        else
+        {
+            togglebutton_play_telemetry->set_active(false);
+            
+            this->RaiseErrorMessage("Error opening this file!", "Maybe the current file is not valid!");
+        }
     }
     else
     {
+        delete ngham_pkts_telemetry;
+        
         filechooserbutton_telemetry->set_sensitive(true);
         
         togglebutton_play_telemetry->set_sensitive(true);
@@ -581,18 +755,14 @@ void FSatPktAna::OnToggleButtonPlayTelemetryToggled()
         if (!togglebutton_play_beacon->get_active())
         {
             checkbutton_log_ngham_packets->set_sensitive(true);
-        }
-        
-        checkbutton_log_telemetry_data->set_sensitive(true);
-        
-        if (!togglebutton_play_beacon->get_active())
-        {
             entry_serial_port->set_sensitive(true);
             combobox_baudrate->set_sensitive(true);
             togglebutton_open_close_port->set_sensitive(true);
         }
         
-        //delete ngham_pkts_telemetry;
+        checkbutton_log_telemetry_data->set_sensitive(true);
+        
+        event_log->AddNewEvent("Telemetry stream finished");
     }
 }
 
@@ -616,7 +786,9 @@ void FSatPktAna::OnButtonStopTelemetryClicked()
 
 void FSatPktAna::OnButtonClearAllTelemetryClicked()
 {
-    //telemetry_data->Clear();
+    telemetry_ngham_statistic->Clear();
+    telemetry_data->Clear();
+    telemetry_data->Display();
 }
 
 void FSatPktAna::OnToggleButtonOpenClosePortToggled()
@@ -660,8 +832,6 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
             checkbutton_log_telemetry_data->set_sensitive(false);
             filechooserbutton_beacon->set_sensitive(false);
             togglebutton_play_beacon->set_sensitive(false);
-            
-            this->OpenLogFiles();
         }
         else
         {
@@ -674,7 +844,7 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
     {
         if (uart->isOpened())
         {
-            this->CloseLogFiles();
+            
         }
         
         entry_serial_port->set_sensitive(true);
@@ -687,23 +857,6 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
         togglebutton_play_beacon->set_sensitive(true);
         
         delete uart;
-    }
-}
-
-void FSatPktAna::OpenLogFiles()
-{
-    if (checkbutton_log_beacon_data->get_active())
-    {
-        log_beacon_data = new Log;
-        log_beacon_data->open((LOG_DEFAULT_DIR "/BEACON_DATA_" + log_beacon_data->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
-    }
-}
-
-void FSatPktAna::CloseLogFiles()
-{    
-    if (checkbutton_log_beacon_data->get_active())
-    {
-        delete log_beacon_data;
     }
 }
 

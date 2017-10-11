@@ -741,7 +741,6 @@
                                     <property name="can_focus">False</property>
                                     <property name="row_spacing">10</property>
                                     <property name="column_spacing">10</property>
-                                    <property name="row_homogeneous">True</property>
                                     <property name="column_homogeneous">True</property>
                                     <child>
                                       <object class="GtkLabel" id="label15">
@@ -764,7 +763,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -792,7 +790,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -820,7 +817,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -848,7 +844,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -876,7 +871,6 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -897,14 +891,13 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label_beacon_data_solar_panel_i_value1">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_i_my">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -912,14 +905,13 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label_beacon_data_solar_panel_i_value2">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_i_px">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -940,14 +932,13 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label_beacon_data_solar_panel_v_value">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_v_mypx">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
-                                        <property name="max_width_chars">5</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -979,11 +970,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label174">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_v_mxpz">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -991,11 +983,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label175">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_v_mzpy">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1063,11 +1056,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label181">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_i_mx">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1075,11 +1069,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label182">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_i_pz">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1087,11 +1082,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label183">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_i_mz">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1099,11 +1095,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label184">
+                                      <object class="GtkLabel" id="label_beacon_data_sp_i_py">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1169,14 +1166,13 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label_beacon_data_imu_data_value1">
+                                          <object class="GtkLabel" id="label_beacon_data_imu_accel_x">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
-                                            <property name="max_width_chars">5</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1216,7 +1212,6 @@
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
-                                            <property name="max_width_chars">5</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1231,7 +1226,6 @@
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
-                                            <property name="max_width_chars">5</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1251,14 +1245,13 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label_beacon_data_imu_data_value2">
+                                          <object class="GtkLabel" id="label_beacon_data_imu_gyro_x">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
-                                            <property name="max_width_chars">5</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1314,11 +1307,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label189">
+                                          <object class="GtkLabel" id="label_beacon_data_imu_accel_y">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1326,11 +1320,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label190">
+                                          <object class="GtkLabel" id="label_beacon_data_imu_accel_z">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1338,11 +1333,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label191">
+                                          <object class="GtkLabel" id="label_beacon_data_imu_gyro_y">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1350,11 +1346,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label192">
+                                          <object class="GtkLabel" id="label_beacon_data_imu_gyro_z">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1396,9 +1393,8 @@
                                       <object class="GtkGrid" id="grid7">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="row_spacing">5</property>
+                                        <property name="row_spacing">10</property>
                                         <property name="column_spacing">10</property>
-                                        <property name="row_homogeneous">True</property>
                                         <property name="column_homogeneous">True</property>
                                         <child>
                                           <object class="GtkLabel" id="label51">
@@ -1413,11 +1409,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label_beacon_data_sat_status_value">
+                                          <object class="GtkLabel" id="label_beacon_data_status_energy_level">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1437,11 +1434,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label54">
+                                          <object class="GtkLabel" id="label_beacon_data_status_antenna">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1497,11 +1495,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label197">
+                                          <object class="GtkLabel" id="label_beacon_data_status_imu">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1509,11 +1508,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label198">
+                                          <object class="GtkLabel" id="label_beacon_data_status_usd">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1521,11 +1521,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label199">
+                                          <object class="GtkLabel" id="label_beacon_data_status_rush">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1533,11 +1534,12 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label200">
+                                          <object class="GtkLabel" id="label_beacon_data_status_eps">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
+                                            <property name="justify">right</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1591,7 +1593,6 @@
                                     <property name="margin_bottom">10</property>
                                     <property name="row_spacing">10</property>
                                     <property name="column_spacing">10</property>
-                                    <property name="row_homogeneous">True</property>
                                     <property name="column_homogeneous">True</property>
                                     <child>
                                       <object class="GtkLabel" id="label26">
@@ -1740,7 +1741,6 @@
                                     <property name="margin_bottom">10</property>
                                     <property name="row_spacing">10</property>
                                     <property name="column_spacing">10</property>
-                                    <property name="row_homogeneous">True</property>
                                     <property name="column_homogeneous">True</property>
                                     <child>
                                       <object class="GtkSeparator" id="separator4">
@@ -1976,11 +1976,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label67">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_reset_counter">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2000,11 +2001,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label69">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_reset_cause">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2036,11 +2038,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label84">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_clock">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2048,11 +2051,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label85">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_modules">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2072,11 +2076,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label165">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_imu">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2096,11 +2101,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label167">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_rush">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2120,11 +2126,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label169">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_eps">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2144,11 +2151,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label171">
+                                                            <object class="GtkLabel" id="label_telemetry_data_status_antenna">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2207,11 +2215,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label87">
+                                                            <object class="GtkLabel" id="label_telemetry_data_uc_temp">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2231,11 +2240,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label89">
+                                                            <object class="GtkLabel" id="label_telemetry_data_uc_voltage">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2255,11 +2265,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label91">
+                                                            <object class="GtkLabel" id="label_telemetry_data_uc_current">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2318,11 +2329,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label93">
+                                                            <object class="GtkLabel" id="label_telemetry_data_time_system">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2342,11 +2354,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label95">
+                                                            <object class="GtkLabel" id="label_telemetry_data_time_system_up">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2478,11 +2491,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label76">
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_accel_x">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2490,11 +2504,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label77">
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_accel_y">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2502,11 +2517,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label78">
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_accel_z">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2514,11 +2530,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label79">
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_gyro_x">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2526,11 +2543,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label80">
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_gyro_y">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2538,11 +2556,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label81">
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_gyro_z">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2660,11 +2679,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label102">
+                                                            <object class="GtkLabel" id="label_telemetry_data_sp_sun_p1">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2672,11 +2692,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label103">
+                                                            <object class="GtkLabel" id="label_telemetry_data_sp_sun_p2">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2684,11 +2705,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label104">
+                                                            <object class="GtkLabel" id="label_telemetry_data_sp_sun_p3">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2696,11 +2718,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label105">
+                                                            <object class="GtkLabel" id="label_telemetry_data_sp_temp_p1">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2708,11 +2731,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label106">
+                                                            <object class="GtkLabel" id="label_telemetry_data_sp_temp_p2">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2720,11 +2744,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label107">
+                                                            <object class="GtkLabel" id="label_telemetry_data_sp_temp_p3">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2835,11 +2860,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label128">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_mean_i">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2871,11 +2897,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label131">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_temp">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2883,11 +2910,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label132">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_1_volt">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2907,11 +2935,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label134">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_2_volt">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2931,11 +2960,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label136">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_current">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2955,11 +2985,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label138">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_charge">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -2979,11 +3010,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label140">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_protection">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3003,11 +3035,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label142">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_status">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3027,11 +3060,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label144">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_cycles">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3051,11 +3085,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label146">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_raac">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3075,11 +3110,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label148">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_rsac">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3099,11 +3135,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label150">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_rarc">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3123,11 +3160,12 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label152">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_bat_rsrc">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
                                                             <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
                                                             </object>
                                                             <packing>
                                                             <property name="left_attach">1</property>
@@ -3296,7 +3334,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label110">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_i_my">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3310,7 +3348,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label112">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_i_px">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3324,7 +3362,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label114">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_i_mx">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3338,7 +3376,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label116">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_i_pz">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3352,7 +3390,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label118">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_i_mz">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3366,7 +3404,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label120">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_i_py">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3380,7 +3418,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label122">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_v_mypx">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3394,7 +3432,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label124">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_v_mxpz">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3408,7 +3446,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label126">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_sp_v_mzpy">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3510,7 +3548,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label155">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_misc_boost_v">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3525,7 +3563,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label157">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_misc_main_bus_v">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3539,7 +3577,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label159">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_misc_beacon_i">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3553,7 +3591,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label161">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_misc_uc_temp">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3579,7 +3617,7 @@
                                                             </packing>
                                                             </child>
                                                             <child>
-                                                            <object class="GtkLabel" id="label163">
+                                                            <object class="GtkLabel" id="label_telemetry_data_eps_misc_energy_level">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="halign">end</property>
@@ -3643,37 +3681,137 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkFrame" id="frame14">
+                              <object class="GtkBox" id="box11">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="vexpand">True</property>
-                                <property name="label_xalign">0.05000000074505806</property>
+                                <property name="spacing">10</property>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment7">
+                                  <object class="GtkFrame" id="frame14">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">5</property>
-                                    <property name="bottom_padding">10</property>
-                                    <property name="left_padding">10</property>
-                                    <property name="right_padding">10</property>
+                                    <property name="vexpand">True</property>
+                                    <property name="label_xalign">0.05000000074505806</property>
                                     <child>
-                                      <object class="GtkTextView" id="textview_rush_data">
-                                        <property name="height_request">50</property>
+                                      <object class="GtkAlignment" id="alignment7">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="editable">False</property>
-                                        <property name="cursor_visible">False</property>
-                                        <property name="monospace">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="top_padding">5</property>
+                                        <property name="bottom_padding">10</property>
+                                        <property name="left_padding">10</property>
+                                        <property name="right_padding">10</property>
+                                        <child>
+                                          <object class="GtkTextView" id="textview_rush_data">
+                                            <property name="height_request">50</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="hexpand">True</property>
+                                            <property name="editable">False</property>
+                                            <property name="cursor_visible">False</property>
+                                            <property name="monospace">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="label59">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">RUSH</property>
                                       </object>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label59">
+                                <child>
+                                  <object class="GtkFrame" id="frame23">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">RUSH</property>
+                                    <property name="label_xalign">0.05000000074505806</property>
+                                    <child>
+                                      <object class="GtkAlignment" id="alignment16">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="top_padding">10</property>
+                                        <property name="bottom_padding">10</property>
+                                        <property name="left_padding">10</property>
+                                        <property name="right_padding">10</property>
+                                        <child>
+                                          <object class="GtkGrid" id="grid18">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="row_spacing">5</property>
+                                            <property name="column_homogeneous">True</property>
+                                            <child>
+                                              <object class="GtkLabel" id="label67">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">Total: </property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label_telemetry_pkt_statistic_total">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">end</property>
+                                                <property name="label" translatable="yes">-</property>
+                                                <property name="justify">right</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label76">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">Lost percentage:</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label_telemetry_pkt_statistic_lost">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">end</property>
+                                                <property name="label" translatable="yes">-</property>
+                                                <property name="justify">right</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="label54">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Packets Statistic</property>
+                                      </object>
+                                    </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
                                 </child>
                               </object>
                               <packing>

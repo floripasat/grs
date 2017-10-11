@@ -47,7 +47,7 @@
 #include "event_log.h"
 #include "log.h"
 #include "protocol_statistic.h"
-#include "beacon_data.h"
+#include "packet_data.h"
 #include "ngham_pkts.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/MainWindow.glade"
@@ -137,14 +137,87 @@ class FSatPktAna
         Gtk::Label                      *label_beacon_data_bat1_t_value;
         Gtk::Label                      *label_beacon_data_bat2_t_value;
         Gtk::Label                      *label_beacon_data_bat_c_value;
-        Gtk::Label                      *label_beacon_data_solar_panel_i_value1;
-        Gtk::Label                      *label_beacon_data_solar_panel_i_value2;
-        Gtk::Label                      *label_beacon_data_solar_panel_v_value;
-        Gtk::Label                      *label_beacon_data_sat_status_value;
-        Gtk::Label                      *label_beacon_data_imu_data_value1;
-        Gtk::Label                      *label_beacon_data_imu_data_value2;
-        Gtk::Label                      *label_beacon_data_system_time_value;
+        Gtk::Label                      *label_beacon_data_sp_i_my;
+        Gtk::Label                      *label_beacon_data_sp_i_px;
+        Gtk::Label                      *label_beacon_data_sp_i_mx;
+        Gtk::Label                      *label_beacon_data_sp_i_pz;
+        Gtk::Label                      *label_beacon_data_sp_i_mz;
+        Gtk::Label                      *label_beacon_data_sp_i_py;
+        Gtk::Label                      *label_beacon_data_sp_v_mypx;
+        Gtk::Label                      *label_beacon_data_sp_v_mxpz;
+        Gtk::Label                      *label_beacon_data_sp_v_mzpy;
+        Gtk::Label                      *label_beacon_data_status_energy_level;
+        Gtk::Label                      *label_beacon_data_status_imu;
+        Gtk::Label                      *label_beacon_data_status_usd;
+        Gtk::Label                      *label_beacon_data_status_rush;
+        Gtk::Label                      *label_beacon_data_status_eps;
+        Gtk::Label                      *label_beacon_data_status_antenna;
+        Gtk::Label                      *label_beacon_data_imu_accel_x;
+        Gtk::Label                      *label_beacon_data_imu_accel_y;
+        Gtk::Label                      *label_beacon_data_imu_accel_z;
+        Gtk::Label                      *label_beacon_data_imu_gyro_x;
+        Gtk::Label                      *label_beacon_data_imu_gyro_y;
+        Gtk::Label                      *label_beacon_data_imu_gyro_z;
         Gtk::Label                      *label_beacon_data_obdh_rst_value;
+        Gtk::Label                      *label_beacon_data_system_time_value;
+        
+        // Telemetry Data
+        Gtk::Label                      *label_telemetry_data_status_reset_counter;
+        Gtk::Label                      *label_telemetry_data_status_reset_cause;
+        Gtk::Label                      *label_telemetry_data_status_clock;
+        Gtk::Label                      *label_telemetry_data_status_modules;
+        Gtk::Label                      *label_telemetry_data_status_imu;
+        Gtk::Label                      *label_telemetry_data_status_rush;
+        Gtk::Label                      *label_telemetry_data_status_eps;
+        Gtk::Label                      *label_telemetry_data_status_antenna;
+        Gtk::Label                      *label_telemetry_data_uc_temp;
+        Gtk::Label                      *label_telemetry_data_uc_voltage;
+        Gtk::Label                      *label_telemetry_data_uc_current;
+        Gtk::Label                      *label_telemetry_data_time_system;
+        Gtk::Label                      *label_telemetry_data_time_system_up;
+        Gtk::Label                      *label_telemetry_data_imu_accel_x;
+        Gtk::Label                      *label_telemetry_data_imu_accel_y;
+        Gtk::Label                      *label_telemetry_data_imu_accel_z;
+        Gtk::Label                      *label_telemetry_data_imu_gyro_x;
+        Gtk::Label                      *label_telemetry_data_imu_gyro_y;
+        Gtk::Label                      *label_telemetry_data_imu_gyro_z;
+        Gtk::Label                      *label_telemetry_data_sp_sun_p1;
+        Gtk::Label                      *label_telemetry_data_sp_sun_p2;
+        Gtk::Label                      *label_telemetry_data_sp_sun_p3;
+        Gtk::Label                      *label_telemetry_data_sp_temp_p1;
+        Gtk::Label                      *label_telemetry_data_sp_temp_p2;
+        Gtk::Label                      *label_telemetry_data_sp_temp_p3;
+        Gtk::Label                      *label_telemetry_data_eps_bat_mean_i;
+        Gtk::Label                      *label_telemetry_data_eps_bat_temp;
+        Gtk::Label                      *label_telemetry_data_eps_bat_1_volt;
+        Gtk::Label                      *label_telemetry_data_eps_bat_2_volt;
+        Gtk::Label                      *label_telemetry_data_eps_bat_current;
+        Gtk::Label                      *label_telemetry_data_eps_bat_charge;
+        Gtk::Label                      *label_telemetry_data_eps_bat_protection;
+        Gtk::Label                      *label_telemetry_data_eps_bat_status;
+        Gtk::Label                      *label_telemetry_data_eps_bat_cycles;
+        Gtk::Label                      *label_telemetry_data_eps_bat_raac;
+        Gtk::Label                      *label_telemetry_data_eps_bat_rsac;
+        Gtk::Label                      *label_telemetry_data_eps_bat_rarc;
+        Gtk::Label                      *label_telemetry_data_eps_bat_rsrc;
+        Gtk::Label                      *label_telemetry_data_eps_sp_i_my;
+        Gtk::Label                      *label_telemetry_data_eps_sp_i_px;
+        Gtk::Label                      *label_telemetry_data_eps_sp_i_mx;
+        Gtk::Label                      *label_telemetry_data_eps_sp_i_pz;
+        Gtk::Label                      *label_telemetry_data_eps_sp_i_mz;
+        Gtk::Label                      *label_telemetry_data_eps_sp_i_py;
+        Gtk::Label                      *label_telemetry_data_eps_sp_v_mypx;
+        Gtk::Label                      *label_telemetry_data_eps_sp_v_mxpz;
+        Gtk::Label                      *label_telemetry_data_eps_sp_v_mzpy;
+        Gtk::Label                      *label_telemetry_data_eps_misc_boost_v;
+        Gtk::Label                      *label_telemetry_data_eps_misc_main_bus_v;
+        Gtk::Label                      *label_telemetry_data_eps_misc_beacon_i;
+        Gtk::Label                      *label_telemetry_data_eps_misc_uc_temp;
+        Gtk::Label                      *label_telemetry_data_eps_misc_energy_level;
+        
+        // Telemetry Packets Statistic
+        Gtk::Label                      *label_telemetry_pkt_statistic_total;
+        Gtk::Label                      *label_telemetry_pkt_statistic_lost;
         
         // Preferences window
         Gtk::Window                     *window_config;
@@ -155,21 +228,46 @@ class FSatPktAna
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
         
-        UART                            *uart;                  /**< . */
-        EventLog                        *event_log;             /**< . */
-        //Log                             *log_ax25_pkts;         /**< . */
-        Log                             *log_beacon_data;       /**< . */
-        Log                             *log_telemetry_data;    /**< . */
-        ProtocolStatistic               *ngham_statistic;       /**< . */
-        ProtocolStatistic               *ax25_statistic;        /**< . */
-        //BeaconData                      *beacon_data;           /**< . */
-        PacketData                      *beacon_data;           /**< . */
-        //TelemetryData                   *telemetry_data;        /**< . */
-        PacketData                      *telemetry_data;        /**< . */
-        
-        NGHamPkts                       *ngham_pkts_beacon;     /**< . */
-        NGHamPkts                       *ngham_pkts_telemetry;  /**< . */
+        /**
+         * \brief 
+         */
+        UART                            *uart;
+        /**
+         * \brief 
+         */
+        EventLog                        *event_log;
+        /**
+         * \brief 
+         */
+        ProtocolStatistic               *ngham_statistic;
+        /**
+         * \brief 
+         */
+        //ProtocolStatistic               *ax25_statistic;
+        /**
+         * \brief 
+         */
+        ProtocolStatistic               *telemetry_ngham_statistic;
+        /**
+         * \brief 
+         */
+        PacketData                      *beacon_data;
+        /**
+         * \brief 
+         */
+        PacketData                      *telemetry_data;
+        /**
+         * \brief 
+         */
+        NGHamPkts                       *ngham_pkts_beacon;
+        /**
+         * \brief 
+         */
         //AX25Pkts                        *ax25_pkts_beacon;
+        /**
+         * \brief 
+         */
+        NGHamPkts                       *ngham_pkts_telemetry;
         
         /**
          * \brief 
@@ -261,18 +359,6 @@ class FSatPktAna
          * \return None
          */
         void OnButtonClearAllTelemetryClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OpenLogFiles();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void CloseLogFiles();
         /**
          * \brief 
          * 

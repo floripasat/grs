@@ -24,7 +24,7 @@
 /**
  * \file beacon_data.cpp
  * 
- * \brief .
+ * \brief Beacon data class implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
@@ -47,78 +47,132 @@ BeaconData::BeaconData()
     
 }
 
-BeaconData::BeaconData(Gtk::Label *bat1_v, Gtk::Label *bat2_v, Gtk::Label *bat1_t,
-                       Gtk::Label *bat2_t, Gtk::Label *bat_c, Gtk::Label *solar_i_1,
-                       Gtk::Label *solar_i_2, Gtk::Label *solar_v, Gtk::Label *status,
-                       Gtk::Label *imu_data1, Gtk::Label *imu_data2, Gtk::Label *system_time,
-                       Gtk::Label *obdh_rst)
+BeaconData::BeaconData(std::vector<Gtk::Label *> lbs)
 {
-    label_bat1_v        = bat1_v;
-    label_bat2_v        = bat2_v;
-    label_bat1_t        = bat1_t;
-    label_bat2_t        = bat2_t;
-    label_bat_c         = bat_c;
-    label_solar_i_1     = solar_i_1;
-    label_solar_i_2     = solar_i_2;
-    label_solar_v       = solar_v;
-    label_status        = status;
-    label_imu_data1     = imu_data1;
-    label_imu_data2     = imu_data2;
-    label_system_time   = system_time;
-    label_obdh_rst      = obdh_rst;
+    unsigned int pos = 0;
+    
+    label_beacon_data_bat1_v_value          = lbs[pos++];
+    label_beacon_data_bat2_v_value          = lbs[pos++];
+    label_beacon_data_bat1_t_value          = lbs[pos++];
+    label_beacon_data_bat2_t_value          = lbs[pos++];
+    label_beacon_data_bat_c_value           = lbs[pos++];
+    label_beacon_data_sp_i_my               = lbs[pos++];
+    label_beacon_data_sp_i_px               = lbs[pos++];
+    label_beacon_data_sp_i_mx               = lbs[pos++];
+    label_beacon_data_sp_i_pz               = lbs[pos++];
+    label_beacon_data_sp_i_mz               = lbs[pos++];
+    label_beacon_data_sp_i_py               = lbs[pos++];
+    label_beacon_data_sp_v_mypx             = lbs[pos++];
+    label_beacon_data_sp_v_mxpz             = lbs[pos++];
+    label_beacon_data_sp_v_mzpy             = lbs[pos++];
+    label_beacon_data_status_energy_level   = lbs[pos++];
+    label_beacon_data_status_imu            = lbs[pos++]; 
+    label_beacon_data_status_usd            = lbs[pos++];
+    label_beacon_data_status_rush           = lbs[pos++];
+    label_beacon_data_status_eps            = lbs[pos++];
+    label_beacon_data_status_antenna        = lbs[pos++];
+    label_beacon_data_imu_accel_x           = lbs[pos++];
+    label_beacon_data_imu_accel_y           = lbs[pos++];
+    label_beacon_data_imu_accel_z           = lbs[pos++];
+    label_beacon_data_imu_gyro_x            = lbs[pos++];
+    label_beacon_data_imu_gyro_y            = lbs[pos++];
+    label_beacon_data_imu_gyro_z            = lbs[pos++];
+    label_beacon_data_obdh_rst_value        = lbs[pos++];
+    label_beacon_data_system_time_value     = lbs[pos++];
     
     this->Clear();
 }
 
 void BeaconData::Display(uint8_t pkt_type)
 {
-    switch(pkt_type)
+    label_beacon_data_bat1_v_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_bat2_v_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_bat1_t_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_bat2_t_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_bat_c_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_i_my->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_i_px->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_i_mx->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_i_pz->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_i_mz->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_i_py->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_v_mypx->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_v_mxpz->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_sp_v_mzpy->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_status_energy_level->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_status_imu->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_status_usd->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_status_rush->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_status_eps->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_status_antenna->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_imu_accel_x->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_imu_accel_y->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_imu_accel_z->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_imu_gyro_x->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_imu_gyro_y->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_imu_gyro_z->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_obdh_rst_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_system_time_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    
+    if (pkt_type < BEACON_DATA_EPS_PKT)
     {
-        case BEACON_DATA_EPS_PKT:
-            label_bat1_v->set_text(ToConstChar(bat1_voltage));
-            label_bat2_v->set_text(ToConstChar(bat2_voltage));
-            label_bat1_t->set_text(ToConstChar(bat1_temp));
-            label_bat2_t->set_text(ToConstChar(bat2_temp));
-            label_bat_c->set_text(ToConstChar(bat_charge));
-            label_solar_i_1->set_text(PrintAxisData(solar_current_1, solar_current_2, solar_current_3));
-            label_solar_i_2->set_text(PrintAxisData(solar_current_4, solar_current_5, solar_current_6));
-            label_solar_v->set_text(PrintAxisData(solar_voltage_1, solar_voltage_2, solar_voltage_3));
-            label_status->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_imu_data1->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_imu_data2->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_system_time->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_obdh_rst->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            break;
-        case BEACON_DATA_OBDH_PKT:
-            label_bat1_v->set_text(ToConstChar(bat1_voltage));
-            label_bat2_v->set_text(ToConstChar(bat2_voltage));
-            label_bat1_t->set_text(ToConstChar(bat1_temp));
-            label_bat2_t->set_text(ToConstChar(bat2_temp));
-            label_bat_c->set_text(ToConstChar(bat_charge));
-            label_solar_i_1->set_text(PrintAxisData(solar_current_1, solar_current_2, solar_current_3));
-            label_solar_i_2->set_text(PrintAxisData(solar_current_4, solar_current_5, solar_current_6));
-            label_solar_v->set_text(PrintAxisData(solar_voltage_1, solar_voltage_2, solar_voltage_3));
-            label_status->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_imu_data1->set_text(PrintAxisData(imu_accel_x, imu_accel_y, imu_accel_z));
-            label_imu_data2->set_text(PrintAxisData(imu_gyro_x, imu_gyro_y, imu_gyro_z));
-            label_system_time->set_text(ToConstChar(system_time_sec));
-            label_obdh_rst->set_text(ToConstChar(obdh_resets));
-            break;
-        default:
-            label_bat1_v->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_bat2_v->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_bat1_t->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_bat2_t->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_bat_c->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_solar_i_1->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_solar_i_2->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_solar_v->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_status->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_imu_data1->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_imu_data2->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_system_time->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            label_obdh_rst->set_text(BEACON_DATA_UNKNOWN_VALUE);
-            break;
+        return;
+    }
+    
+    if (pkt_type <= BEACON_DATA_OBDH_PKT)
+    {
+        label_beacon_data_bat1_v_value->set_text(ToConstChar(bat1_voltage));
+        label_beacon_data_bat2_v_value->set_text(ToConstChar(bat2_voltage));
+        label_beacon_data_bat1_t_value->set_text(ToConstChar(bat1_temp));
+        label_beacon_data_bat2_t_value->set_text(ToConstChar(bat2_temp));
+        label_beacon_data_bat_c_value->set_text(ToConstChar(bat_charge));
+        label_beacon_data_sp_i_my->set_text(ToConstChar(solar_current_1));
+        label_beacon_data_sp_i_px->set_text(ToConstChar(solar_current_2));
+        label_beacon_data_sp_i_mx->set_text(ToConstChar(solar_current_3));
+        label_beacon_data_sp_i_pz->set_text(ToConstChar(solar_current_4));
+        label_beacon_data_sp_i_mz->set_text(ToConstChar(solar_current_5));
+        label_beacon_data_sp_i_py->set_text(ToConstChar(solar_current_6));
+        label_beacon_data_sp_v_mypx->set_text(ToConstChar(solar_voltage_1));
+        label_beacon_data_sp_v_mxpz->set_text(ToConstChar(solar_voltage_2));
+        label_beacon_data_sp_v_mzpy->set_text(ToConstChar(solar_voltage_3));
+        switch(energy_level)
+        {
+            case 0:
+                label_beacon_data_status_energy_level->set_text("\u2605\u2605\u2605\u2605\u2605");
+                break;
+            case 1:
+                label_beacon_data_status_energy_level->set_text("\u2605\u2605\u2605\u2605");
+                break;
+            case 2:
+                label_beacon_data_status_energy_level->set_text("\u2605\u2605\u2605");
+                break;
+            case 3:
+                label_beacon_data_status_energy_level->set_text("\u2605\u2605");
+                break;
+            case 4:
+                label_beacon_data_status_energy_level->set_text("\u2605");
+                break;
+            case 5:
+                label_beacon_data_status_energy_level->set_text("\u2620");
+                break;
+        }
+    }
+    
+    if (pkt_type == BEACON_DATA_OBDH_PKT)
+    {
+        label_beacon_data_status_imu->set_text(imu_status? "\u2714" : "\u2718");
+        label_beacon_data_status_usd->set_text(usd_status? "\u2714" : "\u2718");
+        label_beacon_data_status_rush->set_text(rush_status? "\u2714" : "\u2718");
+        label_beacon_data_status_eps->set_text(eps_status? "\u2714" : "\u2718");
+        label_beacon_data_status_antenna->set_text(antenna_status? "\u2714" : "\u2718");
+        label_beacon_data_imu_accel_x->set_text(ToConstChar(imu_accel_x));
+        label_beacon_data_imu_accel_y->set_text(ToConstChar(imu_accel_y));
+        label_beacon_data_imu_accel_z->set_text(ToConstChar(imu_accel_z));
+        label_beacon_data_imu_gyro_x->set_text(ToConstChar(imu_gyro_x));
+        label_beacon_data_imu_gyro_y->set_text(ToConstChar(imu_gyro_y));
+        label_beacon_data_imu_gyro_z->set_text(ToConstChar(imu_gyro_z));
+        label_beacon_data_obdh_rst_value->set_text(ToConstChar(obdh_resets));
+        label_beacon_data_system_time_value->set_text(PrintTime(system_time_hou, system_time_min, system_time_sec));
     }
 }
 
@@ -127,7 +181,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
     if (len > 10)
     {
         bat1_voltage        = BatVoltConv((data[10] << 8) | data[11]);
-        bat1_voltage        = BatVoltConv((data[12] << 8) | data[13]);
+        bat2_voltage        = BatVoltConv((data[12] << 8) | data[13]);
         bat1_temp           = BatTempConv((data[14] << 16) | (data[15] << 8) | data[16]);
         bat2_temp           = BatTempConv((data[17] << 16) | (data[18] << 8) | data[19]);
         bat_charge          = BatChargeConv((data[20] << 8) | data[21]);
@@ -140,11 +194,17 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
         solar_voltage_1     = SolarPanelVoltageConv((data[34] << 8) | data[35]);
         solar_voltage_2     = SolarPanelVoltageConv((data[36] << 8) | data[37]);
         solar_voltage_3     = SolarPanelVoltageConv((data[38] << 8) | data[39]);
+        energy_level        = data[40];
         
         type_last_pkt = BEACON_DATA_EPS_PKT;
         
-        if (len > 40)
+        if (len > 41)
         {
+            imu_status          = bool((data[41] << 4) & 0x08);
+            usd_status          = bool((data[41] << 3) & 0x04);
+            rush_status         = bool((data[41] << 1) & 0x02);
+            eps_status          = bool((data[41] << 0) & 0x01);
+            antenna_status      = bool((data[41] << 5) & 0x10);
             imu_accel_x         = IMUAccelConv((data[42] << 8) | data[43]);
             imu_accel_y         = IMUAccelConv((data[44] << 8) | data[45]);
             imu_accel_z         = IMUAccelConv((data[46] << 8) | data[47]);
@@ -152,7 +212,9 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             imu_gyro_y          = IMUGyroConv((data[50] << 8) | data[51]);
             imu_gyro_z          = IMUGyroConv((data[52] << 8) | data[53]);
             system_time_sec     = data[54];
-            obdh_resets         = (data[58] << 8) | data[59];
+            system_time_min     = (data[55] | (data[56] << 8) | (data[57] << 16))%60;
+            system_time_hou     = (data[55] | (data[56] << 8) | (data[57] << 16))/60;
+            obdh_resets         = data[58] + data[59]*256;
             
             type_last_pkt = BEACON_DATA_OBDH_PKT;
             
@@ -187,6 +249,12 @@ void BeaconData::Clear()
     solar_voltage_1     = 0;
     solar_voltage_2     = 0;
     solar_voltage_3     = 0;
+    energy_level        = 0;
+    imu_status          = false;
+    usd_status          = false;
+    rush_status         = false;
+    eps_status          = false;
+    antenna_status      = false;
     imu_accel_x         = 0;
     imu_accel_y         = 0;
     imu_accel_z         = 0;
@@ -194,96 +262,86 @@ void BeaconData::Clear()
     imu_gyro_y          = 0;
     imu_gyro_z          = 0;
     system_time_sec     = 0;
+    system_time_min     = 0;
+    system_time_hou     = 0;
     obdh_resets         = 0;
-    
-    this->Display(BEACON_DATA_SAT_ID_PKT);
 }
 
 std::string BeaconData::Log()
 {
     std::string log_entry = "";
     
-    switch(type_last_pkt)
+    if (type_last_pkt < BEACON_DATA_EPS_PKT)
     {
-        case BEACON_DATA_EPS_PKT:
-            log_entry += ToString(bat1_voltage);
-            log_entry += ",";
-            log_entry += ToString(bat2_voltage);
-            log_entry += ",";
-            log_entry += ToString(bat1_temp);
-            log_entry += ",";
-            log_entry += ToString(bat2_temp);
-            log_entry += ",";
-            log_entry += ToString(bat_charge);
-            log_entry += ",";
-            log_entry += ToString(solar_current_1);
-            log_entry += ",";
-            log_entry += ToString(solar_current_2);
-            log_entry += ",";
-            log_entry += ToString(solar_current_3);
-            log_entry += ",";
-            log_entry += ToString(solar_current_4);
-            log_entry += ",";
-            log_entry += ToString(solar_current_5);
-            log_entry += ",";
-            log_entry += ToString(solar_current_6);
-            log_entry += ",";
-            log_entry += ToString(solar_voltage_1);
-            log_entry += ",";
-            log_entry += ToString(solar_voltage_2);
-            log_entry += ",";
-            log_entry += ToString(solar_voltage_3);
-            log_entry += ",,,,,,,,";
-            break;
-        case BEACON_DATA_OBDH_PKT:
-            log_entry += ToString(bat1_voltage);
-            log_entry += ",";
-            log_entry += ToString(bat2_voltage);
-            log_entry += ",";
-            log_entry += ToString(bat1_temp);
-            log_entry += ",";
-            log_entry += ToString(bat2_temp);
-            log_entry += ",";
-            log_entry += ToString(bat_charge);
-            log_entry += ",";
-            log_entry += ToString(solar_current_1);
-            log_entry += ",";
-            log_entry += ToString(solar_current_2);
-            log_entry += ",";
-            log_entry += ToString(solar_current_3);
-            log_entry += ",";
-            log_entry += ToString(solar_current_4);
-            log_entry += ",";
-            log_entry += ToString(solar_current_5);
-            log_entry += ",";
-            log_entry += ToString(solar_current_6);
-            log_entry += ",";
-            log_entry += ToString(solar_voltage_1);
-            log_entry += ",";
-            log_entry += ToString(solar_voltage_2);
-            log_entry += ",";
-            log_entry += ToString(solar_voltage_3);
-            log_entry += ",";
-            log_entry += ToString(imu_accel_x);
-            log_entry += ",";
-            log_entry += ToString(imu_accel_y);
-            log_entry += ",";
-            log_entry += ToString(imu_accel_z);
-            log_entry += ",";
-            log_entry += ToString(imu_gyro_x);
-            log_entry += ",";
-            log_entry += ToString(imu_gyro_y);
-            log_entry += ",";
-            log_entry += ToString(imu_gyro_z);
-            log_entry += ",";
-            log_entry += ToString(system_time_sec);
-            log_entry += ",";
-            log_entry += ToString(obdh_resets);
-            break;
-        default:
-            log_entry += ",,,,,,,,,,,,,,,,,,,,,";
-            break;
-    };
+        return log_entry;
+    }
+    
+    if (type_last_pkt <= BEACON_DATA_OBDH_PKT)
+    {
+        log_entry += ToString(bat1_voltage);
+        log_entry += ",";
+        log_entry += ToString(bat2_voltage);
+        log_entry += ",";
+        log_entry += ToString(bat1_temp);
+        log_entry += ",";
+        log_entry += ToString(bat2_temp);
+        log_entry += ",";
+        log_entry += ToString(bat_charge);
+        log_entry += ",";
+        log_entry += ToString(solar_current_1);
+        log_entry += ",";
+        log_entry += ToString(solar_current_2);
+        log_entry += ",";
+        log_entry += ToString(solar_current_3);
+        log_entry += ",";
+        log_entry += ToString(solar_current_4);
+        log_entry += ",";
+        log_entry += ToString(solar_current_5);
+        log_entry += ",";
+        log_entry += ToString(solar_current_6);
+        log_entry += ",";
+        log_entry += ToString(solar_voltage_1);
+        log_entry += ",";
+        log_entry += ToString(solar_voltage_2);
+        log_entry += ",";
+        log_entry += ToString(solar_voltage_3);
+        log_entry += ",";
+        log_entry += ToString(int(energy_level));
+    }
+    
+    if (type_last_pkt == BEACON_DATA_OBDH_PKT)
+    {
+        log_entry += ",";
+        log_entry += ToString(imu_status);
+        log_entry += ",";
+        log_entry += ToString(usd_status);
+        log_entry += ",";
+        log_entry += ToString(rush_status);
+        log_entry += ",";
+        log_entry += ToString(eps_status);
+        log_entry += ",";
+        log_entry += ToString(antenna_status);
+        log_entry += ",";
+        log_entry += ToString(imu_accel_x);
+        log_entry += ",";
+        log_entry += ToString(imu_accel_y);
+        log_entry += ",";
+        log_entry += ToString(imu_accel_z);
+        log_entry += ",";
+        log_entry += ToString(imu_gyro_x);
+        log_entry += ",";
+        log_entry += ToString(imu_gyro_y);
+        log_entry += ",";
+        log_entry += ToString(imu_gyro_z);
+        log_entry += ",";
+        log_entry += ToString(int(system_time_sec));
+        log_entry += ",";
+        log_entry += ToString(int(system_time_min));
+        log_entry += ",";
+        log_entry += ToString(int(system_time_hou));
+        log_entry += ",";
+        log_entry += ToString(obdh_resets);
+    }
     
     return log_entry;
 }
@@ -295,12 +353,12 @@ const char* BeaconData::getLabel()
 
 double BeaconData::BatVoltConv(uint16_t val)
 {
-    return (val/32)*4.883e-3;
+    return (val/32.0)*4.883e-3;
 }
 
 double BeaconData::BatTempConv(uint32_t val)
 {
-    return ((val*(1.65*2/pow(2, 24))*1e3)-1000)*1/3.85;
+    return (val*0.125)/32.0;
 }
 
 double BeaconData::BatChargeConv(uint16_t val)
@@ -328,15 +386,15 @@ double BeaconData::IMUGyroConv(uint16_t val)
     return int16_t(val)*250.0/32768.0;
 }
 
-const char* BeaconData::PrintAxisData(double x, double y, double z, uint8_t dig)
+const char* BeaconData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
 {
     std::stringstream input_str;
     
-    input_str << std::fixed << std::setprecision(dig) << x;
-    input_str << "/";
-    input_str << std::fixed << std::setprecision(dig) << y;
-    input_str << "/";
-    input_str << std::fixed << std::setprecision(dig) << z;
+    input_str << int(h);
+    input_str << ":";
+    input_str << int(m);
+    input_str << ":";
+    input_str << int(s);
     
     std::string output = input_str.str();
     

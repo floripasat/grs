@@ -24,7 +24,7 @@
 /**
  * \file beacon_data.h
  * 
- * \brief .
+ * \brief Beacon data class.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
@@ -40,16 +40,17 @@
 #define BEACON_DATA_H_
 
 #include <gtkmm.h>
+#include <vector>
 #include <stdint.h>
 #include <string.h>
 
 #include "packet_data.h"
 
-#define BEACON_DATA_SAT_ID_PKT          0
-#define BEACON_DATA_EPS_PKT             1
-#define BEACON_DATA_OBDH_PKT            2
+#define BEACON_DATA_SAT_ID_PKT              0
+#define BEACON_DATA_EPS_PKT                 1
+#define BEACON_DATA_OBDH_PKT                2
 
-#define BEACON_DATA_UNKNOWN_VALUE       "-"
+#define BEACON_DATA_UNKNOWN_VALUE           "-"
 
 /**
  * \class BeaconData
@@ -59,45 +60,69 @@
 class BeaconData: public PacketData
 {
     private:
-        Gtk::Label      *label_bat1_v;      /**< . */
-        Gtk::Label      *label_bat2_v;      /**< . */
-        Gtk::Label      *label_bat1_t;      /**< . */
-        Gtk::Label      *label_bat2_t;      /**< . */
-        Gtk::Label      *label_bat_c;       /**< . */
-        Gtk::Label      *label_solar_i_1;   /**< . */
-        Gtk::Label      *label_solar_i_2;   /**< . */
-        Gtk::Label      *label_solar_v;     /**< . */
-        Gtk::Label      *label_status;      /**< . */
-        Gtk::Label      *label_imu_data1;   /**< . */
-        Gtk::Label      *label_imu_data2;   /**< . */
-        Gtk::Label      *label_system_time; /**< . */
-        Gtk::Label      *label_obdh_rst;    /**< . */
+        Gtk::Label *label_beacon_data_bat1_v_value;
+        Gtk::Label *label_beacon_data_bat2_v_value;
+        Gtk::Label *label_beacon_data_bat1_t_value;
+        Gtk::Label *label_beacon_data_bat2_t_value;
+        Gtk::Label *label_beacon_data_bat_c_value;
+        Gtk::Label *label_beacon_data_sp_i_my;
+        Gtk::Label *label_beacon_data_sp_i_px;
+        Gtk::Label *label_beacon_data_sp_i_mx;
+        Gtk::Label *label_beacon_data_sp_i_pz;
+        Gtk::Label *label_beacon_data_sp_i_mz;
+        Gtk::Label *label_beacon_data_sp_i_py;
+        Gtk::Label *label_beacon_data_sp_v_mypx;
+        Gtk::Label *label_beacon_data_sp_v_mxpz;
+        Gtk::Label *label_beacon_data_sp_v_mzpy;
+        Gtk::Label *label_beacon_data_status_energy_level;
+        Gtk::Label *label_beacon_data_status_imu;
+        Gtk::Label *label_beacon_data_status_usd;
+        Gtk::Label *label_beacon_data_status_rush;
+        Gtk::Label *label_beacon_data_status_eps;
+        Gtk::Label *label_beacon_data_status_antenna;
+        Gtk::Label *label_beacon_data_imu_accel_x;
+        Gtk::Label *label_beacon_data_imu_accel_y;
+        Gtk::Label *label_beacon_data_imu_accel_z;
+        Gtk::Label *label_beacon_data_imu_gyro_x;
+        Gtk::Label *label_beacon_data_imu_gyro_y;
+        Gtk::Label *label_beacon_data_imu_gyro_z;
+        Gtk::Label *label_beacon_data_obdh_rst_value;
+        Gtk::Label *label_beacon_data_system_time_value;
         
-        double bat1_voltage;                /**< . */
-        double bat2_voltage;                /**< . */
-        double bat1_temp;                   /**< . */
-        double bat2_temp;                   /**< . */
-        double bat_charge;                  /**< . */
-        double solar_current_1;             /**< . */
-        double solar_current_2;             /**< . */
-        double solar_current_3;             /**< . */
-        double solar_current_4;             /**< . */
-        double solar_current_5;             /**< . */
-        double solar_current_6;             /**< . */
-        double solar_voltage_1;             /**< . */
-        double solar_voltage_2;             /**< . */
-        double solar_voltage_3;             /**< . */
-        double imu_accel_x;                 /**< . */
-        double imu_accel_y;                 /**< . */
-        double imu_accel_z;                 /**< . */
-        double imu_gyro_x;                  /**< . */
-        double imu_gyro_y;                  /**< . */
-        double imu_gyro_z;                  /**< . */
-        uint32_t system_time_sec;           /**< . */
-        uint16_t obdh_resets;               /**< . */
-        
-        uint8_t type_last_pkt;              /**< . */
-        
+        double bat1_voltage;
+        double bat2_voltage;
+        double bat1_temp;
+        double bat2_temp;
+        double bat_charge;
+        double solar_current_1;
+        double solar_current_2;
+        double solar_current_3;
+        double solar_current_4;
+        double solar_current_5;
+        double solar_current_6;
+        double solar_voltage_1;
+        double solar_voltage_2;
+        double solar_voltage_3;
+        double imu_accel_x;
+        double imu_accel_y;
+        double imu_accel_z;
+        double imu_gyro_x;
+        double imu_gyro_y;
+        double imu_gyro_z;
+        uint8_t system_time_sec;
+        uint8_t system_time_min;
+        uint8_t system_time_hou;
+        uint16_t obdh_resets;
+        uint8_t energy_level;
+        bool imu_status;
+        bool usd_status;
+        bool rush_status;
+        bool eps_status;
+        bool antenna_status;
+        /**
+         * \brief 
+         */
+        uint8_t type_last_pkt;
         /**
          * \brief 
          * 
@@ -157,14 +182,13 @@ class BeaconData: public PacketData
         /**
          * \brief 
          * 
-         * \param x
-         * \param y
-         * \param z
-         * \param dig
+         * \param h
+         * \param m
+         * \param s
          * 
          * \return 
          */
-        const char* PrintAxisData(double x, double y, double z, uint8_t dig=2);
+        const char* PrintTime(uint8_t h, uint8_t m, uint8_t s);
     public:
         /**
          * \brief 
@@ -175,27 +199,11 @@ class BeaconData: public PacketData
         /**
          * \brief 
          * 
-         * \param bat1_v
-         * \param bat2_v
-         * \param bat1_t
-         * \param bat2_t
-         * \param bat_c
-         * \param solar_i_1
-         * \param solar_i_2
-         * \param solar_v
-         * \param status
-         * \param imu_data1
-         * \param imu_data2
-         * \param system_time
-         * \param obdh_rst
+         * \param lbs
          * 
          * \return None
          */
-        BeaconData(Gtk::Label *bat1_v, Gtk::Label *bat2_v, Gtk::Label *bat1_t,
-                   Gtk::Label *bat2_t, Gtk::Label *bat_c, Gtk::Label *solar_i_1,
-                   Gtk::Label *solar_i_2, Gtk::Label *solar_v, Gtk::Label *status,
-                   Gtk::Label *imu_data1, Gtk::Label *imu_data2, Gtk::Label *system_time,
-                   Gtk::Label *obdh_rst);
+        BeaconData(std::vector<Gtk::Label *> lbs);
         /**
          * \brief 
          * 
@@ -203,7 +211,7 @@ class BeaconData: public PacketData
          * 
          * \return None
          */
-        void Display(uint8_t pkt_type);
+        void Display(uint8_t pkt_type=0);
         /**
          * \brief 
          * 
