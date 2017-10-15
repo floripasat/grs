@@ -53,6 +53,11 @@ void PacketData::Display()
     
 }
 
+void PacketData::Display(bool no_data)
+{
+    
+}
+
 void PacketData::Update(uint8_t *data, uint8_t len)
 {
     

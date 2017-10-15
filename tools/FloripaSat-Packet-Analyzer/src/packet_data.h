@@ -70,6 +70,14 @@ class PacketData
         /**
          * \brief 
          * 
+         * \param no_data
+         * 
+         * \return None
+         */
+        virtual void Display(bool no_data);
+        /**
+         * \brief 
+         * 
          * \param data
          * \param len
          * 

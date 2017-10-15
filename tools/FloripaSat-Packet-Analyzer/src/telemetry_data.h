@@ -109,11 +109,44 @@ class TelemetryData: public PacketData
         Gtk::Label *label_telemetry_data_eps_misc_uc_temp;
         Gtk::Label *label_telemetry_data_eps_misc_energy_level;
         
-        double bat1_voltage;
-        double bat2_voltage;
-        double bat1_temp;
-        double bat2_temp;
-        double bat_charge;
+        // Packet Flags
+        uint16_t packet_flags;
+        
+        // OBDH Status
+        uint32_t reset_counter;
+        uint8_t reset_cause;
+        uint8_t clock_fault_flags;
+        uint8_t test_module_flags;
+        bool imu_status;
+        bool usd_status;
+        bool rush_status;
+        bool eps_status;
+        bool antenna_status;
+
+        // IMU data
+        double imu_1_accel_x;
+        double imu_1_accel_y;
+        double imu_1_accel_z;
+        double imu_1_gyro_x;
+        double imu_1_gyro_y;
+        double imu_1_gyro_z;
+        double imu_2_accel_x;
+        double imu_2_accel_y;
+        double imu_2_accel_z;
+        double imu_2_gyro_x;
+        double imu_2_gyro_y;
+        double imu_2_gyro_z;
+
+        // OBDH Misc
+        double MSP_temperature;
+        double supply_voltage;
+        double supply_current;
+
+        // OBDH Time
+        uint8_t system_time_sec;
+        uint32_t system_time_min;
+
+        // Solar Panels
         double solar_current_1;
         double solar_current_2;
         double solar_current_3;
@@ -123,23 +156,41 @@ class TelemetryData: public PacketData
         double solar_voltage_1;
         double solar_voltage_2;
         double solar_voltage_3;
-        double imu_accel_x;
-        double imu_accel_y;
-        double imu_accel_z;
-        double imu_gyro_x;
-        double imu_gyro_y;
-        double imu_gyro_z;
-        uint8_t system_time_sec;
-        uint8_t system_time_min;
-        uint8_t system_time_hou;
-        uint16_t obdh_resets;
-        uint8_t energy_level;
-        bool imu_status;
-        bool usd_status;
-        bool rush_status;
-        bool eps_status;
-        bool antenna_status;
         
+        // EPS Misc
+        double boost_voltage;
+        double main_power_voltage;
+        double BEACON_EPS_current;
+        double ADC_temperature;
+
+        // Battery Monitor
+        double bat_average_current;
+        double bat_temperature;
+        double bat1_voltage;
+        double bat2_voltage;
+        double bat_current;
+        double bat_accumulated_current;
+        uint8_t protection_register;
+        uint8_t status_register;
+        uint16_t cycle_counter_register;
+        double active_absolute_capacity;
+        double standby_absolute_capacity;
+        double active_relative_capacity;
+        double standby_relative_capacity;
+
+        // Temperatures
+        double RTD_measurement_1;
+        double RTD_measurement_2;
+        double RTD_measurement_3;
+        double RTD_measurement_4;
+        double RTD_measurement_5;
+        double RTD_measurement_6;
+        double RTD_measurement_7;
+
+        // Task Scheduler
+        double EPS_status;
+        
+        // Data convertion functions
         /**
          * \brief 
          * 
@@ -151,11 +202,11 @@ class TelemetryData: public PacketData
         /**
          * \brief 
          * 
-         * \param 
+         * \param val
          * 
          * \return 
          */
-        double BatTempConv(uint32_t val);
+        double ADCConv(uint32_t val);
         /**
          * \brief 
          * 
@@ -199,9 +250,97 @@ class TelemetryData: public PacketData
         /**
          * \brief 
          * 
-         * \param h
-         * \param m
-         * \param s
+         * \param val
+         * 
+         * \return 
+         */
+        double MSPInternalTempConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double OBDHSupplyVoltConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double OBDHSupplyCurrentConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double ADCVoltConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double BeaconEPSCurrentConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double ADCInternalTempConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double BatCurrentConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double BatAccumulatedCurrentConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double BatMonitorTempConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double CycleCountRegisterConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param val
+         * 
+         * \return 
+         */
+        double RemainingAbsoluteCapacityConv(uint16_t val);
+        /**
+         * \brief 
+         * 
+         * \param h is the hour
+         * \param m is the minute
+         * \param s is the second
          * 
          * \return 
          */
@@ -224,9 +363,11 @@ class TelemetryData: public PacketData
         /**
          * \brief 
          * 
+         * \param no_data 
+         * 
          * \return None
          */
-        void Display();
+        void Display(bool no_data=false);
         /**
          * \brief 
          * 

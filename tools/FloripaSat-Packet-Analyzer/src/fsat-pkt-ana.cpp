@@ -788,7 +788,7 @@ void FSatPktAna::OnButtonClearAllTelemetryClicked()
 {
     telemetry_ngham_statistic->Clear();
     telemetry_data->Clear();
-    telemetry_data->Display();
+    telemetry_data->Display(false);
 }
 
 void FSatPktAna::OnToggleButtonOpenClosePortToggled()
