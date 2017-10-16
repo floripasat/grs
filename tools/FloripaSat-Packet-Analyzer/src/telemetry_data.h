@@ -144,7 +144,8 @@ class TelemetryData: public PacketData
 
         // OBDH Time
         uint8_t system_time_sec;
-        uint32_t system_time_min;
+        uint8_t system_time_min;
+        uint16_t system_time_hou;
 
         // Solar Panels
         double solar_current_1;

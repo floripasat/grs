@@ -164,9 +164,9 @@ void TelemetryData::Display(bool no_data)
     else
     {
         label_telemetry_data_status_reset_counter->set_text(ToConstChar(reset_counter));
-        label_telemetry_data_status_reset_cause->set_text(ToConstChar(reset_cause));
-        label_telemetry_data_status_clock->set_text(ToConstChar(clock_fault_flags));
-        label_telemetry_data_status_modules->set_text(ToConstChar(test_module_flags));
+        label_telemetry_data_status_reset_cause->set_text(ToConstChar(int(reset_cause)));
+        label_telemetry_data_status_clock->set_text(ToConstChar(int(clock_fault_flags)));
+        label_telemetry_data_status_modules->set_text(ToConstChar(int(test_module_flags)));
         label_telemetry_data_status_imu->set_text(imu_status? "\u2714" : "\u2718");
         label_telemetry_data_status_rush->set_text(rush_status? "\u2714" : "\u2718");
         label_telemetry_data_status_eps->set_text(eps_status? "\u2714" : "\u2718");
@@ -174,8 +174,8 @@ void TelemetryData::Display(bool no_data)
         label_telemetry_data_uc_temp->set_text(ToConstChar(MSP_temperature));
         label_telemetry_data_uc_voltage->set_text(ToConstChar(supply_voltage));
         label_telemetry_data_uc_current->set_text(ToConstChar(supply_current));
-        label_telemetry_data_time_system->set_text(this->PrintTime(0, system_time_min, system_time_sec));
-        label_telemetry_data_time_system_up->set_text(this->PrintTime(0, system_time_min, system_time_sec));
+        label_telemetry_data_time_system->set_text(this->PrintTime(system_time_hou, system_time_min, system_time_sec));
+        label_telemetry_data_time_system_up->set_text(this->PrintTime(system_time_hou, system_time_min, system_time_sec));
         label_telemetry_data_imu_accel_x->set_text(ToConstChar(imu_1_accel_x));
         label_telemetry_data_imu_accel_y->set_text(ToConstChar(imu_1_accel_y));
         label_telemetry_data_imu_accel_z->set_text(ToConstChar(imu_1_accel_z));
@@ -240,18 +240,18 @@ void TelemetryData::Display(bool no_data)
 
 void TelemetryData::Update(uint8_t *data, uint8_t len)
 {
-    if (len > 207)
+    if (len > 140)
     {
         packet_flags                = (data[0] << 8) | data[1];
-        reset_counter               = (data[2] << 16) | (data[3] << 8) | data[4];
+        reset_counter               = (data[4] << 16) | (data[3] << 8) | data[2];
         reset_cause                 = data[5];
         clock_fault_flags           = data[6];
         test_module_flags           = data[7];
-        imu_status                  = bool((data[7] << 4) & 0x08);
-        usd_status                  = bool((data[7] << 3) & 0x04);
-        rush_status                 = bool((data[7] << 1) & 0x02);
-        eps_status                  = bool((data[7] << 0) & 0x01);
-        antenna_status              = bool((data[7] << 5) & 0x10);
+        imu_status                  = bool((data[7] >> 4) & 1);
+        usd_status                  = bool((data[7] >> 3) & 1);
+        rush_status                 = bool((data[7] >> 1) & 1);
+        eps_status                  = bool((data[7] >> 0) & 1);
+        antenna_status              = bool((data[7] >> 5) & 1);
         imu_1_accel_x               = IMUAccelConv((data[8] << 8) | data[9]);
         imu_1_accel_y               = IMUAccelConv((data[10] << 8) | data[11]);
         imu_1_accel_z               = IMUAccelConv((data[12] << 8) | data[13]);
@@ -268,7 +268,8 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         supply_voltage              = OBDHSupplyVoltConv((data[34] << 8) | data[35]);
         supply_current              = OBDHSupplyCurrentConv((data[36] << 8) | data[37]);
         system_time_sec             = data[38];
-        system_time_min             = (data[39] << 16) | (data[40] << 8) | data[41];
+        system_time_min             = (data[39] | (data[40] << 8) | (data[41] << 16))%60;
+        system_time_hou             = (data[39] | (data[40] << 8) | (data[41] << 16))/60;            
         solar_current_1             = SolarPanelCurrentConv((data[139] << 8) | data[140]);
         solar_current_2             = SolarPanelCurrentConv((data[141] << 8) | data[142]);
         solar_current_3             = SolarPanelCurrentConv((data[143] << 8) | data[144]);
@@ -303,6 +304,8 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         RTD_measurement_6           = ADCConv(data[201] << 16 | (data[202] << 8) | data[203]);
         RTD_measurement_7           = ADCConv(data[204] << 16 | (data[205] << 8) | data[206]);
         EPS_status                  = data[207];
+        
+        this->Display();
     }
     else
     {
@@ -538,7 +541,7 @@ double TelemetryData::IMUGyroConv(uint16_t val)
 
 double TelemetryData::MSPInternalTempConv(uint16_t val)
 {
-    return ((val * 2.0 - 2145.0) * 55.0) / (2508.0 - 2145.0) + 30.0;        // CAL1 = 2145 and CAL2 = 2508 for the OBDH MSP (F6659)
+    return ((val * 2.0 - 2048.0) * 55.0) / (2432.0 - 2048.0) + 30.0;        // CAL1 = 2145 and CAL2 = 2508 for the OBDH MSP (F6659)
 }
 
 double TelemetryData::OBDHSupplyVoltConv(uint16_t val)
