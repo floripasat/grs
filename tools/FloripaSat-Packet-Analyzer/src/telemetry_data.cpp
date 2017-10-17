@@ -36,6 +36,8 @@
  * \{
  */
 
+#include <iomanip>
+
 #include "telemetry_data.h"
 #include "aux.hpp"
 
@@ -51,8 +53,8 @@ TelemetryData::TelemetryData(std::vector<Gtk::Label *> lbs)
     label_telemetry_data_status_reset_counter   = lbs[pos++];
     label_telemetry_data_status_reset_cause     = lbs[pos++];
     label_telemetry_data_status_clock           = lbs[pos++];
-    label_telemetry_data_status_modules         = lbs[pos++];
     label_telemetry_data_status_imu             = lbs[pos++];
+    label_telemetry_data_status_usd             = lbs[pos++];
     label_telemetry_data_status_rush            = lbs[pos++];
     label_telemetry_data_status_eps             = lbs[pos++];
     label_telemetry_data_status_antenna         = lbs[pos++];
@@ -111,8 +113,8 @@ void TelemetryData::Display(bool no_data)
         label_telemetry_data_status_reset_counter->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
         label_telemetry_data_status_reset_cause->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
         label_telemetry_data_status_clock->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
-        label_telemetry_data_status_modules->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
         label_telemetry_data_status_imu->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
+        label_telemetry_data_status_usd->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
         label_telemetry_data_status_rush->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
         label_telemetry_data_status_eps->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
         label_telemetry_data_status_antenna->set_text(TELEMETRY_DATA_UNKNOWN_VALUE);
@@ -166,8 +168,8 @@ void TelemetryData::Display(bool no_data)
         label_telemetry_data_status_reset_counter->set_text(ToConstChar(reset_counter));
         label_telemetry_data_status_reset_cause->set_text(ToConstChar(int(reset_cause)));
         label_telemetry_data_status_clock->set_text(ToConstChar(int(clock_fault_flags)));
-        label_telemetry_data_status_modules->set_text(ToConstChar(int(test_module_flags)));
         label_telemetry_data_status_imu->set_text(imu_status? "\u2714" : "\u2718");
+        label_telemetry_data_status_usd->set_text(usd_status? "\u2714" : "\u2718");
         label_telemetry_data_status_rush->set_text(rush_status? "\u2714" : "\u2718");
         label_telemetry_data_status_eps->set_text(eps_status? "\u2714" : "\u2718");
         label_telemetry_data_status_antenna->set_text(antenna_status? "\u2714" : "\u2718");        
@@ -176,12 +178,12 @@ void TelemetryData::Display(bool no_data)
         label_telemetry_data_uc_current->set_text(ToConstChar(supply_current));
         label_telemetry_data_time_system->set_text(this->PrintTime(system_time_hou, system_time_min, system_time_sec));
         label_telemetry_data_time_system_up->set_text(this->PrintTime(system_time_hou, system_time_min, system_time_sec));
-        label_telemetry_data_imu_accel_x->set_text(ToConstChar(imu_1_accel_x));
-        label_telemetry_data_imu_accel_y->set_text(ToConstChar(imu_1_accel_y));
-        label_telemetry_data_imu_accel_z->set_text(ToConstChar(imu_1_accel_z));
-        label_telemetry_data_imu_gyro_x->set_text(ToConstChar(imu_1_gyro_x));
-        label_telemetry_data_imu_gyro_y->set_text(ToConstChar(imu_1_gyro_y));
-        label_telemetry_data_imu_gyro_z->set_text(ToConstChar(imu_1_gyro_z));
+        label_telemetry_data_imu_accel_x->set_text(this->PrintIMUs(imu_1_accel_x, imu_2_accel_x));
+        label_telemetry_data_imu_accel_y->set_text(this->PrintIMUs(imu_1_accel_y, imu_2_accel_y));
+        label_telemetry_data_imu_accel_z->set_text(this->PrintIMUs(imu_1_accel_z, imu_2_accel_z));
+        label_telemetry_data_imu_gyro_x->set_text(this->PrintIMUs(imu_1_gyro_x, imu_2_gyro_x));
+        label_telemetry_data_imu_gyro_y->set_text(this->PrintIMUs(imu_1_gyro_y, imu_2_gyro_y));
+        label_telemetry_data_imu_gyro_z->set_text(this->PrintIMUs(imu_1_gyro_z, imu_2_gyro_z));
         label_telemetry_data_sp_sun_p1->set_text(ToConstChar(RTD_measurement_1));
         label_telemetry_data_sp_sun_p2->set_text(ToConstChar(RTD_measurement_2));
         label_telemetry_data_sp_sun_p3->set_text(ToConstChar(RTD_measurement_3));
@@ -194,8 +196,8 @@ void TelemetryData::Display(bool no_data)
         label_telemetry_data_eps_bat_2_volt->set_text(ToConstChar(bat2_voltage));
         label_telemetry_data_eps_bat_current->set_text(ToConstChar(bat_current));
         label_telemetry_data_eps_bat_charge->set_text(ToConstChar(bat_accumulated_current));
-        label_telemetry_data_eps_bat_protection->set_text(ToConstChar(protection_register));
-        label_telemetry_data_eps_bat_status->set_text(ToConstChar(status_register));
+        label_telemetry_data_eps_bat_protection->set_text(ToConstChar(int(protection_register)));
+        label_telemetry_data_eps_bat_status->set_text(ToConstChar(int(status_register)));
         label_telemetry_data_eps_bat_cycles->set_text(ToConstChar(cycle_counter_register));
         label_telemetry_data_eps_bat_raac->set_text(ToConstChar(active_absolute_capacity));
         label_telemetry_data_eps_bat_rsac->set_text(ToConstChar(standby_absolute_capacity));
@@ -342,6 +344,7 @@ void TelemetryData::Clear()
     supply_current              = 0;
     system_time_sec             = 0;
     system_time_min             = 0;
+    system_time_hou             = 0;
     solar_current_1             = 0;
     solar_current_2             = 0;
     solar_current_3             = 0;
@@ -392,6 +395,16 @@ std::string TelemetryData::Log()
     log_entry += ",";
     log_entry += ToString(int(test_module_flags));
     log_entry += ",";
+    log_entry += ToString(imu_status);
+    log_entry += ",";
+    log_entry += ToString(usd_status);
+    log_entry += ",";
+    log_entry += ToString(rush_status);
+    log_entry += ",";
+    log_entry += ToString(eps_status);
+    log_entry += ",";
+    log_entry += ToString(antenna_status);
+    log_entry += ",";
     log_entry += ToString(imu_1_accel_x);
     log_entry += ",";
     log_entry += ToString(imu_1_accel_y);
@@ -422,9 +435,11 @@ std::string TelemetryData::Log()
     log_entry += ",";
     log_entry += ToString(supply_current);
     log_entry += ",";
-    log_entry += ToString(int(system_time_sec));
+    log_entry += ToString(int(system_time_hou));
     log_entry += ",";
     log_entry += ToString(int(system_time_min));
+    log_entry += ",";
+    log_entry += ToString(int(system_time_sec));
     log_entry += ",";
     log_entry += ToString(solar_current_1);
     log_entry += ",";
@@ -494,7 +509,7 @@ std::string TelemetryData::Log()
     log_entry += ",";
     log_entry += ToString(RTD_measurement_7);
     log_entry += ",";
-    log_entry += ToString(EPS_status);
+    log_entry += ToString(int(EPS_status));
     
     return log_entry;
 }
@@ -608,18 +623,18 @@ const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
     
     return output.c_str();
 }
-/*
-const char* TelemetryData::()
+
+const char* TelemetryData::PrintIMUs(double imu_1, double imu_2, unsigned int digits)
 {
     std::stringstream input_str;
     
-    intpu_std << ;
-    intpu_std << "/";
-    intpu_std << ;
+    input_str << std::fixed << std::setprecision(digits) << imu_1;
+    input_str << "/";
+    input_str << std::fixed << std::setprecision(digits) << imu_2;
     
     std::string output = input_str.str();
     
     return output.c_str();
 }
-*/
+
 //! \} End of telemetry_data

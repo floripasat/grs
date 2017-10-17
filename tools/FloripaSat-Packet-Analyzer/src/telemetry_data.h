@@ -59,8 +59,8 @@ class TelemetryData: public PacketData
         Gtk::Label *label_telemetry_data_status_reset_counter;
         Gtk::Label *label_telemetry_data_status_reset_cause;
         Gtk::Label *label_telemetry_data_status_clock;
-        Gtk::Label *label_telemetry_data_status_modules;
         Gtk::Label *label_telemetry_data_status_imu;
+        Gtk::Label *label_telemetry_data_status_usd;
         Gtk::Label *label_telemetry_data_status_rush;
         Gtk::Label *label_telemetry_data_status_eps;
         Gtk::Label *label_telemetry_data_status_antenna;
@@ -346,6 +346,16 @@ class TelemetryData: public PacketData
          * \return 
          */
         const char* PrintTime(uint8_t h, uint8_t m, uint8_t s);
+        /**
+         * \brief 
+         * 
+         * \param imu_1
+         * \param imu_2
+         * \param digits
+         * 
+         * \return 
+         */
+        const char* PrintIMUs(double imu_1, double imu_2, unsigned int digits=4);
     public:
         /**
          * \brief 

@@ -310,8 +310,8 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     ref_builder->get_widget("label_telemetry_data_status_reset_counter", label_telemetry_data_status_reset_counter);
     ref_builder->get_widget("label_telemetry_data_status_reset_cause", label_telemetry_data_status_reset_cause);
     ref_builder->get_widget("label_telemetry_data_status_clock", label_telemetry_data_status_clock);
-    ref_builder->get_widget("label_telemetry_data_status_modules", label_telemetry_data_status_modules);
     ref_builder->get_widget("label_telemetry_data_status_imu", label_telemetry_data_status_imu);
+    ref_builder->get_widget("label_telemetry_data_status_usd", label_telemetry_data_status_usd);
     ref_builder->get_widget("label_telemetry_data_status_rush", label_telemetry_data_status_rush);
     ref_builder->get_widget("label_telemetry_data_status_eps", label_telemetry_data_status_eps);
     ref_builder->get_widget("label_telemetry_data_status_antenna", label_telemetry_data_status_antenna);
@@ -364,8 +364,8 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     telemetry_data_labels.push_back(label_telemetry_data_status_reset_counter);
     telemetry_data_labels.push_back(label_telemetry_data_status_reset_cause);
     telemetry_data_labels.push_back(label_telemetry_data_status_clock);
-    telemetry_data_labels.push_back(label_telemetry_data_status_modules);
     telemetry_data_labels.push_back(label_telemetry_data_status_imu);
+    telemetry_data_labels.push_back(label_telemetry_data_status_usd);
     telemetry_data_labels.push_back(label_telemetry_data_status_rush);
     telemetry_data_labels.push_back(label_telemetry_data_status_eps);
     telemetry_data_labels.push_back(label_telemetry_data_status_antenna);
@@ -703,7 +703,7 @@ void FSatPktAna::OnButtonClearAllBeaconClicked()
     ngham_statistic->Clear();
     //ax25_statistic->Clear();
     beacon_data->Clear();
-    beacon_data->Display();
+    beacon_data->Display(0);
 }
 
 void FSatPktAna::OnToggleButtonPlayTelemetryToggled()
@@ -788,7 +788,7 @@ void FSatPktAna::OnButtonClearAllTelemetryClicked()
 {
     telemetry_ngham_statistic->Clear();
     telemetry_data->Clear();
-    telemetry_data->Display(false);
+    telemetry_data->Display(true);
 }
 
 void FSatPktAna::OnToggleButtonOpenClosePortToggled()

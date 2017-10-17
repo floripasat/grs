@@ -75,6 +75,8 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 {                        
     uint8_t data[256];
     uint8_t data_len;
+    std::string event_text;
+    
     switch(ngham_Decode(byte, data, &data_len))
     {
         case PKT_CONDITION_OK:
@@ -95,7 +97,9 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 }
             }
             
-            event_log->AddNewEvent("New valid NGHAM packet from beacon", EVENT_LOG_TYPE_NEW_VALID_PACKET);
+            event_text = "New valid NGHAM packet from " + std::string(packet_data->getLabel());
+            
+            event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
             
             if (make_log)
             {
@@ -120,7 +124,9 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             return false;
             break;
         case PKT_CONDITION_FAIL:
-            event_log->AddNewEvent("New invalid NGHAM packet from beacon", EVENT_LOG_TYPE_NEW_INVALID_PACKET);
+            event_text = "New invalid NGHAM packet from " + std::string(packet_data->getLabel());
+        
+            event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_INVALID_PACKET);
             
             if (make_log)
             {

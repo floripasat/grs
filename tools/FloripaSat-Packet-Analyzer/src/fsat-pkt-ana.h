@@ -165,8 +165,8 @@ class FSatPktAna
         Gtk::Label                      *label_telemetry_data_status_reset_counter;
         Gtk::Label                      *label_telemetry_data_status_reset_cause;
         Gtk::Label                      *label_telemetry_data_status_clock;
-        Gtk::Label                      *label_telemetry_data_status_modules;
         Gtk::Label                      *label_telemetry_data_status_imu;
+        Gtk::Label                      *label_telemetry_data_status_usd;
         Gtk::Label                      *label_telemetry_data_status_rush;
         Gtk::Label                      *label_telemetry_data_status_eps;
         Gtk::Label                      *label_telemetry_data_status_antenna;
