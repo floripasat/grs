@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: FloripaSat GS Receiver
 # Author: Gabriel Mariano Marcelino, Ruan Molgero
-# Generated: Mon Oct  9 17:36:04 2017
+# Generated: Wed Oct 18 23:08:29 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -51,7 +51,7 @@ class fsat_grs(grc_wxgui.top_block_gui):
         self.signal_source_freq = signal_source_freq = 0
         self.samp_rate = samp_rate = 1e6
         self.freq = freq = 145.9e6
-        self.bindata_file = bindata_file = "/code/gnuradio/bin_data.bin"
+        self.bindata_file = bindata_file = "/code/gnuradio/bin_data_beacon.bin"
         self.baudrate = baudrate = 1.2e3
         self.bandwidth = bandwidth = 30e3
 
@@ -145,7 +145,7 @@ class fsat_grs(grc_wxgui.top_block_gui):
         	size=((480,50)),
         )
         self.GridAdd(self.wxgui_fftsink2_0.win, 5, 0, 1, 1)
-        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + "" )
+        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + "rtl=0" )
         self.osmosdr_source_0.set_sample_rate(samp_rate)
         self.osmosdr_source_0.set_center_freq(freq, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)
@@ -204,9 +204,9 @@ class fsat_grs(grc_wxgui.top_block_gui):
         self.digital_clock_recovery_mm_xx_0.set_omega(self.samp_rate/(self.baudrate*100))
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, self.bandwidth/2, self.bandwidth/2/6, firdes.WIN_HAMMING, 6.76))
         self.low_pass_filter_1.set_taps(firdes.low_pass(1, self.samp_rate, self.baudrate, self.baudrate/6, firdes.WIN_HAMMING, 6.76))
-        self.osmosdr_source_0.set_sample_rate(self.samp_rate)
-        self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
         self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
+        self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
+        self.osmosdr_source_0.set_sample_rate(self.samp_rate)
 
     def get_freq(self):
         return self.freq
@@ -214,16 +214,16 @@ class fsat_grs(grc_wxgui.top_block_gui):
     def set_freq(self, freq):
         self.freq = freq
         self._freq_text_box.set_value(self.freq)
-        self.osmosdr_source_0.set_center_freq(self.freq, 0)
         self.wxgui_fftsink2_0.set_baseband_freq(self.freq)
+        self.osmosdr_source_0.set_center_freq(self.freq, 0)
 
     def get_bindata_file(self):
         return self.bindata_file
 
     def set_bindata_file(self, bindata_file):
         self.bindata_file = bindata_file
-        self._bindata_file_text_box.set_value(self.bindata_file)
         self.blocks_file_sink_1.open(self.bindata_file)
+        self._bindata_file_text_box.set_value(self.bindata_file)
 
     def get_baudrate(self):
         return self.baudrate

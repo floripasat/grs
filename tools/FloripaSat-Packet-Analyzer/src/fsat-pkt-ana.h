@@ -368,9 +368,11 @@ class FSatPktAna
         /**
          * \brief 
          * 
+         * \param beacon_receiver
+         * 
          * \return None
          */
-        void RunGNURadioReceiver();
+        void RunGNURadioReceiver(bool beacon_receiver=true);
     public:
         /**
          * \brief 

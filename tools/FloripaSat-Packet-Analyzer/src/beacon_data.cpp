@@ -200,11 +200,11 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
         
         if (len > 41)
         {
-            imu_status          = bool((data[41] << 4) & 0x08);
-            usd_status          = bool((data[41] << 3) & 0x04);
-            rush_status         = bool((data[41] << 1) & 0x02);
-            eps_status          = bool((data[41] << 0) & 0x01);
-            antenna_status      = bool((data[41] << 5) & 0x10);
+            imu_status          = bool((data[41] >> 4) & 1);
+            usd_status          = bool((data[41] >> 3) & 1);
+            rush_status         = bool((data[41] >> 1) & 1);
+            eps_status          = bool((data[41] >> 0) & 1);
+            antenna_status      = bool((data[41] >> 5) & 1);
             imu_accel_x         = IMUAccelConv((data[42] << 8) | data[43]);
             imu_accel_y         = IMUAccelConv((data[44] << 8) | data[45]);
             imu_accel_z         = IMUAccelConv((data[46] << 8) | data[47]);

@@ -601,9 +601,13 @@ void FSatPktAna::OnToolButtonStatisticsClicked()
 
 void FSatPktAna::OnToolButtonRunClicked()
 {
-    std::thread thread_gnuradio(&FSatPktAna::RunGNURadioReceiver, this);
+    std::thread thread_gnuradio_beacon(&FSatPktAna::RunGNURadioReceiver, this, true);
     
-    thread_gnuradio.detach();
+    thread_gnuradio_beacon.detach();
+    
+    std::thread thread_gnuradio_telemetry(&FSatPktAna::RunGNURadioReceiver, this, false);
+    
+    thread_gnuradio_telemetry.detach();
 }
 
 void FSatPktAna::OnToolButtonAboutClicked()
@@ -871,9 +875,16 @@ void FSatPktAna::RaiseErrorMessage(const char* error_title, const char* error_te
     delete msg_dialog;
 }
 
-void FSatPktAna::RunGNURadioReceiver()
+void FSatPktAna::RunGNURadioReceiver(bool beacon_receiver)
 {
-    system("python gnuradio/fsat_grs.py");
+    if (beacon_receiver)
+    {
+        system("python gnuradio/fsat_grs_beacon.py");
+    }
+    else
+    {
+        system("python gnuradio/fsat_grs_telemetry.py");
+    }
 }
 
 //! \} End of fsat_pkt_ana group
