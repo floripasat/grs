@@ -97,7 +97,7 @@ const char* ToConstChar(T input)
 template <typename T>
 std::string ToString(T input)
 {
-    std::ostringstream out;
+    std::stringstream out;
     
     out << input;
     

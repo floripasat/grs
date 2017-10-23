@@ -42,7 +42,7 @@
 #include <gtkmm.h>
 #include <vector>
 #include <stdint.h>
-#include <string.h>
+#include <string>
 
 #include "packet_data.h"
 

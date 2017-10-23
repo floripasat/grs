@@ -42,12 +42,14 @@
 #include "beacon_data.h"
 #include "aux.hpp"
 
+using namespace std;
+
 BeaconData::BeaconData()
 {
     
 }
 
-BeaconData::BeaconData(std::vector<Gtk::Label *> lbs)
+BeaconData::BeaconData(vector<Gtk::Label *> lbs)
 {
     unsigned int pos = 0;
     
@@ -137,23 +139,23 @@ void BeaconData::Display(uint8_t pkt_type)
         label_beacon_data_sp_v_mzpy->set_text(ToConstChar(solar_voltage_3));
         switch(energy_level)
         {
-            case 0:
+            case 1:
                 label_beacon_data_status_energy_level->set_text("\u2605\u2605\u2605\u2605\u2605");
                 break;
-            case 1:
+            case 2:
                 label_beacon_data_status_energy_level->set_text("\u2605\u2605\u2605\u2605");
                 break;
-            case 2:
+            case 3:
                 label_beacon_data_status_energy_level->set_text("\u2605\u2605\u2605");
                 break;
-            case 3:
-                label_beacon_data_status_energy_level->set_text("\u2605\u2605");
-                break;
             case 4:
-                label_beacon_data_status_energy_level->set_text("\u2605");
+                label_beacon_data_status_energy_level->set_text("\u2605\u2605");
                 break;
             case 5:
                 label_beacon_data_status_energy_level->set_text("\u2620");
+                break;
+            default:
+                label_beacon_data_status_energy_level->set_text(BEACON_DATA_UNKNOWN_VALUE);
                 break;
         }
     }
@@ -180,20 +182,20 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
 {
     if (len > 10)
     {
-        bat1_voltage        = BatVoltConv((data[10] << 8) | data[11]);
-        bat2_voltage        = BatVoltConv((data[12] << 8) | data[13]);
+        bat1_voltage        = BatVoltConv((data[11] << 8) | data[10]);
+        bat2_voltage        = BatVoltConv((data[13] << 8) | data[12]);
         bat1_temp           = BatTempConv((data[14] << 16) | (data[15] << 8) | data[16]);
         bat2_temp           = BatTempConv((data[17] << 16) | (data[18] << 8) | data[19]);
-        bat_charge          = BatChargeConv((data[20] << 8) | data[21]);
-        solar_current_1     = SolarPanelCurrentConv((data[22] << 8) | data[23]);
-        solar_current_2     = SolarPanelCurrentConv((data[24] << 8) | data[25]);
-        solar_current_3     = SolarPanelCurrentConv((data[26] << 8) | data[27]);
-        solar_current_4     = SolarPanelCurrentConv((data[28] << 8) | data[29]);
-        solar_current_5     = SolarPanelCurrentConv((data[30] << 8) | data[31]);
-        solar_current_6     = SolarPanelCurrentConv((data[32] << 8) | data[33]);
-        solar_voltage_1     = SolarPanelVoltageConv((data[34] << 8) | data[35]);
-        solar_voltage_2     = SolarPanelVoltageConv((data[36] << 8) | data[37]);
-        solar_voltage_3     = SolarPanelVoltageConv((data[38] << 8) | data[39]);
+        bat_charge          = BatChargeConv((data[21] << 8) | data[20]);
+        solar_current_1     = SolarPanelCurrentConv((data[23] << 8) | data[22]);
+        solar_current_2     = SolarPanelCurrentConv((data[25] << 8) | data[24]);
+        solar_current_3     = SolarPanelCurrentConv((data[27] << 8) | data[26]);
+        solar_current_4     = SolarPanelCurrentConv((data[29] << 8) | data[28]);
+        solar_current_5     = SolarPanelCurrentConv((data[31] << 8) | data[30]);
+        solar_current_6     = SolarPanelCurrentConv((data[33] << 8) | data[32]);
+        solar_voltage_1     = SolarPanelVoltageConv((data[35] << 8) | data[34]);
+        solar_voltage_2     = SolarPanelVoltageConv((data[37] << 8) | data[36]);
+        solar_voltage_3     = SolarPanelVoltageConv((data[39] << 8) | data[38]);
         energy_level        = data[40];
         
         type_last_pkt = BEACON_DATA_EPS_PKT;
@@ -267,9 +269,9 @@ void BeaconData::Clear()
     obdh_resets         = 0;
 }
 
-std::string BeaconData::Log()
+string BeaconData::Log()
 {
-    std::string log_entry = "";
+    string log_entry = "";
     
     if (type_last_pkt < BEACON_DATA_EPS_PKT)
     {
@@ -363,7 +365,7 @@ double BeaconData::BatTempConv(uint32_t val)
 
 double BeaconData::BatChargeConv(uint16_t val)
 {
-    return 0;
+    return val*(6.25*1e-4);
 }
 
 double BeaconData::SolarPanelCurrentConv(uint16_t val)
