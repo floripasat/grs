@@ -37,10 +37,17 @@ import pylab
 def plot_data(x, y, y_label="Data", c_title="Time x Data", save=False):
     x_label = "Time [sec]"
     
-    pylab.plot(x, y, "-bo")
+    # Linear Regression
+    #fit = pylab.polyfit(x, y, 3)
+    #fit_fn = pylab.poly1d(fit)
+    #pylab.plot(x, fit_fn(x), '-g', label='Best curve')
+    
+    pylab.plot(x, y, '-bo')#, label='Measures')
     pylab.title(c_title)
     pylab.xlabel(x_label)
     pylab.ylabel(y_label)
+    #pylab.legend(loc='best')
+    #pylab.axis([0, x[-1], min(y)*0.999, max(y)*1.001])
     if save:
         pylab.savefig('plot.pdf', bbox_inches='tight', dpi=600, transparent=True)
     pylab.show()
@@ -63,8 +70,9 @@ def main(args):
         reader = csv.reader(csvfile, delimiter=',', quotechar='|')
         try:
             for row in reader:
-                column.append(float(row[int(args[2])]))
-                time_sec.append((int(row[3])*3600) + (int(row[4])*60) + (int(row[5])))
+                if len(row) > (int(args[2]) + 1):
+                    column.append(float(row[int(args[2])]))
+                    time_sec.append((int(row[3])*3600) + (int(row[4])*60) + (int(row[5])))
         except:
             pass
     
