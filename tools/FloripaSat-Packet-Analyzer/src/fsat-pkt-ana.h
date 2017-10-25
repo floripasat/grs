@@ -54,6 +54,9 @@
 
 #define DATA_RECEPTION_SAMPLE_RATE      1000
 
+#define FSAT_PKT_ANA_GRC_BEACON_BIN     "/tmp/bin_data_beacon.bin"
+#define FSAT_PKT_ANA_GRC_TELEMETRY_BIN  "/tmp/bin_data_telemetry.bin"
+
 /**
  * \class FSatPktAna
  * 

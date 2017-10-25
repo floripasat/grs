@@ -654,7 +654,14 @@ void FSatPktAna::OnToggleButtonPlayBeaconToggled()
     {
         ngham_pkts_beacon = new NGHamPkts(event_log, beacon_data, ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_beacon_data->get_active());
         
-        ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), std::ifstream::in);
+        if (filechooserbutton_beacon->get_filename().size() > 0)
+        {
+            ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), std::ifstream::in);
+        }
+        else
+        {
+            ngham_pkts_beacon->open(FSAT_PKT_ANA_GRC_BEACON_BIN, std::ifstream::in);
+        }
         
         if (ngham_pkts_beacon->is_open())
         {
@@ -726,6 +733,10 @@ void FSatPktAna::OnButtonStopBeaconClicked()
 {
     togglebutton_play_beacon->set_active(false);
     togglebutton_pause_beacon->set_active(false);
+    
+    // Save bin stream for further analysis
+    system("mkdir -p bindata");
+    system("cp -a /tmp/bin_data_beacon.bin bindata/BEACON_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin");
 }
 
 void FSatPktAna::OnButtonClearAllBeaconClicked()
@@ -734,6 +745,7 @@ void FSatPktAna::OnButtonClearAllBeaconClicked()
     //ax25_statistic->Clear();
     beacon_data->Clear();
     beacon_data->Display(0);
+    filechooserbutton_beacon->unselect_all();
 }
 
 void FSatPktAna::OnToggleButtonPlayTelemetryToggled()
@@ -742,7 +754,14 @@ void FSatPktAna::OnToggleButtonPlayTelemetryToggled()
     {
         ngham_pkts_telemetry = new NGHamPkts(event_log, telemetry_data, telemetry_ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_telemetry_data->get_active());
         
-        ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), std::ifstream::in);
+        if (filechooserbutton_telemetry->get_filename().size() > 0)
+        {
+            ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), std::ifstream::in);
+        }
+        else
+        {
+            ngham_pkts_telemetry->open(FSAT_PKT_ANA_GRC_TELEMETRY_BIN, std::ifstream::in);
+        }
         
         if (ngham_pkts_telemetry->is_open())
         {
@@ -812,6 +831,10 @@ void FSatPktAna::OnButtonStopTelemetryClicked()
 {
     togglebutton_play_telemetry->set_active(false);
     togglebutton_pause_telemetry->set_active(false);
+    
+    // Save bin stream for further analysis
+    system("mkdir -p bindata");
+    system("cp -a /tmp/bin_data_telemetry.bin bindata/TELEMETRY_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin");
 }
 
 void FSatPktAna::OnButtonClearAllTelemetryClicked()
@@ -819,6 +842,7 @@ void FSatPktAna::OnButtonClearAllTelemetryClicked()
     telemetry_ngham_statistic->Clear();
     telemetry_data->Clear();
     telemetry_data->Display(true);
+    filechooserbutton_telemetry->unselect_all();
 }
 
 void FSatPktAna::OnToggleButtonOpenClosePortToggled()

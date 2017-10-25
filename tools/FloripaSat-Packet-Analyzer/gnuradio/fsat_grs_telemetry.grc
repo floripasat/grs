@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>fsat_grs</value>
+      <value>fsat_grs_telemetry</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -58,7 +58,7 @@
     </param>
     <param>
       <key>realtime_scheduling</key>
-      <value></value>
+      <value>1</value>
     </param>
     <param>
       <key>run_command</key>
@@ -113,7 +113,7 @@
     </param>
     <param>
       <key>grid_pos</key>
-      <value>(2,0,1,1)</value>
+      <value>(1,1,1,1)</value>
     </param>
     <param>
       <key>id</key>
@@ -160,7 +160,7 @@
     </param>
     <param>
       <key>grid_pos</key>
-      <value>(1,0,1,1)</value>
+      <value>(0,1,1,1)</value>
     </param>
     <param>
       <key>id</key>
@@ -176,50 +176,30 @@
     </param>
   </block>
   <block>
-    <key>variable_text_box</key>
+    <key>variable</key>
     <param>
       <key>comment</key>
       <value></value>
-    </param>
-    <param>
-      <key>converver</key>
-      <value>str_converter</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>"/code/gnuradio/bin_data_telemetry.bin"</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>formatter</key>
-      <value>None</value>
-    </param>
-    <param>
       <key>_coordinate</key>
-      <value>(1056, 12)</value>
+      <value>(104, 117)</value>
     </param>
     <param>
       <key>_rotation</key>
       <value>0</value>
     </param>
     <param>
-      <key>grid_pos</key>
-      <value>(0,1,1,1)</value>
-    </param>
-    <param>
       <key>id</key>
-      <value>bindata_file</value>
+      <value>bin_file_sink</value>
     </param>
     <param>
-      <key>label</key>
-      <value>Output File</value>
-    </param>
-    <param>
-      <key>notebook</key>
-      <value></value>
+      <key>value</key>
+      <value>"/tmp/bin_data_telemetry.bin"</value>
     </param>
   </block>
   <block>
@@ -281,7 +261,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(8, 101)</value>
+      <value>(8, 117)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -324,7 +304,7 @@
     </param>
     <param>
       <key>grid_pos</key>
-      <value>(3,0,1,1)</value>
+      <value>(1,0,1,1)</value>
     </param>
     <param>
       <key>id</key>
@@ -638,7 +618,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>bindata_file</value>
+      <value>bin_file_sink</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -2382,7 +2362,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(8, 204)</value>
+      <value>(8, 189)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2525,7 +2505,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(464, 126)</value>
+      <value>(464, 143)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2533,7 +2513,7 @@
     </param>
     <param>
       <key>grid_pos</key>
-      <value>(5,0,1,1)</value>
+      <value>(2,0,1,1)</value>
     </param>
     <param>
       <key>id</key>
@@ -2644,7 +2624,7 @@
     </param>
     <param>
       <key>grid_pos</key>
-      <value>(5,1,1,1)</value>
+      <value>(2,1,1,1)</value>
     </param>
     <param>
       <key>id</key>
