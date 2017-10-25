@@ -124,6 +124,12 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
         toolbutton_gnuradio->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonRunClicked));
     }
     
+    ref_builder->get_widget("toolbutton_plot", toolbutton_plot);
+    if (toolbutton_plot)
+    {
+        toolbutton_plot->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnToolButtonPlotClicked));
+    }
+    
     ref_builder->get_widget("toolbutton_about", toolbutton_about);
     if (toolbutton_about)
     {
@@ -422,11 +428,25 @@ int FSatPktAna::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char 
     
     telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
     
-    // Preferences window
-    ref_builder->get_widget("window_config", window_config);
+    // Preferences dialog
+    ref_builder->get_widget("dialog_config", dialog_config);
     
     // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
+    
+    // Plot dialog
+    ref_builder->get_widget("dialog_plot", dialog_plot);
+    ref_builder->get_widget("filechooserbutton_plot", filechooserbutton_plot);
+    ref_builder->get_widget("entry_plot_column", entry_plot_column);
+    ref_builder->get_widget("entry_plot_y_label", entry_plot_y_label);
+    ref_builder->get_widget("entry_plot_log_title", entry_plot_title);
+    ref_builder->get_widget("checkbutton_plot_save_pdf", checkbutton_plot_save_pdf);
+    ref_builder->get_widget("button_plot", button_plot);
+    
+    if (button_plot)
+    {
+        button_plot->signal_clicked().connect(sigc::mem_fun(*this, &FSatPktAna::OnButtonPlotClicked));
+    }
     
     return 0;
 }
@@ -583,15 +603,13 @@ void FSatPktAna::OnToolButtonOpenClicked()
 }
 
 void FSatPktAna::OnToolButtonConfigClicked()
-{
-/*    window_config->set_transient_for(*main_window);
-    
-    int response = window_config->show();
+{    
+    int response = dialog_config->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
-        window_config->hide();
-    }*/
+        dialog_config->hide();
+    }
 }
 
 void FSatPktAna::OnToolButtonStatisticsClicked()
@@ -610,10 +628,18 @@ void FSatPktAna::OnToolButtonRunClicked()
     thread_gnuradio_telemetry.detach();
 }
 
-void FSatPktAna::OnToolButtonAboutClicked()
+void FSatPktAna::OnToolButtonPlotClicked()
 {
-    aboutdialog->set_transient_for(*main_window);
+    int response = dialog_plot->run();;
     
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_plot->hide();
+    }
+}
+
+void FSatPktAna::OnToolButtonAboutClicked()
+{    
     int response = aboutdialog->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
@@ -864,6 +890,59 @@ void FSatPktAna::OnToggleButtonOpenClosePortToggled()
     }
 }
 
+void FSatPktAna::OnButtonPlotClicked()
+{
+    std::string cmd = "python matplotlib/csv_plot.py";
+    
+    if (filechooserbutton_plot->get_filename().size() > 0)  
+    {
+        if (entry_plot_column->get_text().size() > 0)
+        {
+            cmd += " ";
+            cmd += filechooserbutton_plot->get_filename();
+            
+            cmd += " ";
+            cmd += entry_plot_column->get_text();
+            
+            cmd += " ";
+            if (entry_plot_y_label->get_text().size() > 0)
+            {
+                cmd += entry_plot_y_label->get_text();
+            }
+            else
+            {
+                cmd += "\"Some data [Some data unit]\"";
+            }
+            
+            cmd += " ";
+            if (entry_plot_title->get_text().size() > 0)
+            {
+                cmd += entry_plot_title->get_text();
+            }
+            else
+            {
+                cmd += "\"Some title\"";
+            }
+            
+            cmd += checkbutton_plot_save_pdf->get_active()? " True" : "";
+            
+            std::thread thread_matplotlib(&FSatPktAna::RunMatPlotLib, this, cmd.c_str());
+
+            thread_matplotlib.detach();
+            
+            dialog_plot->hide();
+        }
+        else
+        {
+            this->RaiseErrorMessage("No column number provided!", "You must specify a column number to plot the data!");
+        }
+    }
+    else
+    {
+        this->RaiseErrorMessage("No log file provided!", "You must provid a log file to plot a log data!");
+    }
+}
+
 void FSatPktAna::RaiseErrorMessage(const char* error_title, const char* error_text)
 {
     msg_dialog = new Gtk::MessageDialog(error_title, false, Gtk::MESSAGE_ERROR);
@@ -885,6 +964,11 @@ void FSatPktAna::RunGNURadioReceiver(bool beacon_receiver)
     {
         system("python gnuradio/fsat_grs_telemetry.py");
     }
+}
+
+void FSatPktAna::RunMatPlotLib(const char *cmd)
+{
+    system(cmd);
 }
 
 //! \} End of fsat_pkt_ana group

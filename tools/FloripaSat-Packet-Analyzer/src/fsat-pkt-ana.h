@@ -69,6 +69,7 @@ class FSatPktAna
         Gtk::ToolButton                 *toolbutton_config;
         Gtk::ToolButton                 *toolbutton_statistics;
         Gtk::ToolButton                 *toolbutton_gnuradio;
+        Gtk::ToolButton                 *toolbutton_plot;
         Gtk::ToolButton                 *toolbutton_about;
         
         // Beacon stream
@@ -219,11 +220,20 @@ class FSatPktAna
         Gtk::Label                      *label_telemetry_pkt_statistic_total;
         Gtk::Label                      *label_telemetry_pkt_statistic_lost;
         
-        // Preferences window
-        Gtk::Window                     *window_config;
+        // Preferences Dialog
+        Gtk::Dialog                     *dialog_config;
         
         // About Dialog
         Gtk::AboutDialog                *aboutdialog;
+        
+        // Plot Dialog
+        Gtk::Dialog                     *dialog_plot;
+        Gtk::FileChooserButton          *filechooserbutton_plot;
+        Gtk::Entry                      *entry_plot_column;
+        Gtk::Entry                      *entry_plot_y_label;
+        Gtk::Entry                      *entry_plot_title;
+        Gtk::CheckButton                *checkbutton_plot_save_pdf;
+        Gtk::Button                     *button_plot;
         
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
@@ -310,6 +320,12 @@ class FSatPktAna
          * 
          * \return None
          */
+        void OnToolButtonPlotClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
         void OnToolButtonAboutClicked();
         /**
          * \brief 
@@ -364,6 +380,12 @@ class FSatPktAna
          * 
          * \return None
          */
+        void OnButtonPlotClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
         void RaiseErrorMessage(const char* error_title, const char* error_text);
         /**
          * \brief 
@@ -373,6 +395,14 @@ class FSatPktAna
          * \return None
          */
         void RunGNURadioReceiver(bool beacon_receiver=true);
+        /**
+         * \brief Plot a log data column using matplotlib.
+         * 
+         * \param cmd is the command with the arguments to run the python script to call matplotlib.
+         * 
+         * \return None
+         */
+        void RunMatPlotLib(const char *cmd);
     public:
         /**
          * \brief 

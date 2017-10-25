@@ -16,10 +16,12 @@ all:
 	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/*.o $(BUILD_DIR)/*.a -o $(BUILD_DIR)/$(TARGET).x $(GTKMM_FLAGS)
 	mkdir -p $(BUILD_DIR)/glade
 	mkdir -p $(BUILD_DIR)/gnuradio
+	mkdir -p $(BUILD_DIR)/matplotlib
 	cp gui/MainWindow.glade $(BUILD_DIR)/glade/
 	cp img/icon.png $(BUILD_DIR)/
 	cp gnuradio/fsat_grs_beacon.py $(BUILD_DIR)/gnuradio/
 	cp gnuradio/fsat_grs_telemetry.py $(BUILD_DIR)/gnuradio/
+	cp matplotlib/csv_plot.py $(BUILD_DIR)/matplotlib/
 
 clean:
 	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/*.x $(BUILD_DIR)/*.a
