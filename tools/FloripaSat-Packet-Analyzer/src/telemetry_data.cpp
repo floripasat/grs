@@ -286,7 +286,7 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         BEACON_EPS_current          = BeaconEPSCurrentConv((data[161] << 8) | data[162]);
         ADC_temperature             = ADCInternalTempConv((data[163] << 8) | data[164]);
         bat_average_current         = BatCurrentConv((data[165] << 8) | data[166]);
-        bat_temperature             = ADCConv((data[167] << 8) | data[168]);
+        bat_temperature             = BatMonitorTempConv((data[167] << 8) | data[168]);
         bat1_voltage                = BatVoltConv((data[169] << 8) | data[170]);
         bat2_voltage                = BatVoltConv((data[171] << 8) | data[172]);
         bat_current                 = BatCurrentConv((data[173] << 8) | data[174]);
