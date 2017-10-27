@@ -581,8 +581,16 @@ bool FSatPktAna::Timer()
     {
         if (!togglebutton_pause_beacon->get_active())
         {
-            ngham_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
-            //ax25_pkts_beacon->Search();
+            if (filechooserbutton_beacon->get_filename().size() > 0)
+            {
+                ngham_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
+                //ax25_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
+            }
+            else
+            {
+                ngham_pkts_beacon->Search(FSAT_PKT_ANA_GRC_BEACON_BIN);
+                //ax25_pkts_beacon->Search(FSAT_PKT_ANA_GRC_BEACON_BIN);
+            }
         }
     }
     
@@ -590,7 +598,14 @@ bool FSatPktAna::Timer()
     {
         if (!togglebutton_pause_telemetry->get_active())
         {
-            ngham_pkts_telemetry->Search(filechooserbutton_telemetry->get_filename().c_str());
+            if (filechooserbutton_telemetry->get_filename().size() > 0)
+            {
+                ngham_pkts_telemetry->Search(filechooserbutton_telemetry->get_filename().c_str());
+            }
+            else
+            {
+                ngham_pkts_telemetry->Search(FSAT_PKT_ANA_GRC_TELEMETRY_BIN);
+            }
         }
     }
     
@@ -948,7 +963,21 @@ void FSatPktAna::OnButtonPlotClicked()
                 cmd += "\"Some title\"";
             }
             
-            cmd += checkbutton_plot_save_pdf->get_active()? " True" : "";
+            if (checkbutton_plot_save_pdf->get_active())
+            {
+                system("mkdir -p plots");
+                cmd += " plots/";
+                if (entry_plot_title->get_text().size() > 0)
+                {
+                    cmd += entry_plot_title->get_text();
+                }
+                else
+                {
+                    cmd += "plot";
+                }
+                
+                cmd += ".pdf";
+            }
             
             std::thread thread_matplotlib(&FSatPktAna::RunMatPlotLib, this, cmd.c_str());
 

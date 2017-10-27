@@ -189,7 +189,7 @@ class TelemetryData: public PacketData
         double RTD_measurement_7;
 
         // Task Scheduler
-        double EPS_status;
+        uint8_t EPS_status;
         
         // Data convertion functions
         /**

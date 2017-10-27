@@ -34,7 +34,7 @@ __status__      = "Prototype"
 import csv
 import pylab
 
-def plot_data(x, y, y_label="Data", c_title="Time x Data", save=False):
+def plot_data(x, y, y_label="Data", c_title="Time x Data", file_name=""):
     x_label = "Time [sec]"
     
     # Linear Regression
@@ -48,8 +48,8 @@ def plot_data(x, y, y_label="Data", c_title="Time x Data", save=False):
     pylab.ylabel(y_label)
     #pylab.legend(loc='best')
     #pylab.axis([0, x[-1], min(y)*0.999, max(y)*1.001])
-    if save:
-        pylab.savefig('plot.pdf', bbox_inches='tight', dpi=600, transparent=True)
+    if len(file_name) > 0:
+        pylab.savefig(file_name, bbox_inches='tight', dpi=600, transparent=True)
     pylab.show()
 
 
@@ -60,7 +60,7 @@ def main(args):
         print "\t- Second argument must be the column to display the data"
         print "\t- Third argument (OPTIONAL) can be the axis y label"
         print "\t- Fourth argument (OPTIONAL) can be the plot title"
-        print "\t- Fifth argument (OPTIONAL) can be True or False (Save or not the plot)"
+        print "\t- Fifth argument (OPTIONAL) can be the name of the pdf file to save the plot"
         
         return 0
     
@@ -86,7 +86,7 @@ def main(args):
     elif len(args) == 5:
         plot_data(time_sec, column, args[3], args[4])
     elif len(args) == 6:
-        plot_data(time_sec, column, args[3], args[4], bool(args[5]))
+        plot_data(time_sec, column, args[3], args[4], args[5])
     else:
         plot_data(time_sec, column)
     
