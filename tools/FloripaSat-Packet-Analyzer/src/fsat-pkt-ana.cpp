@@ -1011,11 +1011,11 @@ void FSatPktAna::RunGNURadioReceiver(bool beacon_receiver)
 {
     if (beacon_receiver)
     {
-        system("python gnuradio/fsat_grs_beacon.py");
+        system("python -u gnuradio/fsat_grs_beacon.py");
     }
     else
     {
-        system("python gnuradio/fsat_grs_telemetry.py");
+        system("python -u gnuradio/fsat_grs_telemetry.py");
     }
 }
 
