@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: FloripaSat GFSK Beacon Receiver
 # Author: Gabriel Mariano Marcelino
-# Generated: Mon Oct 30 00:06:55 2017
+# Generated: Fri Oct 27 10:37:30 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -22,14 +22,12 @@ from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import eng_notation
 from gnuradio import filter
+from gnuradio import fosphor
 from gnuradio import gr
-from gnuradio import wxgui
 from gnuradio.eng_option import eng_option
 from gnuradio.fft import window
 from gnuradio.filter import firdes
-from gnuradio.wxgui import fftsink2
 from gnuradio.wxgui import forms
-from gnuradio.wxgui import waterfallsink2
 from grc_gnuradio import wxgui as grc_wxgui
 from optparse import OptionParser
 import math
@@ -48,6 +46,8 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         ##################################################
         # Variables
         ##################################################
+        self.variable_static_text_0_0 = variable_static_text_0_0 = ""
+        self.variable_static_text_0 = variable_static_text_0 = ""
         self.sdr_rf_gain = sdr_rf_gain = 10
         self.sdr_if_gain = sdr_if_gain = 20
         self.sdr_bb_gain = sdr_bb_gain = 20
@@ -82,7 +82,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	cast=int,
         	proportion=1,
         )
-        self.GridAdd(_sdr_rf_gain_sizer, 2, 1, 1, 1)
+        self.GridAdd(_sdr_rf_gain_sizer, 3, 1, 1, 1)
         _sdr_if_gain_sizer = wx.BoxSizer(wx.VERTICAL)
         self._sdr_if_gain_text_box = forms.text_box(
         	parent=self.GetWin(),
@@ -105,7 +105,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	cast=int,
         	proportion=1,
         )
-        self.GridAdd(_sdr_if_gain_sizer, 3, 1, 1, 1)
+        self.GridAdd(_sdr_if_gain_sizer, 4, 1, 1, 1)
         _sdr_bb_gain_sizer = wx.BoxSizer(wx.VERTICAL)
         self._sdr_bb_gain_text_box = forms.text_box(
         	parent=self.GetWin(),
@@ -128,7 +128,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	cast=int,
         	proportion=1,
         )
-        self.GridAdd(_sdr_bb_gain_sizer, 4, 1, 1, 1)
+        self.GridAdd(_sdr_bb_gain_sizer, 5, 1, 1, 1)
         _samp_rate_sizer = wx.BoxSizer(wx.VERTICAL)
         self._samp_rate_text_box = forms.text_box(
         	parent=self.GetWin(),
@@ -151,7 +151,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	cast=float,
         	proportion=1,
         )
-        self.GridAdd(_samp_rate_sizer, 1, 1, 1, 1)
+        self.GridAdd(_samp_rate_sizer, 2, 1, 1, 1)
         _freq_sizer = wx.BoxSizer(wx.VERTICAL)
         self._freq_text_box = forms.text_box(
         	parent=self.GetWin(),
@@ -169,12 +169,12 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	callback=self.set_freq,
         	minimum=145e6,
         	maximum=146e6,
-        	num_steps=1000,
+        	num_steps=100,
         	style=wx.SL_HORIZONTAL,
         	cast=float,
         	proportion=1,
         )
-        self.GridAdd(_freq_sizer, 0, 1, 1, 1)
+        self.GridAdd(_freq_sizer, 1, 1, 1, 1)
         self._baudrate_text_box = forms.text_box(
         	parent=self.GetWin(),
         	value=self.baudrate,
@@ -182,7 +182,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	label="Baudrate [bps]",
         	converter=forms.int_converter(),
         )
-        self.GridAdd(self._baudrate_text_box, 6, 1, 1, 1)
+        self.GridAdd(self._baudrate_text_box, 11, 1, 1, 1)
         _bandwidth_sizer = wx.BoxSizer(wx.VERTICAL)
         self._bandwidth_text_box = forms.text_box(
         	parent=self.GetWin(),
@@ -205,40 +205,23 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	cast=float,
         	proportion=1,
         )
-        self.GridAdd(_bandwidth_sizer, 5, 1, 1, 1)
-        self.wxgui_waterfallsink2_0 = waterfallsink2.waterfall_sink_c(
-        	self.GetWin(),
-        	baseband_freq=0,
-        	dynamic_range=100,
-        	ref_level=0,
-        	ref_scale=2.0,
-        	sample_rate=samp_rate,
-        	fft_size=512,
-        	fft_rate=15,
-        	average=False,
-        	avg_alpha=0.1,
-        	title="",
-        	size=([800,400]),
+        self.GridAdd(_bandwidth_sizer, 10, 1, 1, 1)
+        self._variable_static_text_0_0_static_text = forms.static_text(
+        	parent=self.GetWin(),
+        	value=self.variable_static_text_0_0,
+        	callback=self.set_variable_static_text_0_0,
+        	label="Receiver Configuration",
+        	converter=forms.str_converter(),
         )
-        self.GridAdd(self.wxgui_waterfallsink2_0.win, 7, 0, 7, 1)
-        self.wxgui_fftsink2_0 = fftsink2.fft_sink_c(
-        	self.GetWin(),
-        	baseband_freq=freq,
-        	y_per_div=10,
-        	y_divs=9,
-        	ref_level=0,
-        	ref_scale=2.0,
-        	sample_rate=samp_rate,
-        	fft_size=1024,
-        	fft_rate=15,
-        	average=True,
-        	avg_alpha=0.1,
-        	title="",
-        	peak_hold=False,
-        	win=window.blackmanharris,
-        	size=([800,100]),
+        self.GridAdd(self._variable_static_text_0_0_static_text, 9, 1, 1, 1)
+        self._variable_static_text_0_static_text = forms.static_text(
+        	parent=self.GetWin(),
+        	value=self.variable_static_text_0,
+        	callback=self.set_variable_static_text_0,
+        	label="SDR Configuration",
+        	converter=forms.str_converter(),
         )
-        self.GridAdd(self.wxgui_fftsink2_0.win, 0, 0, 7, 1)
+        self.GridAdd(self._variable_static_text_0_static_text, 0, 1, 1, 1)
         self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + "rtl=0" )
         self.osmosdr_source_0.set_sample_rate(samp_rate)
         self.osmosdr_source_0.set_center_freq(freq, 0)
@@ -256,6 +239,12 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	1, samp_rate, baudrate, baudrate/6, firdes.WIN_HAMMING, 6.76))
         self.low_pass_filter_0 = filter.fir_filter_ccf(1, firdes.low_pass(
         	1, samp_rate, bandwidth/2, bandwidth/2/6, firdes.WIN_HAMMING, 6.76))
+        self.fosphor_wx_sink_c_0 = fosphor.wx_sink_c(
+        	self.GetWin()
+        )
+        self.fosphor_wx_sink_c_0.set_fft_window(window.WIN_BLACKMAN_hARRIS)
+        self.fosphor_wx_sink_c_0.set_frequency_range(freq, samp_rate)
+        self.GridAdd(self.fosphor_wx_sink_c_0.win, 0, 0, 12, 1)
         self.digital_clock_recovery_mm_xx_0 = digital.clock_recovery_mm_ff(samp_rate/(baudrate*100), 0.001, 0, 0.25, 0.001)
         self.digital_binary_slicer_fb_0 = digital.binary_slicer_fb()
         self.blocks_file_sink_1 = blocks.file_sink(gr.sizeof_char*1, bin_file_sink, False)
@@ -270,9 +259,22 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self.connect((self.digital_clock_recovery_mm_xx_0, 0), (self.digital_binary_slicer_fb_0, 0))    
         self.connect((self.low_pass_filter_0, 0), (self.analog_quadrature_demod_cf_0, 0))    
         self.connect((self.low_pass_filter_1, 0), (self.digital_clock_recovery_mm_xx_0, 0))    
+        self.connect((self.osmosdr_source_0, 0), (self.fosphor_wx_sink_c_0, 0))    
         self.connect((self.osmosdr_source_0, 0), (self.low_pass_filter_0, 0))    
-        self.connect((self.osmosdr_source_0, 0), (self.wxgui_fftsink2_0, 0))    
-        self.connect((self.osmosdr_source_0, 0), (self.wxgui_waterfallsink2_0, 0))    
+
+    def get_variable_static_text_0_0(self):
+        return self.variable_static_text_0_0
+
+    def set_variable_static_text_0_0(self, variable_static_text_0_0):
+        self.variable_static_text_0_0 = variable_static_text_0_0
+        self._variable_static_text_0_0_static_text.set_value(self.variable_static_text_0_0)
+
+    def get_variable_static_text_0(self):
+        return self.variable_static_text_0
+
+    def set_variable_static_text_0(self, variable_static_text_0):
+        self.variable_static_text_0 = variable_static_text_0
+        self._variable_static_text_0_static_text.set_value(self.variable_static_text_0)
 
     def get_sdr_rf_gain(self):
         return self.sdr_rf_gain
@@ -309,11 +311,10 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self._samp_rate_slider.set_value(self.samp_rate)
         self._samp_rate_text_box.set_value(self.samp_rate)
         self.digital_clock_recovery_mm_xx_0.set_omega(self.samp_rate/(self.baudrate*100))
+        self.fosphor_wx_sink_c_0.set_frequency_range(self.freq, self.samp_rate)
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, self.bandwidth/2, self.bandwidth/2/6, firdes.WIN_HAMMING, 6.76))
         self.low_pass_filter_1.set_taps(firdes.low_pass(1, self.samp_rate, self.baudrate, self.baudrate/6, firdes.WIN_HAMMING, 6.76))
         self.osmosdr_source_0.set_sample_rate(self.samp_rate)
-        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
-        self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
 
     def get_freq(self):
         return self.freq
@@ -322,8 +323,8 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self.freq = freq
         self._freq_slider.set_value(self.freq)
         self._freq_text_box.set_value(self.freq)
+        self.fosphor_wx_sink_c_0.set_frequency_range(self.freq, self.samp_rate)
         self.osmosdr_source_0.set_center_freq(self.freq, 0)
-        self.wxgui_fftsink2_0.set_baseband_freq(self.freq)
 
     def get_bin_file_sink(self):
         return self.bin_file_sink
