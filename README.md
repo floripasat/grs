@@ -1,19 +1,8 @@
-# FloripaSat - GRS
-## Ground Station Software of the FloripaSat Project
+# FloripaSat GRS: Ground Station of the FloripaSat Project
 
-The software of the ground segment of the FloripaSat project.
+## Resources
 
-## Dependencies
+* FloripaSat project homepage: [http://www.floripasat.ufsc.br/](http://www.floripasat.ufsc.br/)
+* FloripaSat project source code: [https://github.com/floripasat](https://github.com/floripasat)
+* GRS documentation: [https://github.com/floripasat/grs/wiki](https://github.com/floripasat/grs/wiki)
 
-* PySide
-
-## GUI Design
-
-* Qt 4.8.7
-* Qt Designer 4.8.7
-
-## References
-
-All source code of the project can be found in [GitHub](https://github.com/floripasat).
-
-The official website of the project is [www.floripasat.ufsc.br](http://www.floripasat.ufsc.br/).

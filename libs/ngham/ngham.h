@@ -4,7 +4,7 @@
  * Copyright (C) 2014, Jon Petter Skagmo
  * Copyright (C) 2017, Gabriel Mariano Marcelino
  * 
- * This file is part of FloripaSat-TTC
+ * This file is part of FloripaSat-GRS
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,7 +31,7 @@
  * \date 10/02/2017
  * 
  * \defgroup ngham NGHam
- * \ingroup lib
+ * \ingroup fsat_pkt_ana
  * \{
  */
 
