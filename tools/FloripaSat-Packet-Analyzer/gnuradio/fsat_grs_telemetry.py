@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: FloripaSat GFSK Telemetry Receiver
 # Author: Gabriel Mariano Marcelino
-# Generated: Mon Oct 30 00:07:27 2017
+# Generated: Tue Oct 31 13:32:04 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -232,14 +232,14 @@ class fsat_grs_telemetry(grc_wxgui.top_block_gui):
         	fft_size=1024,
         	fft_rate=15,
         	average=True,
-        	avg_alpha=0.1,
+        	avg_alpha=0.5,
         	title="",
         	peak_hold=False,
         	win=window.blackmanharris,
         	size=([800,100]),
         )
         self.GridAdd(self.wxgui_fftsink2_0.win, 0, 0, 7, 1)
-        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + "rtl=0" )
+        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + "rtl=1" )
         self.osmosdr_source_0.set_sample_rate(samp_rate)
         self.osmosdr_source_0.set_center_freq(freq, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)

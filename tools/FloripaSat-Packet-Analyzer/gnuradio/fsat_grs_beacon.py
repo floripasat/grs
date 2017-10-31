@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: FloripaSat GFSK Beacon Receiver
 # Author: Gabriel Mariano Marcelino
-# Generated: Mon Oct 30 00:06:55 2017
+# Generated: Mon Oct 30 23:16:20 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -232,7 +232,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	fft_size=1024,
         	fft_rate=15,
         	average=True,
-        	avg_alpha=0.1,
+        	avg_alpha=0.5,
         	title="",
         	peak_hold=False,
         	win=window.blackmanharris,
@@ -312,8 +312,8 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, self.bandwidth/2, self.bandwidth/2/6, firdes.WIN_HAMMING, 6.76))
         self.low_pass_filter_1.set_taps(firdes.low_pass(1, self.samp_rate, self.baudrate, self.baudrate/6, firdes.WIN_HAMMING, 6.76))
         self.osmosdr_source_0.set_sample_rate(self.samp_rate)
-        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
         self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
+        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
 
     def get_freq(self):
         return self.freq

@@ -2266,7 +2266,7 @@
     <key>wxgui_fftsink2</key>
     <param>
       <key>avg_alpha</key>
-      <value>0.1</value>
+      <value>0.5</value>
     </param>
     <param>
       <key>average</key>
