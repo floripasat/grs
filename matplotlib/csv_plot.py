@@ -32,6 +32,7 @@ __status__      = "Prototype"
 
 import csv
 import pylab
+import datetime
 
 def plot_data(x, y, y_label="Data", c_title="Time x Data", file_name=""):
     x_label = "Time [sec]"
@@ -71,14 +72,14 @@ def main(args):
             for row in reader:
                 if len(row) > (int(args[2]) + 1):
                     column.append(float(row[int(args[2])]))
-                    time_sec.append((int(row[3])*3600) + (int(row[4])*60) + (int(row[5])))
+                    time_sec.append(datetime.datetime(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4]), int(row[5])))
         except:
             pass
     
     initial_time_sec = time_sec[0]
     i = 0
     for i in range(len(time_sec)):
-        time_sec[i] = time_sec[i] - initial_time_sec
+        time_sec[i] = (time_sec[i] - initial_time_sec).seconds
     
     if len(args) == 4:
         plot_data(time_sec, column, args[3])
