@@ -34,19 +34,31 @@ import csv
 import pylab
 import datetime
 
-def plot_data(x, y, y_label="Data", c_title="Time x Data", file_name=""):
+def plot_data(x, y, y_label="Data", c_title="Time x Data", con_points="1", best_curve="0", file_name=""):
     x_label = "Time [sec]"
     
-    # Linear Regression
-    #fit = pylab.polyfit(x, y, 3)
-    #fit_fn = pylab.poly1d(fit)
-    #pylab.plot(x, fit_fn(x), '-g', label='Best curve')
+    # Cubic Linear Regression
+    if best_curve == "1":
+        fit = pylab.polyfit(x, y, 3)
+        fit_fn = pylab.poly1d(fit)
+        pylab.plot(x, fit_fn(x), '-g', label='Best curve')
     
-    pylab.plot(x, y, '-bo')#, label='Measures')
+    if con_points == "1":
+        if best_curve == "1":
+            pylab.plot(x, y, '-bo', label='Measures')
+        else:
+            pylab.plot(x, y, '-bo')
+    else:
+        if best_curve == "1":
+            pylab.plot(x, y, 'bo', label='Measures')
+        else:
+            pylab.plot(x, y, 'bo')
+    
     pylab.title(c_title)
     pylab.xlabel(x_label)
     pylab.ylabel(y_label)
-    #pylab.legend(loc='best')
+    if best_curve == "1":
+        pylab.legend(loc='best')
     #pylab.axis([0, x[-1], min(y)*0.999, max(y)*1.001])
     if len(file_name) > 0:
         pylab.savefig(file_name, bbox_inches='tight', dpi=600, transparent=True)
@@ -56,11 +68,13 @@ def plot_data(x, y, y_label="Data", c_title="Time x Data", file_name=""):
 def main(args):
     if len(args) <= 2 or args[2] == '--help':
         print "Usage:"
-        print "\t- First argument must be the CSV file"
-        print "\t- Second argument must be the column to display the data"
-        print "\t- Third argument (OPTIONAL) can be the axis y label"
-        print "\t- Fourth argument (OPTIONAL) can be the plot title"
-        print "\t- Fifth argument (OPTIONAL) can be the name of the pdf file to save the plot"
+        print "\t- 1st argument must be the CSV file"
+        print "\t- 2nd argument must be the column to display the data"
+        print "\t- 3rd argument (OPTIONAL) is the axis y label"
+        print "\t- 4th argument (OPTIONAL) is the plot title"
+        print "\t- 5th argument (OPTIONAL) is the connect points flag (True/False)"
+        print "\t- 6th argument (OPTIONAL) is the plot best curve flag (True/False)"
+        print "\t- 7th argument (OPTIONAL) is the name of the pdf file to save the plot"
         
         return 0
     
@@ -70,7 +84,7 @@ def main(args):
         reader = csv.reader(csvfile, delimiter=',', quotechar='|')
         try:
             for row in reader:
-                if len(row) > (int(args[2]) + 1):
+                if len(row) > int(args[2]):
                     column.append(float(row[int(args[2])]))
                     time_sec.append(datetime.datetime(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4]), int(row[5])))
         except:
@@ -87,6 +101,10 @@ def main(args):
         plot_data(time_sec, column, args[3], args[4])
     elif len(args) == 6:
         plot_data(time_sec, column, args[3], args[4], args[5])
+    elif len(args) == 7:
+        plot_data(time_sec, column, args[3], args[4], args[5], args[6])
+    elif len(args) == 8:
+        plot_data(time_sec, column, args[3], args[4], args[5], args[6], args[7])
     else:
         plot_data(time_sec, column)
     

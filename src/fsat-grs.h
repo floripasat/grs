@@ -230,11 +230,16 @@ class FSatGRS
         
         // Plot Dialog
         Gtk::Dialog                     *dialog_plot;
-        Gtk::FileChooserButton          *filechooserbutton_plot;
-        Gtk::Entry                      *entry_plot_column;
-        Gtk::Entry                      *entry_plot_y_label;
-        Gtk::Entry                      *entry_plot_title;
-        Gtk::CheckButton                *checkbutton_plot_save_pdf;
+        Gtk::FileChooserButton          *filechooserbutton_plot_beacon;
+        Gtk::ComboBox                   *combobox_plot_beacon_data;
+        Gtk::CheckButton                *checkbutton_plot_beacon_connect_points;
+        Gtk::CheckButton                *checkbutton_plot_beacon_best_curve;
+        Gtk::CheckButton                *checkbutton_plot_save_pdf_beacon;
+        Gtk::FileChooserButton          *filechooserbutton_plot_telemetry;
+        Gtk::ComboBox                   *combobox_plot_telemetry_data;
+        Gtk::CheckButton                *checkbutton_plot_telemetry_connect_points;
+        Gtk::CheckButton                *checkbutton_plot_telemetry_best_curve;
+        Gtk::CheckButton                *checkbutton_plot_save_pdf_telemetry;
         Gtk::Button                     *button_plot;
         
         // Message Dialog

@@ -488,8 +488,6 @@ std::string TelemetryData::Log()
     log_entry += ",";
     log_entry += ToString(standby_absolute_capacity);
     log_entry += ",";
-    log_entry += ToString(standby_absolute_capacity);
-    log_entry += ",";
     log_entry += ToString(active_relative_capacity);
     log_entry += ",";
     log_entry += ToString(standby_relative_capacity);

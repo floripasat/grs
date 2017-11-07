@@ -186,7 +186,7 @@
               <object class="GtkToolButton" id="toolbutton_about">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">About FloripaSat-Packet-Analyzer</property>
+                <property name="tooltip_text" translatable="yes">About FloripaSat GRS</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-about</property>
               </object>
@@ -4615,6 +4615,277 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
       </object>
     </child>
   </object>
+  <object class="GtkListStore" id="liststore_beacon_data">
+    <columns>
+      <!-- column-name beacon_data -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Battery 1 voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 2 voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 1 temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 2 temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery charge</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -Y +X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -X +Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -Z +Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Energy level</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SD card status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">RUSH status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">EPS status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Antenna status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU accelerometer X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU accelerometer Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU accelerometer Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU gyroscope X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU gyroscope Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU gyroscope Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">OBDH resets</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore_telemetry_data">
+    <columns>
+      <!-- column-name telemetry_data -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Packet flags</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Reset counter</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Reset cause</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Clock fault flags</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Test module flags</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SD card status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">RUSH status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">EPS status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Antenna status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 1 acceleremoter X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 1 acceleremoter Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 1 acceleremoter Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 acceleremoter X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 acceleremoter Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 acceleremoter Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 1 gyroscope X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 1 gyroscope Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 1 gyroscope Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 gyroscope X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 gyroscope Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 gyroscope Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">OBDH uC temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">OBDH uC voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">OBDH uC current</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -Y +X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -X +Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -Z +Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Boost voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Main power voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Beacon current</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">EPS uC temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery average temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 1 voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 2 voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery current</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery accumulated current</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Protection register</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Status register</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Cycle counter register</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Active absolute capacity</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Standby absolute capacity</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Active relative capacity</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Standby relative capacity</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel sun P1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel sun P2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel sun P3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel temperature P1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel temperature P2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel temperature P3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">EPS status</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="dialog_plot">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Plot log data</property>
@@ -4657,115 +4928,261 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="grid19">
+          <object class="GtkNotebook" id="notebook1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">10</property>
-            <property name="column_spacing">10</property>
+            <property name="can_focus">True</property>
             <child>
-              <object class="GtkLabel" id="label69">
+              <object class="GtkGrid" id="grid19">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">CSV log file:</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="row_spacing">10</property>
+                <property name="column_spacing">10</property>
+                <child>
+                  <object class="GtkLabel" id="label69">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">CSV log file:</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFileChooserButton" id="filechooserbutton_plot_beacon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label77">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Data:</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combobox_plot_beacon_data">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="model">liststore_beacon_data</property>
+                    <property name="active">0</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_plot_save_pdf_beacon">
+                    <property name="label" translatable="yes">Save as PDF (Vectorized image)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_plot_beacon_connect_points">
+                    <property name="label" translatable="yes">Connect points</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_plot_beacon_best_curve">
+                    <property name="label" translatable="yes">Plot best curve</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkFileChooserButton" id="filechooserbutton_plot">
+            <child type="tab">
+              <object class="GtkLabel" id="label33">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Beacon</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label77">
+              <object class="GtkGrid" id="grid20">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Column (First col. = 0):</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="row_spacing">10</property>
+                <property name="column_spacing">10</property>
+                <child>
+                  <object class="GtkLabel" id="label78">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">CSV log file:</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label79">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Data:</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFileChooserButton" id="filechooserbutton_plot_telemetry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combobox_plot_telemetry_data">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="model">liststore_telemetry_data</property>
+                    <property name="active">0</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_plot_save_pdf_telemetry">
+                    <property name="label" translatable="yes">Save as PDF (Vectorized image)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_plot_telemetry_connect_points">
+                    <property name="label" translatable="yes">Connect points</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_plot_telemetry_best_curve">
+                    <property name="label" translatable="yes">Plot best curve</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="position">1</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkLabel" id="label78">
+            <child type="tab">
+              <object class="GtkLabel" id="label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Y axis label (Between quotes):</property>
+                <property name="label" translatable="yes">Telemetry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label79">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Title (Between quotes):</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-              </packing>
+              <placeholder/>
             </child>
-            <child>
-              <object class="GtkEntry" id="entry_plot_column">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="input_purpose">digits</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_plot_y_label">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_plot_log_title">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_plot_save_pdf">
-                <property name="label" translatable="yes">Save as PDF (Vectorized image)?</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="focus_on_click">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-                <property name="width">2</property>
-              </packing>
+            <child type="tab">
+              <placeholder/>
             </child>
           </object>
           <packing>
