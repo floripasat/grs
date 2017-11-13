@@ -1498,7 +1498,7 @@ void FSatGRS::OnButtonRunAnalysisClicked()
         
         Glib::RefPtr<Gtk::TextBuffer> textview_log_analysis_result_buffer = textview_log_analysis_result->get_buffer();
         
-        textview_log_analysis_result_buffer->set_text(log_analysis->Validate("/tmp/test.log").c_str());
+        textview_log_analysis_result_buffer->set_text(log_analysis->Validate("validate.csv").c_str());
         
         delete log_analysis;
     }
