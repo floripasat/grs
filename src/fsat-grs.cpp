@@ -458,6 +458,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("filechooserbutton_log_analysis", filechooserbutton_log_analysis);
     ref_builder->get_widget("textview_log_analysis_result", textview_log_analysis_result);
     ref_builder->get_widget("button_run_log_analysis", button_run_log_analysis);
+    ref_builder->get_widget("radio_button_log_analysis_beacon", radio_button_log_analysis_beacon);
+    ref_builder->get_widget("radio_button_log_analysis_telemetry", radio_button_log_analysis_telemetry);
     
     if (button_run_log_analysis)
     {
@@ -1498,7 +1500,14 @@ void FSatGRS::OnButtonRunAnalysisClicked()
         
         Glib::RefPtr<Gtk::TextBuffer> textview_log_analysis_result_buffer = textview_log_analysis_result->get_buffer();
         
-        textview_log_analysis_result_buffer->set_text(log_analysis->Validate("validate.csv").c_str());
+        if(radio_button_log_analysis_telemetry->get_active())
+        {
+            textview_log_analysis_result_buffer->set_text(log_analysis->Validate("validate_telemetry.csv").c_str());
+        }
+        if(radio_button_log_analysis_beacon->get_active())
+        {
+            textview_log_analysis_result_buffer->set_text(log_analysis->Validate("validate_beacon.csv").c_str());
+        }
         
         delete log_analysis;
     }

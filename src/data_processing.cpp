@@ -42,6 +42,8 @@
 
 using namespace std;
 
+#define MAX_COLUNMS 100
+
 DataProcessing::DataProcessing(std::string fileName)
 {    
     std::ifstream inputFile;
@@ -67,9 +69,9 @@ DataProcessing::DataProcessing(std::string fileName)
         if (line[i] == ',')
             cols++; 
 
-    max   = new double[cols];   //maximum value
-    min   = new double[cols];   //minimum value
-    avg   = new double[cols];   //average value
+    max   = new double[MAX_COLUNMS];   //maximum value
+    min   = new double[MAX_COLUNMS];   //minimum value
+    avg   = new double[MAX_COLUNMS];   //average value
 
     for (int i = 0; i <= line.size(); i++)
     {
@@ -84,8 +86,7 @@ DataProcessing::DataProcessing(std::string fileName)
         else
         {
             term += line[i];
-        }
-        
+        }        
     }
     rows = 1;    
     
@@ -111,9 +112,13 @@ DataProcessing::DataProcessing(std::string fileName)
             else
             {
                 term += line[i];
-            }
-            
+            }            
         }
+        if(j > cols)
+        {
+            cols = j;
+        }
+        
         rows++;
     }
 
@@ -169,14 +174,14 @@ std::string DataProcessing::Validate(std::string fileName)
     int j,k;
     int fail_count = 0;
 
-    maxValidation = new double[cols];
-    minValidation = new double[cols];
+    maxValidation = new double[MAX_COLUNMS];
+    minValidation = new double[MAX_COLUNMS];
 
     inputFile.open(dataFileName.c_str());
 
     validationFile.open(fileName.c_str());
 
-    std::string outputFileName = fileName.substr(0, fileName.length() - 4) + "_validation.log";
+    //std::string outputFileName = fileName.substr(0, fileName.length() - 4) + "_validation.log";
     //outputFile.open(outputFileName.c_str());
 
     //read the maximum and minimum allowed values

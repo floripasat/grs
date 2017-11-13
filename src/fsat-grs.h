@@ -247,6 +247,8 @@ class FSatGRS
         Gtk::FileChooserButton          *filechooserbutton_log_analysis;
         Gtk::TextView                   *textview_log_analysis_result;
         Gtk::Button                     *button_run_log_analysis;
+        Gtk::RadioButton                *radio_button_log_analysis_beacon;
+        Gtk::RadioButton                *radio_button_log_analysis_telemetry;
         
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;

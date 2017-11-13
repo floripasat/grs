@@ -22,7 +22,7 @@ all:
 	cp gnuradio/fsat_grs_beacon.py $(BUILD_DIR)/gnuradio/
 	cp gnuradio/fsat_grs_telemetry.py $(BUILD_DIR)/gnuradio/
 	cp matplotlib/csv_plot.py $(BUILD_DIR)/matplotlib/
-	cp src/validate.csv $(BUILD_DIR)/
+	cp src/*.csv $(BUILD_DIR)/
 
 clean:
 	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/*.x $(BUILD_DIR)/*.a
