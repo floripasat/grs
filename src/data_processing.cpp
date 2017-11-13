@@ -39,6 +39,7 @@
 #include "data_processing.hpp"
 #include <sstream>
 #include <iomanip>
+
 using namespace std;
 
 DataProcessing::DataProcessing(std::string fileName)
@@ -156,11 +157,12 @@ int DataProcessing::GetRows(void)
     return rows;
 }
 
-void DataProcessing::Validate(std::string fileName)
+std::string DataProcessing::Validate(std::string fileName)
 {
     std::ifstream inputFile;
     std::ifstream validationFile;
-    std::ofstream outputFile;
+    //std::ofstream outputFile;
+    std::stringstream outputFile;
     std::string line, term;
     double value;
     double *maxValidation, *minValidation;
@@ -175,7 +177,7 @@ void DataProcessing::Validate(std::string fileName)
     validationFile.open(fileName.c_str());
 
     std::string outputFileName = fileName.substr(0, fileName.length() - 4) + "_validation.log";
-    outputFile.open(outputFileName.c_str());
+    //outputFile.open(outputFileName.c_str());
 
     //read the maximum and minimum allowed values
     k = j = 0;
@@ -209,9 +211,9 @@ void DataProcessing::Validate(std::string fileName)
     }
 
 
-    outputFile << cols<<" data fields.\n";
-    outputFile << rows<<" data packets.\n";
-    outputFile << cols*rows<<" values.\n\n";
+    outputFile << cols << " data fields.\n";
+    outputFile << rows << " data packets.\n";
+    outputFile << cols*rows << " values.\n\n";
 
     /* validation based on max and min
     for (j = 0; j < cols; j++)
@@ -241,13 +243,13 @@ void DataProcessing::Validate(std::string fileName)
                 temp >> value;
                 if(value < minValidation[j])
                 {
-                    outputFile << " row: "<<k+1<<", column: "<<j+1<<":    " << setfill(' ') << setw(12) << value << "        Min allowed: "<<minValidation[j]<<"\n";
+                    outputFile << "\trow " << k+1 << ", column " << j+1 << ":\t" << setfill(' ') << setw(12) << value << "\t\tMin. allowed: " << minValidation[j] << "\n";
                     fail_count++;
                 }
                 
                 if(value > maxValidation[j])
                 {
-                    outputFile << " row: "<<k+1<<", column: "<<j+1<<":    " << setfill(' ') << setw(12) << value << "        Max allowed: "<<maxValidation[j]<<"\n";            
+                    outputFile << "\trow "<< k+1 << ", column " << j+1 << ":\t" << setfill(' ') << setw(12) << value << "\t\tMax. allowed: " << maxValidation[j] << "\n";            
                     fail_count++;
                 }
                 j++;
@@ -262,11 +264,13 @@ void DataProcessing::Validate(std::string fileName)
         k++;
     }
 
-    outputFile << "\nUnexpected values: "<<fail_count<<"\n";
-    outputFile << "Error: "<<100*fail_count / double(cols*rows)<<"%\n";
+    outputFile << "\nUnexpected values: " << fail_count << "\n";
+    outputFile << "Error: " << 100*fail_count / double(cols*rows) << "%\n";
 
     inputFile.close();
     validationFile.close();
-    outputFile.close();
+    //outputFile.close();
+    
+    return outputFile.str();
 }
 //! \} End of data_processing group implementation

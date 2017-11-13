@@ -31,7 +31,8 @@
  * 
  * \date 09/10/2017
  * 
- * \addtogroup data_processing
+ * \defgroup data_processing Data Processing
+ * \ingroup src
  * \{
  */
 
@@ -55,33 +56,64 @@ class DataProcessing
     std::string dataFileName;
     public:
         /**
-         * \brief 
+         * \brief Class constructor.
          * 
-         * \param ev_log
-         * \param pkt_data
-         * \param ngham_stat
-         * \param l
-         * \param pdl
+         * \param fileName is the file to analyze.
          * 
          * \return None
          */
         DataProcessing(std::string fileName);
+        /**
+         * \brief Class destructor.
+         * 
+         * \return None
+         */
         ~DataProcessing();
         /**
          * \brief 
          * 
-         * \param byte
+         * \param index
          * 
          * \return 
          */
         double GetMax(int index);
+        /**
+         * \brief 
+         * 
+         * \param index
+         * 
+         * \return 
+         */
         double GetMin(int index);
+        /**
+         * \brief 
+         * 
+         * \param index
+         * 
+         * \return 
+         */
         double GetAverage(int index);
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
         int GetColumns();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
         int GetRows();
-        void Validate(std::string fileName);
+        /**
+         * \brief 
+         * 
+         * \param fileName
+         * 
+         * \return 
+         */
+        std::string Validate(std::string fileName);
 };
-
 
 #endif // DATA_PROCESSING_HPP_
 

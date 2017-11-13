@@ -44,6 +44,7 @@
 #include "aux.hpp"
 #include "beacon_data.h"
 #include "telemetry_data.h"
+#include "data_processing.hpp"
 
 FSatGRS::FSatGRS()
 {
@@ -452,6 +453,17 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         button_plot->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPlotClicked));
     }
     
+    // Log Analysis Dialog
+    ref_builder->get_widget("dialog_log_statistics", dialog_log_statistics);
+    ref_builder->get_widget("filechooserbutton_log_analysis", filechooserbutton_log_analysis);
+    ref_builder->get_widget("textview_log_analysis_result", textview_log_analysis_result);
+    ref_builder->get_widget("button_run_log_analysis", button_run_log_analysis);
+    
+    if (button_run_log_analysis)
+    {
+        button_run_log_analysis->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonRunAnalysisClicked));
+    }
+    
     return 0;
 }
 
@@ -633,7 +645,12 @@ void FSatGRS::OnToolButtonConfigClicked()
 
 void FSatGRS::OnToolButtonStatisticsClicked()
 {
+    int response = dialog_log_statistics->run();;
     
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_log_statistics->hide();
+    }
 }
 
 void FSatGRS::OnToolButtonRunClicked()
@@ -1469,6 +1486,26 @@ void FSatGRS::OnButtonPlotClicked()
     }
     
     dialog_plot->hide();
+}
+
+void FSatGRS::OnButtonRunAnalysisClicked()
+{
+    std::string log_file(filechooserbutton_log_analysis->get_filename().c_str());
+    
+    if (log_file.size() > 0)
+    {
+        DataProcessing *log_analysis = new DataProcessing(log_file);
+        
+        Glib::RefPtr<Gtk::TextBuffer> textview_log_analysis_result_buffer = textview_log_analysis_result->get_buffer();
+        
+        textview_log_analysis_result_buffer->set_text(log_analysis->Validate("/tmp/test.log").c_str());
+        
+        delete log_analysis;
+    }
+    else
+    {
+        this->RaiseErrorMessage("No log file provided!", "To run a analysis, a log file must be provided.");
+    }
 }
 
 void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)

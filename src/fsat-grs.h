@@ -242,6 +242,12 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_plot_save_pdf_telemetry;
         Gtk::Button                     *button_plot;
         
+        // Log Analysis Dialog
+        Gtk::Dialog                     *dialog_log_statistics;
+        Gtk::FileChooserButton          *filechooserbutton_log_analysis;
+        Gtk::TextView                   *textview_log_analysis_result;
+        Gtk::Button                     *button_run_log_analysis;
+        
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
         
@@ -388,6 +394,12 @@ class FSatGRS
          * \return None
          */
         void OnButtonPlotClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonRunAnalysisClicked();
         /**
          * \brief 
          * 
