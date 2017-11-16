@@ -181,10 +181,11 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
 {
     if (len > 10)
     {
+    #if BEACON_DATA_ENDIENESS == BEACON_DATA_LSB_FIRST
         bat1_voltage        = BatVoltConv((data[11] << 8) | data[10]);
         bat2_voltage        = BatVoltConv((data[13] << 8) | data[12]);
-        bat1_temp           = BatTempConv((data[14] << 16) | (data[15] << 8) | data[16]);
-        bat2_temp           = BatTempConv((data[17] << 16) | (data[18] << 8) | data[19]);
+        bat1_temp           = BatTempConv((data[16] << 16) | (data[15] << 8) | data[14]);
+        bat2_temp           = BatTempConv((data[19] << 16) | (data[18] << 8) | data[17]);
         bat_charge          = BatChargeConv((data[21] << 8) | data[20]);
         solar_current_1     = SolarPanelCurrentConv((data[23] << 8) | data[22]);
         solar_current_2     = SolarPanelCurrentConv((data[25] << 8) | data[24]);
@@ -195,8 +196,23 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
         solar_voltage_1     = SolarPanelVoltageConv((data[35] << 8) | data[34]);
         solar_voltage_2     = SolarPanelVoltageConv((data[37] << 8) | data[36]);
         solar_voltage_3     = SolarPanelVoltageConv((data[39] << 8) | data[38]);
+    #elif BEACON_DATA_ENDIENESS == BEACON_DATA_MSB_FIRST
+        bat1_voltage        = BatVoltConv((data[10] << 8) | data[11]);
+        bat2_voltage        = BatVoltConv((data[12] << 8) | data[13]);
+        bat1_temp           = BatTempConv((data[14] << 16) | (data[15] << 8) | data[16]);
+        bat2_temp           = BatTempConv((data[17] << 16) | (data[18] << 8) | data[19]);
+        bat_charge          = BatChargeConv((data[20] << 8) | data[21]);
+        solar_current_1     = SolarPanelCurrentConv((data[22] << 8) | data[23]);
+        solar_current_2     = SolarPanelCurrentConv((data[24] << 8) | data[25]);
+        solar_current_3     = SolarPanelCurrentConv((data[26] << 8) | data[27]);
+        solar_current_4     = SolarPanelCurrentConv((data[28] << 8) | data[29]);
+        solar_current_5     = SolarPanelCurrentConv((data[30] << 8) | data[31]);
+        solar_current_6     = SolarPanelCurrentConv((data[32] << 8) | data[33]);
+        solar_voltage_1     = SolarPanelVoltageConv((data[34] << 8) | data[35]);
+        solar_voltage_2     = SolarPanelVoltageConv((data[36] << 8) | data[37]);
+        solar_voltage_3     = SolarPanelVoltageConv((data[38] << 8) | data[39]);
+    #endif // BEACON_DATA_ENDIENESS
         energy_level        = data[40];
-        
         type_last_pkt = BEACON_DATA_EPS_PKT;
         
         if (len > 41)
@@ -206,6 +222,18 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             rush_status         = bool((data[41] >> 1) & 1);
             eps_status          = bool((data[41] >> 0) & 1);
             antenna_status      = bool((data[41] >> 5) & 1);
+        #if BEACON_DATA_ENDIENESS == BEACON_DATA_LSB_FIRST
+            imu_accel_x         = IMUAccelConv((data[43] << 8) | data[42]);
+            imu_accel_y         = IMUAccelConv((data[45] << 8) | data[44]);
+            imu_accel_z         = IMUAccelConv((data[47] << 8) | data[46]);
+            imu_gyro_x          = IMUGyroConv((data[49] << 8) | data[48]);
+            imu_gyro_y          = IMUGyroConv((data[51] << 8) | data[50]);
+            imu_gyro_z          = IMUGyroConv((data[53] << 8) | data[52]);
+            system_time_sec     = data[54];
+            system_time_min     = (data[57] | (data[56] << 8) | (data[55] << 16))%60;
+            system_time_hou     = (data[57] | (data[56] << 8) | (data[55] << 16))/60;
+            obdh_resets         = data[59] + data[58]*256;
+        #elif BEACON_DATA_ENDIENESS == BEACON_DATA_MSB_FIRST
             imu_accel_x         = IMUAccelConv((data[42] << 8) | data[43]);
             imu_accel_y         = IMUAccelConv((data[44] << 8) | data[45]);
             imu_accel_z         = IMUAccelConv((data[46] << 8) | data[47]);
@@ -216,6 +244,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             system_time_min     = (data[55] | (data[56] << 8) | (data[57] << 16))%60;
             system_time_hou     = (data[55] | (data[56] << 8) | (data[57] << 16))/60;
             obdh_resets         = data[58] + data[59]*256;
+        #endif // BEACON_DATA_ENDIENESS
             
             type_last_pkt = BEACON_DATA_OBDH_PKT;
             

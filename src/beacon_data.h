@@ -52,6 +52,11 @@
 
 #define BEACON_DATA_UNKNOWN_VALUE           "-"
 
+#define BEACON_DATA_MSB_FIRST               0
+#define BEACON_DATA_LSB_FIRST               1
+
+#define BEACON_DATA_ENDIENESS               BEACON_DATA_MSB_FIRST
+
 /**
  * \class BeaconData
  * 
