@@ -782,7 +782,7 @@ void FSatGRS::OnButtonClearAllBeaconClicked()
     ngham_statistic->Clear();
     //ax25_statistic->Clear();
     beacon_data->Clear();
-    beacon_data->Display(0);
+    beacon_data->Display(uint8_t(BEACON_DATA_SAT_ID_PKT));
     filechooserbutton_beacon->unselect_all();
 }
 

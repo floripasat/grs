@@ -70,6 +70,14 @@ class PacketData
         /**
          * \brief 
          * 
+         * \param pkt_type
+         * 
+         * \return None
+         */
+        virtual void Display(uint8_t pkt_type);
+        /**
+         * \brief 
+         * 
          * \param no_data
          * 
          * \return None
