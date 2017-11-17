@@ -248,18 +248,18 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             
             type_last_pkt = BEACON_DATA_OBDH_PKT;
             
-            this->Display(BEACON_DATA_OBDH_PKT);
+            this->Display(uint8_t(BEACON_DATA_OBDH_PKT));
         }
         else
         {
-            this->Display(BEACON_DATA_EPS_PKT);
+            this->Display(uint8_t(BEACON_DATA_EPS_PKT));
         }
     }
     else
     {
         type_last_pkt = BEACON_DATA_SAT_ID_PKT;
         
-        this->Display(BEACON_DATA_SAT_ID_PKT);
+        this->Display(uint8_t(BEACON_DATA_SAT_ID_PKT));
     }
 }
 
