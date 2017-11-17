@@ -227,6 +227,8 @@ class FSatGRS
         
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
+        Gtk::Button                     *button_config_ok;
+        Gtk::Button                     *button_config_default;
         
         // About Dialog
         Gtk::AboutDialog                *aboutdialog;
@@ -357,6 +359,18 @@ class FSatGRS
          * \return None
          */
         void OnToolButtonConfigClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonConfigOkClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonConfigDefaultClicked();
         /**
          * \brief 
          * 

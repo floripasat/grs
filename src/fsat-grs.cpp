@@ -446,12 +446,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
     
-    // Preferences dialog
-    ref_builder->get_widget("dialog_config", dialog_config);
-    
-    // About dialog
-    ref_builder->get_widget("aboutdialog", aboutdialog);
-    
     // Plot dialog
     ref_builder->get_widget("dialog_plot", dialog_plot);
     ref_builder->get_widget("filechooserbutton_plot_beacon", filechooserbutton_plot_beacon);
@@ -483,6 +477,24 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     {
         button_run_log_analysis->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonRunAnalysisClicked));
     }
+    
+    // Preferences dialog
+    ref_builder->get_widget("dialog_config", dialog_config);
+    
+    ref_builder->get_widget("button_config_ok", button_config_ok);
+    if (button_config_ok)
+    {
+        button_config_ok->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonConfigOkClicked));
+    }
+    
+    ref_builder->get_widget("button_config_default", button_config_default);
+    if (button_config_default)
+    {
+        button_config_default->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonConfigDefaultClicked));
+    }
+    
+    // About dialog
+    ref_builder->get_widget("aboutdialog", aboutdialog);
     
     return 0;
 }
@@ -661,6 +673,18 @@ void FSatGRS::OnToolButtonConfigClicked()
     {
         dialog_config->hide();
     }
+}
+
+void FSatGRS::OnButtonConfigOkClicked()
+{
+    dialog_config->hide();
+}
+
+void FSatGRS::OnButtonConfigDefaultClicked()
+{
+    //this->LoadDefaultConfiguration();
+    
+    dialog_config->hide();
 }
 
 void FSatGRS::OnToolButtonStatisticsClicked()
