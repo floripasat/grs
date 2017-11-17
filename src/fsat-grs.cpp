@@ -106,12 +106,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         toolbutton_open_log_file->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonOpenClicked));
     }
     
-    ref_builder->get_widget("toolbutton_config", toolbutton_config);
-    if (toolbutton_config)
-    {
-        toolbutton_config->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonConfigClicked));
-    }
-    
     ref_builder->get_widget("toolbutton_statistics", toolbutton_statistics);
     if (toolbutton_statistics)
     {
@@ -128,6 +122,30 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     if (toolbutton_plot)
     {
         toolbutton_plot->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonPlotClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_ping", toolbutton_ping);
+    if (toolbutton_ping)
+    {
+        toolbutton_ping->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonPingClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_request_data", toolbutton_request_data);
+    if (toolbutton_request_data)
+    {
+        toolbutton_request_data->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonRequestDataClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_shutdown", toolbutton_shutdown);
+    if (toolbutton_shutdown)
+    {
+        toolbutton_shutdown->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonShutdownClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_config", toolbutton_config);
+    if (toolbutton_config)
+    {
+        toolbutton_config->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonConfigClicked));
     }
     
     ref_builder->get_widget("toolbutton_about", toolbutton_about);
@@ -632,7 +650,7 @@ bool FSatGRS::Timer()
 
 void FSatGRS::OnToolButtonOpenClicked()
 {
-    
+    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
 }
 
 void FSatGRS::OnToolButtonConfigClicked()
@@ -674,6 +692,30 @@ void FSatGRS::OnToolButtonPlotClicked()
     {
         dialog_plot->hide();
     }
+}
+
+void FSatGRS::OnToolButtonPingClicked()
+{
+    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
+    //std::thread thread_ping_cmd(&FSatGRS::, this);
+    
+    //thread_ping_cmd.detach();
+}
+
+void FSatGRS::OnToolButtonRequestDataClicked()
+{
+    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
+    //std::thread thread_request_cmd(&FSatGRS::, this);
+    
+    //thread_request_cmd.detach();
+}
+
+void FSatGRS::OnToolButtonShutdownClicked()
+{
+    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
+    //std::thread thread_shutdown_cmd(&FSatGRS::, this);
+    
+    //thread_shutdown_cmd.detach();
 }
 
 void FSatGRS::OnToolButtonAboutClicked()

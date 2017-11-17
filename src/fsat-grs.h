@@ -68,10 +68,13 @@ class FSatGRS
         
         // Toolbar
         Gtk::ToolButton                 *toolbutton_open_log_file;
-        Gtk::ToolButton                 *toolbutton_config;
         Gtk::ToolButton                 *toolbutton_statistics;
         Gtk::ToolButton                 *toolbutton_gnuradio;
         Gtk::ToolButton                 *toolbutton_plot;
+        Gtk::ToolButton                 *toolbutton_ping;
+        Gtk::ToolButton                 *toolbutton_request_data;
+        Gtk::ToolButton                 *toolbutton_shutdown;
+        Gtk::ToolButton                 *toolbutton_config;
         Gtk::ToolButton                 *toolbutton_about;
         
         // Beacon stream
@@ -317,12 +320,6 @@ class FSatGRS
          * 
          * \return None
          */
-        void OnToolButtonConfigClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
         void OnToolButtonStatisticsClicked();
         /**
          * \brief 
@@ -336,6 +333,30 @@ class FSatGRS
          * \return None
          */
         void OnToolButtonPlotClicked();
+        /**
+         * \brief Ping button click signal handler.
+         * 
+         * \return None
+         */
+        void OnToolButtonPingClicked();
+        /**
+         * \brief Request data button click signal handler.
+         * 
+         * \return None
+         */
+        void OnToolButtonRequestDataClicked();
+        /**
+         * \brief Shutdown command button click signal handler.
+         * 
+         * \return None
+         */
+        void OnToolButtonShutdownClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToolButtonConfigClicked();
         /**
          * \brief 
          * 
