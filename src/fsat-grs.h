@@ -53,8 +53,8 @@
 
 #define DATA_RECEPTION_SAMPLE_RATE      1000
 
-#define FSAT_GRS_GRC_BEACON_BIN     "/tmp/bin_data_beacon.bin"
-#define FSAT_GRS_GRC_TELEMETRY_BIN  "/tmp/bin_data_telemetry.bin"
+#define FSAT_GRS_GRC_BEACON_BIN         "/tmp/bin_data_beacon.bin"
+#define FSAT_GRS_GRC_TELEMETRY_BIN      "/tmp/bin_data_telemetry.bin"
 
 /**
  * \class FSatGRS
@@ -69,7 +69,6 @@ class FSatGRS
         // Toolbar
         Gtk::ToolButton                 *toolbutton_open_log_file;
         Gtk::ToolButton                 *toolbutton_statistics;
-        Gtk::ToolButton                 *toolbutton_gnuradio;
         Gtk::ToolButton                 *toolbutton_plot;
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
@@ -78,6 +77,12 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_about;
         
         // Beacon stream
+        Gtk::RadioButton                *radiobutton_beacon_src_sdr;
+        Gtk::Entry                      *entry_beacon_sdr_dev;
+        Gtk::RadioButton                *radiobutton_beacon_src_tcp;
+        Gtk::Entry                      *entry_beacon_tcp_ip;
+        Gtk::Entry                      *entry_beacon_tcp_port;
+        Gtk::RadioButton                *radiobutton_beacon_src_file;
         Gtk::FileChooserButton          *filechooserbutton_beacon;
         Gtk::ToggleButton               *togglebutton_play_beacon;
         Gtk::ToggleButton               *togglebutton_pause_beacon;
@@ -85,6 +90,12 @@ class FSatGRS
         Gtk::Button                     *button_clear_all_beacon;
         
         // Telemetry stream
+        Gtk::RadioButton                *radiobutton_telemetry_src_sdr;
+        Gtk::Entry                      *entry_telemetry_sdr_dev;
+        Gtk::RadioButton                *radiobutton_telemetry_src_tcp;
+        Gtk::Entry                      *entry_telemetry_tcp_ip;
+        Gtk::Entry                      *entry_telemetry_tcp_port;
+        Gtk::RadioButton                *radiobutton_telemetry_src_file;
         Gtk::FileChooserButton          *filechooserbutton_telemetry;
         Gtk::ToggleButton               *togglebutton_play_telemetry;
         Gtk::ToggleButton               *togglebutton_pause_telemetry;

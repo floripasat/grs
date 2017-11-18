@@ -112,12 +112,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         toolbutton_statistics->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonStatisticsClicked));
     }
     
-    ref_builder->get_widget("toolbutton_gnuradio", toolbutton_gnuradio);
-    if (toolbutton_gnuradio)
-    {
-        toolbutton_gnuradio->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonRunClicked));
-    }
-    
     ref_builder->get_widget("toolbutton_plot", toolbutton_plot);
     if (toolbutton_plot)
     {
@@ -155,6 +149,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     }
     
     // Beacon stream
+    ref_builder->get_widget("radiobutton_beacon_src_sdr", radiobutton_beacon_src_sdr);
+    ref_builder->get_widget("entry_beacon_sdr_dev", entry_beacon_sdr_dev);
+    ref_builder->get_widget("radiobutton_beacon_src_tcp", radiobutton_beacon_src_tcp);
+    ref_builder->get_widget("entry_beacon_tcp_ip", entry_beacon_tcp_ip);
+    ref_builder->get_widget("entry_beacon_tcp_port", entry_beacon_tcp_port);
+    ref_builder->get_widget("radiobutton_beacon_src_file", radiobutton_beacon_src_file);
     ref_builder->get_widget("filechooserbutton_beacon", filechooserbutton_beacon);
     
     ref_builder->get_widget("togglebutton_play_beacon", togglebutton_play_beacon);
@@ -182,6 +182,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     }
     
     // Telemetry stream
+    ref_builder->get_widget("radiobutton_telemetry_src_sdr", radiobutton_telemetry_src_sdr);
+    ref_builder->get_widget("entry_telemetry_sdr_dev", entry_telemetry_sdr_dev);
+    ref_builder->get_widget("radiobutton_telemetry_src_tcp", radiobutton_telemetry_src_tcp);
+    ref_builder->get_widget("entry_telemetry_tcp_ip", entry_telemetry_tcp_ip);
+    ref_builder->get_widget("entry_telemetry_tcp_port", entry_telemetry_tcp_port);
+    ref_builder->get_widget("radiobutton_telemetry_src_file", radiobutton_telemetry_src_file);
     ref_builder->get_widget("filechooserbutton_telemetry", filechooserbutton_telemetry);
     
     ref_builder->get_widget("togglebutton_play_telemetry", togglebutton_play_telemetry);
@@ -697,17 +703,6 @@ void FSatGRS::OnToolButtonStatisticsClicked()
     }
 }
 
-void FSatGRS::OnToolButtonRunClicked()
-{
-    std::thread thread_gnuradio_beacon(&FSatGRS::RunGNURadioReceiver, this, true);
-    
-    thread_gnuradio_beacon.detach();
-    
-    std::thread thread_gnuradio_telemetry(&FSatGRS::RunGNURadioReceiver, this, false);
-    
-    thread_gnuradio_telemetry.detach();
-}
-
 void FSatGRS::OnToolButtonPlotClicked()
 {
     int response = dialog_plot->run();;
@@ -758,17 +753,33 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
     {
         ngham_pkts_beacon = new NGHamPkts(event_log, beacon_data, ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_beacon_data->get_active());
         
-        if (filechooserbutton_beacon->get_filename().size() > 0)
+        if (radiobutton_beacon_src_sdr->get_active())
+        {
+            system("touch " FSAT_GRS_GRC_BEACON_BIN);
+            
+            std::thread thread_gnuradio_beacon(&FSatGRS::RunGNURadioReceiver, this, true);
+            
+            thread_gnuradio_beacon.detach();
+            
+            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, std::ifstream::in);
+        }
+        /*else if (radiobutton_beacon_src_tcp->get_active())
+        {
+            
+        }*/
+        else if (radiobutton_beacon_src_file->get_active())
         {
             ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), std::ifstream::in);
-        }
-        else
-        {
-            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, std::ifstream::in);
         }
         
         if (ngham_pkts_beacon->is_open())
         {
+            radiobutton_beacon_src_sdr->set_sensitive(false);
+            entry_beacon_sdr_dev->set_sensitive(false);
+            radiobutton_beacon_src_tcp->set_sensitive(false);
+            entry_beacon_tcp_ip->set_sensitive(false);
+            entry_beacon_tcp_port->set_sensitive(false);
+            radiobutton_beacon_src_file->set_sensitive(false);
             filechooserbutton_beacon->set_sensitive(false);
             
             togglebutton_play_beacon->set_sensitive(false);
@@ -798,6 +809,12 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
     {
         delete ngham_pkts_beacon;
         
+        radiobutton_beacon_src_sdr->set_sensitive(true);
+        entry_beacon_sdr_dev->set_sensitive(true);
+        radiobutton_beacon_src_tcp->set_sensitive(true);
+        entry_beacon_tcp_ip->set_sensitive(true);
+        entry_beacon_tcp_port->set_sensitive(true);
+        radiobutton_beacon_src_file->set_sensitive(true);
         filechooserbutton_beacon->set_sensitive(true);
         
         togglebutton_play_beacon->set_sensitive(true);
@@ -858,17 +875,33 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
     {
         ngham_pkts_telemetry = new NGHamPkts(event_log, telemetry_data, telemetry_ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_telemetry_data->get_active());
         
-        if (filechooserbutton_telemetry->get_filename().size() > 0)
+        if (radiobutton_telemetry_src_sdr->get_active())
+        {
+            system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
+            
+            std::thread thread_gnuradio_telemetry(&FSatGRS::RunGNURadioReceiver, this, false);
+            
+            thread_gnuradio_telemetry.detach();
+            
+            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, std::ifstream::in);
+        }
+        /*else if (radiobutton_telemetry_src_tcp->get_active())
+        {
+            
+        }*/
+        else if (radiobutton_telemetry_src_file->get_active())
         {
             ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), std::ifstream::in);
-        }
-        else
-        {
-            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, std::ifstream::in);
         }
         
         if (ngham_pkts_telemetry->is_open())
         {
+            radiobutton_telemetry_src_sdr->set_sensitive(false);
+            entry_telemetry_sdr_dev->set_sensitive(false);
+            radiobutton_telemetry_src_tcp->set_sensitive(false);
+            entry_telemetry_tcp_ip->set_sensitive(false);
+            entry_telemetry_tcp_port->set_sensitive(false);
+            radiobutton_telemetry_src_file->set_sensitive(false);
             filechooserbutton_telemetry->set_sensitive(false);
             
             togglebutton_play_telemetry->set_sensitive(false);
@@ -897,6 +930,12 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
     {
         delete ngham_pkts_telemetry;
         
+        radiobutton_telemetry_src_sdr->set_sensitive(true);
+        entry_telemetry_sdr_dev->set_sensitive(true);
+        radiobutton_telemetry_src_tcp->set_sensitive(true);
+        entry_telemetry_tcp_ip->set_sensitive(true);
+        entry_telemetry_tcp_port->set_sensitive(true);
+        radiobutton_telemetry_src_file->set_sensitive(true);
         filechooserbutton_telemetry->set_sensitive(true);
         
         togglebutton_play_telemetry->set_sensitive(true);
