@@ -82,6 +82,9 @@ class FSatGRS
         Gtk::RadioButton                *radiobutton_beacon_src_tcp;
         Gtk::Entry                      *entry_beacon_tcp_ip;
         Gtk::Entry                      *entry_beacon_tcp_port;
+        Gtk::RadioButton                *radiobutton_beacon_src_serial;
+        Gtk::Entry                      *entry_beacon_serial_port;
+        Gtk::ComboBox                   *combobox_beacon_baudrate;
         Gtk::RadioButton                *radiobutton_beacon_src_file;
         Gtk::FileChooserButton          *filechooserbutton_beacon;
         Gtk::ToggleButton               *togglebutton_play_beacon;
@@ -95,6 +98,9 @@ class FSatGRS
         Gtk::RadioButton                *radiobutton_telemetry_src_tcp;
         Gtk::Entry                      *entry_telemetry_tcp_ip;
         Gtk::Entry                      *entry_telemetry_tcp_port;
+        Gtk::RadioButton                *radiobutton_telemetry_src_serial;
+        Gtk::Entry                      *entry_telemetry_serial_port;
+        Gtk::ComboBox                   *combobox_telemetry_baudrate;
         Gtk::RadioButton                *radiobutton_telemetry_src_file;
         Gtk::FileChooserButton          *filechooserbutton_telemetry;
         Gtk::ToggleButton               *togglebutton_play_telemetry;
@@ -107,11 +113,6 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_log_ax25_packets;
         Gtk::CheckButton                *checkbutton_log_beacon_data;
         Gtk::CheckButton                *checkbutton_log_telemetry_data;
-        
-        // Serial Port
-        Gtk::Entry                      *entry_serial_port;
-        Gtk::ComboBox                   *combobox_baudrate;
-        Gtk::ToggleButton               *togglebutton_open_close_port;
         
         // Event log
         Gtk::TextView                   *textview_event_log;
@@ -310,12 +311,6 @@ class FSatGRS
          */
         NGHamPkts                       *ngham_pkts_telemetry;
         
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnToggleButtonOpenClosePortToggled();
         /**
          * \brief 
          * 

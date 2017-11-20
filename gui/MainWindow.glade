@@ -114,7 +114,6 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
             <property name="toolbar_style">icons</property>
             <child>
               <object class="GtkToolButton" id="toolbutton_open_log_file">
@@ -302,9 +301,10 @@
             <property name="spacing">10</property>
             <child>
               <object class="GtkBox" id="box_config">
+                <property name="width_request">233</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="vexpand">True</property>
+                <property name="halign">start</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
@@ -463,6 +463,93 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkGrid" id="grid26">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="row_spacing">5</property>
+                            <property name="column_spacing">5</property>
+                            <child>
+                              <object class="GtkEntry" id="entry_beacon_serial_port">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="width_chars">14</property>
+                                <property name="max_width_chars">14</property>
+                                <property name="text" translatable="yes">/dev/ttyUSB0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="combobox_beacon_baudrate">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore_baudrates</property>
+                                <property name="active">8</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label_port">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <property name="label" translatable="yes">Device:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label_baudrate">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <property name="label" translatable="yes">Baudrate:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="radiobutton_beacon_src_serial">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_stock">True</property>
+                                <property name="xalign">0</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">radiobutton_beacon_src_sdr</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="height">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkBox" id="box28">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -504,7 +591,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -562,7 +649,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -576,7 +663,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                       </object>
@@ -752,6 +839,91 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkGrid" id="grid27">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="row_spacing">5</property>
+                            <property name="column_spacing">5</property>
+                            <child>
+                              <object class="GtkRadioButton" id="radiobutton_telemetry_src_serial">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_stock">True</property>
+                                <property name="xalign">0</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">radiobutton_telemetry_src_sdr</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="height">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label105">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Device:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label106">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Baudrate:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_telemetry_serial_port">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="width_chars">14</property>
+                                <property name="max_width_chars">14</property>
+                                <property name="text" translatable="yes">/dev/ttyUSB1</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="combobox_telemetry_baudrate">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore_baudrates</property>
+                                <property name="active">10</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext4"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkBox" id="box29">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -793,7 +965,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -850,7 +1022,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -863,7 +1035,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                       </object>
@@ -880,109 +1052,6 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkFrame" id="frame_serial_port">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label_xalign">0.05000000074505806</property>
-                    <child>
-                      <object class="GtkGrid" id="grid_frame_serial_port">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
-                        <property name="margin_right">10</property>
-                        <property name="margin_top">10</property>
-                        <property name="margin_bottom">10</property>
-                        <property name="row_spacing">10</property>
-                        <property name="column_spacing">10</property>
-                        <child>
-                          <object class="GtkLabel" id="label_port">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="label" translatable="yes">Port:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry_serial_port">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="width_chars">17</property>
-                            <property name="max_width_chars">18</property>
-                            <property name="text" translatable="yes">/dev/ttyUSB0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label_baudrate">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="label" translatable="yes">Baudrate:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToggleButton" id="togglebutton_open_close_port">
-                            <property name="label" translatable="yes">Open/Close Port</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="valign">center</property>
-                            <signal name="toggled" handler="on_togglebutton_open_close_port_toggled" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="combobox_baudrate">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="model">liststore_baudrates</property>
-                            <property name="active">12</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label_frame_serial_port">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Serial Port</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -4151,7 +4220,7 @@
                           <object class="GtkFrame" id="frame24">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label_xalign">0</property>
+                            <property name="label_xalign">0.05000000074505806</property>
                             <child>
                               <object class="GtkAlignment" id="alignment17">
                                 <property name="visible">True</property>
@@ -4733,7 +4802,7 @@
                           <object class="GtkFrame" id="frame25">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label_xalign">0</property>
+                            <property name="label_xalign">0.05000000074505806</property>
                             <child>
                               <object class="GtkAlignment" id="alignment18">
                                 <property name="visible">True</property>

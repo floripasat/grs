@@ -154,6 +154,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("radiobutton_beacon_src_tcp", radiobutton_beacon_src_tcp);
     ref_builder->get_widget("entry_beacon_tcp_ip", entry_beacon_tcp_ip);
     ref_builder->get_widget("entry_beacon_tcp_port", entry_beacon_tcp_port);
+    ref_builder->get_widget("radiobutton_beacon_src_serial", radiobutton_beacon_src_serial);
+    ref_builder->get_widget("entry_beacon_serial_port", entry_beacon_serial_port);
+    ref_builder->get_widget("combobox_beacon_baudrate", combobox_beacon_baudrate);
     ref_builder->get_widget("radiobutton_beacon_src_file", radiobutton_beacon_src_file);
     ref_builder->get_widget("filechooserbutton_beacon", filechooserbutton_beacon);
     
@@ -187,6 +190,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("radiobutton_telemetry_src_tcp", radiobutton_telemetry_src_tcp);
     ref_builder->get_widget("entry_telemetry_tcp_ip", entry_telemetry_tcp_ip);
     ref_builder->get_widget("entry_telemetry_tcp_port", entry_telemetry_tcp_port);
+    ref_builder->get_widget("radiobutton_telemetry_src_serial", radiobutton_telemetry_src_serial);
+    ref_builder->get_widget("entry_telemetry_serial_port", entry_telemetry_serial_port);
+    ref_builder->get_widget("combobox_telemetry_baudrate", combobox_telemetry_baudrate);
     ref_builder->get_widget("radiobutton_telemetry_src_file", radiobutton_telemetry_src_file);
     ref_builder->get_widget("filechooserbutton_telemetry", filechooserbutton_telemetry);
     
@@ -219,16 +225,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("checkbutton_log_ax25_packets", checkbutton_log_ax25_packets);
     ref_builder->get_widget("checkbutton_log_beacon_data", checkbutton_log_beacon_data);
     ref_builder->get_widget("checkbutton_log_telemetry_data", checkbutton_log_telemetry_data);
-    
-    // Serial port
-    ref_builder->get_widget("entry_serial_port", entry_serial_port);
-    ref_builder->get_widget("combobox_baudrate", combobox_baudrate);
-    
-    ref_builder->get_widget("togglebutton_open_close_port", togglebutton_open_close_port);
-    if (togglebutton_open_close_port)
-    {
-        togglebutton_open_close_port->signal_toggled().connect(sigc::mem_fun(*this, &FSatGRS::OnToggleButtonOpenClosePortToggled));
-    }
     
     // Event log
     ref_builder->get_widget("textview_event_log", textview_event_log);
@@ -586,9 +582,9 @@ std::vector<uint8_t> FSatGRS::ProccessByte(uint8_t byte)
 
 bool FSatGRS::Timer()
 {
-    if (togglebutton_open_close_port->get_active())
+    /*if (togglebutton_open_close_port->get_active())
     {
-        /*int bytes_buf = uart->DataAvailable();
+        int bytes_buf = uart->DataAvailable();
         if (bytes_buf > 0)
         {
             while(bytes_buf--)
@@ -628,8 +624,8 @@ bool FSatGRS::Timer()
                 
                 // AX25 packets  >>>>>>>>> TO BE IMPLEMENTED
             }
-        }*/
-    }
+        }
+    }*/
     
     if (togglebutton_play_beacon->get_active())
     {
@@ -766,6 +762,10 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         /*else if (radiobutton_beacon_src_tcp->get_active())
         {
             
+        }
+        else if (radiobutton_beacon_src_serial->get_active())
+        {
+            
         }*/
         else if (radiobutton_beacon_src_file->get_active())
         {
@@ -779,6 +779,9 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             radiobutton_beacon_src_tcp->set_sensitive(false);
             entry_beacon_tcp_ip->set_sensitive(false);
             entry_beacon_tcp_port->set_sensitive(false);
+            radiobutton_beacon_src_serial->set_sensitive(false);
+            entry_beacon_serial_port->set_sensitive(false);
+            combobox_beacon_baudrate->set_sensitive(false);
             radiobutton_beacon_src_file->set_sensitive(false);
             filechooserbutton_beacon->set_sensitive(false);
             
@@ -791,10 +794,6 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             checkbutton_log_ngham_packets->set_sensitive(false);
             checkbutton_log_ax25_packets->set_sensitive(false);
             checkbutton_log_beacon_data->set_sensitive(false);
-            
-            entry_serial_port->set_sensitive(false);
-            combobox_baudrate->set_sensitive(false);
-            togglebutton_open_close_port->set_sensitive(false);
             
             event_log->AddNewEvent("New beacon stream started");
         }
@@ -814,6 +813,9 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         radiobutton_beacon_src_tcp->set_sensitive(true);
         entry_beacon_tcp_ip->set_sensitive(true);
         entry_beacon_tcp_port->set_sensitive(true);
+        radiobutton_beacon_src_serial->set_sensitive(true);
+        entry_beacon_serial_port->set_sensitive(true);
+        combobox_beacon_baudrate->set_sensitive(true);
         radiobutton_beacon_src_file->set_sensitive(true);
         filechooserbutton_beacon->set_sensitive(true);
         
@@ -827,9 +829,6 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         {
             checkbutton_log_ngham_packets->set_sensitive(true);
             checkbutton_log_ax25_packets->set_sensitive(true);
-            entry_serial_port->set_sensitive(true);
-            combobox_baudrate->set_sensitive(true);
-            togglebutton_open_close_port->set_sensitive(true);
         }
         
         checkbutton_log_beacon_data->set_sensitive(true);
@@ -888,6 +887,10 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         /*else if (radiobutton_telemetry_src_tcp->get_active())
         {
             
+        }
+        else if (radiobutton_telemetry_src_serial->get_active())
+        {
+            
         }*/
         else if (radiobutton_telemetry_src_file->get_active())
         {
@@ -901,6 +904,9 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             radiobutton_telemetry_src_tcp->set_sensitive(false);
             entry_telemetry_tcp_ip->set_sensitive(false);
             entry_telemetry_tcp_port->set_sensitive(false);
+            radiobutton_telemetry_src_serial->set_sensitive(false);
+            entry_telemetry_serial_port->set_sensitive(false);
+            combobox_telemetry_baudrate->set_sensitive(false);
             radiobutton_telemetry_src_file->set_sensitive(false);
             filechooserbutton_telemetry->set_sensitive(false);
             
@@ -912,10 +918,6 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             
             checkbutton_log_ngham_packets->set_sensitive(false);
             checkbutton_log_telemetry_data->set_sensitive(false);
-            
-            entry_serial_port->set_sensitive(false);
-            combobox_baudrate->set_sensitive(false);
-            togglebutton_open_close_port->set_sensitive(false);
             
             event_log->AddNewEvent("New telemetry stream started");
         }
@@ -935,6 +937,9 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         radiobutton_telemetry_src_tcp->set_sensitive(true);
         entry_telemetry_tcp_ip->set_sensitive(true);
         entry_telemetry_tcp_port->set_sensitive(true);
+        radiobutton_telemetry_src_serial->set_sensitive(true);
+        entry_telemetry_serial_port->set_sensitive(true);
+        combobox_telemetry_baudrate->set_sensitive(true);
         radiobutton_telemetry_src_file->set_sensitive(true);
         filechooserbutton_telemetry->set_sensitive(true);
         
@@ -947,9 +952,6 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         if (!togglebutton_play_beacon->get_active())
         {
             checkbutton_log_ngham_packets->set_sensitive(true);
-            entry_serial_port->set_sensitive(true);
-            combobox_baudrate->set_sensitive(true);
-            togglebutton_open_close_port->set_sensitive(true);
         }
         
         checkbutton_log_telemetry_data->set_sensitive(true);
@@ -987,7 +989,7 @@ void FSatGRS::OnButtonClearAllTelemetryClicked()
     telemetry_data->Display(true);
     filechooserbutton_telemetry->unselect_all();
 }
-
+/*
 void FSatGRS::OnToggleButtonOpenClosePortToggled()
 {
     if (togglebutton_open_close_port->get_active())
@@ -1056,7 +1058,7 @@ void FSatGRS::OnToggleButtonOpenClosePortToggled()
         delete uart;
     }
 }
-
+*/
 void FSatGRS::OnButtonPlotClicked()
 {
     if ((filechooserbutton_plot_beacon->get_filename().size() <= 0) and (filechooserbutton_plot_telemetry->get_filename().size() <= 0))
