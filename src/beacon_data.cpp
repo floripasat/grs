@@ -230,8 +230,8 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             imu_gyro_y          = IMUGyroConv((data[51] << 8) | data[50]);
             imu_gyro_z          = IMUGyroConv((data[53] << 8) | data[52]);
             system_time_sec     = data[54];
-            system_time_min     = (data[57] | (data[56] << 8) | (data[55] << 16))%60;
-            system_time_hou     = (data[57] | (data[56] << 8) | (data[55] << 16))/60;
+            system_time_min     = ((data[57] << 16) | (data[56] << 8) | data[55])%60;
+            system_time_hou     = ((data[57] << 16) | (data[56] << 8) | data[55])/60;    
             obdh_resets         = data[59] + data[58]*256;
         #elif BEACON_DATA_ENDIENESS == BEACON_DATA_MSB_FIRST
             imu_accel_x         = IMUAccelConv((data[42] << 8) | data[43]);
@@ -241,8 +241,8 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             imu_gyro_y          = IMUGyroConv((data[50] << 8) | data[51]);
             imu_gyro_z          = IMUGyroConv((data[52] << 8) | data[53]);
             system_time_sec     = data[54];
-            system_time_min     = (data[55] | (data[56] << 8) | (data[57] << 16))%60;
-            system_time_hou     = (data[55] | (data[56] << 8) | (data[57] << 16))/60;
+            system_time_min     = ((data[55] << 16) | (data[56] << 8) | data[57])%60;
+            system_time_hou     = ((data[55] << 16) | (data[56] << 8) | data[57])/60;      
             obdh_resets         = data[58] + data[59]*256;
         #endif // BEACON_DATA_ENDIENESS
             
