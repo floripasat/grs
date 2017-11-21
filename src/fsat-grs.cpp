@@ -751,6 +751,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         
         if (radiobutton_beacon_src_sdr->get_active())
         {
+            system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
             system("touch " FSAT_GRS_GRC_BEACON_BIN);
             
             std::thread thread_gnuradio_beacon(&FSatGRS::RunGNURadioReceiver, this, true);
@@ -876,6 +877,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         
         if (radiobutton_telemetry_src_sdr->get_active())
         {
+            system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
             system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
             
             std::thread thread_gnuradio_telemetry(&FSatGRS::RunGNURadioReceiver, this, false);
