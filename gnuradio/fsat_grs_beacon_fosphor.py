@@ -38,7 +38,7 @@ import wx
 
 class fsat_grs_beacon(grc_wxgui.top_block_gui):
 
-    def __init__(self):
+    def __init__(self, sdr_dev="rtl=0"):
         grc_wxgui.top_block_gui.__init__(self, title="FloripaSat GFSK Beacon Receiver")
         _icon_path = "/usr/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
         self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
@@ -222,7 +222,7 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         	converter=forms.str_converter(),
         )
         self.GridAdd(self._variable_static_text_0_static_text, 0, 1, 1, 1)
-        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + "rtl=0" )
+        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + sdr_dev )
         self.osmosdr_source_0.set_sample_rate(samp_rate)
         self.osmosdr_source_0.set_center_freq(freq, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)
@@ -356,10 +356,11 @@ def main(top_block_cls=fsat_grs_beacon, options=None):
     if gr.enable_realtime_scheduling() != gr.RT_OK:
         print "Error: failed to enable real-time scheduling."
 
-    tb = top_block_cls()
+    tb = top_block_cls(options)
     tb.Start(True)
     tb.Wait()
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    main(options=sys.argv[1])

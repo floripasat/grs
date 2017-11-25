@@ -1641,11 +1641,17 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
 {
     if (beacon_receiver)
     {
-        system("python -u gnuradio/fsat_grs_beacon.py");
+        std::string grc_beacon_receiver_cmd = "python -u gnuradio/fsat_grs_beacon.py ";
+        grc_beacon_receiver_cmd += entry_beacon_sdr_dev->get_text().c_str();
+        
+        system(grc_beacon_receiver_cmd.c_str());
     }
     else
     {
-        system("python -u gnuradio/fsat_grs_telemetry.py");
+        std::string grc_telemetry_receiver_cmd = "python -u gnuradio/fsat_grs_telemetry.py ";
+        grc_telemetry_receiver_cmd += entry_telemetry_sdr_dev->get_text().c_str();
+        
+        system(grc_telemetry_receiver_cmd.c_str());
     }
 }
 

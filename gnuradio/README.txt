@@ -1,0 +1,1 @@
+NOTE: The generated python scripts from GNURadio must be modified to run properly in the GRS software. The SDR device number must be passed as an argument to these python scripts, and is not possible to do that in the GNURadio software (At least with the default blocks).
