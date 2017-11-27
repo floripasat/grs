@@ -4256,7 +4256,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="checkbutton_imu_2_accel_X">
+                                      <object class="GtkCheckButton" id="checkbutton_imu_2_accel_x">
                                         <property name="label" translatable="yes">IMU 2 Accel. X</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -5329,7 +5329,7 @@
                       <object class="GtkLabel" id="label80">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Data To Resquest</property>
+                        <property name="label" translatable="yes">Data To Request</property>
                       </object>
                       <packing>
                         <property name="position">2</property>
