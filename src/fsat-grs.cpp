@@ -581,6 +581,23 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         button_config_default->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonConfigDefaultClicked));
     }
     
+    // Shutdown Command Authentication Dialog
+    ref_builder->get_widget("dialog_shutdown_authentication", dialog_shutdown_authentication);
+    ref_builder->get_widget("entry_sd_auth_user", entry_sd_auth_user);
+    ref_builder->get_widget("entry_sd_auth_password", entry_sd_auth_password);
+    
+    ref_builder->get_widget("button_sd_auth_send", button_sd_auth_send);
+    if (button_sd_auth_send)
+    {
+        button_sd_auth_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonShutdownAuthSendClicked));
+    }
+    
+    ref_builder->get_widget("button_sd_auth_cancel", button_sd_auth_cancel);
+    if (button_sd_auth_cancel)
+    {
+        button_sd_auth_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonShutdownAuthCancelClicked));
+    }
+    
     // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
     
@@ -777,7 +794,7 @@ void FSatGRS::OnButtonConfigDefaultClicked()
 
 void FSatGRS::OnToolButtonStatisticsClicked()
 {
-    int response = dialog_log_statistics->run();;
+    int response = dialog_log_statistics->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
@@ -787,7 +804,7 @@ void FSatGRS::OnToolButtonStatisticsClicked()
 
 void FSatGRS::OnToolButtonPlotClicked()
 {
-    int response = dialog_plot->run();;
+    int response = dialog_plot->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
@@ -813,10 +830,12 @@ void FSatGRS::OnToolButtonRequestDataClicked()
 
 void FSatGRS::OnToolButtonShutdownClicked()
 {
-    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
-    //std::thread thread_shutdown_cmd(&FSatGRS::, this);
+    int response = dialog_shutdown_authentication->run();
     
-    //thread_shutdown_cmd.detach();
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_shutdown_authentication->hide();
+    }
 }
 
 void FSatGRS::OnToolButtonAboutClicked()
@@ -1844,6 +1863,19 @@ void FSatGRS::OnButtonUnselectEPSDataClicked()
     checkbutton_boost_voltage->set_active(false);
     checkbutton_main_bus_voltage->set_active(false);
     checkbutton_beacon_current->set_active(false);
+}
+
+void FSatGRS::OnButtonShutdownAuthSendClicked()
+{
+    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
+    //std::thread thread_shutdown_cmd(&FSatGRS::, this);
+    
+    //thread_shutdown_cmd.detach();
+}
+
+void FSatGRS::OnButtonShutdownAuthCancelClicked()
+{
+    dialog_shutdown_authentication->hide();
 }
 
 void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)

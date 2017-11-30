@@ -333,6 +333,13 @@ class FSatGRS
         Gtk::RadioButton                *radio_button_log_analysis_beacon;
         Gtk::RadioButton                *radio_button_log_analysis_telemetry;
         
+        // Shutdown Command Authentication Dialog
+        Gtk::Dialog                     *dialog_shutdown_authentication;
+        Gtk::Entry                      *entry_sd_auth_user;
+        Gtk::Entry                      *entry_sd_auth_password;
+        Gtk::Button                     *button_sd_auth_send;
+        Gtk::Button                     *button_sd_auth_cancel;
+        
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
         
@@ -533,6 +540,18 @@ class FSatGRS
          * \return None
          */
         void OnButtonUnselectEPSDataClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonShutdownAuthSendClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonShutdownAuthCancelClicked();
         /**
          * \brief 
          * 
