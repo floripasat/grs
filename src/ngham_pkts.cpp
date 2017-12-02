@@ -35,6 +35,8 @@
  * \{
  */
 
+#include <fstream>
+
 extern "C"
 {
     #include <libs/ngham/ngham.h>
@@ -42,6 +44,16 @@ extern "C"
 
 #include "ngham_pkts.h"
 #include "aux.hpp"
+
+using namespace std;
+
+NGHamPkts::NGHamPkts()
+{
+    make_log = false;
+    make_data_log = false;
+    
+    ngham_Init();
+}
 
 NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *ngham_stat, bool l, bool pdl)
 {
@@ -54,7 +66,7 @@ NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *
     if (make_log)
     {
         log_pkts = new Log;
-        log_pkts->open((LOG_DEFAULT_DIR "/NGHAM_" + log_pkts->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
+        log_pkts->open((LOG_DEFAULT_DIR "/NGHAM_" + log_pkts->CurrentDateTime() + ".csv").c_str(), ofstream::out);
     }
     
     make_data_log = pdl;
@@ -62,7 +74,7 @@ NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *
     if (make_data_log)
     {
         log_data_pkts = new Log;
-        log_data_pkts->open((LOG_DEFAULT_DIR "/" + ToString(packet_data->getLabel()) + "_" + log_data_pkts->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
+        log_data_pkts->open((LOG_DEFAULT_DIR "/" + ToString(packet_data->getLabel()) + "_" + log_data_pkts->CurrentDateTime() + ".csv").c_str(), ofstream::out);
     }
     
     this->InitPkts();
@@ -74,7 +86,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 {                        
     uint8_t data[256];
     uint8_t data_len;
-    std::string event_text;
+    string event_text;
     
     switch(ngham_Decode(byte, data, &data_len))
     {
@@ -86,9 +98,9 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             
             for(unsigned int j=0; j<data_len; j++)
             {
-                std::stringstream byte_str;
+                stringstream byte_str;
                 byte_str << (char)data[j];
-                std::string b = byte_str.str();
+                string b = byte_str.str();
                 
                 if (make_log)
                 {
@@ -96,7 +108,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 }
             }
             
-            event_text = "New valid NGHAM packet from " + std::string(packet_data->getLabel());
+            event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
             
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
             
@@ -123,7 +135,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             return false;
             break;
         case PKT_CONDITION_FAIL:
-            event_text = "New invalid NGHAM packet from " + std::string(packet_data->getLabel());
+            event_text = "New invalid NGHAM packet from " + string(packet_data->getLabel());
         
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_INVALID_PACKET);
             
@@ -139,6 +151,27 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             return true;
             break;
     }
+}
+
+void NGHamPkts::Generate(uint8_t *data, uint8_t len)
+{
+    NGHam_TX_Packet ngham_packet;
+    
+    ngham_TxPktGen(&ngham_packet, data, len);
+    
+    uint8_t pkt_str[300];
+    uint16_t pkt_str_len;
+    
+    ngham_Encode(&ngham_packet, pkt_str, &pkt_str_len);
+    
+    ofstream file(NGHAM_PKT_GEN_FILE, ofstream::out);
+    
+    for(uint8_t i=0; i<pkt_str_len; i++)
+    {
+        file << pkt_str[i];
+    }
+    
+    file.close();
 }
 
 //! \} End of ngham_pkts group

@@ -56,6 +56,12 @@
 #define FSAT_GRS_GRC_BEACON_BIN         "/tmp/bin_data_beacon.bin"
 #define FSAT_GRS_GRC_TELEMETRY_BIN      "/tmp/bin_data_telemetry.bin"
 
+#define FSAT_GRS_ID                     "PY0EFS"
+
+#define FSAT_GRS_UPLINK_PING            0
+#define FSAT_GRS_UPLINK_REQUEST         1
+#define FSAT_GRS_UPLINK_SHUTDOWN        2
+
 /**
  * \class FSatGRS
  * 
@@ -566,6 +572,14 @@ class FSatGRS
          * \return None
          */
         void RunGNURadioReceiver(bool beacon_receiver=true);
+        /**
+         * \brief 
+         * 
+         * \param uplink_type
+         * 
+         * \return None
+         */
+        void RunGNURadioTransmitter(int uplink_type);
         /**
          * \brief Plot a log data column using matplotlib.
          * 

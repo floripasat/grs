@@ -814,10 +814,11 @@ void FSatGRS::OnToolButtonPlotClicked()
 
 void FSatGRS::OnToolButtonPingClicked()
 {
-    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
-    //std::thread thread_ping_cmd(&FSatGRS::, this);
+    std::thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
     
-    //thread_ping_cmd.detach();
+    thread_ping_cmd.detach();
+    
+    this->RaiseErrorMessage("Under development!", "This functionality will be fully available soon.");
 }
 
 void FSatGRS::OnToolButtonRequestDataClicked()
@@ -1904,6 +1905,28 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
         grc_telemetry_receiver_cmd += entry_telemetry_sdr_dev->get_text().c_str();
         
         system(grc_telemetry_receiver_cmd.c_str());
+    }
+}
+
+void FSatGRS::RunGNURadioTransmitter(int uplink_type)
+{
+    NGHamPkts ngham_uplink_pkt;
+    
+    uint8_t ping[] = (FSAT_GRS_ID "pg");
+    
+    switch(uplink_type)
+    {
+        case FSAT_GRS_UPLINK_PING:
+            ngham_uplink_pkt.Generate(ping, sizeof(ping)-1);
+            
+            //system("python -u gnuradio/fsat_grs_uplink.py");
+            
+            event_log->AddNewEvent("Ping command transmitted.");
+            break;
+        case FSAT_GRS_UPLINK_REQUEST:
+            break;
+        case FSAT_GRS_UPLINK_SHUTDOWN:
+            break;
     }
 }
 

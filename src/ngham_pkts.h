@@ -45,6 +45,8 @@
 #include "packet_data.h"
 #include "protocol_statistic.h"
 
+#define NGHAM_PKT_GEN_FILE      "/tmp/uplink_pkt.bin"
+
 /**
  * \class NGHamPkts
  * 
@@ -53,6 +55,12 @@
 class NGHamPkts: public Packets
 {
     public:
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        NGHamPkts();
         /**
          * \brief 
          * 
@@ -73,6 +81,15 @@ class NGHamPkts: public Packets
          * \return 
          */
         bool ProcessByte(uint8_t byte);
+        /**
+         * \brief Generates a NGHam packet with the data and saves it on a file.
+         * 
+         * \param data is an array with payload of the data.
+         * \param len is the length of the payload, in bytes.
+         * 
+         * \return None
+         */
+        void Generate(uint8_t *data, uint8_t len);
 };
 
 #endif // NGHAM_PKTS_H_
