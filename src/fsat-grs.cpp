@@ -823,10 +823,11 @@ void FSatGRS::OnToolButtonPingClicked()
 
 void FSatGRS::OnToolButtonRequestDataClicked()
 {
-    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
-    //std::thread thread_request_cmd(&FSatGRS::, this);
+    std::thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
     
-    //thread_request_cmd.detach();
+    thread_request_cmd.detach();
+    
+    this->RaiseErrorMessage("Under development!", "This functionality will be fully available soon.");
 }
 
 void FSatGRS::OnToolButtonShutdownClicked()
@@ -1868,14 +1869,40 @@ void FSatGRS::OnButtonUnselectEPSDataClicked()
 
 void FSatGRS::OnButtonShutdownAuthSendClicked()
 {
-    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
-    //std::thread thread_shutdown_cmd(&FSatGRS::, this);
+    std::string user = entry_sd_auth_user->get_text();
+    std::string password = entry_sd_auth_password->get_text();
     
-    //thread_shutdown_cmd.detach();
+    if ((user == "gabriel") or (user == "elder"))
+    {
+        if (password == "fsat2017")
+        {
+            std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+            
+            thread_shutdown_cmd.detach();
+            
+            entry_sd_auth_user->set_text("");
+            entry_sd_auth_password->set_text("");
+            
+            dialog_shutdown_authentication->hide();
+            
+            this->RaiseErrorMessage("Under development!", "This functionality will be fully available soon.");
+        }
+        else
+        {
+            this->RaiseErrorMessage("Wrong password!", "Try it again.");
+        }
+    }
+    else
+    {
+        this->RaiseErrorMessage("User not authorized!", "This user is not authorized to send a shutdown command.");
+    }
 }
 
 void FSatGRS::OnButtonShutdownAuthCancelClicked()
 {
+    entry_sd_auth_user->set_text("");
+    entry_sd_auth_password->set_text("");
+    
     dialog_shutdown_authentication->hide();
 }
 
@@ -1913,6 +1940,8 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     NGHamPkts ngham_uplink_pkt;
     
     uint8_t ping[] = (FSAT_GRS_ID "pg");
+    uint8_t request[] = (FSAT_GRS_ID "dw");
+    uint8_t shutdown[] = (FSAT_GRS_ID "sd");
     
     switch(uplink_type)
     {
@@ -1924,8 +1953,18 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             event_log->AddNewEvent("Ping command transmitted.");
             break;
         case FSAT_GRS_UPLINK_REQUEST:
+            ngham_uplink_pkt.Generate(request, sizeof(request)-1);
+            
+            //system("python -u gnuradio/fsat_grs_uplink.py");
+            
+            event_log->AddNewEvent("Data request transmitted.");
             break;
         case FSAT_GRS_UPLINK_SHUTDOWN:
+            ngham_uplink_pkt.Generate(shutdown, sizeof(shutdown)-1);
+            
+            //system("python -u gnuradio/fsat_grs_uplink.py");
+            
+            event_log->AddNewEvent("Shutdown command transmitted.");
             break;
     }
 }
