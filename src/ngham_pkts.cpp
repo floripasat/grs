@@ -166,9 +166,19 @@ void NGHamPkts::Generate(uint8_t *data, uint8_t len)
     
     ofstream file(NGHAM_PKT_GEN_FILE, ofstream::out);
     
+    for(uint8_t i=0; i<50; i++)
+    {
+        file << 0xAA;
+    }
+    
     for(uint8_t i=0; i<pkt_str_len; i++)
     {
         file << pkt_str[i];
+    }
+    
+    for(uint8_t i=0; i<50; i++)
+    {
+        file << 0xAA;
     }
     
     file.close();
