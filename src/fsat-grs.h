@@ -311,6 +311,15 @@ class FSatGRS
         
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
+        Gtk::Entry                      *entry_config_uplink_telemetry_frequency;
+        Gtk::Entry                      *entry_config_uplink_telemetry_burst;
+        Gtk::Entry                      *entry_config_uplink_telemetry_sdr;
+        Gtk::Entry                      *entry_config_uplink_beacon_frequency;
+        Gtk::Entry                      *entry_config_uplink_beacon_burst;
+        Gtk::Entry                      *entry_config_uplink_beacon_sdr;
+        Gtk::RadioButton                *radiobutton_config_uplink_type_telemetry;
+        Gtk::RadioButton                *radiobutton_config_uplink_type_beacon;
+        Gtk::RadioButton                *radiobutton_config_uplink_type_both;
         Gtk::Button                     *button_config_ok;
         Gtk::Button                     *button_config_default;
         

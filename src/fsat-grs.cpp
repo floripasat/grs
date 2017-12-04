@@ -568,6 +568,15 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
+    ref_builder->get_widget("entry_config_uplink_telemetry_frequency", entry_config_uplink_telemetry_frequency);
+    ref_builder->get_widget("entry_config_uplink_telemetry_burst", entry_config_uplink_telemetry_burst);
+    ref_builder->get_widget("entry_config_uplink_telemetry_sdr", entry_config_uplink_telemetry_sdr);
+    ref_builder->get_widget("entry_config_uplink_beacon_frequency", entry_config_uplink_beacon_frequency);
+    ref_builder->get_widget("entry_config_uplink_beacon_burst", entry_config_uplink_beacon_burst);
+    ref_builder->get_widget("entry_config_uplink_beacon_sdr", entry_config_uplink_beacon_sdr);
+    ref_builder->get_widget("radiobutton_config_uplink_type_telemetry", radiobutton_config_uplink_type_telemetry);
+    ref_builder->get_widget("radiobutton_config_uplink_type_beacon", radiobutton_config_uplink_type_beacon);
+    ref_builder->get_widget("radiobutton_config_uplink_type_both", radiobutton_config_uplink_type_both);
     
     ref_builder->get_widget("button_config_ok", button_config_ok);
     if (button_config_ok)
@@ -817,8 +826,6 @@ void FSatGRS::OnToolButtonPingClicked()
     std::thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
     
     thread_ping_cmd.detach();
-    
-    this->RaiseErrorMessage("Under development!", "This functionality will be fully available soon.");
 }
 
 void FSatGRS::OnToolButtonRequestDataClicked()
@@ -826,8 +833,6 @@ void FSatGRS::OnToolButtonRequestDataClicked()
     std::thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
     
     thread_request_cmd.detach();
-    
-    this->RaiseErrorMessage("Under development!", "This functionality will be fully available soon.");
 }
 
 void FSatGRS::OnToolButtonShutdownClicked()
@@ -1884,8 +1889,6 @@ void FSatGRS::OnButtonShutdownAuthSendClicked()
             entry_sd_auth_password->set_text("");
             
             dialog_shutdown_authentication->hide();
-            
-            this->RaiseErrorMessage("Under development!", "This functionality will be fully available soon.");
         }
         else
         {
@@ -1943,28 +1946,55 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t request[] = (FSAT_GRS_ID "dw");
     uint8_t shutdown[] = (FSAT_GRS_ID "sd");
     
+    std::string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
+    if (radiobutton_config_uplink_type_telemetry->get_active())
+    {
+        cmd_str += entry_config_uplink_telemetry_sdr->get_text();
+        cmd_str += " ";
+        cmd_str += entry_config_uplink_telemetry_frequency->get_text();
+    }
+    else if (radiobutton_config_uplink_type_beacon->get_active())
+    {
+        cmd_str += entry_config_uplink_beacon_sdr->get_text();
+        cmd_str += " ";
+        cmd_str += entry_config_uplink_beacon_frequency->get_text();
+    }
+    /*else if (radiobutton_config_uplink_type_both->get_active())
+    {
+        
+    }*/
+    
     switch(uplink_type)
     {
         case FSAT_GRS_UPLINK_PING:
             ngham_uplink_pkt.Generate(ping, sizeof(ping)-1);
             
-            //system("python -u gnuradio/fsat_grs_uplink.py");
-            
-            event_log->AddNewEvent("Ping command transmitted.");
+            for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+                
+                event_log->AddNewEvent("Ping command transmitted.");
+            }
             break;
         case FSAT_GRS_UPLINK_REQUEST:
             ngham_uplink_pkt.Generate(request, sizeof(request)-1);
             
-            //system("python -u gnuradio/fsat_grs_uplink.py");
-            
-            event_log->AddNewEvent("Data request transmitted.");
+            for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+                
+                event_log->AddNewEvent("Data request transmitted.");
+            }
             break;
         case FSAT_GRS_UPLINK_SHUTDOWN:
             ngham_uplink_pkt.Generate(shutdown, sizeof(shutdown)-1);
             
-            //system("python -u gnuradio/fsat_grs_uplink.py");
-            
-            event_log->AddNewEvent("Shutdown command transmitted.");
+            for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+                
+                event_log->AddNewEvent("Shutdown command transmitted.");
+            }
             break;
     }
 }
