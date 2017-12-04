@@ -138,7 +138,7 @@ class fsat_grs_uplink(gr.top_block, Qt.QWidget):
         	verbose=False,
         	log=False,
         )
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, "/tmp/uplink_pkt.bin", True)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, "/tmp/uplink_pkt.bin", False)
 
         ##################################################
         # Connections
