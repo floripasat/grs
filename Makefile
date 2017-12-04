@@ -21,6 +21,7 @@ all:
 	cp img/icon.png $(BUILD_DIR)/
 	cp gnuradio/fsat_grs_beacon.py $(BUILD_DIR)/gnuradio/
 	cp gnuradio/fsat_grs_telemetry.py $(BUILD_DIR)/gnuradio/
+	cp gnuradio/fsat_grs_uplink.py $(BUILD_DIR)/gnuradio/
 	cp matplotlib/csv_plot.py $(BUILD_DIR)/matplotlib/
 	cp src/*.csv $(BUILD_DIR)/
 
