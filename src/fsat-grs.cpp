@@ -1971,6 +1971,8 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
+                event_log->AddNewEvent("Transmitting ping command...");
+                
                 system(cmd_str.c_str());
                 
                 event_log->AddNewEvent("Ping command transmitted.");
@@ -1981,6 +1983,8 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
+                event_log->AddNewEvent("Transmitting data request...");
+                
                 system(cmd_str.c_str());
                 
                 event_log->AddNewEvent("Data request transmitted.");
@@ -1991,6 +1995,8 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
+                event_log->AddNewEvent("Transmitting shutdown command...");
+                
                 system(cmd_str.c_str());
                 
                 event_log->AddNewEvent("Shutdown command transmitted.");
