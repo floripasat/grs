@@ -568,6 +568,14 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
+    ref_builder->get_widget("entry_config_downlink_beacon_freq", entry_config_downlink_beacon_freq);
+    ref_builder->get_widget("entry_config_downlink_beacon_baudrate", entry_config_downlink_beacon_baudrate);
+    ref_builder->get_widget("entry_config_downlink_beacon_filter", entry_config_downlink_beacon_filter);
+    ref_builder->get_widget("entry_config_downlink_beacon_sample_rate", entry_config_downlink_beacon_sample_rate);
+    ref_builder->get_widget("entry_config_downlink_telemetry_freq", entry_config_downlink_telemetry_freq);
+    ref_builder->get_widget("entry_config_downlink_telemetry_baudrate", entry_config_downlink_telemetry_baudrate);
+    ref_builder->get_widget("entry_config_downlink_telemetry_filter", entry_config_downlink_telemetry_filter);
+    ref_builder->get_widget("entry_config_downlink_telemetry_sample_rate", entry_config_downlink_telemetry_sample_rate);
     ref_builder->get_widget("entry_config_uplink_telemetry_frequency", entry_config_uplink_telemetry_frequency);
     ref_builder->get_widget("entry_config_uplink_telemetry_burst", entry_config_uplink_telemetry_burst);
     ref_builder->get_widget("entry_config_uplink_telemetry_sdr", entry_config_uplink_telemetry_sdr);
@@ -1926,6 +1934,14 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
     {
         std::string grc_beacon_receiver_cmd = "python -u gnuradio/fsat_grs_beacon.py ";
         grc_beacon_receiver_cmd += entry_beacon_sdr_dev->get_text().c_str();
+        grc_beacon_receiver_cmd += " ";
+        grc_beacon_receiver_cmd += entry_config_downlink_beacon_freq->get_text().c_str();
+        grc_beacon_receiver_cmd += " ";
+        grc_beacon_receiver_cmd += entry_config_downlink_beacon_baudrate->get_text().c_str();
+        grc_beacon_receiver_cmd += " ";
+        grc_beacon_receiver_cmd += entry_config_downlink_beacon_filter->get_text().c_str();
+        grc_beacon_receiver_cmd += " ";
+        grc_beacon_receiver_cmd += entry_config_downlink_beacon_sample_rate->get_text().c_str();
         
         system(grc_beacon_receiver_cmd.c_str());
     }
@@ -1933,6 +1949,14 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
     {
         std::string grc_telemetry_receiver_cmd = "python -u gnuradio/fsat_grs_telemetry.py ";
         grc_telemetry_receiver_cmd += entry_telemetry_sdr_dev->get_text().c_str();
+        grc_telemetry_receiver_cmd += " ";
+        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_freq->get_text().c_str();
+        grc_telemetry_receiver_cmd += " ";
+        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_baudrate->get_text().c_str();
+        grc_telemetry_receiver_cmd += " ";
+        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_filter->get_text().c_str();
+        grc_telemetry_receiver_cmd += " ";
+        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_sample_rate->get_text().c_str();
         
         system(grc_telemetry_receiver_cmd.c_str());
     }

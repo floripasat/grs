@@ -311,6 +311,14 @@ class FSatGRS
         
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
+        Gtk::Entry                      *entry_config_downlink_beacon_freq;
+        Gtk::Entry                      *entry_config_downlink_beacon_baudrate;
+        Gtk::Entry                      *entry_config_downlink_beacon_filter;
+        Gtk::Entry                      *entry_config_downlink_beacon_sample_rate;
+        Gtk::Entry                      *entry_config_downlink_telemetry_freq;
+        Gtk::Entry                      *entry_config_downlink_telemetry_baudrate;
+        Gtk::Entry                      *entry_config_downlink_telemetry_filter;
+        Gtk::Entry                      *entry_config_downlink_telemetry_sample_rate;
         Gtk::Entry                      *entry_config_uplink_telemetry_frequency;
         Gtk::Entry                      *entry_config_uplink_telemetry_burst;
         Gtk::Entry                      *entry_config_uplink_telemetry_sdr;

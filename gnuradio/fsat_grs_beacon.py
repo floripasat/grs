@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: FloripaSat GFSK Beacon Receiver
 # Author: Gabriel Mariano Marcelino
-# Generated: Mon Oct 30 23:16:20 2017
+# Generated: Thu Dec  7 00:51:14 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -40,7 +40,7 @@ import wx
 
 class fsat_grs_beacon(grc_wxgui.top_block_gui):
 
-    def __init__(self, sdr_dev="rtl=0"):
+    def __init__(self, sdr_dev="rtl=0", frequency="145.9e6", baud_rate="1.2e3", filter_bandwidth="30e3", sample_rate="1e6"):
         grc_wxgui.top_block_gui.__init__(self, title="FloripaSat GFSK Beacon Receiver")
         _icon_path = "/usr/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
         self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
@@ -51,11 +51,11 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self.sdr_rf_gain = sdr_rf_gain = 10
         self.sdr_if_gain = sdr_if_gain = 20
         self.sdr_bb_gain = sdr_bb_gain = 20
-        self.samp_rate = samp_rate = 1e6
-        self.freq = freq = 145.9e6
+        self.samp_rate = samp_rate = float(sample_rate)
+        self.freq = freq = float(frequency)
         self.bin_file_sink = bin_file_sink = "/tmp/bin_data_beacon.bin"
-        self.baudrate = baudrate = 1.2e3
-        self.bandwidth = bandwidth = 30e3
+        self.baudrate = baudrate = float(baud_rate)
+        self.bandwidth = bandwidth = float(filter_bandwidth)
 
         ##################################################
         # Blocks
@@ -312,8 +312,8 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, self.bandwidth/2, self.bandwidth/2/6, firdes.WIN_HAMMING, 6.76))
         self.low_pass_filter_1.set_taps(firdes.low_pass(1, self.samp_rate, self.baudrate, self.baudrate/6, firdes.WIN_HAMMING, 6.76))
         self.osmosdr_source_0.set_sample_rate(self.samp_rate)
-        self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
         self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
+        self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
 
     def get_freq(self):
         return self.freq
@@ -351,15 +351,15 @@ class fsat_grs_beacon(grc_wxgui.top_block_gui):
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, self.bandwidth/2, self.bandwidth/2/6, firdes.WIN_HAMMING, 6.76))
 
 
-def main(top_block_cls=fsat_grs_beacon, options=None):
+def main(top_block_cls=fsat_grs_beacon, sdr="rtl=0", freq="145.9e6", baud="1.2e3", band="30e3", sample="1e6"):
     if gr.enable_realtime_scheduling() != gr.RT_OK:
         print "Error: failed to enable real-time scheduling."
-
-    tb = top_block_cls(options)
+    
+    tb = top_block_cls(sdr, freq, baud, band, sample)
     tb.Start(True)
     tb.Wait()
 
 
 if __name__ == '__main__':
     import sys
-    main(options=sys.argv[1])
+    main(sdr=sys.argv[1], freq=sys.argv[2], baud=sys.argv[3], band=sys.argv[4], sample=sys.argv[5])
