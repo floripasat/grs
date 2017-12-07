@@ -108,7 +108,29 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 }
             }
             
-            event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
+            if ((data_len > 40) and (data_len < 80))
+            {
+                if ((data[0] == 'H') and (data[1] == 'e'))
+                {
+                    event_text = "Ping result received: ";
+                    for(uint8_t i=0; i<data_len; i++)
+                    {
+                        event_text += char(data[i]);
+                    }
+                }
+                else if ((data[0] == 'S') and (data[1] == 'h'))
+                {
+                    event_text = "Shutdown result received: ";
+                    for(uint8_t i=0; i<data_len; i++)
+                    {
+                        event_text += char(data[i]);
+                    }
+                }
+            }
+            else
+            {
+                event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
+            }
             
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
             
@@ -166,19 +188,9 @@ void NGHamPkts::Generate(uint8_t *data, uint8_t len)
     
     ofstream file(NGHAM_PKT_GEN_FILE, ofstream::out);
     
-    for(uint8_t i=0; i<50; i++)
-    {
-        file << 0xAA;
-    }
-    
     for(uint8_t i=0; i<pkt_str_len; i++)
     {
         file << pkt_str[i];
-    }
-    
-    for(uint8_t i=0; i<50; i++)
-    {
-        file << 0xAA;
     }
     
     file.close();

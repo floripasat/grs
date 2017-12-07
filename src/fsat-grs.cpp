@@ -831,6 +831,12 @@ void FSatGRS::OnToolButtonPlotClicked()
 
 void FSatGRS::OnToolButtonPingClicked()
 {
+    std::string ping_event = "Transmitting ";
+    ping_event += entry_config_uplink_telemetry_burst->get_text();
+    ping_event += " ping command...";
+    
+    event_log->AddNewEvent(ping_event.c_str());
+    
     std::thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
     
     thread_ping_cmd.detach();
@@ -838,6 +844,12 @@ void FSatGRS::OnToolButtonPingClicked()
 
 void FSatGRS::OnToolButtonRequestDataClicked()
 {
+    std::string data_request_event = "Transmitting ";
+    data_request_event += entry_config_uplink_telemetry_burst->get_text();
+    data_request_event += " data request...";
+    
+    event_log->AddNewEvent(data_request_event.c_str());
+    
     std::thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
     
     thread_request_cmd.detach();
@@ -1889,6 +1901,12 @@ void FSatGRS::OnButtonShutdownAuthSendClicked()
     {
         if (password == "fsat2017")
         {
+            std::string shutdown_event = "Transmitting ";
+            shutdown_event += entry_config_uplink_telemetry_burst->get_text();
+            shutdown_event += " shutdown command...";
+            
+            event_log->AddNewEvent(shutdown_event.c_str());
+            
             std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
             
             thread_shutdown_cmd.detach();
@@ -1999,8 +2017,6 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
-                event_log->AddNewEvent("Transmitting ping command...");
-                
                 system(cmd_str.c_str());
                 
                 //event_log->AddNewEvent("Ping command transmitted.");
@@ -2011,8 +2027,6 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
-                event_log->AddNewEvent("Transmitting data request...");
-                
                 system(cmd_str.c_str());
                 
                 //event_log->AddNewEvent("Data request transmitted.");
@@ -2023,8 +2037,6 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
-                event_log->AddNewEvent("Transmitting shutdown command...");
-                
                 system(cmd_str.c_str());
                 
                 //event_log->AddNewEvent("Shutdown command transmitted.");

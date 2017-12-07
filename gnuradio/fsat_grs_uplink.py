@@ -21,7 +21,7 @@ import time
 
 class fsat_grs_uplink(gr.top_block):
 
-    def __init__(self, sdr_dev="rtl=1", frequency="437.9318e6", baud_rate="2.4e3"):
+    def __init__(self, sdr_dev="rtl=1", frequency="437.9e6", baud_rate="2.4e3"):
         gr.top_block.__init__(self, "FloripaSat GRS Transmitter")
 
         ##################################################
@@ -29,8 +29,8 @@ class fsat_grs_uplink(gr.top_block):
         ##################################################
         self.sps = sps = 10
         self.deviation = deviation = 5000
-        self.baudrate = baudrate = float(baud_rate)
-        self.samp_rate_tx = samp_rate_tx = 4e6
+        self.baudrate = baudrate = int(baud_rate)
+        self.samp_rate_tx = samp_rate_tx = int(4e6)
         self.samp_rate = samp_rate = sps*baudrate
         self.mod_index = mod_index = deviation/baudrate/0.628
         self.freq = freq = float(frequency)
@@ -126,10 +126,10 @@ class fsat_grs_uplink(gr.top_block):
         self.bps = bps
 
 
-def main(top_block_cls=fsat_grs_uplink, sdr="rtl=1", freq="437.9318e6", baud="2.4e3"):
+def main(top_block_cls=fsat_grs_uplink, sdr="rtl=1", freq="437.9e6", baud="2.4e3"):
     if gr.enable_realtime_scheduling() != gr.RT_OK:
         print "Error: failed to enable real-time scheduling."
-
+    
     tb = top_block_cls(sdr, freq, baud)
     tb.start()
     tb.wait()
