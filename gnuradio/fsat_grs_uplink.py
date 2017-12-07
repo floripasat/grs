@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: FloripaSat GRS Transmitter
 # Author: Gabriel Mariano Marcelino
-# Generated: Mon Dec  4 17:24:50 2017
+# Generated: Wed Dec  6 23:45:22 2017
 ##################################################
 
 from gnuradio import blocks
@@ -21,7 +21,7 @@ import time
 
 class fsat_grs_uplink(gr.top_block):
 
-    def __init__(self, sdr_dev="rtl=1", tx_freq="437.9e6"):
+    def __init__(self, sdr_dev="rtl=1", frequency="437.9318e6", baud_rate="2.4e3"):
         gr.top_block.__init__(self, "FloripaSat GRS Transmitter")
 
         ##################################################
@@ -29,11 +29,11 @@ class fsat_grs_uplink(gr.top_block):
         ##################################################
         self.sps = sps = 10
         self.deviation = deviation = 5000
-        self.baudrate = baudrate = 2400
-        self.samp_rate_tx = samp_rate_tx = 4000000
+        self.baudrate = baudrate = float(baud_rate)
+        self.samp_rate_tx = samp_rate_tx = 4e6
         self.samp_rate = samp_rate = sps*baudrate
         self.mod_index = mod_index = deviation/baudrate/0.628
-        self.freq = freq = float(tx_freq)
+        self.freq = freq = float(frequency)
         self.bps = bps = 1
 
         ##################################################
@@ -126,15 +126,15 @@ class fsat_grs_uplink(gr.top_block):
         self.bps = bps
 
 
-def main(top_block_cls=fsat_grs_uplink, sdr_dev="rtl=0", tx_freq="437.9e6", options=None):
+def main(top_block_cls=fsat_grs_uplink, sdr="rtl=1", freq="437.9318e6", baud="2.4e3"):
     if gr.enable_realtime_scheduling() != gr.RT_OK:
         print "Error: failed to enable real-time scheduling."
 
-    tb = top_block_cls(sdr_dev, tx_freq)
+    tb = top_block_cls(sdr, freq, baud)
     tb.start()
     tb.wait()
 
 
 if __name__ == '__main__':
     import sys
-    main(sdr_dev=sys.argv[1], tx_freq=sys.argv[2])
+    main(sdr=sys.argv[1], freq=sys.argv[2], baud=sys.argv[3])

@@ -1976,12 +1976,16 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         cmd_str += entry_config_uplink_telemetry_sdr->get_text();
         cmd_str += " ";
         cmd_str += entry_config_uplink_telemetry_frequency->get_text();
+        cmd_str += " ";
+        cmd_str += entry_config_downlink_telemetry_baudrate->get_text();
     }
     else if (radiobutton_config_uplink_type_beacon->get_active())
     {
         cmd_str += entry_config_uplink_beacon_sdr->get_text();
         cmd_str += " ";
         cmd_str += entry_config_uplink_beacon_frequency->get_text();
+        cmd_str += " ";
+        cmd_str += entry_config_downlink_beacon_baudrate->get_text();
     }
     /*else if (radiobutton_config_uplink_type_both->get_active())
     {
@@ -1999,7 +2003,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 
                 system(cmd_str.c_str());
                 
-                event_log->AddNewEvent("Ping command transmitted.");
+                //event_log->AddNewEvent("Ping command transmitted.");
             }
             break;
         case FSAT_GRS_UPLINK_REQUEST:
@@ -2011,7 +2015,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 
                 system(cmd_str.c_str());
                 
-                event_log->AddNewEvent("Data request transmitted.");
+                //event_log->AddNewEvent("Data request transmitted.");
             }
             break;
         case FSAT_GRS_UPLINK_SHUTDOWN:
@@ -2023,7 +2027,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 
                 system(cmd_str.c_str());
                 
-                event_log->AddNewEvent("Shutdown command transmitted.");
+                //event_log->AddNewEvent("Shutdown command transmitted.");
             }
             break;
     }
