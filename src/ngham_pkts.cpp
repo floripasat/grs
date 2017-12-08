@@ -91,6 +91,11 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
     switch(ngham_Decode(byte, data, &data_len))
     {
         case PKT_CONDITION_OK:
+            if (data_len < 10)      // Probably an uplink packet from the ground station
+            {
+                return true;
+            }
+            
             if (make_log)
             {
                 *log_pkts << "V," << log_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV);
@@ -132,12 +137,12 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
             }
             
-            event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
-            
             if (make_log)
             {
                 *log_pkts << "\n";
             }
+            
+            event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
             
             protocol_statistic->AddValidPkt();
             
