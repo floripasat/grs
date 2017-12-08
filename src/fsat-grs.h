@@ -62,6 +62,9 @@
 #define FSAT_GRS_UPLINK_REQUEST         1
 #define FSAT_GRS_UPLINK_SHUTDOWN        2
 
+#define FSAT_GRS_USERS_FILE             "users.key"
+#define FSAT_GRS_USERS_PASSWORDS_FILE   "passwords.key"
+
 /**
  * \class FSatGRS
  * 
@@ -311,6 +314,12 @@ class FSatGRS
         
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
+        Gtk::Entry                      *entry_config_general_admin_user;
+        Gtk::Entry                      *entry_config_general_admin_password;
+        Gtk::Entry                      *entry_config_general_new_user;
+        Gtk::Entry                      *entry_config_general_new_password;
+        Gtk::Entry                      *entry_config_general_admin_password_confirmation;
+        Gtk::Button                     *button_config_general_add_new_user;
         Gtk::Entry                      *entry_config_downlink_beacon_freq;
         Gtk::Entry                      *entry_config_downlink_beacon_baudrate;
         Gtk::Entry                      *entry_config_downlink_beacon_filter;
@@ -575,6 +584,12 @@ class FSatGRS
          * \return None
          */
         void OnButtonShutdownAuthCancelClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonAddNewUserClicked();
         /**
          * \brief 
          * 

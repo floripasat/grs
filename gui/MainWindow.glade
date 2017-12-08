@@ -5479,6 +5479,188 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
             <property name="margin_top">10</property>
             <property name="tab_pos">left</property>
             <child>
+              <object class="GtkBox" id="box35">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel" id="label161">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Shutdown Authentication</property>
+                    <attributes>
+                      <attribute name="weight" value="heavy"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid33">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">20</property>
+                    <property name="row_spacing">10</property>
+                    <property name="column_spacing">10</property>
+                    <child>
+                      <object class="GtkLabel" id="label163">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Admin.:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label165">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Admin. password:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label167">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">New user:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label169">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">New user password:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry_config_general_admin_user">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry_config_general_admin_password">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="visibility">False</property>
+                        <property name="invisible_char">•</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry_config_general_new_user">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry_config_general_new_password">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="visibility">False</property>
+                        <property name="invisible_char">•</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_config_general_add_new_user">
+                        <property name="label" translatable="yes">Add new user</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label171">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">New user password again:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry_config_general_admin_password_confirmation">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="visibility">False</property>
+                        <property name="invisible_char">•</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label159">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">General</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -6036,6 +6218,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="label25">
@@ -6044,6 +6229,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="label" translatable="yes">Packets</property>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -6310,7 +6496,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 </child>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child type="tab">
@@ -6320,7 +6506,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="label" translatable="yes">Logs</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -6586,7 +6772,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child type="tab">
@@ -6596,7 +6782,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="label" translatable="yes">Downlink</property>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -6892,7 +7078,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 </child>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child type="tab">
@@ -6902,7 +7088,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="label" translatable="yes">Uplink</property>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

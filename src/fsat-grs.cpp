@@ -39,12 +39,14 @@
 #include <string>
 #include <cstdio>
 #include <thread>
+#include <array>
 
 #include "fsat-grs.h"
 #include "aux.hpp"
 #include "beacon_data.h"
 #include "telemetry_data.h"
 #include "data_processing.hpp"
+#include "sha256.h"
 
 FSatGRS::FSatGRS()
 {
@@ -54,6 +56,8 @@ FSatGRS::FSatGRS()
 FSatGRS::FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
 {
     this->BuildWidgets(ref_builder, ui_file);
+    
+    system("mkdir -p ~/.fsat_grs");
 }
 
 FSatGRS::~FSatGRS()
@@ -568,6 +572,18 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
+    ref_builder->get_widget("entry_config_general_admin_user", entry_config_general_admin_user);
+    ref_builder->get_widget("entry_config_general_admin_password", entry_config_general_admin_password);
+    ref_builder->get_widget("entry_config_general_new_user", entry_config_general_new_user);
+    ref_builder->get_widget("entry_config_general_new_password", entry_config_general_new_password);
+    ref_builder->get_widget("entry_config_general_admin_password_confirmation", entry_config_general_admin_password_confirmation);
+    
+    ref_builder->get_widget("button_config_general_add_new_user", button_config_general_add_new_user);
+    if (button_config_general_add_new_user)
+    {
+        button_config_general_add_new_user->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonAddNewUserClicked));
+    }
+    
     ref_builder->get_widget("entry_config_downlink_beacon_freq", entry_config_downlink_beacon_freq);
     ref_builder->get_widget("entry_config_downlink_beacon_baudrate", entry_config_downlink_beacon_baudrate);
     ref_builder->get_widget("entry_config_downlink_beacon_filter", entry_config_downlink_beacon_filter);
@@ -833,7 +849,7 @@ void FSatGRS::OnToolButtonPingClicked()
 {
     std::string ping_event = "Transmitting ";
     ping_event += entry_config_uplink_telemetry_burst->get_text();
-    ping_event += " ping command...";
+    ping_event += " ping command(s)...";
     
     event_log->AddNewEvent(ping_event.c_str());
     
@@ -846,7 +862,7 @@ void FSatGRS::OnToolButtonRequestDataClicked()
 {
     std::string data_request_event = "Transmitting ";
     data_request_event += entry_config_uplink_telemetry_burst->get_text();
-    data_request_event += " data request...";
+    data_request_event += " data request(s)...";
     
     event_log->AddNewEvent(data_request_event.c_str());
     
@@ -1894,16 +1910,98 @@ void FSatGRS::OnButtonUnselectEPSDataClicked()
 
 void FSatGRS::OnButtonShutdownAuthSendClicked()
 {
-    std::string user = entry_sd_auth_user->get_text();
-    std::string password = entry_sd_auth_password->get_text();
+    std::string user_hash = sha256(entry_sd_auth_user->get_text());
+    std::string password_hash = sha256(entry_sd_auth_password->get_text());
     
-    if ((user == "gabriel") or (user == "elder"))
+    std::ifstream file_users_read(FSAT_GRS_USERS_FILE, std::ifstream::in);
+    
+    if (file_users_read.is_open())
     {
-        if (password == "fsat2017")
+        std::string old_users = "";
+        unsigned int user_line = 0;
+        
+        while(!file_users_read.eof())
+        {
+            char d;
+            file_users_read >> d;
+            
+            if (d == '\n')
+            {
+                user_line++;
+                
+                if ((old_users == user_hash) or (user_hash == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"))
+                {
+                    std::ifstream file_passwords_read(FSAT_GRS_USERS_PASSWORDS_FILE, std::ifstream::in);
+                    
+                    if (file_passwords_read.is_open())
+                    {
+                        std::string old_passwords = "";
+                        unsigned int password_line = 0;
+                        
+                        while(!file_passwords_read.eof())
+                        {
+                            char p;
+                            file_passwords_read >> p;
+                            
+                            if (p == '\n')
+                            {
+                                if (password_line == user_line)
+                                {
+                                    if ((old_passwords == password_hash) or (password_hash == "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"))
+                                    {
+                                        std::string shutdown_event = "Transmitting ";
+                                        shutdown_event += entry_config_uplink_telemetry_burst->get_text();
+                                        shutdown_event += " shutdown command(s)...";
+                                        
+                                        event_log->AddNewEvent(shutdown_event.c_str());
+                                        
+                                        std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+                                        
+                                        thread_shutdown_cmd.detach();
+                                        
+                                        entry_sd_auth_user->set_text("");
+                                        entry_sd_auth_password->set_text("");
+                                        
+                                        dialog_shutdown_authentication->hide();
+                                        
+                                        return;
+                                    }
+                                }
+                                else if (password_line < user_line)
+                                {
+                                    password_line++;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                                
+                                old_passwords = "";
+                            }
+                            
+                            old_passwords += p;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                
+                old_users = "";
+            }
+            
+            old_users += d;
+        }
+    }
+    
+    if (user_hash == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc")
+    {
+        if (password_hash == "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c")
         {
             std::string shutdown_event = "Transmitting ";
             shutdown_event += entry_config_uplink_telemetry_burst->get_text();
-            shutdown_event += " shutdown command...";
+            shutdown_event += " shutdown command(s)...";
             
             event_log->AddNewEvent(shutdown_event.c_str());
             
@@ -1933,6 +2031,77 @@ void FSatGRS::OnButtonShutdownAuthCancelClicked()
     entry_sd_auth_password->set_text("");
     
     dialog_shutdown_authentication->hide();
+}
+
+void FSatGRS::OnButtonAddNewUserClicked()
+{
+    if (sha256(entry_config_general_admin_user->get_text()) == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc")
+    {
+        if (sha256(entry_config_general_admin_password->get_text()) == "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c")
+        {
+            std::ifstream file_users_read(FSAT_GRS_USERS_FILE, std::ifstream::in);
+            
+            if (file_users_read.is_open())
+            {
+                std::string old_users = "";
+                
+                while(!file_users_read.eof())
+                {
+                    char d;
+                    file_users_read >> d;
+                    
+                    if (d == '\n')
+                    {
+                        if ((old_users == entry_config_general_new_user->get_text()) or (entry_config_general_new_user->get_text() == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"))
+                        {
+                            this->RaiseErrorMessage("This user already exist!", "Enter another user name.");
+                            
+                            return;
+                        }
+                        
+                        old_users = "";
+                    }
+                    
+                    old_users += d;
+                }
+            }
+            
+            if (entry_config_general_new_password->get_text() == entry_config_general_admin_password_confirmation->get_text())
+            {
+                std::ofstream file_users(FSAT_GRS_USERS_FILE, std::ofstream::out | std::ofstream::app);
+                
+                file_users << sha256(entry_config_general_new_user->get_text()) << "\n";
+                
+                file_users.close();
+                
+                std::ofstream file_users_passwords(FSAT_GRS_USERS_PASSWORDS_FILE, std::ofstream::out | std::ofstream::app);
+                
+                file_users_passwords << sha256(entry_config_general_new_password->get_text()) << "\n";
+                
+                file_users_passwords.close();
+                
+                entry_config_general_admin_user->set_text("");
+                entry_config_general_admin_password->set_text("");
+                entry_config_general_new_user->set_text("");
+                entry_config_general_new_password->set_text("");
+                entry_config_general_admin_password_confirmation->set_text("");
+                
+                event_log->AddNewEvent("New user created!");
+            }
+            else
+            {
+                this->RaiseErrorMessage("The new user's passwords are not equal!", "Try it again.");
+            }
+        }
+        else
+        {
+            this->RaiseErrorMessage("Wrong admin password!", "Try it again.");
+        }
+    }
+    else
+    {
+        this->RaiseErrorMessage("Wrong admin user!", "This user can't do that or does not exist.");
+    }
 }
 
 void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)
