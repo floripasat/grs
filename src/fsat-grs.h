@@ -56,8 +56,6 @@
 #define FSAT_GRS_GRC_BEACON_BIN         "/tmp/bin_data_beacon.bin"
 #define FSAT_GRS_GRC_TELEMETRY_BIN      "/tmp/bin_data_telemetry.bin"
 
-#define FSAT_GRS_ID                     "PY0EFS"
-
 #define FSAT_GRS_UPLINK_PING            0
 #define FSAT_GRS_UPLINK_REQUEST         1
 #define FSAT_GRS_UPLINK_SHUTDOWN        2
@@ -314,6 +312,7 @@ class FSatGRS
         
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
+        Gtk::Entry                      *entry_config_general_gs_id;
         Gtk::Entry                      *entry_config_general_admin_user;
         Gtk::Entry                      *entry_config_general_admin_password;
         Gtk::Entry                      *entry_config_general_new_user;
@@ -336,7 +335,6 @@ class FSatGRS
         Gtk::Entry                      *entry_config_uplink_beacon_sdr;
         Gtk::RadioButton                *radiobutton_config_uplink_type_telemetry;
         Gtk::RadioButton                *radiobutton_config_uplink_type_beacon;
-        Gtk::RadioButton                *radiobutton_config_uplink_type_both;
         Gtk::Button                     *button_config_ok;
         Gtk::Button                     *button_config_default;
         

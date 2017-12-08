@@ -39,7 +39,6 @@
 #include <string>
 #include <cstdio>
 #include <thread>
-#include <array>
 
 #include "fsat-grs.h"
 #include "aux.hpp"
@@ -57,7 +56,7 @@ FSatGRS::FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
 {
     this->BuildWidgets(ref_builder, ui_file);
     
-    system("mkdir -p ~/.fsat_grs");
+    //system("mkdir -p ~/.fsat_grs");
 }
 
 FSatGRS::~FSatGRS()
@@ -572,6 +571,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
+    ref_builder->get_widget("entry_config_general_gs_id", entry_config_general_gs_id);
     ref_builder->get_widget("entry_config_general_admin_user", entry_config_general_admin_user);
     ref_builder->get_widget("entry_config_general_admin_password", entry_config_general_admin_password);
     ref_builder->get_widget("entry_config_general_new_user", entry_config_general_new_user);
@@ -600,7 +600,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("entry_config_uplink_beacon_sdr", entry_config_uplink_beacon_sdr);
     ref_builder->get_widget("radiobutton_config_uplink_type_telemetry", radiobutton_config_uplink_type_telemetry);
     ref_builder->get_widget("radiobutton_config_uplink_type_beacon", radiobutton_config_uplink_type_beacon);
-    ref_builder->get_widget("radiobutton_config_uplink_type_both", radiobutton_config_uplink_type_both);
     
     ref_builder->get_widget("button_config_ok", button_config_ok);
     if (button_config_ok)
@@ -2153,9 +2152,15 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 {
     NGHamPkts ngham_uplink_pkt;
     
-    uint8_t ping[] = (FSAT_GRS_ID "pg");
-    uint8_t request[] = (FSAT_GRS_ID "dw");
-    uint8_t shutdown[] = (FSAT_GRS_ID "sd");
+    std::string grs_id = entry_config_general_gs_id->get_text();
+    while(grs_id.size() < 6)
+    {
+        grs_id += " ";
+    }
+    
+    uint8_t ping[9];
+    uint8_t request[9];
+    uint8_t shutdown[9];
     
     std::string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
     if (radiobutton_config_uplink_type_telemetry->get_active())
@@ -2174,15 +2179,19 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         cmd_str += " ";
         cmd_str += entry_config_downlink_beacon_baudrate->get_text();
     }
-    /*else if (radiobutton_config_uplink_type_both->get_active())
-    {
-        
-    }*/
     
     switch(uplink_type)
     {
         case FSAT_GRS_UPLINK_PING:
-            ngham_uplink_pkt.Generate(ping, sizeof(ping)-1);
+            for(unsigned int i=0; i<6; i++)
+            {
+                ping[i] = grs_id[i];
+            }
+            
+            ping[6] = 'p';
+            ping[7] = 'g';
+            
+            ngham_uplink_pkt.Generate(ping, 8);
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
@@ -2192,7 +2201,15 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
             break;
         case FSAT_GRS_UPLINK_REQUEST:
-            ngham_uplink_pkt.Generate(request, sizeof(request)-1);
+            for(unsigned int i=0; i<6; i++)
+            {
+                request[i] = grs_id[i];
+            }
+            
+            request[6] = 'd';
+            request[7] = 'w';
+            
+            ngham_uplink_pkt.Generate(request, 8);
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
@@ -2202,7 +2219,15 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
             break;
         case FSAT_GRS_UPLINK_SHUTDOWN:
-            ngham_uplink_pkt.Generate(shutdown, sizeof(shutdown)-1);
+            for(unsigned int i=0; i<6; i++)
+            {
+                shutdown[i] = grs_id[i];
+            }
+            
+            shutdown[6] = 's';
+            shutdown[7] = 'd';
+            
+            ngham_uplink_pkt.Generate(shutdown, 8);
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {
