@@ -56,12 +56,17 @@
 #define FSAT_GRS_GRC_BEACON_BIN         "/tmp/bin_data_beacon.bin"
 #define FSAT_GRS_GRC_TELEMETRY_BIN      "/tmp/bin_data_telemetry.bin"
 
+#define FSAT_GRS_CONFIG_FILE            "/.fsat_grs/fsat_grs.conf"
+
 #define FSAT_GRS_UPLINK_PING            0
 #define FSAT_GRS_UPLINK_REQUEST         1
 #define FSAT_GRS_UPLINK_SHUTDOWN        2
 
-#define FSAT_GRS_USERS_FILE             "users.key"
-#define FSAT_GRS_USERS_PASSWORDS_FILE   "passwords.key"
+#define FSAT_GRS_USERS_FILE             "/.fsat_grs/users.key"
+#define FSAT_GRS_USERS_PASSWORDS_FILE   "/.fsat_grs/passwords.key"
+
+#define FSAT_GRS_ADMIN_HASH             "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"
+#define FSAT_GRS_ADMIN_PASSWORD_HASH    "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"
 
 /**
  * \class FSatGRS
@@ -114,12 +119,6 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_telemetry;
         Gtk::Button                     *button_stop_telemetry;
         Gtk::Button                     *button_clear_all_telemetry;
-        
-        // Log
-        Gtk::CheckButton                *checkbutton_log_ngham_packets;
-        Gtk::CheckButton                *checkbutton_log_ax25_packets;
-        Gtk::CheckButton                *checkbutton_log_beacon_data;
-        Gtk::CheckButton                *checkbutton_log_telemetry_data;
         
         // Event log
         Gtk::TextView                   *textview_event_log;
@@ -319,6 +318,10 @@ class FSatGRS
         Gtk::Entry                      *entry_config_general_new_password;
         Gtk::Entry                      *entry_config_general_admin_password_confirmation;
         Gtk::Button                     *button_config_general_add_new_user;
+        Gtk::CheckButton                *checkbutton_log_ngham_packets;
+        Gtk::CheckButton                *checkbutton_log_ax25_packets;
+        Gtk::CheckButton                *checkbutton_log_beacon_data;
+        Gtk::CheckButton                *checkbutton_log_telemetry_data;
         Gtk::Entry                      *entry_config_downlink_beacon_freq;
         Gtk::Entry                      *entry_config_downlink_beacon_baudrate;
         Gtk::Entry                      *entry_config_downlink_beacon_filter;
@@ -618,6 +621,24 @@ class FSatGRS
          * \return None
          */
         void RunMatPlotLib(const char *cmd);
+        /**
+         * \brief Load configuration parameters from a configuration parameters file.
+         * 
+         * \return None
+         */
+        void LoadConfigs();
+        /**
+         * \brief Save configuration parameters to a configuration parameters file.
+         * 
+         * \return None
+         */
+        void SaveConfigs();
+        /**
+         * \brief Load the default configuration parameters.
+         * 
+         * \return None
+         */
+        void LoadDefaultConfigs();
     public:
         /**
          * \brief 

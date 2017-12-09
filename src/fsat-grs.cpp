@@ -39,6 +39,7 @@
 #include <string>
 #include <cstdio>
 #include <thread>
+#include <stdlib.h>
 
 #include "fsat-grs.h"
 #include "aux.hpp"
@@ -55,8 +56,6 @@ FSatGRS::FSatGRS()
 FSatGRS::FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
 {
     this->BuildWidgets(ref_builder, ui_file);
-    
-    //system("mkdir -p ~/.fsat_grs");
 }
 
 FSatGRS::~FSatGRS()
@@ -638,6 +637,20 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
 
 int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
 {
+    system("mkdir -p $HOME/.fsat_grs");
+    
+    std::string cmd = "touch $HOME";
+    system((cmd + FSAT_GRS_USERS_FILE + " || exit").c_str());
+    system((cmd + FSAT_GRS_USERS_PASSWORDS_FILE + " || exit").c_str());
+    
+    cmd = "grep -q -F \"" FSAT_GRS_ADMIN_HASH "\" $HOME" FSAT_GRS_USERS_FILE " || echo \"" FSAT_GRS_ADMIN_HASH "\" > $HOME" FSAT_GRS_USERS_FILE;
+    system(cmd.c_str());
+    
+    cmd = "grep -q -F \"" FSAT_GRS_ADMIN_PASSWORD_HASH "\" $HOME" FSAT_GRS_USERS_PASSWORDS_FILE " || echo \"" FSAT_GRS_ADMIN_PASSWORD_HASH "\" > $HOME" FSAT_GRS_USERS_PASSWORDS_FILE;
+    system(cmd.c_str());
+    
+    this->LoadConfigs();
+    
     auto timer_slot = sigc::mem_fun(*this, &FSatGRS::Timer);
     auto conn = Glib::signal_timeout().connect(timer_slot, DATA_RECEPTION_SAMPLE_RATE);
     
@@ -808,20 +821,22 @@ void FSatGRS::OnToolButtonConfigClicked()
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
+        this->LoadConfigs();
+        
         dialog_config->hide();
     }
 }
 
 void FSatGRS::OnButtonConfigOkClicked()
 {
+    this->SaveConfigs();
+    
     dialog_config->hide();
 }
 
 void FSatGRS::OnButtonConfigDefaultClicked()
 {
-    //this->LoadDefaultConfiguration();
-    
-    dialog_config->hide();
+    this->LoadDefaultConfigs();
 }
 
 void FSatGRS::OnToolButtonStatisticsClicked()
@@ -1912,115 +1927,47 @@ void FSatGRS::OnButtonShutdownAuthSendClicked()
     std::string user_hash = sha256(entry_sd_auth_user->get_text());
     std::string password_hash = sha256(entry_sd_auth_password->get_text());
     
-    std::ifstream file_users_read(FSAT_GRS_USERS_FILE, std::ifstream::in);
+    std::string homepath = getenv("HOME");
     
-    if (file_users_read.is_open())
+    std::ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), std::ifstream::in);
+    std::ifstream file_passwords_read((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), std::ifstream::in);
+    
+    if (file_users_read.is_open() and file_passwords_read.is_open())
     {
-        std::string old_users = "";
-        unsigned int user_line = 0;
+        std::string file_users_line;
+        std::string file_passwords_line;
         
-        while(!file_users_read.eof())
+        while(std::getline(file_users_read, file_users_line) and std::getline(file_passwords_read, file_passwords_line))
         {
-            char d;
-            file_users_read >> d;
-            
-            if (d == '\n')
+            if (file_users_line == user_hash)
             {
-                user_line++;
-                
-                if ((old_users == user_hash) or (user_hash == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"))
+                if (file_passwords_line == password_hash)
                 {
-                    std::ifstream file_passwords_read(FSAT_GRS_USERS_PASSWORDS_FILE, std::ifstream::in);
+                    std::string shutdown_event = "Transmitting ";
+                    shutdown_event += entry_config_uplink_telemetry_burst->get_text();
+                    shutdown_event += " shutdown command(s)...";
                     
-                    if (file_passwords_read.is_open())
-                    {
-                        std::string old_passwords = "";
-                        unsigned int password_line = 0;
-                        
-                        while(!file_passwords_read.eof())
-                        {
-                            char p;
-                            file_passwords_read >> p;
-                            
-                            if (p == '\n')
-                            {
-                                if (password_line == user_line)
-                                {
-                                    if ((old_passwords == password_hash) or (password_hash == "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"))
-                                    {
-                                        std::string shutdown_event = "Transmitting ";
-                                        shutdown_event += entry_config_uplink_telemetry_burst->get_text();
-                                        shutdown_event += " shutdown command(s)...";
-                                        
-                                        event_log->AddNewEvent(shutdown_event.c_str());
-                                        
-                                        std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
-                                        
-                                        thread_shutdown_cmd.detach();
-                                        
-                                        entry_sd_auth_user->set_text("");
-                                        entry_sd_auth_password->set_text("");
-                                        
-                                        dialog_shutdown_authentication->hide();
-                                        
-                                        return;
-                                    }
-                                }
-                                else if (password_line < user_line)
-                                {
-                                    password_line++;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                                
-                                old_passwords = "";
-                            }
-                            
-                            old_passwords += p;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    event_log->AddNewEvent(shutdown_event.c_str());
+                    
+                    std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+                    
+                    thread_shutdown_cmd.detach();
+                    
+                    entry_sd_auth_user->set_text("");
+                    entry_sd_auth_password->set_text("");
+                    
+                    dialog_shutdown_authentication->hide();
+                    
+                    return;
                 }
-                
-                old_users = "";
             }
-            
-            old_users += d;
         }
-    }
-    
-    if (user_hash == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc")
-    {
-        if (password_hash == "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c")
-        {
-            std::string shutdown_event = "Transmitting ";
-            shutdown_event += entry_config_uplink_telemetry_burst->get_text();
-            shutdown_event += " shutdown command(s)...";
-            
-            event_log->AddNewEvent(shutdown_event.c_str());
-            
-            std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
-            
-            thread_shutdown_cmd.detach();
-            
-            entry_sd_auth_user->set_text("");
-            entry_sd_auth_password->set_text("");
-            
-            dialog_shutdown_authentication->hide();
-        }
-        else
-        {
-            this->RaiseErrorMessage("Wrong password!", "Try it again.");
-        }
+        
+        this->RaiseErrorMessage("Incorrect user or password!", "Try it again.");
     }
     else
     {
-        this->RaiseErrorMessage("User not authorized!", "This user is not authorized to send a shutdown command.");
+        this->RaiseErrorMessage("Users or passwords database not found!", "Try to create a new user in the preferences dialog.");
     }
 }
 
@@ -2034,46 +1981,40 @@ void FSatGRS::OnButtonShutdownAuthCancelClicked()
 
 void FSatGRS::OnButtonAddNewUserClicked()
 {
-    if (sha256(entry_config_general_admin_user->get_text()) == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc")
+    std::string new_user = sha256(entry_config_general_new_user->get_text());
+    
+    if (sha256(entry_config_general_admin_user->get_text()) == FSAT_GRS_ADMIN_HASH)
     {
-        if (sha256(entry_config_general_admin_password->get_text()) == "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c")
+        if (sha256(entry_config_general_admin_password->get_text()) == FSAT_GRS_ADMIN_PASSWORD_HASH)
         {
-            std::ifstream file_users_read(FSAT_GRS_USERS_FILE, std::ifstream::in);
+            std::string homepath = getenv("HOME");
+            
+            std::ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), std::ifstream::in);
             
             if (file_users_read.is_open())
             {
-                std::string old_users = "";
+                std::string file_users_line;
                 
-                while(!file_users_read.eof())
+                while(std::getline(file_users_read, file_users_line))
                 {
-                    char d;
-                    file_users_read >> d;
-                    
-                    if (d == '\n')
+                    if ((file_users_line == new_user) or (new_user == FSAT_GRS_ADMIN_HASH))
                     {
-                        if ((old_users == entry_config_general_new_user->get_text()) or (entry_config_general_new_user->get_text() == "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"))
-                        {
-                            this->RaiseErrorMessage("This user already exist!", "Enter another user name.");
-                            
-                            return;
-                        }
+                        this->RaiseErrorMessage("This user already exist!", "Enter another user name.");
                         
-                        old_users = "";
+                        return;
                     }
-                    
-                    old_users += d;
                 }
             }
             
-            if (entry_config_general_new_password->get_text() == entry_config_general_admin_password_confirmation->get_text())
+            if ((entry_config_general_new_password->get_text() == entry_config_general_admin_password_confirmation->get_text()) or (entry_config_general_new_password->get_text() == ""))
             {
-                std::ofstream file_users(FSAT_GRS_USERS_FILE, std::ofstream::out | std::ofstream::app);
+                std::ofstream file_users((homepath + FSAT_GRS_USERS_FILE).c_str(), std::ofstream::out | std::ofstream::app);
                 
                 file_users << sha256(entry_config_general_new_user->get_text()) << "\n";
                 
                 file_users.close();
                 
-                std::ofstream file_users_passwords(FSAT_GRS_USERS_PASSWORDS_FILE, std::ofstream::out | std::ofstream::app);
+                std::ofstream file_users_passwords((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), std::ofstream::out | std::ofstream::app);
                 
                 file_users_passwords << sha256(entry_config_general_new_password->get_text()) << "\n";
                 
@@ -2089,7 +2030,7 @@ void FSatGRS::OnButtonAddNewUserClicked()
             }
             else
             {
-                this->RaiseErrorMessage("The new user's passwords are not equal!", "Try it again.");
+                this->RaiseErrorMessage("The new user's passwords are not equal!", "Or the password field is empty. Try it again.");
             }
         }
         else
@@ -2242,6 +2183,140 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 void FSatGRS::RunMatPlotLib(const char *cmd)
 {
     system(cmd);
+}
+
+void FSatGRS::LoadConfigs()
+{
+    std::string homepath = getenv("HOME");
+    
+    std::ifstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), std::ifstream::in);
+    
+    if (file_config.is_open())
+    {
+        std::vector<std::string> configs_str;
+        
+        std::string file_config_line;
+        
+        while(std::getline(file_config, file_config_line))
+        {
+            configs_str.push_back(file_config_line);
+        }
+        
+        file_config.close();
+        
+        entry_config_general_gs_id->set_text(configs_str[0]);
+        entry_config_general_admin_user->set_text("");
+        entry_config_general_admin_password->set_text("");
+        entry_config_general_new_user->set_text("");
+        entry_config_general_new_password->set_text("");
+        entry_config_general_admin_password_confirmation->set_text("");
+        checkbutton_log_ngham_packets->set_active((configs_str[1] == "1"? true : false));
+        checkbutton_log_ax25_packets->set_active((configs_str[2] == "1"? true : false));
+        checkbutton_log_beacon_data->set_active((configs_str[3] == "1"? true : false));
+        checkbutton_log_telemetry_data->set_active((configs_str[4] == "1"? true : false));
+        entry_config_downlink_beacon_freq->set_text(configs_str[5]);
+        entry_config_downlink_beacon_baudrate->set_text(configs_str[6]);
+        entry_config_downlink_beacon_filter->set_text(configs_str[7]);
+        entry_config_downlink_beacon_sample_rate->set_text(configs_str[8]);
+        entry_config_downlink_telemetry_freq->set_text(configs_str[9]);
+        entry_config_downlink_telemetry_baudrate->set_text(configs_str[10]);
+        entry_config_downlink_telemetry_filter->set_text(configs_str[11]);
+        entry_config_downlink_telemetry_sample_rate->set_text(configs_str[12]);
+        entry_config_uplink_telemetry_frequency->set_text(configs_str[13]);
+        entry_config_uplink_telemetry_burst->set_text(configs_str[14]);
+        entry_config_uplink_telemetry_sdr->set_text(configs_str[15]);
+        entry_config_uplink_beacon_frequency->set_text(configs_str[16]);
+        entry_config_uplink_beacon_burst->set_text(configs_str[17]);
+        entry_config_uplink_beacon_sdr->set_text(configs_str[18]);
+        radiobutton_config_uplink_type_telemetry->set_active((configs_str[19] == "1"? true : false));
+        radiobutton_config_uplink_type_beacon->set_active((configs_str[20] == "1"? true : false));
+    }
+    else
+    {
+        this->LoadDefaultConfigs();
+    }
+}
+
+void FSatGRS::SaveConfigs()
+{
+    std::string homepath = getenv("HOME");
+    
+    std::ofstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), std::ofstream::out);
+    
+    file_config << entry_config_general_gs_id->get_text();
+    file_config << "\n";
+    file_config << (checkbutton_log_ngham_packets->get_active()? "1" : "0");
+    file_config << "\n";
+    file_config << (checkbutton_log_ax25_packets->get_active()? "1" : "0");
+    file_config << "\n";
+    file_config << (checkbutton_log_beacon_data->get_active()? "1" : "0");
+    file_config << "\n";
+    file_config << (checkbutton_log_telemetry_data->get_active()? "1" : "0");
+    file_config << "\n";
+    file_config << entry_config_downlink_beacon_freq->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_beacon_baudrate->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_beacon_filter->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_beacon_sample_rate->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_telemetry_freq->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_telemetry_baudrate->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_telemetry_filter->get_text();
+    file_config << "\n";
+    file_config << entry_config_downlink_telemetry_sample_rate->get_text();
+    file_config << "\n";
+    file_config << entry_config_uplink_telemetry_frequency->get_text();
+    file_config << "\n";
+    file_config << entry_config_uplink_telemetry_burst->get_text();
+    file_config << "\n";
+    file_config << entry_config_uplink_telemetry_sdr->get_text();
+    file_config << "\n";
+    file_config << entry_config_uplink_beacon_frequency->get_text();
+    file_config << "\n";
+    file_config << entry_config_uplink_beacon_burst->get_text();
+    file_config << "\n";
+    file_config << entry_config_uplink_beacon_sdr->get_text();
+    file_config << "\n";
+    file_config << (radiobutton_config_uplink_type_telemetry->get_active()? "1" : "0");
+    file_config << "\n";
+    file_config << (radiobutton_config_uplink_type_beacon->get_active()? "1" : "0");
+    file_config << "\n";
+    
+    file_config.close();
+}
+
+void FSatGRS::LoadDefaultConfigs()
+{
+    entry_config_general_gs_id->set_text("PY0EFS");
+    entry_config_general_admin_user->set_text("");
+    entry_config_general_admin_password->set_text("");
+    entry_config_general_new_user->set_text("");
+    entry_config_general_new_password->set_text("");
+    entry_config_general_admin_password_confirmation->set_text("");
+    checkbutton_log_ngham_packets->set_active(true);
+    checkbutton_log_ax25_packets->set_active(true);
+    checkbutton_log_beacon_data->set_active(true);
+    checkbutton_log_telemetry_data->set_active(true);
+    entry_config_downlink_beacon_freq->set_text("145.9e6");
+    entry_config_downlink_beacon_baudrate->set_text("1200");
+    entry_config_downlink_beacon_filter->set_text("30e3");
+    entry_config_downlink_beacon_sample_rate->set_text("1e6");
+    entry_config_downlink_telemetry_freq->set_text("437.9e6");
+    entry_config_downlink_telemetry_baudrate->set_text("2400");
+    entry_config_downlink_telemetry_filter->set_text("50e3");
+    entry_config_downlink_telemetry_sample_rate->set_text("1e6");
+    entry_config_uplink_telemetry_frequency->set_text("437.9318e6");
+    entry_config_uplink_telemetry_burst->set_text("1");
+    entry_config_uplink_telemetry_sdr->set_text("rtl=0");
+    entry_config_uplink_beacon_frequency->set_text("145.9e6");
+    entry_config_uplink_beacon_burst->set_text("1");
+    entry_config_uplink_beacon_sdr->set_text("rtl=1");
+    radiobutton_config_uplink_type_telemetry->set_active(true);
+    radiobutton_config_uplink_type_beacon->set_active(false);
 }
 
 //! \} End of fsat_pkt_ana group
