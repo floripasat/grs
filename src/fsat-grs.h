@@ -85,6 +85,8 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
         Gtk::ToolButton                 *toolbutton_shutdown;
+        Gtk::ToolButton                 *toolbutton_open_gpredict;
+        Gtk::ToolButton                 *toolbutton_open_grqx;
         Gtk::ToolButton                 *toolbutton_config;
         Gtk::ToolButton                 *toolbutton_about;
         
@@ -240,7 +242,7 @@ class FSatGRS
         Gtk::Label                      *label_telemetry_data_eps_misc_energy_level;
         
         // Data to request tab
-        Gtk::CheckButton                *checkbutton_imu_1_accel_x;
+        /*Gtk::CheckButton                *checkbutton_imu_1_accel_x;
         Gtk::CheckButton                *checkbutton_imu_2_accel_x;
         Gtk::CheckButton                *checkbutton_imu_1_accel_y;
         Gtk::CheckButton                *checkbutton_imu_2_accel_y;
@@ -253,58 +255,9 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_imu_2_gyro_y;
         Gtk::CheckButton                *checkbutton_imu_2_gyro_z;
         Gtk::CheckButton                *checkbutton_sp_sun_p1;
-        Gtk::CheckButton                *checkbutton_sp_temp_p1;
-        Gtk::CheckButton                *checkbutton_sp_sun_p2;
-        Gtk::CheckButton                *checkbutton_sp_sun_p3;
-        Gtk::CheckButton                *checkbutton_sp_temp_p2;
-        Gtk::CheckButton                *checkbutton_sp_temp_p3;
-        Gtk::CheckButton                *checkbutton_reset_counter;
-        Gtk::CheckButton                *checkbutton_clock_fault;
-        Gtk::CheckButton                *checkbutton_reset_cause;
-        Gtk::CheckButton                *checkbutton_obdh_uc_temp;
-        Gtk::CheckButton                *checkbutton_system_time;
-        Gtk::CheckButton                *checkbutton_imu_status;
-        Gtk::CheckButton                *checkbutton_sd_card_status;
-        Gtk::CheckButton                *checkbutton_rush_status;
-        Gtk::CheckButton                *checkbutton_eps_status;
-        Gtk::CheckButton                *checkbutton_antenna_status;
-        Gtk::CheckButton                *checkbutton_obdh_uc_voltage;
-        Gtk::CheckButton                *checkbutton_obdh_uc_current;
-        Gtk::CheckButton                *checkbutton_system_up_time;
-        Gtk::CheckButton                *checkbutton_rush_data;
         Gtk::Button                     *button_request_obdh_select_all;
         Gtk::Button                     *button_request_obdh_unselect_all;
-        
-        Gtk::CheckButton                *checkbutton_bat_mean_current;
-        Gtk::CheckButton                *checkbutton_bat_temperature;
-        Gtk::CheckButton                *checkbutton_bat_1_voltage;
-        Gtk::CheckButton                *checkbutton_bat_2_voltage;
-        Gtk::CheckButton                *checkbutton_bat_current;
-        Gtk::CheckButton                *checkbutton_bat_charge;
-        Gtk::CheckButton                *checkbutton_bat_rsrc;
-        Gtk::CheckButton                *checkbutton_energy_level;
-        Gtk::CheckButton                *checkbutton_sp_current_my;
-        Gtk::CheckButton                *checkbutton_sp_current_px;
-        Gtk::CheckButton                *checkbutton_sp_current_mx;
-        Gtk::CheckButton                *checkbutton_sp_current_pz;
-        Gtk::CheckButton                *checkbutton_sp_current_mz;
-        Gtk::CheckButton                *checkbutton_sp_current_py;
-        Gtk::CheckButton                *checkbutton_sp_voltage_my_px;
-        Gtk::CheckButton                *checkbutton_sp_voltage_mx_pz;
-        Gtk::CheckButton                *checkbutton_sp_voltage_mz_py;
-        Gtk::CheckButton                *checkbutton_eps_uc_temp;
-        Gtk::CheckButton                *checkbutton_bat_protection;
-        Gtk::CheckButton                *checkbutton_bat_status;
-        Gtk::CheckButton                *checkbutton_bat_cycle_counting;
-        Gtk::CheckButton                *checkbutton_bat_raac;
-        Gtk::CheckButton                *checkbutton_bat_rsac;
-        Gtk::CheckButton                *checkbutton_bat_rarc;
-        Gtk::CheckButton                *checkbutton_boost_voltage;
-        Gtk::CheckButton                *checkbutton_main_bus_voltage;
-        Gtk::CheckButton                *checkbutton_beacon_current;
-        Gtk::Button                     *button_request_eps_select_all;
-        Gtk::Button                     *button_request_eps_unselect_all;
-        
+        */
         // Telemetry Packets Statistic
         Gtk::Label                      *label_telemetry_pkt_statistic_total;
         Gtk::Label                      *label_telemetry_pkt_statistic_lost;
@@ -466,6 +419,18 @@ class FSatGRS
          */
         void OnToolButtonShutdownClicked();
         /**
+         * \brief Open GPredict software.
+         * 
+         * \return None
+         */
+        void OnToolButtonOpenGPredictClicked();
+        /**
+         * \brief Open GQRX software.
+         * 
+         * \return None
+         */
+        void OnToolButtonOpenGQRXClicked();
+        /**
          * \brief 
          * 
          * \return None
@@ -549,30 +514,6 @@ class FSatGRS
          * \return None
          */
         void OnButtonRunAnalysisClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnButtonSelectOBDHDataClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnButtonUnselectOBDHDataClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnButtonSelectEPSDataClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnButtonUnselectEPSDataClicked();
         /**
          * \brief 
          * 

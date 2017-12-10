@@ -138,6 +138,18 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         toolbutton_shutdown->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonShutdownClicked));
     }
     
+    ref_builder->get_widget("toolbutton_open_gpredict", toolbutton_open_gpredict);
+    if (toolbutton_open_gpredict)
+    {
+        toolbutton_open_gpredict->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonOpenGPredictClicked));
+    }
+    
+    ref_builder->get_widget("toolbutton_open_grqx", toolbutton_open_grqx);
+    if (toolbutton_open_grqx)
+    {
+        toolbutton_open_grqx->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonOpenGQRXClicked));
+    }
+    
     ref_builder->get_widget("toolbutton_config", toolbutton_config);
     if (toolbutton_config)
     {
@@ -451,40 +463,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
     
     // Data to request
-    ref_builder->get_widget("checkbutton_imu_1_accel_x", checkbutton_imu_1_accel_x);
-    ref_builder->get_widget("checkbutton_imu_2_accel_x", checkbutton_imu_2_accel_x);
-    ref_builder->get_widget("checkbutton_imu_1_accel_y", checkbutton_imu_1_accel_y);
-    ref_builder->get_widget("checkbutton_imu_2_accel_y", checkbutton_imu_2_accel_y);
-    ref_builder->get_widget("checkbutton_imu_1_accel_z", checkbutton_imu_1_accel_z);
-    ref_builder->get_widget("checkbutton_imu_2_accel_z", checkbutton_imu_2_accel_z);
-    ref_builder->get_widget("checkbutton_imu_1_gyro_x", checkbutton_imu_1_gyro_x);
-    ref_builder->get_widget("checkbutton_imu_1_gyro_y", checkbutton_imu_1_gyro_y);
-    ref_builder->get_widget("checkbutton_imu_1_gyro_z", checkbutton_imu_1_gyro_z);
-    ref_builder->get_widget("checkbutton_imu_2_gyro_x", checkbutton_imu_2_gyro_x);
-    ref_builder->get_widget("checkbutton_imu_2_gyro_y", checkbutton_imu_2_gyro_y);
-    ref_builder->get_widget("checkbutton_imu_2_gyro_z", checkbutton_imu_2_gyro_z);
-    ref_builder->get_widget("checkbutton_sp_sun_p1", checkbutton_sp_sun_p1);
-    ref_builder->get_widget("checkbutton_sp_temp_p1", checkbutton_sp_temp_p1);
-    ref_builder->get_widget("checkbutton_sp_sun_p2", checkbutton_sp_sun_p2);
-    ref_builder->get_widget("checkbutton_sp_sun_p3", checkbutton_sp_sun_p3);
-    ref_builder->get_widget("checkbutton_sp_temp_p2", checkbutton_sp_temp_p2);
-    ref_builder->get_widget("checkbutton_sp_temp_p3", checkbutton_sp_temp_p3);
-    ref_builder->get_widget("checkbutton_reset_counter", checkbutton_reset_counter);
-    ref_builder->get_widget("checkbutton_clock_fault", checkbutton_clock_fault);
-    ref_builder->get_widget("checkbutton_reset_cause", checkbutton_reset_cause);
-    ref_builder->get_widget("checkbutton_obdh_uc_temp", checkbutton_obdh_uc_temp);
-    ref_builder->get_widget("checkbutton_system_time", checkbutton_system_time);
-    ref_builder->get_widget("checkbutton_imu_status", checkbutton_imu_status);
-    ref_builder->get_widget("checkbutton_sd_card_status", checkbutton_sd_card_status);
-    ref_builder->get_widget("checkbutton_rush_status", checkbutton_rush_status);
-    ref_builder->get_widget("checkbutton_eps_status", checkbutton_eps_status);
-    ref_builder->get_widget("checkbutton_antenna_status", checkbutton_antenna_status);
-    ref_builder->get_widget("checkbutton_obdh_uc_voltage", checkbutton_obdh_uc_voltage);
-    ref_builder->get_widget("checkbutton_obdh_uc_current", checkbutton_obdh_uc_current);
-    ref_builder->get_widget("checkbutton_system_up_time", checkbutton_system_up_time);
-    ref_builder->get_widget("checkbutton_rush_data", checkbutton_rush_data);
-    ref_builder->get_widget("button_request_obdh_select_all", button_request_obdh_select_all);
-    ref_builder->get_widget("button_request_obdh_unselect_all", button_request_obdh_unselect_all);
+    /*ref_builder->get_widget("", );
     
     if (button_request_obdh_select_all)
     {
@@ -494,47 +473,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     if (button_request_obdh_unselect_all)
     {
         button_request_obdh_unselect_all->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUnselectOBDHDataClicked));
-    }
-    
-    ref_builder->get_widget("checkbutton_bat_mean_current", checkbutton_bat_mean_current);
-    ref_builder->get_widget("checkbutton_bat_temperature", checkbutton_bat_temperature);
-    ref_builder->get_widget("checkbutton_bat_1_voltage", checkbutton_bat_1_voltage);
-    ref_builder->get_widget("checkbutton_bat_2_voltage", checkbutton_bat_2_voltage);
-    ref_builder->get_widget("checkbutton_bat_current", checkbutton_bat_current);
-    ref_builder->get_widget("checkbutton_bat_charge", checkbutton_bat_charge);
-    ref_builder->get_widget("checkbutton_bat_rsrc", checkbutton_bat_rsrc);
-    ref_builder->get_widget("checkbutton_energy_level", checkbutton_energy_level);
-    ref_builder->get_widget("checkbutton_sp_current_my", checkbutton_sp_current_my);
-    ref_builder->get_widget("checkbutton_sp_current_px", checkbutton_sp_current_px);
-    ref_builder->get_widget("checkbutton_sp_current_mx", checkbutton_sp_current_mx);
-    ref_builder->get_widget("checkbutton_sp_current_pz", checkbutton_sp_current_pz);
-    ref_builder->get_widget("checkbutton_sp_current_mz", checkbutton_sp_current_mz);
-    ref_builder->get_widget("checkbutton_sp_current_py", checkbutton_sp_current_py);
-    ref_builder->get_widget("checkbutton_sp_voltage_my_px", checkbutton_sp_voltage_my_px);
-    ref_builder->get_widget("checkbutton_sp_voltage_mx_pz", checkbutton_sp_voltage_mx_pz);
-    ref_builder->get_widget("checkbutton_sp_voltage_mz_py", checkbutton_sp_voltage_mz_py);
-    ref_builder->get_widget("checkbutton_eps_uc_temp", checkbutton_eps_uc_temp);
-    ref_builder->get_widget("checkbutton_bat_protection", checkbutton_bat_protection);
-    ref_builder->get_widget("checkbutton_bat_status", checkbutton_bat_status);
-    ref_builder->get_widget("checkbutton_bat_cycle_counting", checkbutton_bat_cycle_counting);
-    ref_builder->get_widget("checkbutton_bat_raac", checkbutton_bat_raac);
-    ref_builder->get_widget("checkbutton_bat_rsac", checkbutton_bat_rsac);
-    ref_builder->get_widget("checkbutton_bat_rarc", checkbutton_bat_rarc);
-    ref_builder->get_widget("checkbutton_boost_voltage", checkbutton_boost_voltage);
-    ref_builder->get_widget("checkbutton_main_bus_voltage", checkbutton_main_bus_voltage);
-    ref_builder->get_widget("checkbutton_beacon_current", checkbutton_beacon_current);
-    ref_builder->get_widget("button_request_eps_select_all", button_request_eps_select_all);
-    ref_builder->get_widget("button_request_eps_unselect_all", button_request_eps_unselect_all);
-    
-    if (button_request_eps_select_all)
-    {
-        button_request_eps_select_all->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonSelectEPSDataClicked));
-    }
-    
-    if (button_request_eps_unselect_all)
-    {
-        button_request_eps_unselect_all->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUnselectEPSDataClicked));
-    }
+    }*/
     
     // Plot dialog
     ref_builder->get_widget("dialog_plot", dialog_plot);
@@ -892,6 +831,30 @@ void FSatGRS::OnToolButtonShutdownClicked()
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
         dialog_shutdown_authentication->hide();
+    }
+}
+
+void FSatGRS::OnToolButtonOpenGPredictClicked()
+{
+    if (access("/usr/bin/gpredict", X_OK) == 0)
+    {
+        system("gpredict &");
+    }
+    else
+    {
+        this->RaiseErrorMessage("GPredict not installed!", "The GPredict software is not installed.");
+    }
+}
+
+void FSatGRS::OnToolButtonOpenGQRXClicked()
+{
+    if (access("/usr/bin/gqrx", X_OK) == 0)
+    {
+        system("gqrx &");
+    }
+    else
+    {
+        this->RaiseErrorMessage("GQRX not installed!", "The GQRX software is not installed.");
     }
 }
 
@@ -1786,140 +1749,6 @@ void FSatGRS::OnButtonRunAnalysisClicked()
     {
         this->RaiseErrorMessage("No log file provided!", "To run a analysis, a log file must be provided.");
     }
-}
-
-void FSatGRS::OnButtonSelectOBDHDataClicked()
-{
-    checkbutton_imu_1_accel_x->set_active(true);
-    checkbutton_imu_2_accel_x->set_active(true);
-    checkbutton_imu_1_accel_y->set_active(true);
-    checkbutton_imu_2_accel_y->set_active(true);
-    checkbutton_imu_1_accel_z->set_active(true);
-    checkbutton_imu_2_accel_z->set_active(true);
-    checkbutton_imu_1_gyro_x->set_active(true);
-    checkbutton_imu_1_gyro_y->set_active(true);
-    checkbutton_imu_1_gyro_z->set_active(true);
-    checkbutton_imu_2_gyro_x->set_active(true);
-    checkbutton_imu_2_gyro_y->set_active(true);
-    checkbutton_imu_2_gyro_z->set_active(true);
-    checkbutton_sp_sun_p1->set_active(true);
-    checkbutton_sp_temp_p1->set_active(true);
-    checkbutton_sp_sun_p2->set_active(true);
-    checkbutton_sp_sun_p3->set_active(true);
-    checkbutton_sp_temp_p2->set_active(true);
-    checkbutton_sp_temp_p3->set_active(true);
-    checkbutton_reset_counter->set_active(true);
-    checkbutton_clock_fault->set_active(true);
-    checkbutton_reset_cause->set_active(true);
-    checkbutton_obdh_uc_temp->set_active(true);
-    checkbutton_system_time->set_active(true);
-    checkbutton_imu_status->set_active(true);
-    checkbutton_sd_card_status->set_active(true);
-    checkbutton_rush_status->set_active(true);
-    checkbutton_eps_status->set_active(true);
-    checkbutton_antenna_status->set_active(true);
-    checkbutton_obdh_uc_voltage->set_active(true);
-    checkbutton_obdh_uc_current->set_active(true);
-    checkbutton_system_up_time->set_active(true);
-    checkbutton_rush_data->set_active(true);
-}
-
-void FSatGRS::OnButtonUnselectOBDHDataClicked()
-{
-    checkbutton_imu_1_accel_x->set_active(false);
-    checkbutton_imu_2_accel_x->set_active(false);
-    checkbutton_imu_1_accel_y->set_active(false);
-    checkbutton_imu_2_accel_y->set_active(false);
-    checkbutton_imu_1_accel_z->set_active(false);
-    checkbutton_imu_2_accel_z->set_active(false);
-    checkbutton_imu_1_gyro_x->set_active(false);
-    checkbutton_imu_1_gyro_y->set_active(false);
-    checkbutton_imu_1_gyro_z->set_active(false);
-    checkbutton_imu_2_gyro_x->set_active(false);
-    checkbutton_imu_2_gyro_y->set_active(false);
-    checkbutton_imu_2_gyro_z->set_active(false);
-    checkbutton_sp_sun_p1->set_active(false);
-    checkbutton_sp_temp_p1->set_active(false);
-    checkbutton_sp_sun_p2->set_active(false);
-    checkbutton_sp_sun_p3->set_active(false);
-    checkbutton_sp_temp_p2->set_active(false);
-    checkbutton_sp_temp_p3->set_active(false);
-    checkbutton_reset_counter->set_active(false);
-    checkbutton_clock_fault->set_active(false);
-    checkbutton_reset_cause->set_active(false);
-    checkbutton_obdh_uc_temp->set_active(false);
-    checkbutton_system_time->set_active(false);
-    checkbutton_imu_status->set_active(false);
-    checkbutton_sd_card_status->set_active(false);
-    checkbutton_rush_status->set_active(false);
-    checkbutton_eps_status->set_active(false);
-    checkbutton_antenna_status->set_active(false);
-    checkbutton_obdh_uc_voltage->set_active(false);
-    checkbutton_obdh_uc_current->set_active(false);
-    checkbutton_system_up_time->set_active(false);
-    checkbutton_rush_data->set_active(false);
-}
-
-void FSatGRS::OnButtonSelectEPSDataClicked()
-{
-    checkbutton_bat_mean_current->set_active(true);
-    checkbutton_bat_temperature->set_active(true);
-    checkbutton_bat_1_voltage->set_active(true);
-    checkbutton_bat_2_voltage->set_active(true);
-    checkbutton_bat_current->set_active(true);
-    checkbutton_bat_charge->set_active(true);
-    checkbutton_bat_rsrc->set_active(true);
-    checkbutton_energy_level->set_active(true);
-    checkbutton_sp_current_my->set_active(true);
-    checkbutton_sp_current_px->set_active(true);
-    checkbutton_sp_current_mx->set_active(true);
-    checkbutton_sp_current_pz->set_active(true);
-    checkbutton_sp_current_mz->set_active(true);
-    checkbutton_sp_current_py->set_active(true);
-    checkbutton_sp_voltage_my_px->set_active(true);
-    checkbutton_sp_voltage_mx_pz->set_active(true);
-    checkbutton_sp_voltage_mz_py->set_active(true);
-    checkbutton_eps_uc_temp->set_active(true);
-    checkbutton_bat_protection->set_active(true);
-    checkbutton_bat_status->set_active(true);
-    checkbutton_bat_cycle_counting->set_active(true);
-    checkbutton_bat_raac->set_active(true);
-    checkbutton_bat_rsac->set_active(true);
-    checkbutton_bat_rarc->set_active(true);
-    checkbutton_boost_voltage->set_active(true);
-    checkbutton_main_bus_voltage->set_active(true);
-    checkbutton_beacon_current->set_active(true);
-}
-
-void FSatGRS::OnButtonUnselectEPSDataClicked()
-{
-    checkbutton_bat_mean_current->set_active(false);
-    checkbutton_bat_temperature->set_active(false);
-    checkbutton_bat_1_voltage->set_active(false);
-    checkbutton_bat_2_voltage->set_active(false);
-    checkbutton_bat_current->set_active(false);
-    checkbutton_bat_charge->set_active(false);
-    checkbutton_bat_rsrc->set_active(false);
-    checkbutton_energy_level->set_active(false);
-    checkbutton_sp_current_my->set_active(false);
-    checkbutton_sp_current_px->set_active(false);
-    checkbutton_sp_current_mx->set_active(false);
-    checkbutton_sp_current_pz->set_active(false);
-    checkbutton_sp_current_mz->set_active(false);
-    checkbutton_sp_current_py->set_active(false);
-    checkbutton_sp_voltage_my_px->set_active(false);
-    checkbutton_sp_voltage_mx_pz->set_active(false);
-    checkbutton_sp_voltage_mz_py->set_active(false);
-    checkbutton_eps_uc_temp->set_active(false);
-    checkbutton_bat_protection->set_active(false);
-    checkbutton_bat_status->set_active(false);
-    checkbutton_bat_cycle_counting->set_active(false);
-    checkbutton_bat_raac->set_active(false);
-    checkbutton_bat_rsac->set_active(false);
-    checkbutton_bat_rarc->set_active(false);
-    checkbutton_boost_voltage->set_active(false);
-    checkbutton_main_bus_voltage->set_active(false);
-    checkbutton_beacon_current->set_active(false);
 }
 
 void FSatGRS::OnButtonShutdownAuthSendClicked()
