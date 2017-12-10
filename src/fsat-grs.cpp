@@ -456,24 +456,11 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     telemetry_data = new TelemetryData(telemetry_data_labels);
     
-    // Telemtry Packets Statistic
+    // Telemetry Packets Statistic
     ref_builder->get_widget("label_telemetry_pkt_statistic_total", label_telemetry_pkt_statistic_total);
     ref_builder->get_widget("label_telemetry_pkt_statistic_lost", label_telemetry_pkt_statistic_lost);
     
     telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
-    
-    // Data to request
-    /*ref_builder->get_widget("", );
-    
-    if (button_request_obdh_select_all)
-    {
-        button_request_obdh_select_all->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonSelectOBDHDataClicked));
-    }
-    
-    if (button_request_obdh_unselect_all)
-    {
-        button_request_obdh_unselect_all->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUnselectOBDHDataClicked));
-    }*/
     
     // Plot dialog
     ref_builder->get_widget("dialog_plot", dialog_plot);
@@ -549,6 +536,34 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     if (button_config_default)
     {
         button_config_default->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonConfigDefaultClicked));
+    }
+    
+    // Data to request
+    ref_builder->get_widget("dialog_data_request", dialog_data_request);
+    ref_builder->get_widget("checkbutton_request_packet_flags", checkbutton_request_packet_flags);
+    ref_builder->get_widget("checkbutton_request_obdh_status", checkbutton_request_obdh_status);
+    ref_builder->get_widget("checkbutton_request_imu", checkbutton_request_imu);
+    ref_builder->get_widget("checkbutton_request_obdh_time", checkbutton_request_obdh_time);
+    ref_builder->get_widget("checkbutton_request_obdh_mis", checkbutton_request_obdh_mis);
+    ref_builder->get_widget("checkbutton_request_solar_panels_sensors", checkbutton_request_solar_panels_sensors);
+    ref_builder->get_widget("checkbutton_request_main_radio", checkbutton_request_main_radio);
+    ref_builder->get_widget("checkbutton_request_solar_panels", checkbutton_request_solar_panels);
+    ref_builder->get_widget("checkbutton_request_eps_misc", checkbutton_request_eps_misc);
+    ref_builder->get_widget("checkbutton_request_battery_monitor", checkbutton_request_battery_monitor);
+    ref_builder->get_widget("checkbutton_request_temperatures", checkbutton_request_temperatures);
+    ref_builder->get_widget("checkbutton_request_task_scheduler", checkbutton_request_task_scheduler);
+    ref_builder->get_widget("checkbutton_request_rush", checkbutton_request_rush);
+    ref_builder->get_widget("button_data_request_send", button_data_request_send);
+    ref_builder->get_widget("button_data_request_cancel", button_data_request_cancel);
+    
+    if (button_data_request_send)
+    {
+        button_data_request_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonDataRequestSendClicked));
+    }
+    
+    if (button_data_request_cancel)
+    {
+        button_data_request_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonDataRequestCancelClicked));
     }
     
     // Shutdown Command Authentication Dialog
@@ -813,15 +828,12 @@ void FSatGRS::OnToolButtonPingClicked()
 
 void FSatGRS::OnToolButtonRequestDataClicked()
 {
-    std::string data_request_event = "Transmitting ";
-    data_request_event += entry_config_uplink_telemetry_burst->get_text();
-    data_request_event += " data request(s)...";
+    int response = dialog_data_request->run();
     
-    event_log->AddNewEvent(data_request_event.c_str());
-    
-    std::thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
-    
-    thread_request_cmd.detach();
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_data_request->hide();
+    }
 }
 
 void FSatGRS::OnToolButtonShutdownClicked()
@@ -839,6 +851,8 @@ void FSatGRS::OnToolButtonOpenGPredictClicked()
     if (access("/usr/bin/gpredict", X_OK) == 0)
     {
         system("gpredict &");
+        
+        event_log->AddNewEvent("Opening GPredict software...");
     }
     else
     {
@@ -851,6 +865,8 @@ void FSatGRS::OnToolButtonOpenGQRXClicked()
     if (access("/usr/bin/gqrx", X_OK) == 0)
     {
         system("gqrx &");
+        
+        event_log->AddNewEvent("Opening GQRX software...");
     }
     else
     {
@@ -1751,6 +1767,26 @@ void FSatGRS::OnButtonRunAnalysisClicked()
     }
 }
 
+void FSatGRS::OnButtonDataRequestSendClicked()
+{
+    std::string data_request_event = "Transmitting ";
+    data_request_event += entry_config_uplink_telemetry_burst->get_text();
+    data_request_event += " data request(s)...";
+    
+    event_log->AddNewEvent(data_request_event.c_str());
+    
+    std::thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
+    
+    thread_request_cmd.detach();
+    
+    dialog_data_request->hide();
+}
+
+void FSatGRS::OnButtonDataRequestCancelClicked()
+{
+    dialog_data_request->hide();
+}
+
 void FSatGRS::OnButtonShutdownAuthSendClicked()
 {
     std::string user_hash = sha256(entry_sd_auth_user->get_text());
@@ -1929,7 +1965,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     }
     
     uint8_t ping[9];
-    uint8_t request[9];
+    uint8_t request[22];
     uint8_t shutdown[9];
     
     std::string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
@@ -1978,8 +2014,21 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             request[6] = 'd';
             request[7] = 'w';
+            request[8] = (checkbutton_request_packet_flags->get_active()? '1' : '0');
+            request[9] = (checkbutton_request_obdh_status->get_active()? '1' : '0');
+            request[10] = (checkbutton_request_imu->get_active()? '1' : '0');
+            request[11] = (checkbutton_request_obdh_time->get_active()? '1' : '0');
+            request[12] = (checkbutton_request_obdh_mis->get_active()? '1' : '0');
+            request[13] = (checkbutton_request_solar_panels_sensors->get_active()? '1' : '0');
+            request[14] = (checkbutton_request_main_radio->get_active()? '1' : '0');
+            request[15] = (checkbutton_request_solar_panels->get_active()? '1' : '0');
+            request[16] = (checkbutton_request_eps_misc->get_active()? '1' : '0');
+            request[17] = (checkbutton_request_battery_monitor->get_active()? '1' : '0');
+            request[18] = (checkbutton_request_temperatures->get_active()? '1' : '0');
+            request[19] = (checkbutton_request_task_scheduler->get_active()? '1' : '0');
+            request[20] = (checkbutton_request_rush->get_active()? '1' : '0');
             
-            ngham_uplink_pkt.Generate(request, 8);
+            ngham_uplink_pkt.Generate(request, 21);
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
             {

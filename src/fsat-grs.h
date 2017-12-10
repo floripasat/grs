@@ -241,23 +241,6 @@ class FSatGRS
         Gtk::Label                      *label_telemetry_data_eps_misc_uc_temp;
         Gtk::Label                      *label_telemetry_data_eps_misc_energy_level;
         
-        // Data to request tab
-        /*Gtk::CheckButton                *checkbutton_imu_1_accel_x;
-        Gtk::CheckButton                *checkbutton_imu_2_accel_x;
-        Gtk::CheckButton                *checkbutton_imu_1_accel_y;
-        Gtk::CheckButton                *checkbutton_imu_2_accel_y;
-        Gtk::CheckButton                *checkbutton_imu_1_accel_z;
-        Gtk::CheckButton                *checkbutton_imu_2_accel_z;
-        Gtk::CheckButton                *checkbutton_imu_1_gyro_x;
-        Gtk::CheckButton                *checkbutton_imu_1_gyro_y;
-        Gtk::CheckButton                *checkbutton_imu_1_gyro_z;
-        Gtk::CheckButton                *checkbutton_imu_2_gyro_x;
-        Gtk::CheckButton                *checkbutton_imu_2_gyro_y;
-        Gtk::CheckButton                *checkbutton_imu_2_gyro_z;
-        Gtk::CheckButton                *checkbutton_sp_sun_p1;
-        Gtk::Button                     *button_request_obdh_select_all;
-        Gtk::Button                     *button_request_obdh_unselect_all;
-        */
         // Telemetry Packets Statistic
         Gtk::Label                      *label_telemetry_pkt_statistic_total;
         Gtk::Label                      *label_telemetry_pkt_statistic_lost;
@@ -318,6 +301,24 @@ class FSatGRS
         Gtk::Button                     *button_run_log_analysis;
         Gtk::RadioButton                *radio_button_log_analysis_beacon;
         Gtk::RadioButton                *radio_button_log_analysis_telemetry;
+        
+        // Data Request Dialog
+        Gtk::Dialog                     *dialog_data_request;
+        Gtk::CheckButton                *checkbutton_request_packet_flags;
+        Gtk::CheckButton                *checkbutton_request_obdh_status;
+        Gtk::CheckButton                *checkbutton_request_imu;
+        Gtk::CheckButton                *checkbutton_request_obdh_time;
+        Gtk::CheckButton                *checkbutton_request_obdh_mis;
+        Gtk::CheckButton                *checkbutton_request_solar_panels_sensors;
+        Gtk::CheckButton                *checkbutton_request_main_radio;
+        Gtk::CheckButton                *checkbutton_request_solar_panels;
+        Gtk::CheckButton                *checkbutton_request_eps_misc;
+        Gtk::CheckButton                *checkbutton_request_battery_monitor;
+        Gtk::CheckButton                *checkbutton_request_temperatures;
+        Gtk::CheckButton                *checkbutton_request_task_scheduler;
+        Gtk::CheckButton                *checkbutton_request_rush;
+        Gtk::Button                     *button_data_request_send;
+        Gtk::Button                     *button_data_request_cancel;
         
         // Shutdown Command Authentication Dialog
         Gtk::Dialog                     *dialog_shutdown_authentication;
@@ -514,6 +515,20 @@ class FSatGRS
          * \return None
          */
         void OnButtonRunAnalysisClicked();
+        /**
+         * \brief Sends the data request command.
+         * 
+         * \return None
+         */
+        void OnButtonDataRequestSendClicked();
+        /**
+         * \brief Cancels the data request
+         * 
+         * Closes the data request dialog.
+         * 
+         * \return None
+         */
+        void OnButtonDataRequestCancelClicked();
         /**
          * \brief 
          * 
