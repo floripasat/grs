@@ -108,10 +108,10 @@ void Packets::Search(const char *file)
     
     uint32_t byte_counter = 0;
     
-    while(!this->eof())
+    char d;
+    while(this->get(d))
     {
-        uint8_t byte;
-        *this >> byte;
+        uint8_t byte = d;
         fin_byte_counter++;
         
         if (fin_byte_counter <= prev_fin_byte_counter)
