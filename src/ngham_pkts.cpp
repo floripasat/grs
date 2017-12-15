@@ -113,23 +113,20 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 }
             }
             
-            if ((data_len > 40) and (data_len < 80))
+            if ((data[0] == 'H') and (data[1] == 'e') and (data[2] == 'l'))
             {
-                if ((data[0] == 'H') and (data[1] == 'e'))
+                event_text = "Ping result received: ";
+                for(uint8_t i=0; i<data_len; i++)
                 {
-                    event_text = "Ping result received: ";
-                    for(uint8_t i=0; i<data_len; i++)
-                    {
-                        event_text += char(data[i]);
-                    }
+                    event_text += char(data[i]);
                 }
-                else if ((data[0] == 'S') and (data[1] == 'h'))
+            }
+            else if ((data[0] == 'S') and (data[1] == 'h') and (data[2] == 'u'))
+            {
+                event_text = "Shutdown result received: ";
+                for(uint8_t i=0; i<data_len; i++)
                 {
-                    event_text = "Shutdown result received: ";
-                    for(uint8_t i=0; i<data_len; i++)
-                    {
-                        event_text += char(data[i]);
-                    }
+                    event_text += char(data[i]);
                 }
             }
             else
