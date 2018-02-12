@@ -92,7 +92,7 @@ class FSatGRS
         
         // Beacon stream
         Gtk::RadioButton                *radiobutton_beacon_src_sdr;
-        Gtk::Entry                      *entry_beacon_sdr_dev;
+        Gtk::ComboBox                   *combobox_beacon_sdr_dev;
         Gtk::RadioButton                *radiobutton_beacon_src_tcp;
         Gtk::Entry                      *entry_beacon_tcp_ip;
         Gtk::Entry                      *entry_beacon_tcp_port;
@@ -108,7 +108,7 @@ class FSatGRS
         
         // Telemetry stream
         Gtk::RadioButton                *radiobutton_telemetry_src_sdr;
-        Gtk::Entry                      *entry_telemetry_sdr_dev;
+        Gtk::ComboBox                   *combobox_telemetry_sdr_dev;
         Gtk::RadioButton                *radiobutton_telemetry_src_tcp;
         Gtk::Entry                      *entry_telemetry_tcp_ip;
         Gtk::Entry                      *entry_telemetry_tcp_port;

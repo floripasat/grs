@@ -104,6 +104,121 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="liststore_beacon_data">
+    <columns>
+      <!-- column-name beacon_data -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Battery 1 voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 2 voltage</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 1 temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery 2 temperature</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battery charge</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current -Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel current +Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -Y +X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -X +Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solar panel voltage -Z +Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Energy level</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SD card status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">RUSH status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">EPS status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Antenna status</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU accelerometer X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU accelerometer Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU accelerometer Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU gyroscope X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU gyroscope Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU gyroscope Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">OBDH resets</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore_sdr_devices">
+    <columns>
+      <!-- column-name sdrs_devs -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">RTL-SDR 0</col>
+      </row>
+      <row>
+        <col id="0">RTL-SDR 1</col>
+      </row>
+      <row>
+        <col id="0">FunCube 0</col>
+      </row>
+      <row>
+        <col id="0">FunCube 1</col>
+      </row>
+      <row>
+        <col id="0">USRP 0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">USRP 1</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">FloripaSat GRS</property>
@@ -341,13 +456,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box4">
+          <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">10</property>
+            <property name="can_focus">True</property>
+            <property name="position">260</property>
+            <property name="position_set">True</property>
+            <property name="wide_handle">True</property>
             <child>
               <object class="GtkBox" id="box_config">
-                <property name="width_request">233</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
@@ -403,12 +519,18 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entry_beacon_sdr_dev">
+                              <object class="GtkComboBox" id="combobox_beacon_sdr_dev">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="width_chars">12</property>
-                                <property name="max_width_chars">13</property>
-                                <property name="text" translatable="yes">rtl=0</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="model">liststore_sdr_devices</property>
+                                <property name="active">0</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -531,6 +653,7 @@
                               <object class="GtkComboBox" id="combobox_beacon_baudrate">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="model">liststore_baudrates</property>
                                 <property name="active">8</property>
                                 <child>
@@ -622,6 +745,7 @@
                               <object class="GtkFileChooserButton" id="filechooserbutton_beacon">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="create_folders">False</property>
                                 <property name="preview_widget_active">False</property>
                                 <property name="use_preview_label">False</property>
@@ -778,12 +902,18 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entry_telemetry_sdr_dev">
+                              <object class="GtkComboBox" id="combobox_telemetry_sdr_dev">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="width_chars">12</property>
-                                <property name="max_width_chars">13</property>
-                                <property name="text" translatable="yes">rtl=1</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="model">liststore_sdr_devices</property>
+                                <property name="active">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -948,6 +1078,7 @@
                               <object class="GtkComboBox" id="combobox_telemetry_baudrate">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="model">liststore_baudrates</property>
                                 <property name="active">10</property>
                                 <child>
@@ -996,6 +1127,7 @@
                               <object class="GtkFileChooserButton" id="filechooserbutton_telemetry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="create_folders">False</property>
                                 <property name="preview_widget_active">False</property>
                                 <property name="use_preview_label">False</property>
@@ -1102,17 +1234,17 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
             <child>
               <object class="GtkPaned" id="paned2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
-                <property name="position">541</property>
+                <property name="position">550</property>
                 <property name="position_set">True</property>
                 <property name="wide_handle">True</property>
                 <child>
@@ -4282,9 +4414,8 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
           </object>
@@ -4308,7 +4439,7 @@
     <property name="transient_for">MainWindow</property>
     <property name="program_name">FloripaSat GRS</property>
     <property name="version">1.0-beta</property>
-    <property name="copyright" translatable="yes">Copyright (c) 2017, Federal University of Santa Catarina</property>
+    <property name="copyright" translatable="yes">Copyright (c) 2017-2018, Federal University of Santa Catarina</property>
     <property name="website">https://github.com/floripasat/grs</property>
     <property name="website_label" translatable="yes">https://github.com/floripasat/grs</property>
     <property name="authors">André Martins Pio de Mattos  &lt;andrempmattos@gmail.com&gt;
@@ -6598,95 +6729,6 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore_beacon_data">
-    <columns>
-      <!-- column-name beacon_data -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Battery 1 voltage</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Battery 2 voltage</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Battery 1 temperature</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Battery 2 temperature</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Battery charge</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel current -Y</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel current +X</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel current -X</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel current +Z</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel current -Z</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel current +Y</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel voltage -Y +X</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel voltage -X +Z</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Solar panel voltage -Z +Y</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Energy level</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU status</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">SD card status</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">RUSH status</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">EPS status</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Antenna status</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU accelerometer X</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU accelerometer Y</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU accelerometer Z</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU gyroscope X</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU gyroscope Y</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU gyroscope Z</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">OBDH resets</col>
-      </row>
-    </data>
   </object>
   <object class="GtkListStore" id="liststore_telemetry_data">
     <columns>

@@ -164,7 +164,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     // Beacon stream
     ref_builder->get_widget("radiobutton_beacon_src_sdr", radiobutton_beacon_src_sdr);
-    ref_builder->get_widget("entry_beacon_sdr_dev", entry_beacon_sdr_dev);
+    ref_builder->get_widget("combobox_beacon_sdr_dev", combobox_beacon_sdr_dev);
     ref_builder->get_widget("radiobutton_beacon_src_tcp", radiobutton_beacon_src_tcp);
     ref_builder->get_widget("entry_beacon_tcp_ip", entry_beacon_tcp_ip);
     ref_builder->get_widget("entry_beacon_tcp_port", entry_beacon_tcp_port);
@@ -200,7 +200,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     
     // Telemetry stream
     ref_builder->get_widget("radiobutton_telemetry_src_sdr", radiobutton_telemetry_src_sdr);
-    ref_builder->get_widget("entry_telemetry_sdr_dev", entry_telemetry_sdr_dev);
+    ref_builder->get_widget("combobox_telemetry_sdr_dev", combobox_telemetry_sdr_dev);
     ref_builder->get_widget("radiobutton_telemetry_src_tcp", radiobutton_telemetry_src_tcp);
     ref_builder->get_widget("entry_telemetry_tcp_ip", entry_telemetry_tcp_ip);
     ref_builder->get_widget("entry_telemetry_tcp_port", entry_telemetry_tcp_port);
@@ -848,7 +848,7 @@ void FSatGRS::OnToolButtonShutdownClicked()
 
 void FSatGRS::OnToolButtonOpenGPredictClicked()
 {
-    if (access("/usr/bin/gpredict", X_OK) == 0)
+    if ((access("/usr/bin/gpredict", X_OK) == 0) or (access("/usr/local/bin/gpredict", X_OK) == 0))
     {
         system("gpredict &");
         
@@ -917,7 +917,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         if (ngham_pkts_beacon->is_open())
         {
             radiobutton_beacon_src_sdr->set_sensitive(false);
-            entry_beacon_sdr_dev->set_sensitive(false);
+            combobox_beacon_sdr_dev->set_sensitive(false);
             radiobutton_beacon_src_tcp->set_sensitive(false);
             entry_beacon_tcp_ip->set_sensitive(false);
             entry_beacon_tcp_port->set_sensitive(false);
@@ -951,7 +951,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         delete ngham_pkts_beacon;
         
         radiobutton_beacon_src_sdr->set_sensitive(true);
-        entry_beacon_sdr_dev->set_sensitive(true);
+        combobox_beacon_sdr_dev->set_sensitive(true);
         radiobutton_beacon_src_tcp->set_sensitive(true);
         entry_beacon_tcp_ip->set_sensitive(true);
         entry_beacon_tcp_port->set_sensitive(true);
@@ -1043,7 +1043,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         if (ngham_pkts_telemetry->is_open())
         {
             radiobutton_telemetry_src_sdr->set_sensitive(false);
-            entry_telemetry_sdr_dev->set_sensitive(false);
+            combobox_telemetry_sdr_dev->set_sensitive(false);
             radiobutton_telemetry_src_tcp->set_sensitive(false);
             entry_telemetry_tcp_ip->set_sensitive(false);
             entry_telemetry_tcp_port->set_sensitive(false);
@@ -1076,7 +1076,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         delete ngham_pkts_telemetry;
         
         radiobutton_telemetry_src_sdr->set_sensitive(true);
-        entry_telemetry_sdr_dev->set_sensitive(true);
+        combobox_telemetry_sdr_dev->set_sensitive(true);
         radiobutton_telemetry_src_tcp->set_sensitive(true);
         entry_telemetry_tcp_ip->set_sensitive(true);
         entry_telemetry_tcp_port->set_sensitive(true);
@@ -1925,7 +1925,30 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
     if (beacon_receiver)
     {
         std::string grc_beacon_receiver_cmd = "python -u gnuradio/fsat_grs_beacon.py ";
-        grc_beacon_receiver_cmd += entry_beacon_sdr_dev->get_text().c_str();
+        switch(combobox_beacon_sdr_dev->get_active_row_number())
+        {
+            case 0:
+                grc_beacon_receiver_cmd += "rtl=0";
+                break;
+            case 1:
+                grc_beacon_receiver_cmd += "rtl=1";
+                break;
+            case 2:
+                grc_beacon_receiver_cmd += "fcd=0";
+                break;
+            case 3:
+                grc_beacon_receiver_cmd += "fcd=1";
+                break;
+            case 4:
+                grc_beacon_receiver_cmd += "uhd=0";
+                break;
+            case 5:
+                grc_beacon_receiver_cmd += "uhd=1";
+                break;
+            default:
+                this->RaiseErrorMessage("Invalid SDR device!", "Check the SDR connection or model type.");
+                break;
+        }
         grc_beacon_receiver_cmd += " ";
         grc_beacon_receiver_cmd += entry_config_downlink_beacon_freq->get_text().c_str();
         grc_beacon_receiver_cmd += " ";
@@ -1940,7 +1963,30 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
     else
     {
         std::string grc_telemetry_receiver_cmd = "python -u gnuradio/fsat_grs_telemetry.py ";
-        grc_telemetry_receiver_cmd += entry_telemetry_sdr_dev->get_text().c_str();
+        switch(combobox_telemetry_sdr_dev->get_active_row_number())
+        {
+            case 0:
+                grc_telemetry_receiver_cmd += "rtl=0";
+                break;
+            case 1:
+                grc_telemetry_receiver_cmd += "rtl=1";
+                break;
+            case 2:
+                grc_telemetry_receiver_cmd += "fcd=0";
+                break;
+            case 3:
+                grc_telemetry_receiver_cmd += "fcd=1";
+                break;
+            case 4:
+                grc_telemetry_receiver_cmd += "uhd=0";
+                break;
+            case 5:
+                grc_telemetry_receiver_cmd += "uhd=1";
+                break;
+            default:
+                this->RaiseErrorMessage("Invalid SDR device!", "Check the SDR connection or model type.");
+                break;
+        }
         grc_telemetry_receiver_cmd += " ";
         grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_freq->get_text().c_str();
         grc_telemetry_receiver_cmd += " ";
