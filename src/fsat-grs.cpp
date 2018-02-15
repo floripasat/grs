@@ -170,6 +170,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         toolbutton_shutdown->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonShutdownClicked));
     }
     
+    ref_builder->get_widget("toolbutton_schedule_cmd", toolbutton_schedule_cmd);
+    if (toolbutton_schedule_cmd)
+    {
+        toolbutton_schedule_cmd->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonCmdSchedulerClicked));
+    }
+
     ref_builder->get_widget("toolbutton_open_gpredict", toolbutton_open_gpredict);
     if (toolbutton_open_gpredict)
     {
@@ -615,6 +621,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         button_sd_auth_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonShutdownAuthCancelClicked));
     }
     
+    // Telecommand Scheduler Dialog
+    ref_builder->get_widget("dialog_cmd_scheduler", dialog_cmd_scheduler);
+
     // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
     
@@ -970,6 +979,16 @@ void FSatGRS::OnToolButtonShutdownClicked()
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
         dialog_shutdown_authentication->hide();
+    }
+}
+
+void FSatGRS::OnToolButtonCmdSchedulerClicked()
+{
+    int response = dialog_cmd_scheduler->run();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_cmd_scheduler->hide();
     }
 }
 

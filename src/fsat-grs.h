@@ -92,6 +92,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
         Gtk::ToolButton                 *toolbutton_shutdown;
+        Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
         Gtk::ToolButton                 *toolbutton_open_grqx;
         Gtk::ToolButton                 *toolbutton_config;
@@ -334,6 +335,9 @@ class FSatGRS
         Gtk::Button                     *button_sd_auth_send;
         Gtk::Button                     *button_sd_auth_cancel;
         
+        // Telecommand Scheduler Dialog
+        Gtk::Dialog                     *dialog_cmd_scheduler;
+
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
         
@@ -460,6 +464,12 @@ class FSatGRS
          * \return None
          */
         void OnToolButtonShutdownClicked();
+        /**
+         * \brief Telecommand scheduler button click signal handler.
+         * 
+         * \return None
+         */
+        void OnToolButtonCmdSchedulerClicked();
         /**
          * \brief Open GPredict software.
          * 
