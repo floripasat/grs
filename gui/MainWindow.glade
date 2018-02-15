@@ -2,6 +2,15 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <object class="GtkAction" id="action1"/>
+  <object class="GtkFileFilter" id="filefilter1">
+    <mime-types>
+      <mime-type>text/csv</mime-type>
+    </mime-types>
+    <patterns>
+      <pattern>*.csv</pattern>
+    </patterns>
+  </object>
   <object class="GtkImage" id="image_gpredict_icon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -254,8 +263,23 @@
               </packing>
             </child>
             <child>
+              <object class="GtkToolButton" id="toolbutton_close_log_file">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Close the log file</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-close</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id="toolbutton_prev_log_line">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Previous log data</property>
                 <property name="use_underline">True</property>
@@ -269,6 +293,7 @@
             <child>
               <object class="GtkToolButton" id="toolbutton_next_log_line">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Next log data</property>
                 <property name="use_underline">True</property>
@@ -459,7 +484,7 @@
           <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">260</property>
+            <property name="position">258</property>
             <property name="position_set">True</property>
             <property name="wide_handle">True</property>
             <child>
@@ -6730,6 +6755,60 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
       </object>
     </child>
   </object>
+  <object class="GtkFileChooserDialog" id="filechooserdialog_log_viewer">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Choose a log file</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">MainWindow</property>
+    <property name="create_folders">False</property>
+    <property name="filter">filefilter1</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="filechooserdialog-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="filechooserdialog-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_log_viewer_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_log_viewer_open">
+                <property name="label" translatable="yes">Open</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="liststore_telemetry_data">
     <columns>
       <!-- column-name telemetry_data -->
@@ -7203,12 +7282,6 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <placeholder/>
             </child>
           </object>
           <packing>

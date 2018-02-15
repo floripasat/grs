@@ -381,6 +381,45 @@ const char* BeaconData::getLabel()
     return "BEACON";
 }
 
+void BeaconData::ForceDisplay(vector<string> data)
+{
+    while(data.size() < 34)
+    {
+        data.push_back(std::string("-"));
+    }
+
+    unsigned int i = 6;
+
+    label_beacon_data_bat1_v_value->set_text(data[i++]);
+    label_beacon_data_bat2_v_value->set_text(data[i++]);
+    label_beacon_data_bat1_t_value->set_text(data[i++]);
+    label_beacon_data_bat2_t_value->set_text(data[i++]);
+    label_beacon_data_bat_c_value->set_text(data[i++]);
+    label_beacon_data_sp_i_my->set_text(data[i++]);
+    label_beacon_data_sp_i_px->set_text(data[i++]);
+    label_beacon_data_sp_i_mx->set_text(data[i++]);
+    label_beacon_data_sp_i_pz->set_text(data[i++]);
+    label_beacon_data_sp_i_mz->set_text(data[i++]);
+    label_beacon_data_sp_i_py->set_text(data[i++]);
+    label_beacon_data_sp_v_mypx->set_text(data[i++]);
+    label_beacon_data_sp_v_mxpz->set_text(data[i++]);
+    label_beacon_data_sp_v_mzpy->set_text(data[i++]);
+    label_beacon_data_status_energy_level->set_text(data[i++]);
+    label_beacon_data_status_imu->set_text(data[i++]);
+    label_beacon_data_status_usd->set_text(data[i++]);
+    label_beacon_data_status_rush->set_text(data[i++]);
+    label_beacon_data_status_eps->set_text(data[i++]);
+    label_beacon_data_status_antenna->set_text(data[i++]);
+    label_beacon_data_imu_accel_x->set_text(data[i++]);
+    label_beacon_data_imu_accel_y->set_text(data[i++]);
+    label_beacon_data_imu_accel_z->set_text(data[i++]);
+    label_beacon_data_imu_gyro_x->set_text(data[i++]);
+    label_beacon_data_imu_gyro_y->set_text(data[i++]);
+    label_beacon_data_imu_gyro_z->set_text(data[i++]);
+    label_beacon_data_obdh_rst_value->set_text(data[i++]);
+    label_beacon_data_system_time_value->set_text(data[i++]);
+}
+
 double BeaconData::BatVoltConv(uint16_t val)
 {
     return (val/32.0)*4.883e-3;

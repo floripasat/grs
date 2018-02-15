@@ -516,6 +516,69 @@ const char* TelemetryData::getLabel()
     return "TELEMETRY";
 }
 
+void TelemetryData::ForceDisplay(std::vector<std::string> data)
+{
+    while(data.size() < 57)
+    {
+        data.push_back(std::string("-"));
+    }
+
+    unsigned int i = 6;
+
+    label_telemetry_data_status_reset_counter->set_text(data[i++]);
+    label_telemetry_data_status_reset_cause->set_text(data[i++]);
+    label_telemetry_data_status_clock->set_text(data[i++]);
+    label_telemetry_data_status_imu->set_text(data[i++]);
+    label_telemetry_data_status_usd->set_text(data[i++]);
+    label_telemetry_data_status_rush->set_text(data[i++]);
+    label_telemetry_data_status_eps->set_text(data[i++]);
+    label_telemetry_data_status_antenna->set_text(data[i++]);
+    label_telemetry_data_uc_temp->set_text(data[i++]);
+    label_telemetry_data_uc_voltage->set_text(data[i++]);
+    label_telemetry_data_uc_current->set_text(data[i++]);
+    label_telemetry_data_time_system->set_text(data[i++]);
+    label_telemetry_data_time_system_up->set_text(data[i++]);
+    label_telemetry_data_imu_accel_x->set_text(data[i++]);
+    label_telemetry_data_imu_accel_y->set_text(data[i++]);
+    label_telemetry_data_imu_accel_z->set_text(data[i++]);
+    label_telemetry_data_imu_gyro_x->set_text(data[i++]);
+    label_telemetry_data_imu_gyro_y->set_text(data[i++]);
+    label_telemetry_data_imu_gyro_z->set_text(data[i++]);
+    label_telemetry_data_sp_sun_p1->set_text(data[i++]);
+    label_telemetry_data_sp_sun_p2->set_text(data[i++]);
+    label_telemetry_data_sp_sun_p3->set_text(data[i++]);
+    label_telemetry_data_sp_temp_p1->set_text(data[i++]);
+    label_telemetry_data_sp_temp_p2->set_text(data[i++]);
+    label_telemetry_data_sp_temp_p3->set_text(data[i++]);
+    label_telemetry_data_eps_bat_mean_i->set_text(data[i++]);
+    label_telemetry_data_eps_bat_temp->set_text(data[i++]);
+    label_telemetry_data_eps_bat_1_volt->set_text(data[i++]);
+    label_telemetry_data_eps_bat_2_volt->set_text(data[i++]);
+    label_telemetry_data_eps_bat_current->set_text(data[i++]);
+    label_telemetry_data_eps_bat_charge->set_text(data[i++]);
+    label_telemetry_data_eps_bat_protection->set_text(data[i++]);
+    label_telemetry_data_eps_bat_status->set_text(data[i++]);
+    label_telemetry_data_eps_bat_cycles->set_text(data[i++]);
+    label_telemetry_data_eps_bat_raac->set_text(data[i++]);
+    label_telemetry_data_eps_bat_rsac->set_text(data[i++]);
+    label_telemetry_data_eps_bat_rarc->set_text(data[i++]);
+    label_telemetry_data_eps_bat_rsrc->set_text(data[i++]);
+    label_telemetry_data_eps_sp_i_my->set_text(data[i++]);
+    label_telemetry_data_eps_sp_i_px->set_text(data[i++]);
+    label_telemetry_data_eps_sp_i_mx->set_text(data[i++]);
+    label_telemetry_data_eps_sp_i_pz->set_text(data[i++]);
+    label_telemetry_data_eps_sp_i_mz->set_text(data[i++]);
+    label_telemetry_data_eps_sp_i_py->set_text(data[i++]);
+    label_telemetry_data_eps_sp_v_mypx->set_text(data[i++]);
+    label_telemetry_data_eps_sp_v_mxpz->set_text(data[i++]);
+    label_telemetry_data_eps_sp_v_mzpy->set_text(data[i++]);
+    label_telemetry_data_eps_misc_boost_v->set_text(data[i++]);
+    label_telemetry_data_eps_misc_main_bus_v->set_text(data[i++]);
+    label_telemetry_data_eps_misc_beacon_i->set_text(data[i++]);
+    label_telemetry_data_eps_misc_uc_temp->set_text(data[i++]);
+    label_telemetry_data_eps_misc_energy_level->set_text(data[i++]);
+}
+
 double TelemetryData::BatVoltConv(uint16_t val)
 {
     return (int16_t(val)/32)*4.883e-3;

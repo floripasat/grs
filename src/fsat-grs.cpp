@@ -108,6 +108,38 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         toolbutton_open_log_file->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonOpenClicked));
     }
     
+    ref_builder->get_widget("filechooserdialog_log_viewer", filechooserdialog_log_viewer);
+    
+    ref_builder->get_widget("button_log_viewer_cancel", button_log_viewer_cancel);
+    if (button_log_viewer_cancel)
+    {
+        button_log_viewer_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonLogViewerCancelClicked));
+    }
+
+    ref_builder->get_widget("button_log_viewer_open", button_log_viewer_open);
+    if (button_log_viewer_open)
+    {
+        button_log_viewer_open->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonLogViewerOpenClicked));
+    }
+
+    ref_builder->get_widget("toolbutton_close_log_file", toolbutton_close_log_file);
+    if (toolbutton_close_log_file)
+    {
+        toolbutton_close_log_file->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonCloseClicked));
+    }
+
+    ref_builder->get_widget("toolbutton_prev_log_line", toolbutton_prev_log_line);
+    if (toolbutton_prev_log_line)
+    {
+        toolbutton_prev_log_line->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonPrevClicked));
+    }
+
+    ref_builder->get_widget("toolbutton_next_log_line", toolbutton_next_log_line);
+    if (toolbutton_next_log_line)
+    {
+        toolbutton_next_log_line->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonNextClicked));
+    }
+
     ref_builder->get_widget("toolbutton_statistics", toolbutton_statistics);
     if (toolbutton_statistics)
     {
@@ -766,7 +798,102 @@ bool FSatGRS::Timer()
 
 void FSatGRS::OnToolButtonOpenClicked()
 {
-    this->RaiseErrorMessage("Under development!", "This functionality will be available soon.");
+    int response = filechooserdialog_log_viewer->run();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        filechooserdialog_log_viewer->hide();
+    }
+}
+
+void FSatGRS::OnButtonLogViewerCancelClicked()
+{
+    filechooserdialog_log_viewer->hide();
+}
+
+void FSatGRS::OnButtonLogViewerOpenClicked()
+{
+    std::string log_file = filechooserdialog_log_viewer->get_filename();
+
+    read_log = new ReadLog;
+
+    read_log->open(log_file.c_str());
+
+    filechooserdialog_log_viewer->hide();
+    
+    if (read_log->is_open())
+    {
+        std::string log_text = read_log->getLogType();
+        log_text += " log file ";
+        log_text += log_file.c_str();
+        log_text += " with ";
+        log_text += ToString(read_log->getLines());
+        log_text += " entries opened.";
+
+        event_log->AddNewEvent(log_text.c_str());
+
+        beacon_data->ForceDisplay(read_log->getDataLine(0));
+        
+        toolbutton_open_log_file->set_sensitive(false);
+        toolbutton_close_log_file->set_sensitive(true);
+        toolbutton_prev_log_line->set_sensitive(true);
+        toolbutton_next_log_line->set_sensitive(true);
+    }
+    else
+    {
+        delete read_log;
+
+        this->RaiseErrorMessage("Error opening the log file!", "The selected file is invalid or corrupted.");
+    }
+}
+
+void FSatGRS::OnToolButtonCloseClicked()
+{
+    if (read_log->is_open())
+    {
+        read_log->close();
+        
+        delete read_log;
+    }
+
+    toolbutton_open_log_file->set_sensitive(true);
+    toolbutton_close_log_file->set_sensitive(false);
+    toolbutton_prev_log_line->set_sensitive(false);
+    toolbutton_next_log_line->set_sensitive(false);
+
+    event_log->AddNewEvent("Log file closed.");
+}
+
+void FSatGRS::OnToolButtonPrevClicked()
+{
+    if (read_log->getLogType() == "BEACON")
+    {
+        beacon_data->ForceDisplay(read_log->getPrevious());
+    }
+    else if (read_log->getLogType() == "TELEMETRY")
+    {
+        telemetry_data->ForceDisplay(read_log->getPrevious());
+    }
+    else
+    {
+        this->RaiseErrorMessage("Type of log file unknown!", "Nothing to display.");
+    }
+}
+
+void FSatGRS::OnToolButtonNextClicked()
+{
+    if (read_log->getLogType() == "BEACON")
+    {
+        beacon_data->ForceDisplay(read_log->getNext());
+    }
+    else if (read_log->getLogType() == "TELEMETRY")
+    {
+        telemetry_data->ForceDisplay(read_log->getNext());
+    }
+    else
+    {
+        this->RaiseErrorMessage("Type of log file unknown!", "Nothing to display.");
+    }
 }
 
 void FSatGRS::OnToolButtonConfigClicked()
@@ -916,6 +1043,10 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         
         if (ngham_pkts_beacon->is_open())
         {
+            toolbutton_open_log_file->set_sensitive(false);
+            toolbutton_close_log_file->set_sensitive(false);
+            toolbutton_prev_log_line->set_sensitive(false);
+            toolbutton_next_log_line->set_sensitive(false);
             radiobutton_beacon_src_sdr->set_sensitive(false);
             combobox_beacon_sdr_dev->set_sensitive(false);
             radiobutton_beacon_src_tcp->set_sensitive(false);
@@ -950,6 +1081,10 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
     {
         delete ngham_pkts_beacon;
         
+        toolbutton_open_log_file->set_sensitive(true);
+        toolbutton_close_log_file->set_sensitive(false);
+        toolbutton_prev_log_line->set_sensitive(false);
+        toolbutton_next_log_line->set_sensitive(false);
         radiobutton_beacon_src_sdr->set_sensitive(true);
         combobox_beacon_sdr_dev->set_sensitive(true);
         radiobutton_beacon_src_tcp->set_sensitive(true);
@@ -1042,6 +1177,10 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         
         if (ngham_pkts_telemetry->is_open())
         {
+            toolbutton_open_log_file->set_sensitive(false);
+            toolbutton_close_log_file->set_sensitive(false);
+            toolbutton_prev_log_line->set_sensitive(false);
+            toolbutton_next_log_line->set_sensitive(false);
             radiobutton_telemetry_src_sdr->set_sensitive(false);
             combobox_telemetry_sdr_dev->set_sensitive(false);
             radiobutton_telemetry_src_tcp->set_sensitive(false);
@@ -1075,6 +1214,10 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
     {
         delete ngham_pkts_telemetry;
         
+        toolbutton_open_log_file->set_sensitive(true);
+        toolbutton_close_log_file->set_sensitive(false);
+        toolbutton_prev_log_line->set_sensitive(false);
+        toolbutton_next_log_line->set_sensitive(false);
         radiobutton_telemetry_src_sdr->set_sensitive(true);
         combobox_telemetry_sdr_dev->set_sensitive(true);
         radiobutton_telemetry_src_tcp->set_sensitive(true);

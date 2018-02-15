@@ -39,6 +39,7 @@
 #ifndef PACKET_DATA_H_
 #define PACKET_DATA_H_
 
+#include <vector>
 #include <string>
 
 /**
@@ -110,6 +111,14 @@ class PacketData
          * \return 
          */
         virtual const char* getLabel();
+        /**
+         * \brief Forces the data to display into the beacon/telemetry panel.
+         *
+         * \param data is a vector of strings with the data to display in the beacon/telemetry panel.
+         *
+         * \return None
+         */
+        virtual void ForceDisplay(std::vector<std::string> data);
 };
 
 #endif // PACKET_DATA_H_

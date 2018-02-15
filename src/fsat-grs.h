@@ -48,6 +48,7 @@
 #include "protocol_statistic.h"
 #include "packet_data.h"
 #include "ngham_pkts.h"
+#include "read_log.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/MainWindow.glade"
 
@@ -80,6 +81,12 @@ class FSatGRS
         
         // Toolbar
         Gtk::ToolButton                 *toolbutton_open_log_file;
+        Gtk::FileChooserDialog          *filechooserdialog_log_viewer;
+        Gtk::Button                     *button_log_viewer_cancel;
+        Gtk::Button                     *button_log_viewer_open;
+        Gtk::ToolButton                 *toolbutton_close_log_file;
+        Gtk::ToolButton                 *toolbutton_prev_log_line;
+        Gtk::ToolButton                 *toolbutton_next_log_line;
         Gtk::ToolButton                 *toolbutton_statistics;
         Gtk::ToolButton                 *toolbutton_plot;
         Gtk::ToolButton                 *toolbutton_ping;
@@ -370,7 +377,11 @@ class FSatGRS
          * \brief 
          */
         NGHamPkts                       *ngham_pkts_telemetry;
-        
+        /**
+         * \brief 
+         */
+        ReadLog                         *read_log;
+
         /**
          * \brief 
          * 
@@ -383,6 +394,36 @@ class FSatGRS
          * \return 
          */
         void OnToolButtonOpenClicked();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
+        void OnButtonLogViewerCancelClicked();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
+        void OnButtonLogViewerOpenClicked();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
+        void OnToolButtonCloseClicked();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
+        void OnToolButtonPrevClicked();
+        /**
+         * \brief 
+         * 
+         * \return 
+         */
+        void OnToolButtonNextClicked();
         /**
          * \brief 
          * 

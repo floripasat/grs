@@ -37,6 +37,8 @@
 
 #include "packet_data.h"
 
+using namespace std;
+
 PacketData::PacketData()
 {
     
@@ -72,7 +74,7 @@ void PacketData::Clear()
     
 }
 
-std::string PacketData::Log()
+string PacketData::Log()
 {
     return std::string("");
 }
@@ -80,6 +82,11 @@ std::string PacketData::Log()
 const char* PacketData::getLabel()
 {
     return "GENERIC";
+}
+
+void PacketData::ForceDisplay(vector<string> data)
+{
+
 }
 
 //! \} End of packet_data

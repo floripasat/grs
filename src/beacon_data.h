@@ -244,6 +244,14 @@ class BeaconData: public PacketData
          * \return None
          */
         const char* getLabel();
+        /**
+         * \brief Forces the data to display into the beacon panel.
+         *
+         * \param data is a vector of strings with the data to display in the beacon panel.
+         *
+         * \return None
+         */
+        void ForceDisplay(std::vector<std::string> data);
 };
 
 #endif // BEACON_DATA_H_

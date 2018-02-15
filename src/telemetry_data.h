@@ -406,6 +406,14 @@ class TelemetryData: public PacketData
          * \return 
          */
         const char* getLabel();
+        /**
+         * \brief Forces the data to display into the telemetry panel.
+         *
+         * \param data is a vector of strings with the data to display in the telemetry panel.
+         *
+         * \return None
+         */
+        void ForceDisplay(std::vector<std::string> data);
 };
 
 #endif // TELEMTRY_DATA_H_
