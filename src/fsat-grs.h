@@ -130,6 +130,24 @@ class FSatGRS
         Gtk::Button                     *button_stop_telemetry;
         Gtk::Button                     *button_clear_all_telemetry;
         
+        // Uplink stream
+        Gtk::RadioButton                *radiobutton_uplink_output_sdr;
+        Gtk::ComboBox                   *combobox_uplink_output_sdr_device;
+        Gtk::RadioButton                *radiobutton_uplink_output_serial;
+        Gtk::Entry                      *entry_uplink_output_serial_dev;
+        Gtk::ComboBox                   *combobox_uplink_output_serial_baudrate;
+        Gtk::RadioButton                *radiobutton_uplink_grs_scheduler;
+        Gtk::Button                     *button_uplink_control_open_grs_scheduler;
+        Gtk::RadioButton                *radiobutton_uplink_server_control;
+        Gtk::Entry                      *entry_uplink_server_ip;
+        Gtk::Entry                      *entry_uplink_server_port;
+        Gtk::CheckButton                *checkbutton_uplink_telecommands_ping;
+        Gtk::CheckButton                *checkbutton_uplink_telecommands_data_request;
+        Gtk::CheckButton                *checkbutton_uplink_telecommands_shutdown;
+        Gtk::ToggleButton               *togglebutton_play_uplink;
+        Gtk::ToggleButton               *togglebutton_pause_uplink;
+        Gtk::Button                     *button_stop_uplink;
+
         // Event log
         Gtk::TextView                   *textview_event_log;
         
@@ -598,6 +616,31 @@ class FSatGRS
          * \return None
          */
         void OnButtonAddNewUserClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonGRSSchedulerClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToggleButtonPlayUplinkStreamToggled();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnToggleButtonPauseUplinkStreamToggled();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonStopUplinkStreamClicked();
+
         /**
          * \brief 
          * 

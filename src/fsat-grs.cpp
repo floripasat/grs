@@ -272,6 +272,45 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         button_clear_all_telemetry->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonClearAllTelemetryClicked));
     }
     
+    // Uplink stream
+    ref_builder->get_widget("radiobutton_uplink_output_sdr", radiobutton_uplink_output_sdr);
+    ref_builder->get_widget("combobox_uplink_output_sdr_device", combobox_uplink_output_sdr_device);
+    ref_builder->get_widget("radiobutton_uplink_output_serial", radiobutton_uplink_output_serial);
+    ref_builder->get_widget("entry_uplink_output_serial_dev", entry_uplink_output_serial_dev);
+    ref_builder->get_widget("combobox_uplink_output_serial_baudrate", combobox_uplink_output_serial_baudrate);
+    ref_builder->get_widget("radiobutton_uplink_grs_scheduler", radiobutton_uplink_grs_scheduler);
+    
+    ref_builder->get_widget("button_uplink_control_open_grs_scheduler", button_uplink_control_open_grs_scheduler);
+    if (button_uplink_control_open_grs_scheduler)
+    {
+        button_uplink_control_open_grs_scheduler->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonGRSSchedulerClicked));
+    }
+
+    ref_builder->get_widget("radiobutton_uplink_server_control", radiobutton_uplink_server_control);
+    ref_builder->get_widget("entry_uplink_server_ip", entry_uplink_server_ip);
+    ref_builder->get_widget("entry_uplink_server_port", entry_uplink_server_port);
+    ref_builder->get_widget("checkbutton_uplink_telecommands_ping", checkbutton_uplink_telecommands_ping);
+    ref_builder->get_widget("checkbutton_uplink_telecommands_data_request", checkbutton_uplink_telecommands_data_request);
+    ref_builder->get_widget("checkbutton_uplink_telecommands_shutdown", checkbutton_uplink_telecommands_shutdown);
+    
+    ref_builder->get_widget("togglebutton_play_uplink", togglebutton_play_uplink);
+    if (togglebutton_play_uplink)
+    {
+        togglebutton_play_uplink->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToggleButtonPlayUplinkStreamToggled));
+    }
+
+    ref_builder->get_widget("togglebutton_pause_uplink", togglebutton_pause_uplink);
+    if (togglebutton_pause_uplink)
+    {
+        togglebutton_pause_uplink->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToggleButtonPauseUplinkStreamToggled));
+    }
+
+    ref_builder->get_widget("button_stop_uplink", button_stop_uplink);
+    if (button_stop_uplink)
+    {
+        button_stop_uplink->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonStopUplinkStreamClicked));
+    }
+
     // Log checkbuttons
     ref_builder->get_widget("checkbutton_log_ngham_packets", checkbutton_log_ngham_packets);
     ref_builder->get_widget("checkbutton_log_ax25_packets", checkbutton_log_ax25_packets);
@@ -1293,6 +1332,31 @@ void FSatGRS::OnButtonClearAllTelemetryClicked()
     telemetry_data->Clear();
     telemetry_data->Display(true);
     filechooserbutton_telemetry->unselect_all();
+}
+
+void FSatGRS::OnButtonGRSSchedulerClicked()
+{
+    int response = dialog_cmd_scheduler->run();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_cmd_scheduler->hide();
+    }
+}
+
+void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
+{
+    this->RaiseErrorMessage("Under development!", "This will be working soon.");
+}
+
+void FSatGRS::OnToggleButtonPauseUplinkStreamToggled()
+{
+    this->RaiseErrorMessage("Under development!", "This will be working soon.");
+}
+
+void FSatGRS::OnButtonStopUplinkStreamClicked()
+{
+    this->RaiseErrorMessage("Under development!", "This will be working soon.");
 }
 /*
 void FSatGRS::OnToggleButtonOpenClosePortToggled()
