@@ -2035,7 +2035,16 @@ void FSatGRS::OnButtonShutdownAuthSendClicked()
                 if (file_passwords_line == password_hash)
                 {
                     std::string shutdown_event = "Transmitting ";
-                    shutdown_event += entry_config_uplink_telemetry_burst->get_text();
+                    
+                    if (radiobutton_config_uplink_type_telemetry->get_active())
+                    {
+                        shutdown_event += entry_config_uplink_telemetry_burst->get_text();
+                    }
+                    else if (radiobutton_config_uplink_type_beacon->get_active())
+                    {
+                        shutdown_event += entry_config_uplink_beacon_burst->get_text();
+                    }
+                    
                     shutdown_event += " shutdown command(s)...";
                     
                     event_log->AddNewEvent(shutdown_event.c_str());
@@ -2239,7 +2248,8 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t ping[9];
     uint8_t request[22];
     uint8_t shutdown[9];
-    
+    unsigned int packets_number = 1;
+
     std::string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
     if (radiobutton_config_uplink_type_telemetry->get_active())
     {
@@ -2320,7 +2330,16 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             ngham_uplink_pkt.Generate(shutdown, 8);
             
-            for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
+            if (radiobutton_config_uplink_type_telemetry->get_active())
+            {
+                packets_number = std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr);
+            }
+            else if (radiobutton_config_uplink_type_beacon->get_active())
+            {
+                packets_number = std::stoi(entry_config_uplink_beacon_burst->get_text(), nullptr);
+            }
+
+            for(unsigned int i=0; i<packets_number; i++)
             {
                 system(cmd_str.c_str());
                 
