@@ -275,6 +275,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     // Uplink stream
     ref_builder->get_widget("radiobutton_uplink_output_sdr", radiobutton_uplink_output_sdr);
     ref_builder->get_widget("combobox_uplink_output_sdr_device", combobox_uplink_output_sdr_device);
+    ref_builder->get_widget("radiobutton_uplink_output_server", radiobutton_uplink_output_server);
+    ref_builder->get_widget("entry_uplink_output_server_ip", entry_uplink_output_server_ip);
+    ref_builder->get_widget("entry_uplink_output_server_port", entry_uplink_output_server_port);
     ref_builder->get_widget("radiobutton_uplink_output_serial", radiobutton_uplink_output_serial);
     ref_builder->get_widget("entry_uplink_output_serial_dev", entry_uplink_output_serial_dev);
     ref_builder->get_widget("combobox_uplink_output_serial_baudrate", combobox_uplink_output_serial_baudrate);
@@ -289,6 +292,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("radiobutton_uplink_server_control", radiobutton_uplink_server_control);
     ref_builder->get_widget("entry_uplink_server_ip", entry_uplink_server_ip);
     ref_builder->get_widget("entry_uplink_server_port", entry_uplink_server_port);
+    ref_builder->get_widget("radiobutton_uplink_manual_control", radiobutton_uplink_manual_control);
     ref_builder->get_widget("checkbutton_uplink_telecommands_ping", checkbutton_uplink_telecommands_ping);
     ref_builder->get_widget("checkbutton_uplink_telecommands_data_request", checkbutton_uplink_telecommands_data_request);
     ref_builder->get_widget("checkbutton_uplink_telecommands_shutdown", checkbutton_uplink_telecommands_shutdown);
@@ -630,6 +634,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("checkbutton_request_temperatures", checkbutton_request_temperatures);
     ref_builder->get_widget("checkbutton_request_task_scheduler", checkbutton_request_task_scheduler);
     ref_builder->get_widget("checkbutton_request_rush", checkbutton_request_rush);
+    ref_builder->get_widget("entry_uplink_request_pkt_quant", entry_uplink_request_pkt_quant);
     ref_builder->get_widget("button_data_request_send", button_data_request_send);
     ref_builder->get_widget("button_data_request_cancel", button_data_request_cancel);
     
@@ -2309,7 +2314,8 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             request[18] = (checkbutton_request_temperatures->get_active()? '1' : '0');
             request[19] = (checkbutton_request_task_scheduler->get_active()? '1' : '0');
             request[20] = (checkbutton_request_rush->get_active()? '1' : '0');
-            
+            //pkt_quant = entry_uplink_request_pkt_quant->get_text();
+
             ngham_uplink_pkt.Generate(request, 21);
             
             for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)

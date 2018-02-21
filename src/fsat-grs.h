@@ -133,6 +133,9 @@ class FSatGRS
         // Uplink stream
         Gtk::RadioButton                *radiobutton_uplink_output_sdr;
         Gtk::ComboBox                   *combobox_uplink_output_sdr_device;
+        Gtk::RadioButton                *radiobutton_uplink_output_server;
+        Gtk::Entry                      *entry_uplink_output_server_ip;
+        Gtk::Entry                      *entry_uplink_output_server_port;
         Gtk::RadioButton                *radiobutton_uplink_output_serial;
         Gtk::Entry                      *entry_uplink_output_serial_dev;
         Gtk::ComboBox                   *combobox_uplink_output_serial_baudrate;
@@ -141,6 +144,7 @@ class FSatGRS
         Gtk::RadioButton                *radiobutton_uplink_server_control;
         Gtk::Entry                      *entry_uplink_server_ip;
         Gtk::Entry                      *entry_uplink_server_port;
+        Gtk::RadioButton                *radiobutton_uplink_manual_control;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_ping;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_data_request;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_shutdown;
@@ -343,6 +347,7 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_request_temperatures;
         Gtk::CheckButton                *checkbutton_request_task_scheduler;
         Gtk::CheckButton                *checkbutton_request_rush;
+        Gtk::Entry                      *entry_uplink_request_pkt_quant;
         Gtk::Button                     *button_data_request_send;
         Gtk::Button                     *button_data_request_cancel;
         
