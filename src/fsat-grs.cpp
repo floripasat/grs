@@ -598,12 +598,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("entry_config_downlink_telemetry_baudrate", entry_config_downlink_telemetry_baudrate);
     ref_builder->get_widget("entry_config_downlink_telemetry_filter", entry_config_downlink_telemetry_filter);
     ref_builder->get_widget("entry_config_downlink_telemetry_sample_rate", entry_config_downlink_telemetry_sample_rate);
+    ref_builder->get_widget("entry_config_uplink_burst", entry_config_uplink_burst);
     ref_builder->get_widget("entry_config_uplink_telemetry_frequency", entry_config_uplink_telemetry_frequency);
-    ref_builder->get_widget("entry_config_uplink_telemetry_burst", entry_config_uplink_telemetry_burst);
-    ref_builder->get_widget("entry_config_uplink_telemetry_sdr", entry_config_uplink_telemetry_sdr);
     ref_builder->get_widget("entry_config_uplink_beacon_frequency", entry_config_uplink_beacon_frequency);
-    ref_builder->get_widget("entry_config_uplink_beacon_burst", entry_config_uplink_beacon_burst);
-    ref_builder->get_widget("entry_config_uplink_beacon_sdr", entry_config_uplink_beacon_sdr);
     ref_builder->get_widget("radiobutton_config_uplink_type_telemetry", radiobutton_config_uplink_type_telemetry);
     ref_builder->get_widget("radiobutton_config_uplink_type_beacon", radiobutton_config_uplink_type_beacon);
     
@@ -996,7 +993,7 @@ void FSatGRS::OnToolButtonPlotClicked()
 void FSatGRS::OnToolButtonPingClicked()
 {
     std::string ping_event = "Transmitting ";
-    ping_event += entry_config_uplink_telemetry_burst->get_text();
+    ping_event += entry_config_uplink_burst->get_text();
     ping_event += " ping command(s)...";
     
     event_log->AddNewEvent(ping_event.c_str());
@@ -1351,17 +1348,125 @@ void FSatGRS::OnButtonGRSSchedulerClicked()
 
 void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
 {
-    this->RaiseErrorMessage("Under development!", "This will be working soon.");
+    if (togglebutton_play_uplink->get_active())
+    {
+        radiobutton_uplink_output_sdr->set_sensitive(false);
+        combobox_uplink_output_sdr_device->set_sensitive(false);
+        radiobutton_uplink_output_server->set_sensitive(false);
+        entry_uplink_output_server_ip->set_sensitive(false);
+        entry_uplink_output_server_port->set_sensitive(false);
+        radiobutton_uplink_output_serial->set_sensitive(false);
+        entry_uplink_output_serial_dev->set_sensitive(false);
+        combobox_uplink_output_serial_baudrate->set_sensitive(false);
+        radiobutton_uplink_grs_scheduler->set_sensitive(false);
+        button_uplink_control_open_grs_scheduler->set_sensitive(false);
+        radiobutton_uplink_server_control->set_sensitive(false);
+        entry_uplink_server_ip->set_sensitive(false);
+        entry_uplink_server_port->set_sensitive(false);
+        radiobutton_uplink_manual_control->set_sensitive(false);
+        checkbutton_uplink_telecommands_ping->set_sensitive(false);
+        checkbutton_uplink_telecommands_data_request->set_sensitive(false);
+        checkbutton_uplink_telecommands_shutdown->set_sensitive(false);
+        
+        togglebutton_play_uplink->set_sensitive(false);
+        togglebutton_pause_uplink->set_sensitive(true);
+        button_stop_uplink->set_sensitive(true);
+        
+        if (radiobutton_uplink_manual_control->get_active())
+        {
+            if (checkbutton_uplink_telecommands_ping->get_active())
+            {
+                toolbutton_ping->set_sensitive(true);
+            }
+            
+            if (checkbutton_uplink_telecommands_data_request->get_active())
+            {
+                toolbutton_request_data->set_sensitive(true);
+            }
+            
+            if (checkbutton_uplink_telecommands_shutdown->get_active())
+            {
+                toolbutton_shutdown->set_sensitive(true);
+            }
+        }
+        
+        event_log->AddNewEvent("New uplink stream started");
+        
+        if (radiobutton_uplink_output_server->get_active() or radiobutton_uplink_output_serial->get_active())
+        {
+            this->RaiseErrorMessage("Under development!", "The uplink output via a serial device or an external server will be available soon.");
+            
+            togglebutton_play_uplink->set_active(false);
+        }
+        else if (radiobutton_uplink_grs_scheduler->get_active() or radiobutton_uplink_server_control->get_active())
+        {
+            this->RaiseErrorMessage("Under development!", "The uplink control using the GRS scheduler or an external server will be available soon.");
+            
+            togglebutton_play_uplink->set_active(false);
+        }
+    }
+    else
+    {
+        radiobutton_uplink_output_sdr->set_sensitive(true);
+        combobox_uplink_output_sdr_device->set_sensitive(true);
+        radiobutton_uplink_output_server->set_sensitive(true);
+        entry_uplink_output_server_ip->set_sensitive(true);
+        entry_uplink_output_server_port->set_sensitive(true);
+        radiobutton_uplink_output_serial->set_sensitive(true);
+        entry_uplink_output_serial_dev->set_sensitive(true);
+        combobox_uplink_output_serial_baudrate->set_sensitive(true);
+        radiobutton_uplink_grs_scheduler->set_sensitive(true);
+        button_uplink_control_open_grs_scheduler->set_sensitive(true);
+        radiobutton_uplink_server_control->set_sensitive(true);
+        entry_uplink_server_ip->set_sensitive(true);
+        entry_uplink_server_port->set_sensitive(true);
+        radiobutton_uplink_manual_control->set_sensitive(true);
+        checkbutton_uplink_telecommands_ping->set_sensitive(true);
+        checkbutton_uplink_telecommands_data_request->set_sensitive(true);
+        checkbutton_uplink_telecommands_shutdown->set_sensitive(true);
+        
+        togglebutton_play_uplink->set_sensitive(true);
+        togglebutton_pause_uplink->set_sensitive(false);
+        button_stop_uplink->set_sensitive(false);
+
+        if (radiobutton_uplink_manual_control->get_active())
+        {
+            if (checkbutton_uplink_telecommands_ping->get_active())
+            {
+                toolbutton_ping->set_sensitive(false);
+            }
+            
+            if (checkbutton_uplink_telecommands_data_request->get_active())
+            {
+                toolbutton_request_data->set_sensitive(false);
+            }
+
+            if (checkbutton_uplink_telecommands_shutdown->get_active())
+            {
+                toolbutton_shutdown->set_sensitive(false);
+            }
+        }
+
+        event_log->AddNewEvent("Uplink stream finished");
+    }
 }
 
 void FSatGRS::OnToggleButtonPauseUplinkStreamToggled()
 {
-    this->RaiseErrorMessage("Under development!", "This will be working soon.");
+    if (togglebutton_pause_uplink->get_active())
+    {
+        togglebutton_play_uplink->set_sensitive(false);
+    }
+    else
+    {
+        togglebutton_play_uplink->set_sensitive(true);
+    }
 }
 
 void FSatGRS::OnButtonStopUplinkStreamClicked()
 {
-    this->RaiseErrorMessage("Under development!", "This will be working soon.");
+    togglebutton_play_uplink->set_active(false);
+    togglebutton_pause_uplink->set_active(false);
 }
 /*
 void FSatGRS::OnToggleButtonOpenClosePortToggled()
@@ -2001,7 +2106,7 @@ void FSatGRS::OnButtonRunAnalysisClicked()
 void FSatGRS::OnButtonDataRequestSendClicked()
 {
     std::string data_request_event = "Transmitting ";
-    data_request_event += entry_config_uplink_telemetry_burst->get_text();
+    data_request_event += entry_config_uplink_burst->get_text();
     data_request_event += " data request(s)...";
     
     event_log->AddNewEvent(data_request_event.c_str());
@@ -2040,16 +2145,7 @@ void FSatGRS::OnButtonShutdownAuthSendClicked()
                 if (file_passwords_line == password_hash)
                 {
                     std::string shutdown_event = "Transmitting ";
-                    
-                    if (radiobutton_config_uplink_type_telemetry->get_active())
-                    {
-                        shutdown_event += entry_config_uplink_telemetry_burst->get_text();
-                    }
-                    else if (radiobutton_config_uplink_type_beacon->get_active())
-                    {
-                        shutdown_event += entry_config_uplink_beacon_burst->get_text();
-                    }
-                    
+                    shutdown_event += entry_config_uplink_burst->get_text();
                     shutdown_event += " shutdown command(s)...";
                     
                     event_log->AddNewEvent(shutdown_event.c_str());
@@ -2256,18 +2352,30 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     unsigned int packets_number = 1;
 
     std::string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
+    switch(combobox_uplink_output_sdr_device->get_active_row_number())
+    {
+        case 0:
+            cmd_str += "uhd=0 ";
+            break;
+        case 1:
+            cmd_str += "uhd=1 ";
+            break;
+        case 2:
+            cmd_str += "uhd=2 ";
+            break;
+        default:
+            cmd_str += "uhd=0 ";
+            break;
+    }
+
     if (radiobutton_config_uplink_type_telemetry->get_active())
     {
-        cmd_str += entry_config_uplink_telemetry_sdr->get_text();
-        cmd_str += " ";
         cmd_str += entry_config_uplink_telemetry_frequency->get_text();
         cmd_str += " ";
         cmd_str += entry_config_downlink_telemetry_baudrate->get_text();
     }
     else if (radiobutton_config_uplink_type_beacon->get_active())
     {
-        cmd_str += entry_config_uplink_beacon_sdr->get_text();
-        cmd_str += " ";
         cmd_str += entry_config_uplink_beacon_frequency->get_text();
         cmd_str += " ";
         cmd_str += entry_config_downlink_beacon_baudrate->get_text();
@@ -2286,7 +2394,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             ngham_uplink_pkt.Generate(ping, 8);
             
-            for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
+            for(unsigned int i=0; i<std::stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
                 
@@ -2318,7 +2426,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
             ngham_uplink_pkt.Generate(request, 21);
             
-            for(unsigned int i=0; i<std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr); i++)
+            for(unsigned int i=0; i<std::stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
                 
@@ -2336,14 +2444,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             ngham_uplink_pkt.Generate(shutdown, 8);
             
-            if (radiobutton_config_uplink_type_telemetry->get_active())
-            {
-                packets_number = std::stoi(entry_config_uplink_telemetry_burst->get_text(), nullptr);
-            }
-            else if (radiobutton_config_uplink_type_beacon->get_active())
-            {
-                packets_number = std::stoi(entry_config_uplink_beacon_burst->get_text(), nullptr);
-            }
+            packets_number = std::stoi(entry_config_uplink_burst->get_text(), nullptr);
 
             for(unsigned int i=0; i<packets_number; i++)
             {
@@ -2397,14 +2498,11 @@ void FSatGRS::LoadConfigs()
         entry_config_downlink_telemetry_baudrate->set_text(configs_str[10]);
         entry_config_downlink_telemetry_filter->set_text(configs_str[11]);
         entry_config_downlink_telemetry_sample_rate->set_text(configs_str[12]);
-        entry_config_uplink_telemetry_frequency->set_text(configs_str[13]);
-        entry_config_uplink_telemetry_burst->set_text(configs_str[14]);
-        entry_config_uplink_telemetry_sdr->set_text(configs_str[15]);
-        entry_config_uplink_beacon_frequency->set_text(configs_str[16]);
-        entry_config_uplink_beacon_burst->set_text(configs_str[17]);
-        entry_config_uplink_beacon_sdr->set_text(configs_str[18]);
-        radiobutton_config_uplink_type_telemetry->set_active((configs_str[19] == "1"? true : false));
-        radiobutton_config_uplink_type_beacon->set_active((configs_str[20] == "1"? true : false));
+        entry_config_uplink_burst->set_text(configs_str[13]);
+        entry_config_uplink_telemetry_frequency->set_text(configs_str[14]);
+        entry_config_uplink_beacon_frequency->set_text(configs_str[15]);
+        radiobutton_config_uplink_type_telemetry->set_active((configs_str[16] == "1"? true : false));
+        radiobutton_config_uplink_type_beacon->set_active((configs_str[17] == "1"? true : false));
     }
     else
     {
@@ -2444,17 +2542,11 @@ void FSatGRS::SaveConfigs()
     file_config << "\n";
     file_config << entry_config_downlink_telemetry_sample_rate->get_text();
     file_config << "\n";
+    file_config << entry_config_uplink_burst->get_text();
+    file_config << "\n";
     file_config << entry_config_uplink_telemetry_frequency->get_text();
     file_config << "\n";
-    file_config << entry_config_uplink_telemetry_burst->get_text();
-    file_config << "\n";
-    file_config << entry_config_uplink_telemetry_sdr->get_text();
-    file_config << "\n";
     file_config << entry_config_uplink_beacon_frequency->get_text();
-    file_config << "\n";
-    file_config << entry_config_uplink_beacon_burst->get_text();
-    file_config << "\n";
-    file_config << entry_config_uplink_beacon_sdr->get_text();
     file_config << "\n";
     file_config << (radiobutton_config_uplink_type_telemetry->get_active()? "1" : "0");
     file_config << "\n";
@@ -2484,12 +2576,9 @@ void FSatGRS::LoadDefaultConfigs()
     entry_config_downlink_telemetry_baudrate->set_text("2400");
     entry_config_downlink_telemetry_filter->set_text("50e3");
     entry_config_downlink_telemetry_sample_rate->set_text("1e6");
+    entry_config_uplink_burst->set_text("1");
     entry_config_uplink_telemetry_frequency->set_text("437.9318e6");
-    entry_config_uplink_telemetry_burst->set_text("1");
-    entry_config_uplink_telemetry_sdr->set_text("rtl=0");
-    entry_config_uplink_beacon_frequency->set_text("145.9e6");
-    entry_config_uplink_beacon_burst->set_text("1");
-    entry_config_uplink_beacon_sdr->set_text("rtl=1");
+    entry_config_uplink_beacon_frequency->set_text("145.910e6");
     radiobutton_config_uplink_type_telemetry->set_active(true);
     radiobutton_config_uplink_type_beacon->set_active(false);
 }

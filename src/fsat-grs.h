@@ -296,12 +296,9 @@ class FSatGRS
         Gtk::Entry                      *entry_config_downlink_telemetry_baudrate;
         Gtk::Entry                      *entry_config_downlink_telemetry_filter;
         Gtk::Entry                      *entry_config_downlink_telemetry_sample_rate;
+        Gtk::Entry                      *entry_config_uplink_burst;
         Gtk::Entry                      *entry_config_uplink_telemetry_frequency;
-        Gtk::Entry                      *entry_config_uplink_telemetry_burst;
-        Gtk::Entry                      *entry_config_uplink_telemetry_sdr;
         Gtk::Entry                      *entry_config_uplink_beacon_frequency;
-        Gtk::Entry                      *entry_config_uplink_beacon_burst;
-        Gtk::Entry                      *entry_config_uplink_beacon_sdr;
         Gtk::RadioButton                *radiobutton_config_uplink_type_telemetry;
         Gtk::RadioButton                *radiobutton_config_uplink_type_beacon;
         Gtk::Button                     *button_config_ok;
