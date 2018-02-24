@@ -17,7 +17,7 @@ all:
 	mkdir -p $(BUILD_DIR)/glade
 	mkdir -p $(BUILD_DIR)/gnuradio
 	mkdir -p $(BUILD_DIR)/matplotlib
-	cp gui/MainWindow.glade $(BUILD_DIR)/glade/
+	cp gui/fsat_grs_gui.glade $(BUILD_DIR)/glade/
 	cp img/icon.png $(BUILD_DIR)/
 	cp img/gpredict-icon.png $(BUILD_DIR)/
 	cp img/gqrx-icon.png $(BUILD_DIR)/

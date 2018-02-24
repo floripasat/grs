@@ -47,6 +47,7 @@
 #include "telemetry_data.h"
 #include "data_processing.hpp"
 #include "sha256.h"
+#include "uplink_events_columns.h"
 
 FSatGRS::FSatGRS()
 {
@@ -66,7 +67,7 @@ FSatGRS::~FSatGRS()
     //delete beacon_data;
     //delete telemetry_data;
     delete event_log;
-    delete main_window;
+    delete window_fsat_grs;
 }
 
 int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
@@ -94,9 +95,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         return -1;
     }
     
-    ref_builder->get_widget("MainWindow", main_window);
+    ref_builder->get_widget("window_fsat_grs", window_fsat_grs);
     
-    if (!main_window)
+    if (!window_fsat_grs)
     {
         return -1;
     }
@@ -662,8 +663,44 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
         button_sd_auth_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonShutdownAuthCancelClicked));
     }
     
-    // Telecommand Scheduler Dialog
-    ref_builder->get_widget("dialog_cmd_scheduler", dialog_cmd_scheduler);
+    // Uplink Scheduler Manager Dialog
+    ref_builder->get_widget("dialog_uplink_scheduler_manager", dialog_uplink_scheduler_manager);
+    ref_builder->get_widget("treeview_uplink_scheduler_manager_events", treeview_uplink_scheduler_manager_events);
+    liststore_uplink_events = Glib::RefPtr<Gtk::ListStore>::cast_static(ref_builder->get_object("liststore_uplink_events"));
+    ref_builder->get_widget("button_uplink_scheduler_manager_add", button_uplink_scheduler_manager_add);
+    if (button_uplink_scheduler_manager_add)
+    {
+        button_uplink_scheduler_manager_add->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUplinkSchedulerManagerAddClicked));
+    }
+
+    ref_builder->get_widget("button_uplink_scheduler_manager_delete", button_uplink_scheduler_manager_delete);
+    if (button_uplink_scheduler_manager_delete)
+    {
+        button_uplink_scheduler_manager_delete->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUplinkSchedulerManagerDeleteClicked));
+    }
+
+    ref_builder->get_widget("dialog_uplink_scheduler_manager_new_event", dialog_uplink_scheduler_manager_new_event);
+    ref_builder->get_widget("combobox_uplink_scheduler_manager_new_event_cmd", combobox_uplink_scheduler_manager_new_event_cmd);
+    ref_builder->get_widget("switch_uplink_scheduler_manager_new_event_interval", switch_uplink_scheduler_manager_new_event_interval);
+    ref_builder->get_widget("entry_uplink_scheduler_manager_new_event_start_time", entry_uplink_scheduler_manager_new_event_start_time);
+    ref_builder->get_widget("entry_uplink_scheduler_manager_new_event_start_date", entry_uplink_scheduler_manager_new_event_start_date);
+    ref_builder->get_widget("entry_uplink_scheduler_manager_new_event_end_time", entry_uplink_scheduler_manager_new_event_end_time);
+    ref_builder->get_widget("entry_uplink_scheduler_manager_new_event_end_date", entry_uplink_scheduler_manager_new_event_end_date);
+    ref_builder->get_widget("switch_uplink_scheduler_manager_new_event_period", switch_uplink_scheduler_manager_new_event_period);
+    ref_builder->get_widget("entry_uplink_scheduler_manager_new_event_period_value", entry_uplink_scheduler_manager_new_event_period_value);
+    ref_builder->get_widget("switch_uplink_scheduler_manager_new_event_cycles", switch_uplink_scheduler_manager_new_event_cycles);
+    ref_builder->get_widget("entry_uplink_scheduler_manager_new_event_cycles_value", entry_uplink_scheduler_manager_new_event_cycles_value);
+    ref_builder->get_widget("button_uplink_scheduler_manager_new_event_add", button_uplink_scheduler_manager_new_event_add);
+    if (button_uplink_scheduler_manager_new_event_add)
+    {
+        button_uplink_scheduler_manager_new_event_add->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked));
+    }
+
+    ref_builder->get_widget("button_uplink_scheduler_manager_new_event_cancel", button_uplink_scheduler_manager_new_event_cancel);
+    if (button_uplink_scheduler_manager_new_event_cancel)
+    {
+        button_uplink_scheduler_manager_new_event_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUplinkSchedulerManagerNewEventCancelClicked));
+    }
 
     // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
@@ -690,7 +727,7 @@ int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
     auto timer_slot = sigc::mem_fun(*this, &FSatGRS::Timer);
     auto conn = Glib::signal_timeout().connect(timer_slot, DATA_RECEPTION_SAMPLE_RATE);
     
-    return app->run(*main_window);
+    return app->run(*window_fsat_grs);
 }
 /*
 std::vector<uint8_t> FSatGRS::ProccessByte(uint8_t byte)
@@ -1025,11 +1062,11 @@ void FSatGRS::OnToolButtonShutdownClicked()
 
 void FSatGRS::OnToolButtonCmdSchedulerClicked()
 {
-    int response = dialog_cmd_scheduler->run();
+    int response = dialog_uplink_scheduler_manager->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
-        dialog_cmd_scheduler->hide();
+        dialog_uplink_scheduler_manager->hide();
     }
 }
 
@@ -1338,11 +1375,11 @@ void FSatGRS::OnButtonClearAllTelemetryClicked()
 
 void FSatGRS::OnButtonGRSSchedulerClicked()
 {
-    int response = dialog_cmd_scheduler->run();
+    int response = dialog_uplink_scheduler_manager->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
-        dialog_cmd_scheduler->hide();
+        dialog_uplink_scheduler_manager->hide();
     }
 }
 
@@ -2245,17 +2282,115 @@ void FSatGRS::OnButtonAddNewUserClicked()
     }
 }
 
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- UPLINK SCHEDULER MANAGER DIALOG ----------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+void FSatGRS::OnButtonUplinkSchedulerManagerAddClicked()
+{
+    int response = dialog_uplink_scheduler_manager_new_event->run();
+    
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_uplink_scheduler_manager_new_event->hide();
+    }
+}
+
+void FSatGRS::OnButtonUplinkSchedulerManagerDeleteClicked()
+{
+    Glib::RefPtr<Gtk::TreeSelection> selection = treeview_uplink_scheduler_manager_events->get_selection();
+
+    std::vector<Gtk::TreeModel::Path> paths = selection->get_selected_rows();
+    for(int i=paths.size()-1; i>=0; i--)
+    {
+        liststore_uplink_events->erase(liststore_uplink_events->get_iter(paths[i]));
+    }
+}
+
+void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
+{
+    UplinkEventsColumns columns;
+    
+    Gtk::TreeModel::Row row = *(liststore_uplink_events->append());
+    
+    std::string cmd_name;
+    switch(combobox_uplink_scheduler_manager_new_event_cmd->get_active_row_number())
+    {
+        case 0:
+            cmd_name = "Ping";
+            break;
+        case 1:
+            cmd_name = "Data request";
+            break;
+        case 2:
+            cmd_name = "Shutdown";
+            break;
+        default:
+            cmd_name = "Ping";
+            break;
+    }
+    
+    std::string start_str = "-";
+    std::string end_str = "-";
+    if (switch_uplink_scheduler_manager_new_event_interval->get_active())
+    {
+        start_str = entry_uplink_scheduler_manager_new_event_start_time->get_text();
+        start_str += "-";
+        start_str += entry_uplink_scheduler_manager_new_event_start_date->get_text();
+        
+        end_str = entry_uplink_scheduler_manager_new_event_end_time->get_text();
+        end_str += "-";
+        end_str += entry_uplink_scheduler_manager_new_event_end_date->get_text();
+    }
+
+    std::string period_str = "-";
+    if (switch_uplink_scheduler_manager_new_event_period->get_active())
+    {
+        period_str = entry_uplink_scheduler_manager_new_event_period_value->get_text();
+    }
+
+    std::string cycles_str = "-";
+    if (switch_uplink_scheduler_manager_new_event_cycles->get_active())
+    {
+        cycles_str = entry_uplink_scheduler_manager_new_event_cycles_value->get_text();
+    }
+
+    row[columns.events_cmd]     = cmd_name;
+    row[columns.events_start]   = start_str;
+    row[columns.events_end]     = end_str;
+    row[columns.events_period]  = period_str;
+    row[columns.events_cycles]  = cycles_str;
+    
+    dialog_uplink_scheduler_manager_new_event->hide();
+}
+
+void FSatGRS::OnButtonUplinkSchedulerManagerNewEventCancelClicked()
+{
+    dialog_uplink_scheduler_manager_new_event->hide();
+}
+
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- ERRORS -----------------------------------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
 void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)
 {
     msg_dialog = new Gtk::MessageDialog(error_title, false, Gtk::MESSAGE_ERROR);
     msg_dialog->set_secondary_text(error_text);
-    msg_dialog->set_transient_for(*main_window);
+    msg_dialog->set_transient_for(*window_fsat_grs);
     
     msg_dialog->run();
     
     delete msg_dialog;
 }
 
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- GNURADIO ---------------------------------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
 void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
 {
     if (beacon_receiver)
@@ -2456,11 +2591,21 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     }
 }
 
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- MATPLOTLIB -------------------------------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
 void FSatGRS::RunMatPlotLib(const char *cmd)
 {
     system(cmd);
 }
 
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- CONFIGURATION ----------------------------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
 void FSatGRS::LoadConfigs()
 {
     std::string homepath = getenv("HOME");

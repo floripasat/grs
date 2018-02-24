@@ -39,7 +39,7 @@
 
 #include "fsat-grs.h"
 
-#define GLADE_UI_FILE       "glade/MainWindow.glade"
+#define GLADE_UI_FILE       "glade/fsat_grs_gui.glade"
 
 /**
  * \fn main

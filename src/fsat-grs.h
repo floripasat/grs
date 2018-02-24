@@ -50,7 +50,7 @@
 #include "ngham_pkts.h"
 #include "read_log.h"
 
-#define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/MainWindow.glade"
+#define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/fsat_grs_gui.glade"
 
 #define DATA_RECEPTION_SAMPLE_RATE      1000
 
@@ -77,7 +77,7 @@
 class FSatGRS
 {
         // Main window
-        Gtk::Window                     *main_window;
+        Gtk::Window                     *window_fsat_grs;
         
         // Toolbar
         Gtk::ToolButton                 *toolbutton_open_log_file;
@@ -355,8 +355,25 @@ class FSatGRS
         Gtk::Button                     *button_sd_auth_send;
         Gtk::Button                     *button_sd_auth_cancel;
         
-        // Telecommand Scheduler Dialog
-        Gtk::Dialog                     *dialog_cmd_scheduler;
+        // Uplink Scheduler Manager Dialog
+        Gtk::Dialog                     *dialog_uplink_scheduler_manager;
+        Gtk::TreeView                   *treeview_uplink_scheduler_manager_events;
+        Glib::RefPtr<Gtk::ListStore>    liststore_uplink_events;
+        Gtk::Button                     *button_uplink_scheduler_manager_add;
+        Gtk::Button                     *button_uplink_scheduler_manager_delete;
+        Gtk::Dialog                     *dialog_uplink_scheduler_manager_new_event;
+        Gtk::ComboBox                   *combobox_uplink_scheduler_manager_new_event_cmd;
+        Gtk::Switch                     *switch_uplink_scheduler_manager_new_event_interval;
+        Gtk::Entry                      *entry_uplink_scheduler_manager_new_event_start_time;
+        Gtk::Entry                      *entry_uplink_scheduler_manager_new_event_start_date;
+        Gtk::Entry                      *entry_uplink_scheduler_manager_new_event_end_time;
+        Gtk::Entry                      *entry_uplink_scheduler_manager_new_event_end_date;
+        Gtk::Switch                     *switch_uplink_scheduler_manager_new_event_period;
+        Gtk::Entry                      *entry_uplink_scheduler_manager_new_event_period_value;
+        Gtk::Switch                     *switch_uplink_scheduler_manager_new_event_cycles;
+        Gtk::Entry                      *entry_uplink_scheduler_manager_new_event_cycles_value;
+        Gtk::Button                     *button_uplink_scheduler_manager_new_event_add;
+        Gtk::Button                     *button_uplink_scheduler_manager_new_event_cancel;
 
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
@@ -642,6 +659,30 @@ class FSatGRS
          * \return None
          */
         void OnButtonStopUplinkStreamClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonUplinkSchedulerManagerAddClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonUplinkSchedulerManagerDeleteClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonUplinkSchedulerManagerNewEventAddClicked();
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonUplinkSchedulerManagerNewEventCancelClicked();
 
         /**
          * \brief 
