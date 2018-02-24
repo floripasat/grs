@@ -385,7 +385,7 @@ void BeaconData::ForceDisplay(vector<string> data)
 {
     while(data.size() < 34)
     {
-        data.push_back(std::string("-"));
+        data.push_back(string("-"));
     }
 
     unsigned int i = 6;
@@ -457,7 +457,7 @@ double BeaconData::IMUGyroConv(uint16_t val)
 
 const char* BeaconData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
 {
-    std::stringstream input_str;
+    stringstream input_str;
     
     input_str << int(h);
     input_str << ":";
@@ -465,7 +465,7 @@ const char* BeaconData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
     input_str << ":";
     input_str << int(s);
     
-    std::string output = input_str.str();
+    string output = input_str.str();
     
     return output.c_str();
 }

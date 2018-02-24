@@ -23,7 +23,7 @@
 /**
  * \file fsat-grs.h
  * 
- * \brief .
+ * \brief Main class for the FSatGRS.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 

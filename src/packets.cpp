@@ -37,6 +37,8 @@
 
 #include "packets.h"
 
+using namespace std;
+
 Packets::Packets()
 {
     make_log = false;
@@ -101,10 +103,10 @@ void Packets::Search(const char *file)
 {
     if (!this->is_open())
     {
-        this->open(file, std::ifstream::in);
+        this->open(file, ifstream::in);
     }
     
-    std::vector<uint8_t> sync_bits_buffer;
+    vector<uint8_t> sync_bits_buffer;
     
     uint32_t byte_counter = 0;
     
@@ -128,7 +130,7 @@ void Packets::Search(const char *file)
             sync_bits_buffer.push_back(byte);
             if (sync_bits_buffer.size() == sync_bytes.size()*8)  // 1 byte = 8 bits
             {
-                std::vector<uint8_t> sync_bytes_buffer(sync_bytes.size(), 0x00);
+                vector<uint8_t> sync_bytes_buffer(sync_bytes.size(), 0x00);
                 unsigned int j = 7;
                 unsigned int k = 0;
                 for(unsigned int l=0;l<sync_bits_buffer.size();l++)
@@ -190,7 +192,7 @@ void Packets::Search(const char *file)
     this->close();
 }
 
-std::string Packets::LogPayload()
+string Packets::LogPayload()
 {
     
 }

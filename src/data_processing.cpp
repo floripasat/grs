@@ -44,10 +44,10 @@ using namespace std;
 
 #define MAX_COLUNMS 100
 
-DataProcessing::DataProcessing(std::string fileName)
+DataProcessing::DataProcessing(string fileName)
 {    
-    std::ifstream inputFile;
-    std::string line, term;
+    ifstream inputFile;
+    string line, term;
     double value;
     int j = 0;
     cols = 0;
@@ -56,7 +56,7 @@ DataProcessing::DataProcessing(std::string fileName)
 
     inputFile.open(fileName.c_str());
 
-    if(std::getline(inputFile, line))
+    if(getline(inputFile, line))
     {
         cols = 1;
     }
@@ -76,7 +76,7 @@ DataProcessing::DataProcessing(std::string fileName)
     for (int i = 0; i <= line.size(); i++)
     {
         if (line[i] == ',' || line[i] == '\0'){
-            std::stringstream temp(term);
+            stringstream temp(term);
             temp >> max[j];
             min[j] = max[j];
             avg[j] = max[j];
@@ -91,13 +91,13 @@ DataProcessing::DataProcessing(std::string fileName)
     rows = 1;    
     
 
-    while(std::getline(inputFile, line))
+    while(getline(inputFile, line))
     {           
         j = 0;  
         for (int i = 0; i <= line.size(); i++)
         {            
             if (line[i] == ',' || line[i] == '\0'){
-                std::stringstream temp(term);
+                stringstream temp(term);
                 temp >> value;
                 if(value < min[j])
                     min[j] = value;
@@ -162,13 +162,13 @@ int DataProcessing::GetRows(void)
     return rows;
 }
 
-std::string DataProcessing::Validate(std::string fileName)
+string DataProcessing::Validate(string fileName)
 {
-    std::ifstream inputFile;
-    std::ifstream validationFile;
-    //std::ofstream outputFile;
-    std::stringstream outputFile;
-    std::string line, term;
+    ifstream inputFile;
+    ifstream validationFile;
+    //ofstream outputFile;
+    stringstream outputFile;
+    string line, term;
     double value;
     double *maxValidation, *minValidation;
     int j,k;
@@ -181,18 +181,18 @@ std::string DataProcessing::Validate(std::string fileName)
 
     validationFile.open(fileName.c_str());
 
-    //std::string outputFileName = fileName.substr(0, fileName.length() - 4) + "_validation.log";
+    //string outputFileName = fileName.substr(0, fileName.length() - 4) + "_validation.log";
     //outputFile.open(outputFileName.c_str());
 
     //read the maximum and minimum allowed values
     k = j = 0;
-    while(std::getline(validationFile, line))
+    while(getline(validationFile, line))
     {
         for (int i = 0; i <= line.size(); i++)
         {
             if (line[i] == ',')
             {
-                std::stringstream temp(term);
+                stringstream temp(term);
                 temp >> minValidation[j];
                 term = "";
             }
@@ -200,7 +200,7 @@ std::string DataProcessing::Validate(std::string fileName)
             {
                 if (line[i] == '#' || line[i] == '\0')
                 {
-                    std::stringstream temp(term);
+                    stringstream temp(term);
                     temp >> maxValidation[j];
                     j++;
                     term = "";
@@ -238,13 +238,13 @@ std::string DataProcessing::Validate(std::string fileName)
     */
     outputFile << "Values not allowed:\n";
 
-    while(std::getline(inputFile, line))
+    while(getline(inputFile, line))
     {           
         j = 0;  
         for (int i = 0; i <= line.size(); i++)
         {            
             if (line[i] == ',' || line[i] == '\0'){
-                std::stringstream temp(term);
+                stringstream temp(term);
                 temp >> value;
                 if(value < minValidation[j])
                 {

@@ -48,7 +48,7 @@ void ReadLog::open(const char *f)
 {
     file_name = f;
 
-    ifstream::open(f, std::ifstream::in);
+    ifstream::open(f, ifstream::in);
 }
 
 unsigned int ReadLog::getLines()
@@ -58,7 +58,7 @@ unsigned int ReadLog::getLines()
 
     if (!this->is_open())
     {
-        ifstream::open(file_name, std::ifstream::in);
+        ifstream::open(file_name, ifstream::in);
     }
     
     while(this->getline(line, 300))
@@ -96,7 +96,7 @@ vector<string> ReadLog::getDataLine(unsigned int l)
 
     if (!this->is_open())
     {
-        ifstream::open(file_name, std::ifstream::in);
+        ifstream::open(file_name, ifstream::in);
     }
 
     while(this->get(c))

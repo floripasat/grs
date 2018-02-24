@@ -76,7 +76,7 @@ void PacketData::Clear()
 
 string PacketData::Log()
 {
-    return std::string("");
+    return string("");
 }
 
 const char* PacketData::getLabel()

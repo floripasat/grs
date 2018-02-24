@@ -42,6 +42,8 @@
 
 #include "log.h"
 
+using namespace std;
+
 Log::Log()
 {
     if (!VerifyDirectory(LOG_DEFAULT_DIR))
@@ -76,11 +78,11 @@ void Log::CreateDirectory(const char* folder)
 {
     if (mkdir(folder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
     {
-        throw std::runtime_error("It is not possible to create a new log folder!");
+        throw runtime_error("It is not possible to create a new log folder!");
     }
 }
 
-std::string Log::CurrentDateTime(int output_format)
+string Log::CurrentDateTime(int output_format)
 {
     time_t now = time(0);
     struct tm tstruct;

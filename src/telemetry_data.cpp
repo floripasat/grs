@@ -40,12 +40,14 @@
 #include "telemetry_data.h"
 #include "aux.hpp"
 
+using namespace std;
+
 TelemetryData::TelemetryData()
 {
     
 }
 
-TelemetryData::TelemetryData(std::vector<Gtk::Label *> lbs)
+TelemetryData::TelemetryData(vector<Gtk::Label *> lbs)
 {
     unsigned int pos = 0;
     
@@ -380,9 +382,9 @@ void TelemetryData::Clear()
     EPS_status                  = 0;
 }
 
-std::string TelemetryData::Log()
+string TelemetryData::Log()
 {
-    std::string log_entry = "";
+    string log_entry = "";
     
     log_entry += ToString(int(packet_flags));
     log_entry += ",";
@@ -516,11 +518,11 @@ const char* TelemetryData::getLabel()
     return "TELEMETRY";
 }
 
-void TelemetryData::ForceDisplay(std::vector<std::string> data)
+void TelemetryData::ForceDisplay(vector<string> data)
 {
     while(data.size() < 57)
     {
-        data.push_back(std::string("-"));
+        data.push_back(string("-"));
     }
 
     unsigned int i = 6;
@@ -671,7 +673,7 @@ double TelemetryData::RemainingAbsoluteCapacityConv(uint16_t val)
 
 const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
 {
-    std::stringstream input_str;
+    stringstream input_str;
     
     input_str << int(h);
     input_str << ":";
@@ -679,20 +681,20 @@ const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
     input_str << ":";
     input_str << int(s);
     
-    std::string output = input_str.str();
+    string output = input_str.str();
     
     return output.c_str();
 }
 
 const char* TelemetryData::PrintIMUs(double imu_1, double imu_2, unsigned int digits)
 {
-    std::stringstream input_str;
+    stringstream input_str;
     
-    input_str << std::fixed << std::setprecision(digits) << imu_1;
+    input_str << fixed << setprecision(digits) << imu_1;
     input_str << "/";
-    input_str << std::fixed << std::setprecision(digits) << imu_2;
+    input_str << fixed << setprecision(digits) << imu_2;
     
-    std::string output = input_str.str();
+    string output = input_str.str();
     
     return output.c_str();
 }

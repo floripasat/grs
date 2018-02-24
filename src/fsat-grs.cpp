@@ -23,7 +23,7 @@
 /**
  * \file fsat-grs.cpp
  * 
- * \brief .
+ * \brief Implementation of the main class of the FSatGRS.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
@@ -48,6 +48,8 @@
 #include "data_processing.hpp"
 #include "sha256.h"
 #include "uplink_events_columns.h"
+
+using namespace std;
 
 FSatGRS::FSatGRS()
 {
@@ -327,7 +329,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     if (textview_event_log)
     {
         event_log = new EventLog(textview_event_log);
-        event_log->open((LOG_DEFAULT_DIR "/EVENTS_" + event_log->CurrentDateTime() + ".csv").c_str(), std::ofstream::out);
+        event_log->open((LOG_DEFAULT_DIR "/EVENTS_" + event_log->CurrentDateTime() + ".csv").c_str(), ofstream::out);
     }
     
     // NGHam packet configuration preamble
@@ -396,7 +398,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("label_beacon_data_obdh_rst_value", label_beacon_data_obdh_rst_value);
     ref_builder->get_widget("label_beacon_data_system_time_value", label_beacon_data_system_time_value);
     
-    std::vector<Gtk::Label *> beacon_data_labels;
+    vector<Gtk::Label *> beacon_data_labels;
     beacon_data_labels.push_back(label_beacon_data_bat1_v_value);
     beacon_data_labels.push_back(label_beacon_data_bat2_v_value);
     beacon_data_labels.push_back(label_beacon_data_bat1_t_value);
@@ -482,7 +484,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("label_telemetry_data_eps_misc_uc_temp", label_telemetry_data_eps_misc_uc_temp);
     ref_builder->get_widget("label_telemetry_data_eps_misc_energy_level", label_telemetry_data_eps_misc_energy_level);
     
-    std::vector<Gtk::Label *> telemetry_data_labels;
+    vector<Gtk::Label *> telemetry_data_labels;
     telemetry_data_labels.push_back(label_telemetry_data_status_reset_counter);
     telemetry_data_labels.push_back(label_telemetry_data_status_reset_cause);
     telemetry_data_labels.push_back(label_telemetry_data_status_clock);
@@ -712,7 +714,7 @@ int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
 {
     system("mkdir -p $HOME/.fsat_grs");
     
-    std::string cmd = "touch $HOME";
+    string cmd = "touch $HOME";
     system((cmd + FSAT_GRS_USERS_FILE + " || exit").c_str());
     system((cmd + FSAT_GRS_USERS_PASSWORDS_FILE + " || exit").c_str());
     
@@ -730,16 +732,16 @@ int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
     return app->run(*window_fsat_grs);
 }
 /*
-std::vector<uint8_t> FSatGRS::ProccessByte(uint8_t byte)
+vector<uint8_t> FSatGRS::ProccessByte(uint8_t byte)
 {
-    std::vector<uint8_t> sync_bytes;
+    vector<uint8_t> sync_bytes;
     
     sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s3->get_text()));
     sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s2->get_text()));
     sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s1->get_text()));
     sync_bytes.push_back(EntryToHex(entry_ngham_sync_bytes_s0->get_text()));
     
-    std::vector<uint8_t> result;
+    vector<uint8_t> result;
     
     if (!receive_pkt)
     {
@@ -812,7 +814,7 @@ bool FSatGRS::Timer()
             {
                 uint8_t byte = uart->GetByte();
                 
-                std::vector<uint8_t> r = this->ProccessByte(byte);
+                vector<uint8_t> r = this->ProccessByte(byte);
                 if (!r.empty())
                 {
                     if (checkbutton_log_ngham_packets->get_active())
@@ -822,9 +824,9 @@ bool FSatGRS::Timer()
                     
                     for(unsigned int i=0;i<r.size();i++)
                     {
-                        std::stringstream byte_str;
+                        stringstream byte_str;
                         byte_str << (char)r[i];
-                        std::string b_ngham = byte_str.str();
+                        string b_ngham = byte_str.str();
                         
                         if (checkbutton_log_ngham_packets->get_active())
                         {
@@ -900,7 +902,7 @@ void FSatGRS::OnButtonLogViewerCancelClicked()
 
 void FSatGRS::OnButtonLogViewerOpenClicked()
 {
-    std::string log_file = filechooserdialog_log_viewer->get_filename();
+    string log_file = filechooserdialog_log_viewer->get_filename();
 
     read_log = new ReadLog;
 
@@ -910,7 +912,7 @@ void FSatGRS::OnButtonLogViewerOpenClicked()
     
     if (read_log->is_open())
     {
-        std::string log_text = read_log->getLogType();
+        string log_text = read_log->getLogType();
         log_text += " log file ";
         log_text += log_file.c_str();
         log_text += " with ";
@@ -1029,13 +1031,13 @@ void FSatGRS::OnToolButtonPlotClicked()
 
 void FSatGRS::OnToolButtonPingClicked()
 {
-    std::string ping_event = "Transmitting ";
+    string ping_event = "Transmitting ";
     ping_event += entry_config_uplink_burst->get_text();
     ping_event += " ping command(s)...";
     
     event_log->AddNewEvent(ping_event.c_str());
     
-    std::thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
+    thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
     
     thread_ping_cmd.detach();
 }
@@ -1119,11 +1121,11 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
             system("touch " FSAT_GRS_GRC_BEACON_BIN);
             
-            std::thread thread_gnuradio_beacon(&FSatGRS::RunGNURadioReceiver, this, true);
+            thread thread_gnuradio_beacon(&FSatGRS::RunGNURadioReceiver, this, true);
             
             thread_gnuradio_beacon.detach();
             
-            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, std::ifstream::in);
+            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
         }
         /*else if (radiobutton_beacon_src_tcp->get_active())
         {
@@ -1135,7 +1137,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         }*/
         else if (radiobutton_beacon_src_file->get_active())
         {
-            ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), std::ifstream::in);
+            ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), ifstream::in);
         }
         
         if (ngham_pkts_beacon->is_open())
@@ -1253,11 +1255,11 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
             system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
             
-            std::thread thread_gnuradio_telemetry(&FSatGRS::RunGNURadioReceiver, this, false);
+            thread thread_gnuradio_telemetry(&FSatGRS::RunGNURadioReceiver, this, false);
             
             thread_gnuradio_telemetry.detach();
             
-            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, std::ifstream::in);
+            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
         }
         /*else if (radiobutton_telemetry_src_tcp->get_active())
         {
@@ -1269,7 +1271,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         }*/
         else if (radiobutton_telemetry_src_file->get_active())
         {
-            ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), std::ifstream::in);
+            ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), ifstream::in);
         }
         
         if (ngham_pkts_telemetry->is_open())
@@ -1584,7 +1586,7 @@ void FSatGRS::OnButtonPlotClicked()
         return;
     }
     
-    std::string cmd = "python matplotlib/csv_plot.py";
+    string cmd = "python matplotlib/csv_plot.py";
     
     if (filechooserbutton_plot_beacon->get_filename().size() > 0)  
     {
@@ -1776,12 +1778,12 @@ void FSatGRS::OnButtonPlotClicked()
             };
         }
         
-        std::thread thread_matplotlib_beacon(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
+        thread thread_matplotlib_beacon(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
         thread_matplotlib_beacon.detach();
     }
     
-    std::string cmd2 = "python matplotlib/csv_plot.py";
+    string cmd2 = "python matplotlib/csv_plot.py";
     
     if (filechooserbutton_plot_telemetry->get_filename().size() > 0)  
     {
@@ -2105,7 +2107,7 @@ void FSatGRS::OnButtonPlotClicked()
             };
         }
         
-        std::thread thread_matplotlib_telemetry(&FSatGRS::RunMatPlotLib, this, cmd2.c_str());
+        thread thread_matplotlib_telemetry(&FSatGRS::RunMatPlotLib, this, cmd2.c_str());
 
         thread_matplotlib_telemetry.detach();
     }
@@ -2115,7 +2117,7 @@ void FSatGRS::OnButtonPlotClicked()
 
 void FSatGRS::OnButtonRunAnalysisClicked()
 {
-    std::string log_file(filechooserbutton_log_analysis->get_filename().c_str());
+    string log_file(filechooserbutton_log_analysis->get_filename().c_str());
     
     if (log_file.size() > 0)
     {
@@ -2142,13 +2144,13 @@ void FSatGRS::OnButtonRunAnalysisClicked()
 
 void FSatGRS::OnButtonDataRequestSendClicked()
 {
-    std::string data_request_event = "Transmitting ";
+    string data_request_event = "Transmitting ";
     data_request_event += entry_config_uplink_burst->get_text();
     data_request_event += " data request(s)...";
     
     event_log->AddNewEvent(data_request_event.c_str());
     
-    std::thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
+    thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
     
     thread_request_cmd.detach();
     
@@ -2162,32 +2164,32 @@ void FSatGRS::OnButtonDataRequestCancelClicked()
 
 void FSatGRS::OnButtonShutdownAuthSendClicked()
 {
-    std::string user_hash = sha256(entry_sd_auth_user->get_text());
-    std::string password_hash = sha256(entry_sd_auth_password->get_text());
+    string user_hash = sha256(entry_sd_auth_user->get_text());
+    string password_hash = sha256(entry_sd_auth_password->get_text());
     
-    std::string homepath = getenv("HOME");
+    string homepath = getenv("HOME");
     
-    std::ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), std::ifstream::in);
-    std::ifstream file_passwords_read((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), std::ifstream::in);
+    ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), ifstream::in);
+    ifstream file_passwords_read((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), ifstream::in);
     
     if (file_users_read.is_open() and file_passwords_read.is_open())
     {
-        std::string file_users_line;
-        std::string file_passwords_line;
+        string file_users_line;
+        string file_passwords_line;
         
-        while(std::getline(file_users_read, file_users_line) and std::getline(file_passwords_read, file_passwords_line))
+        while(getline(file_users_read, file_users_line) and getline(file_passwords_read, file_passwords_line))
         {
             if (file_users_line == user_hash)
             {
                 if (file_passwords_line == password_hash)
                 {
-                    std::string shutdown_event = "Transmitting ";
+                    string shutdown_event = "Transmitting ";
                     shutdown_event += entry_config_uplink_burst->get_text();
                     shutdown_event += " shutdown command(s)...";
                     
                     event_log->AddNewEvent(shutdown_event.c_str());
                     
-                    std::thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+                    thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
                     
                     thread_shutdown_cmd.detach();
                     
@@ -2219,21 +2221,21 @@ void FSatGRS::OnButtonShutdownAuthCancelClicked()
 
 void FSatGRS::OnButtonAddNewUserClicked()
 {
-    std::string new_user = sha256(entry_config_general_new_user->get_text());
+    string new_user = sha256(entry_config_general_new_user->get_text());
     
     if (sha256(entry_config_general_admin_user->get_text()) == FSAT_GRS_ADMIN_HASH)
     {
         if (sha256(entry_config_general_admin_password->get_text()) == FSAT_GRS_ADMIN_PASSWORD_HASH)
         {
-            std::string homepath = getenv("HOME");
+            string homepath = getenv("HOME");
             
-            std::ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), std::ifstream::in);
+            ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), ifstream::in);
             
             if (file_users_read.is_open())
             {
-                std::string file_users_line;
+                string file_users_line;
                 
-                while(std::getline(file_users_read, file_users_line))
+                while(getline(file_users_read, file_users_line))
                 {
                     if ((file_users_line == new_user) or (new_user == FSAT_GRS_ADMIN_HASH))
                     {
@@ -2246,13 +2248,13 @@ void FSatGRS::OnButtonAddNewUserClicked()
             
             if ((entry_config_general_new_password->get_text() == entry_config_general_admin_password_confirmation->get_text()) or (entry_config_general_new_password->get_text() == ""))
             {
-                std::ofstream file_users((homepath + FSAT_GRS_USERS_FILE).c_str(), std::ofstream::out | std::ofstream::app);
+                ofstream file_users((homepath + FSAT_GRS_USERS_FILE).c_str(), ofstream::out | ofstream::app);
                 
                 file_users << sha256(entry_config_general_new_user->get_text()) << "\n";
                 
                 file_users.close();
                 
-                std::ofstream file_users_passwords((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), std::ofstream::out | std::ofstream::app);
+                ofstream file_users_passwords((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), ofstream::out | ofstream::app);
                 
                 file_users_passwords << sha256(entry_config_general_new_password->get_text()) << "\n";
                 
@@ -2301,7 +2303,7 @@ void FSatGRS::OnButtonUplinkSchedulerManagerDeleteClicked()
 {
     Glib::RefPtr<Gtk::TreeSelection> selection = treeview_uplink_scheduler_manager_events->get_selection();
 
-    std::vector<Gtk::TreeModel::Path> paths = selection->get_selected_rows();
+    vector<Gtk::TreeModel::Path> paths = selection->get_selected_rows();
     for(int i=paths.size()-1; i>=0; i--)
     {
         liststore_uplink_events->erase(liststore_uplink_events->get_iter(paths[i]));
@@ -2314,7 +2316,7 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
     
     Gtk::TreeModel::Row row = *(liststore_uplink_events->append());
     
-    std::string cmd_name;
+    string cmd_name;
     switch(combobox_uplink_scheduler_manager_new_event_cmd->get_active_row_number())
     {
         case 0:
@@ -2331,8 +2333,8 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
             break;
     }
     
-    std::string start_str = "-";
-    std::string end_str = "-";
+    string start_str = "-";
+    string end_str = "-";
     if (switch_uplink_scheduler_manager_new_event_interval->get_active())
     {
         start_str = entry_uplink_scheduler_manager_new_event_start_time->get_text();
@@ -2344,13 +2346,13 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
         end_str += entry_uplink_scheduler_manager_new_event_end_date->get_text();
     }
 
-    std::string period_str = "-";
+    string period_str = "-";
     if (switch_uplink_scheduler_manager_new_event_period->get_active())
     {
         period_str = entry_uplink_scheduler_manager_new_event_period_value->get_text();
     }
 
-    std::string cycles_str = "-";
+    string cycles_str = "-";
     if (switch_uplink_scheduler_manager_new_event_cycles->get_active())
     {
         cycles_str = entry_uplink_scheduler_manager_new_event_cycles_value->get_text();
@@ -2395,7 +2397,7 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
 {
     if (beacon_receiver)
     {
-        std::string grc_beacon_receiver_cmd = "python -u gnuradio/fsat_grs_beacon.py ";
+        string grc_beacon_receiver_cmd = "python -u gnuradio/fsat_grs_beacon.py ";
         switch(combobox_beacon_sdr_dev->get_active_row_number())
         {
             case 0:
@@ -2433,7 +2435,7 @@ void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
     }
     else
     {
-        std::string grc_telemetry_receiver_cmd = "python -u gnuradio/fsat_grs_telemetry.py ";
+        string grc_telemetry_receiver_cmd = "python -u gnuradio/fsat_grs_telemetry.py ";
         switch(combobox_telemetry_sdr_dev->get_active_row_number())
         {
             case 0:
@@ -2475,7 +2477,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 {
     NGHamPkts ngham_uplink_pkt;
     
-    std::string grs_id = entry_config_general_gs_id->get_text();
+    string grs_id = entry_config_general_gs_id->get_text();
     while(grs_id.size() < 6)
     {
         grs_id += " ";
@@ -2486,7 +2488,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t shutdown[9];
     unsigned int packets_number = 1;
 
-    std::string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
+    string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
     switch(combobox_uplink_output_sdr_device->get_active_row_number())
     {
         case 0:
@@ -2529,7 +2531,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             ngham_uplink_pkt.Generate(ping, 8);
             
-            for(unsigned int i=0; i<std::stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
                 
@@ -2561,7 +2563,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
             ngham_uplink_pkt.Generate(request, 21);
             
-            for(unsigned int i=0; i<std::stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
                 
@@ -2579,7 +2581,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             
             ngham_uplink_pkt.Generate(shutdown, 8);
             
-            packets_number = std::stoi(entry_config_uplink_burst->get_text(), nullptr);
+            packets_number = stoi(entry_config_uplink_burst->get_text(), nullptr);
 
             for(unsigned int i=0; i<packets_number; i++)
             {
@@ -2608,17 +2610,17 @@ void FSatGRS::RunMatPlotLib(const char *cmd)
 //***************************************************************************************************************************************
 void FSatGRS::LoadConfigs()
 {
-    std::string homepath = getenv("HOME");
+    string homepath = getenv("HOME");
     
-    std::ifstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), std::ifstream::in);
+    ifstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), ifstream::in);
     
     if (file_config.is_open())
     {
-        std::vector<std::string> configs_str;
+        vector<string> configs_str;
         
-        std::string file_config_line;
+        string file_config_line;
         
-        while(std::getline(file_config, file_config_line))
+        while(getline(file_config, file_config_line))
         {
             configs_str.push_back(file_config_line);
         }
@@ -2657,9 +2659,9 @@ void FSatGRS::LoadConfigs()
 
 void FSatGRS::SaveConfigs()
 {
-    std::string homepath = getenv("HOME");
+    string homepath = getenv("HOME");
     
-    std::ofstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), std::ofstream::out);
+    ofstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), ofstream::out);
     
     file_config << entry_config_general_gs_id->get_text();
     file_config << "\n";

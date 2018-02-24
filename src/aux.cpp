@@ -37,6 +37,8 @@
 
 #include "aux.hpp"
 
+using namespace std;
+
 uint8_t EntryToHex(Glib::ustring byte_str)
 {
     int byte = int(byte_str[byte_str.size()-2]);
@@ -48,27 +50,39 @@ uint8_t EntryToHex(Glib::ustring byte_str)
     return ((uint8_t)b1 << 4) + (uint8_t)b0;
 }
 
-std::string HexToStr(uint8_t byte)
+string HexToStr(uint8_t byte)
 {
-    std::string output = "0x";
+    string output = "0x";
     
     uint8_t digit = (uint8_t)(byte >> 4);
     
     if (digit < 0x0A)
+    {
         output += (char)(digit + 0x30);     // 0x30 = ascii 0
+    }
     else if (digit <= 0x0F)
+    {
         output += (char)(digit + 0x37);     // 0x37 = ascii 7
+    }
     else
+    {
         output += 'N';
+    }
     
     digit = (uint8_t)(byte & 0x0F);
     
     if (digit < 0x0A)
+    {
         output += (char)(digit + 0x30);     // 0x30 = ascii 0
+    }
     else if (digit <= 0x0F)
+    {
         output += (char)(digit + 0x37);     // 0x37 = ascii 7
+    }
     else
+    {
         output += 'N';
+    }
     
     return output;
 }
