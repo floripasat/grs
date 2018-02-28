@@ -38,7 +38,6 @@
 #include <fstream>
 #include <string>
 #include <cstdio>
-#include <thread>
 #include <stdlib.h>
 
 #include "fsat-grs.h"
@@ -882,6 +881,66 @@ bool FSatGRS::Timer()
         }
     }
     
+    if (togglebutton_play_uplink->get_active())
+    {
+        if (radiobutton_uplink_grs_scheduler->get_active())
+        {
+            for(unsigned int i=0; i<uplink_events.size(); i++)
+            {
+                if (uplink_events[i].CanTransmit())
+                {
+                    if (checkbutton_uplink_telecommands_ping->get_active())
+                    {
+                        if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_PING)
+                        {
+                            string ping_event = "Transmitting ";
+                            ping_event += entry_config_uplink_burst->get_text();
+                            ping_event += " ping command(s)...";
+                            
+                            event_log->AddNewEvent(ping_event.c_str());
+                            
+                            thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
+                            
+                            thread_ping_cmd.detach();
+                        }
+                    }
+
+                    if (checkbutton_uplink_telecommands_data_request->get_active())
+                    {
+                        if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_DATA_REQUEST)
+                        {
+                            string data_request_event = "Transmitting ";
+                            data_request_event += entry_config_uplink_burst->get_text();
+                            data_request_event += " data request(s)...";
+                            
+                            event_log->AddNewEvent(data_request_event.c_str());
+                            
+                            thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
+                            
+                            thread_request_cmd.detach();
+                        }
+                    }
+
+                    if (checkbutton_uplink_telecommands_shutdown->get_active())
+                    {
+                        if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_SHUTDOWN)
+                        {
+                            string shutdown_event = "Transmitting ";
+                            shutdown_event += entry_config_uplink_burst->get_text();
+                            shutdown_event += " shutdown command(s)...";
+                            
+                            event_log->AddNewEvent(shutdown_event.c_str());
+                            
+                            thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+                            
+                            thread_shutdown_cmd.detach();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 	return true;
 }
 
@@ -1121,9 +1180,8 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
             system("touch " FSAT_GRS_GRC_BEACON_BIN);
             
-            thread thread_gnuradio_beacon(&FSatGRS::RunGNURadioReceiver, this, true);
-            
-            thread_gnuradio_beacon.detach();
+            thread_downlink_beacon = new thread(&FSatGRS::RunGNURadioReceiver, this, true);
+            thread_downlink_beacon->detach();
             
             ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
         }
@@ -1179,7 +1237,8 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
     else
     {
         delete ngham_pkts_beacon;
-        
+        delete thread_downlink_beacon;
+
         toolbutton_open_log_file->set_sensitive(true);
         toolbutton_close_log_file->set_sensitive(false);
         toolbutton_prev_log_line->set_sensitive(false);
@@ -1255,9 +1314,8 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
             system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
             
-            thread thread_gnuradio_telemetry(&FSatGRS::RunGNURadioReceiver, this, false);
-            
-            thread_gnuradio_telemetry.detach();
+            thread_downlink_telemetry = new thread(&FSatGRS::RunGNURadioReceiver, this, false);
+            thread_downlink_telemetry->detach(); 
             
             ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
         }
@@ -1312,6 +1370,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
     else
     {
         delete ngham_pkts_telemetry;
+        delete thread_downlink_telemetry;
         
         toolbutton_open_log_file->set_sensitive(true);
         toolbutton_close_log_file->set_sensitive(false);
@@ -1375,6 +1434,11 @@ void FSatGRS::OnButtonClearAllTelemetryClicked()
     filechooserbutton_telemetry->unselect_all();
 }
 
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- UPLINK -----------------------------------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
 void FSatGRS::OnButtonGRSSchedulerClicked()
 {
     int response = dialog_uplink_scheduler_manager->run();
@@ -1437,12 +1501,12 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             
             togglebutton_play_uplink->set_active(false);
         }
-        else if (radiobutton_uplink_grs_scheduler->get_active() or radiobutton_uplink_server_control->get_active())
+        /*else if (radiobutton_uplink_grs_scheduler->get_active() or radiobutton_uplink_server_control->get_active())
         {
             this->RaiseErrorMessage("Under development!", "The uplink control using the GRS scheduler or an external server will be available soon.");
             
             togglebutton_play_uplink->set_active(false);
-        }
+        }*/
     }
     else
     {
@@ -2304,9 +2368,12 @@ void FSatGRS::OnButtonUplinkSchedulerManagerDeleteClicked()
     Glib::RefPtr<Gtk::TreeSelection> selection = treeview_uplink_scheduler_manager_events->get_selection();
 
     vector<Gtk::TreeModel::Path> paths = selection->get_selected_rows();
+    
     for(int i=paths.size()-1; i>=0; i--)
     {
         liststore_uplink_events->erase(liststore_uplink_events->get_iter(paths[i]));
+
+        uplink_events.erase(uplink_events.begin() + stoi(paths[i].to_string(), nullptr));
     }
 }
 
@@ -2316,20 +2383,26 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
     
     Gtk::TreeModel::Row row = *(liststore_uplink_events->append());
     
+    unsigned int uplink_events_pos = uplink_events.size();
+
     string cmd_name;
     switch(combobox_uplink_scheduler_manager_new_event_cmd->get_active_row_number())
     {
         case 0:
             cmd_name = "Ping";
+            uplink_events.push_back(UplinkEvent(string("Ping")));
             break;
         case 1:
             cmd_name = "Data request";
+            uplink_events.push_back(UplinkEvent(string("Data request")));
             break;
         case 2:
             cmd_name = "Shutdown";
+            uplink_events.push_back(UplinkEvent(string("Shutdown")));
             break;
         default:
             cmd_name = "Ping";
+            uplink_events.push_back(UplinkEvent(string("Ping")));
             break;
     }
     
@@ -2344,18 +2417,25 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
         end_str = entry_uplink_scheduler_manager_new_event_end_time->get_text();
         end_str += "-";
         end_str += entry_uplink_scheduler_manager_new_event_end_date->get_text();
+
+        uplink_events[uplink_events_pos].SetInterval(entry_uplink_scheduler_manager_new_event_start_time->get_text(), entry_uplink_scheduler_manager_new_event_start_date->get_text(),
+                                                     entry_uplink_scheduler_manager_new_event_end_time->get_text(), entry_uplink_scheduler_manager_new_event_end_date->get_text());
     }
 
     string period_str = "-";
     if (switch_uplink_scheduler_manager_new_event_period->get_active())
     {
         period_str = entry_uplink_scheduler_manager_new_event_period_value->get_text();
+
+        uplink_events[uplink_events_pos].SetPeriod(period_str);
     }
 
     string cycles_str = "-";
     if (switch_uplink_scheduler_manager_new_event_cycles->get_active())
     {
         cycles_str = entry_uplink_scheduler_manager_new_event_cycles_value->get_text();
+        
+        uplink_events[uplink_events_pos].SetCycles(cycles_str);
     }
 
     row[columns.events_cmd]     = cmd_name;

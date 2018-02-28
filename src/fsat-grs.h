@@ -41,6 +41,7 @@
 #include <gtkmm.h>
 #include <vector>
 #include <stdint.h>
+#include <thread>
 
 #include "uart.h"
 #include "event_log.h"
@@ -49,6 +50,7 @@
 #include "packet_data.h"
 #include "ngham_pkts.h"
 #include "read_log.h"
+#include "uplink_event.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/fsat_grs_gui.glade"
 
@@ -422,6 +424,23 @@ class FSatGRS
          * \brief 
          */
         ReadLog                         *read_log;
+        /**
+         * \brief A vector to hold all the scheduled events.
+         */
+        std::vector<UplinkEvent>        uplink_events;
+        
+        //******************************************************************************************
+        //******************************************************************************************
+        //-- THREADS -------------------------------------------------------------------------------
+        //******************************************************************************************
+        //******************************************************************************************
+        /**
+         * \brief 
+         */
+        std::thread                     *thread_downlink_beacon;
+        std::thread                     *thread_downlink_telemetry;
+        //std::thread                     *thread_uplink;
+        //std::thread                     *thread_plot;
 
         /**
          * \brief 
