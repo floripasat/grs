@@ -2390,19 +2390,19 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
     {
         case 0:
             cmd_name = "Ping";
-            uplink_events.push_back(UplinkEvent(string("Ping")));
+            uplink_events.push_back(UplinkEvent(UPLINK_EVENT_TYPE_PING));
             break;
         case 1:
             cmd_name = "Data request";
-            uplink_events.push_back(UplinkEvent(string("Data request")));
+            uplink_events.push_back(UplinkEvent(UPLINK_EVENT_TYPE_DATA_REQUEST));
             break;
         case 2:
             cmd_name = "Shutdown";
-            uplink_events.push_back(UplinkEvent(string("Shutdown")));
+            uplink_events.push_back(UplinkEvent(UPLINK_EVENT_TYPE_SHUTDOWN));
             break;
         default:
             cmd_name = "Ping";
-            uplink_events.push_back(UplinkEvent(string("Ping")));
+            uplink_events.push_back(UplinkEvent(UPLINK_EVENT_TYPE_PING));
             break;
     }
     
@@ -2427,7 +2427,7 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
     {
         period_str = entry_uplink_scheduler_manager_new_event_period_value->get_text();
 
-        uplink_events[uplink_events_pos].SetPeriod(period_str);
+        uplink_events[uplink_events_pos].SetPeriod(stoi(period_str, nullptr));
     }
 
     string cycles_str = "-";
@@ -2435,7 +2435,7 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
     {
         cycles_str = entry_uplink_scheduler_manager_new_event_cycles_value->get_text();
         
-        uplink_events[uplink_events_pos].SetCycles(cycles_str);
+        uplink_events[uplink_events_pos].SetCycles(stoi(cycles_str, nullptr));
     }
 
     row[columns.events_cmd]     = cmd_name;

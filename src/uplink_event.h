@@ -74,15 +74,15 @@ class UplinkEvent
         /**
          * \brief Class constructor.
          *
-         * \param type is a string with the type of the command.
+         * \param t is the type of the command.
          *
          * \return None
          */
-        UplinkEvent(std::string type);
+        UplinkEvent(unsigned int t);
         /**
          * \brief Class constructor.
          *
-         * \param t is a string with the type of the command.
+         * \param t is the type of the command.
          * \param time_start is a string with the start time of the interval (HH:MM:SS).
          * \param date_start is a string with the start date of the interval (DD/MM/YYYY).
          * \param time_end is a string with the end time of the interval (HH:MM:SS).
@@ -90,34 +90,34 @@ class UplinkEvent
          *
          * \return None
          */
-        UplinkEvent(std::string t, std::string time_start, std::string date_start, std::string time_end, std::string date_end);
+        UplinkEvent(unsigned int t, std::string time_start, std::string date_start, std::string time_end, std::string date_end);
         /**
          * \brief Class constructor.
          *
-         * \param t is a string with the type of the command.
+         * \param t is the type of the command.
          * \param time_start is a string with the start time of the interval (HH:MM:SS).
          * \param date_start is a string with the start date of the interval (DD/MM/YYYY).
          * \param time_end is a string with the end time of the interval (HH:MM:SS).
          * \param date_end is a string with the end date of the interval (DD/MM/YYYY).
-         * \param p is a string with the period value (in seconds).
+         * \param p is the period value (in seconds).
          *
          * \return None
          */
-        UplinkEvent(std::string t, std::string time_start, std::string date_start, std::string time_end, std::string date_end, std::string p);
+        UplinkEvent(unsigned int t, std::string time_start, std::string date_start, std::string time_end, std::string date_end, unsigned int p);
         /**
          * \brief Class constructor.
          *
-         * \param t is a string with the type of the command.
+         * \param t is the type of the command.
          * \param time_start is a string with the start time of the interval (HH:MM:SS).
          * \param date_start is a string with the start date of the interval (DD/MM/YYYY).
          * \param time_end is a string with the end time of the interval (HH:MM:SS).
          * \param date_end is a string with the end date of the interval (DD/MM/YYYY).
-         * \param p is a string with the period value (in seconds).
-         * \param c is a string with the number of cycles.
+         * \param p is the period value (in seconds).
+         * \param c is the number of cycles.
          *
          * \return None
          */
-        UplinkEvent(std::string t, std::string time_start, std::string date_start, std::string time_end, std::string date_end, std::string p, std::string c);
+        UplinkEvent(unsigned int t, std::string time_start, std::string date_start, std::string time_end, std::string date_end, unsigned int p, unsigned int c);
         /**
          * \brief Class destructor.
          *
@@ -133,11 +133,11 @@ class UplinkEvent
         /**
          * \brief Sets the type of the uplink command.
          *
-         * \param t is a string with the type of command.
+         * \param t is the type of command.
          *
          * \return None
          */
-        void SetType(std::string t);
+        void SetType(unsigned int t);
         /**
          * \brief Sets the time/date interval of the event.
          *
@@ -152,19 +152,19 @@ class UplinkEvent
         /**
          * \brief Sets the period of the transmissions of the event.
          *
-         * \param p is a string with the period.
+         * \param p is the period in seconds.
          *
          * \return None
          */
-        void SetPeriod(std::string p);
+        void SetPeriod(unsigned int p);
         /**
          * \brief Sets the number of cycles of transmissions.
          *
-         * \param c is a string with the number of cycles.
+         * \param c is the number of cycles.
          *
          * \return None
          */
-        void SetCycles(std::string c);
+        void SetCycles(unsigned int c);
         /**
          * \brief Gets the type of the event.
          *

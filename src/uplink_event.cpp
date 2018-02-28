@@ -46,7 +46,7 @@ UplinkEvent::UplinkEvent()
 
 }
 
-UplinkEvent::UplinkEvent(string t)
+UplinkEvent::UplinkEvent(unsigned int t)
 {
     this->SetType(t);
     has_interval = false;
@@ -54,7 +54,7 @@ UplinkEvent::UplinkEvent(string t)
     has_cycles = false;
 }
 
-UplinkEvent::UplinkEvent(string t, string time_start, string date_start, string time_end, string date_end)
+UplinkEvent::UplinkEvent(unsigned int t, string time_start, string date_start, string time_end, string date_end)
 {
     this->SetType(t);
     this->SetInterval(time_start, date_start, time_end, date_end);
@@ -62,7 +62,7 @@ UplinkEvent::UplinkEvent(string t, string time_start, string date_start, string 
     has_cycles = false;
 }
 
-UplinkEvent::UplinkEvent(string t, string time_start, string date_start, string time_end, string date_end, string p)
+UplinkEvent::UplinkEvent(unsigned int t, string time_start, string date_start, string time_end, string date_end, unsigned int p)
 {
     this->SetType(t);
     this->SetInterval(time_start, date_start, time_end, date_end);
@@ -70,7 +70,7 @@ UplinkEvent::UplinkEvent(string t, string time_start, string date_start, string 
     has_cycles = false;
 }
 
-UplinkEvent::UplinkEvent(string t, string time_start, string date_start, string time_end, string date_end, string p, string c)
+UplinkEvent::UplinkEvent(unsigned int t, string time_start, string date_start, string time_end, string date_end, unsigned int p, unsigned int c)
 {
     this->SetType(t);
     this->SetInterval(time_start, date_start, time_end, date_end);
@@ -220,24 +220,9 @@ bool UplinkEvent::CanTransmit()
     }
 }
 
-void UplinkEvent::SetType(string t)
+void UplinkEvent::SetType(unsigned int t)
 {
-    if (t == "Ping")
-    {
-        type = UPLINK_EVENT_TYPE_PING;
-    }
-    else if (t == "Data request")
-    {
-        type = UPLINK_EVENT_TYPE_DATA_REQUEST;
-    }
-    else if (t == "Shutdown")
-    {
-        type = UPLINK_EVENT_TYPE_SHUTDOWN;
-    }
-    else
-    {
-        type = UPLINK_EVENT_TYPE_PING;
-    }
+    type = t;
 }
 
 void UplinkEvent::SetInterval(string start_time, string start_date, string end_time, string end_date)
@@ -267,19 +252,19 @@ void UplinkEvent::SetInterval(string start_time, string start_date, string end_t
     end = mktime(&end_tm);
 }
 
-void UplinkEvent::SetPeriod(string p)
+void UplinkEvent::SetPeriod(unsigned int p)
 {
     has_period = true;
 
-    period_s = stoi(p, nullptr);
+    period_s = p;
 }
 
-void UplinkEvent::SetCycles(string c)
+void UplinkEvent::SetCycles(unsigned int c)
 {
     has_cycles = true;
     tx_count = 0;
 
-    cycles = stoi(c , nullptr);
+    cycles = c;
 }
 
 unsigned int UplinkEvent::GetType()
