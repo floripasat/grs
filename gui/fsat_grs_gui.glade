@@ -7194,7 +7194,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="text" translatable="yes">145.910e6</property>
+                        <property name="text" translatable="yes">145.911e6</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

@@ -2805,7 +2805,7 @@ void FSatGRS::LoadDefaultConfigs()
     entry_config_downlink_telemetry_sample_rate->set_text("1e6");
     entry_config_uplink_burst->set_text("1");
     entry_config_uplink_telemetry_frequency->set_text("437.9318e6");
-    entry_config_uplink_beacon_frequency->set_text("145.910e6");
+    entry_config_uplink_beacon_frequency->set_text("145.911e6");
     radiobutton_config_uplink_type_telemetry->set_active(true);
     radiobutton_config_uplink_type_beacon->set_active(false);
 }
