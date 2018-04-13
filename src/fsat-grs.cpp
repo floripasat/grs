@@ -44,6 +44,7 @@
 #include "aux.hpp"
 #include "beacon_data.h"
 #include "telemetry_data.h"
+#include "telecommands.h" 
 #include "data_processing.hpp"
 #include "sha256.h"
 #include "uplink_events_columns.h"
@@ -2557,6 +2558,9 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 {
     NGHamPkts ngham_uplink_pkt;
     
+    string homepath = getenv("HOME");        
+    ofstream file_config((homepath + "/.fsat_grs/packet_flags.txt").c_str(), ofstream::out);    
+    
     string grs_id = entry_config_general_gs_id->get_text();
     while(grs_id.size() < 6)
     {
@@ -2564,8 +2568,9 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     }
     
     uint8_t ping[9];
-    uint8_t request[22];
+    uint8_t request[16];
     uint8_t shutdown[9];
+    request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
     string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
@@ -2623,25 +2628,44 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             {
                 request[i] = grs_id[i];
             }
-            
-            request[6] = 'd';
-            request[7] = 'w';
-            request[8] = (checkbutton_request_packet_flags->get_active()? '1' : '0');
-            request[9] = (checkbutton_request_obdh_status->get_active()? '1' : '0');
-            request[10] = (checkbutton_request_imu->get_active()? '1' : '0');
-            request[11] = (checkbutton_request_obdh_time->get_active()? '1' : '0');
-            request[12] = (checkbutton_request_obdh_mis->get_active()? '1' : '0');
-            request[13] = (checkbutton_request_solar_panels_sensors->get_active()? '1' : '0');
-            request[14] = (checkbutton_request_main_radio->get_active()? '1' : '0');
-            request[15] = (checkbutton_request_solar_panels->get_active()? '1' : '0');
-            request[16] = (checkbutton_request_eps_misc->get_active()? '1' : '0');
-            request[17] = (checkbutton_request_battery_monitor->get_active()? '1' : '0');
-            request[18] = (checkbutton_request_temperatures->get_active()? '1' : '0');
-            request[19] = (checkbutton_request_task_scheduler->get_active()? '1' : '0');
-            request[20] = (checkbutton_request_rush->get_active()? '1' : '0');
-            //pkt_quant = entry_uplink_request_pkt_quant->get_text();
+                    
+            rqt_packet.packages_count = std::stoi(entry_uplink_request_pkt_quant->get_text());
+            rqt_packet.packages_origin = NEWER_PACKAGES_ORIGIN;
+            rqt_packet.packages_offset = -2;
+            rqt_packet.flags = 0;
 
-            ngham_uplink_pkt.Generate(request, 21);
+            //rqt_packet.flags =  (checkbutton_request_packet_flags->get_active()         ?   0x : 0);
+            rqt_packet.flags =  (checkbutton_request_obdh_status->get_active()          ?   0x0001 : 0);
+            rqt_packet.flags += (checkbutton_request_imu->get_active()                  ?   0x0002 : 0);
+            rqt_packet.flags += (checkbutton_request_obdh_time->get_active()            ?   0x0004 : 0);
+            rqt_packet.flags += (checkbutton_request_obdh_mis->get_active()             ?   0x0008 : 0);
+            rqt_packet.flags += (checkbutton_request_solar_panels_sensors->get_active() ?   0x0010 : 0);
+            rqt_packet.flags += (checkbutton_request_main_radio->get_active()           ?   0x0020 : 0);
+            rqt_packet.flags += (checkbutton_request_solar_panels->get_active()         ?   0x0040 : 0);
+            rqt_packet.flags += (checkbutton_request_eps_misc->get_active()             ?   0x0080 : 0);
+            rqt_packet.flags += (checkbutton_request_battery_monitor->get_active()      ?   0x0100 : 0);
+            rqt_packet.flags += (checkbutton_request_temperatures->get_active()         ?   0x0200 : 0);
+            rqt_packet.flags += (checkbutton_request_task_scheduler->get_active()       ?   0x0400 : 0);
+            rqt_packet.flags += (checkbutton_request_rush->get_active()                 ?   0x0800 : 0);
+
+
+            
+            file_config.write((char *)&(rqt_packet.flags), 2);
+            file_config.close();
+
+            request[6]  = REQUEST_DATA_TELECOMMAND    & 0xFF;
+            request[7]  = REQUEST_DATA_TELECOMMAND>>8 & 0xFF;
+            request[8]  = rqt_packet.flags>>8;
+            request[9]  = rqt_packet.flags & 0xFF;
+            request[10] = rqt_packet.packages_count;
+            request[11] = rqt_packet.packages_origin;
+            request[12] = rqt_packet.packages_offset>>24 & 0xFF;
+            request[13] = rqt_packet.packages_offset>>16 & 0xFF;
+            request[14] = rqt_packet.packages_offset>>8  & 0xFF;
+            request[15] = rqt_packet.packages_offset     & 0xFF;
+
+
+            ngham_uplink_pkt.Generate(request, 16);
             
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {

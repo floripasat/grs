@@ -232,7 +232,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             system_time_sec     = data[54];
             system_time_min     = ((data[57] << 16) | (data[56] << 8) | data[55])%60;
             system_time_hou     = ((data[57] << 16) | (data[56] << 8) | data[55])/60;    
-            obdh_resets         = data[59] + data[58]*256;
+            obdh_resets         = data[58] + data[59]*256;
         #elif BEACON_DATA_ENDIENESS == BEACON_DATA_MSB_FIRST
             imu_accel_x         = IMUAccelConv((data[42] << 8) | data[43]);
             imu_accel_y         = IMUAccelConv((data[44] << 8) | data[45]);
@@ -243,7 +243,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
             system_time_sec     = data[54];
             system_time_min     = ((data[55] << 16) | (data[56] << 8) | data[57])%60;
             system_time_hou     = ((data[55] << 16) | (data[56] << 8) | data[57])/60;      
-            obdh_resets         = data[58] + data[59]*256;
+            obdh_resets         = data[59] + data[58]*256;
         #endif // BEACON_DATA_ENDIENESS
             
             type_last_pkt = BEACON_DATA_OBDH_PKT;
@@ -385,7 +385,7 @@ void BeaconData::ForceDisplay(vector<string> data)
 {
     while(data.size() < 34)
     {
-        data.push_back(string("-"));
+        data.push_back(std::string("-"));
     }
 
     unsigned int i = 6;
@@ -457,7 +457,7 @@ double BeaconData::IMUGyroConv(uint16_t val)
 
 const char* BeaconData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
 {
-    stringstream input_str;
+    std::stringstream input_str;
     
     input_str << int(h);
     input_str << ":";
@@ -465,7 +465,7 @@ const char* BeaconData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
     input_str << ":";
     input_str << int(s);
     
-    string output = input_str.str();
+    std::string output = input_str.str();
     
     return output.c_str();
 }

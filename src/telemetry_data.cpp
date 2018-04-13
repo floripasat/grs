@@ -36,9 +36,49 @@
  */
 
 #include <iomanip>
+#include <fstream>
+#include <string>
 
 #include "telemetry_data.h"
 #include "aux.hpp"
+
+#define  OBDH_STATUS_FLAG           (0x0001)
+#define  IMU_FLAG                   (0x0002)
+#define  OBDH_MISC_FLAG             (0x0004)
+#define  OBDH_UPTIME_FLAG           (0x0008)
+#define  SOLAR_PANELS_SENSORS_FLAG  (0x0010)
+#define  MAIN_RADIO_FLAG            (0x0020)
+#define  SOLAR_PANELS_FLAG          (0x0040)
+#define  EPS_MISC_FLAG              (0x0080)
+#define  BATTERY_MONITOR_FLAG       (0x0100)
+#define  TEMPERATURES_FLAG          (0x0200)
+#define  ENERGY_LEVEL_FLAG          (0x0400)
+#define  PAYLOAD1_FLAG              (0x0800)
+#define  PAYLOAD2_FLAG              (0x1000)
+
+#define WHOLE_ORBIT_DATA_FLAG       (0x8000)
+
+#define has_flag(x,y)   (x & y)
+
+typedef struct {
+    uint16_t package_flags;
+    //obdh
+    uint8_t obdh_status             [6];
+    uint8_t imu                     [24];
+    uint8_t obdh_misc               [6];
+    uint8_t obdh_uptime             [4];
+    uint8_t solar_panels_sensors    [12];
+    uint8_t main_radio              [19];
+    //eps
+    uint8_t solar_panels            [18];    
+    uint8_t eps_misc                [8];
+    uint8_t battery_monitor         [21];
+    uint8_t temperatures            [21];
+    uint8_t energy_level            [1];
+    //payloads
+    uint8_t payload1                [40];
+    uint8_t payload2                [7];
+} data_packet_t;
 
 using namespace std;
 
@@ -47,7 +87,7 @@ TelemetryData::TelemetryData()
     
 }
 
-TelemetryData::TelemetryData(vector<Gtk::Label *> lbs)
+TelemetryData::TelemetryData(std::vector<Gtk::Label *> lbs)
 {
     unsigned int pos = 0;
     
@@ -243,77 +283,193 @@ void TelemetryData::Display(bool no_data)
 
 void TelemetryData::Update(uint8_t *data, uint8_t len)
 {
-    if (len > 140)
+    data_packet_t packet;
+
+    uint16_t flags = ((uint16_t)data[1]<<8) | (uint16_t) data[0];
+    uint16_t rqt_flags;
+    //flags = flags & rqt_packet.flags;
+    uint16_t packageSize = 2;
+
+    unsigned int i;
+
+    string homepath = getenv("HOME");
+            
+    ifstream file_flags((homepath + "/.fsat_grs/packet_flags.txt").c_str(), ifstream::in);
+    if (file_flags.is_open())
     {
-        packet_flags                = (data[0] << 8) | data[1];
-        reset_counter               = (data[2] << 16) | (data[3] << 8) | data[4];
-        reset_cause                 = data[5];
-        clock_fault_flags           = data[6];
-        test_module_flags           = data[7];
-        imu_status                  = bool((data[7] >> 4) & 1);
-        usd_status                  = bool((data[7] >> 3) & 1);
-        rush_status                 = bool((data[7] >> 1) & 1);
-        eps_status                  = bool((data[7] >> 0) & 1);
-        antenna_status              = bool((data[7] >> 5) & 1);
-        imu_1_accel_x               = IMUAccelConv((data[8] << 8) | data[9]);
-        imu_1_accel_y               = IMUAccelConv((data[10] << 8) | data[11]);
-        imu_1_accel_z               = IMUAccelConv((data[12] << 8) | data[13]);
-        imu_1_gyro_x                = IMUGyroConv((data[14] << 8) | data[15]);
-        imu_1_gyro_y                = IMUGyroConv((data[16] << 8) | data[17]);
-        imu_1_gyro_z                = IMUGyroConv((data[18] << 8) | data[19]);
-        imu_2_accel_x               = IMUAccelConv((data[20] << 8) | data[21]);
-        imu_2_accel_y               = IMUAccelConv((data[22] << 8) | data[23]);
-        imu_2_accel_z               = IMUAccelConv((data[24] << 8) | data[25]);
-        imu_2_gyro_x                = IMUGyroConv((data[26] << 8) | data[27]);
-        imu_2_gyro_y                = IMUGyroConv((data[28] << 8) | data[29]);
-        imu_2_gyro_z                = IMUGyroConv((data[30] << 8) | data[31]);
-        MSP_temperature             = MSPInternalTempConv((data[32] << 8) | data[33]);
-        supply_voltage              = OBDHSupplyVoltConv((data[34] << 8) | data[35]);
-        supply_current              = OBDHSupplyCurrentConv((data[36] << 8) | data[37]);
-        system_time_sec             = data[38];
-        system_time_min             = ((data[39] << 16) | (data[40] << 8) | data[41])%60;
-        system_time_hou             = ((data[39] << 16) | (data[40] << 8) | data[41])/60;            
-        solar_current_1             = SolarPanelCurrentConv((data[139] << 8) | data[140]);
-        solar_current_2             = SolarPanelCurrentConv((data[141] << 8) | data[142]);
-        solar_current_3             = SolarPanelCurrentConv((data[143] << 8) | data[144]);
-        solar_current_4             = SolarPanelCurrentConv((data[145] << 8) | data[146]);
-        solar_current_5             = SolarPanelCurrentConv((data[147] << 8) | data[148]);
-        solar_current_6             = SolarPanelCurrentConv((data[149] << 8) | data[150]);
-        solar_voltage_1             = SolarPanelVoltageConv((data[151] << 8) | data[152]);
-        solar_voltage_2             = SolarPanelVoltageConv((data[153] << 8) | data[154]);
-        solar_voltage_3             = SolarPanelVoltageConv((data[155] << 8) | data[156]);
-        boost_voltage               = ADCVoltConv((data[157] << 8) | data[158]);
-        main_power_voltage          = ADCVoltConv((data[159] << 8) | data[160]);
-        BEACON_EPS_current          = BeaconEPSCurrentConv((data[161] << 8) | data[162]);
-        ADC_temperature             = ADCInternalTempConv((data[163] << 8) | data[164]);
-        bat_average_current         = BatCurrentConv((data[165] << 8) | data[166]);
-        bat_temperature             = BatMonitorTempConv((data[167] << 8) | data[168]);
-        bat1_voltage                = BatVoltConv((data[169] << 8) | data[170]);
-        bat2_voltage                = BatVoltConv((data[171] << 8) | data[172]);
-        bat_current                 = BatCurrentConv((data[173] << 8) | data[174]);
-        bat_accumulated_current     = BatAccumulatedCurrentConv((data[175] << 8) | data[176]);
-        protection_register         = data[177];
-        status_register             = data[178];
-        cycle_counter_register      = CycleCountRegisterConv(data[179]);
-        active_absolute_capacity    = RemainingAbsoluteCapacityConv((data[180] << 8) | data[181]);
-        standby_absolute_capacity   = RemainingAbsoluteCapacityConv((data[182] << 8) | data[183]);
-        active_relative_capacity    = data[184];
-        standby_relative_capacity   = data[185];
-        RTD_measurement_1           = ADCConv(data[186] << 16 | (data[187] << 8) | data[188]);
-        RTD_measurement_2           = ADCConv(data[189] << 16 | (data[190] << 8) | data[191]);
-        RTD_measurement_3           = ADCConv(data[192] << 16 | (data[193] << 8) | data[194]);
-        RTD_measurement_4           = ADCConv(data[195] << 16 | (data[196] << 8) | data[197]);
-        RTD_measurement_5           = ADCConv(data[198] << 16 | (data[199] << 8) | data[200]);
-        RTD_measurement_6           = ADCConv(data[201] << 16 | (data[202] << 8) | data[203]);
-        RTD_measurement_7           = ADCConv(data[204] << 16 | (data[205] << 8) | data[206]);
-        EPS_status                  = data[207];
-        
-        this->Display();
+        file_flags.read((char *)&rqt_flags, 2);
+        file_flags.close();    
+    }    
+
+    /** Periodic telemetry or first requested frame: ignore the flags cause it has the whole orbit data anyway */
+    if (has_flag(flags, WHOLE_ORBIT_DATA_FLAG))   
+    {      
+        flags = 0xffff;   
     }
     else
     {
-        this->Clear();
+       flags =  flags & rqt_flags;
     }
+
+    if(has_flag(flags, OBDH_STATUS_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.obdh_status); i++)
+        {
+            packet.obdh_status[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, IMU_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.imu); i++)
+        {
+            packet.imu[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, OBDH_MISC_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.obdh_misc); i++)
+        {
+            packet.obdh_misc[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, OBDH_UPTIME_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.obdh_uptime); i++)
+        {
+            packet.obdh_uptime[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, SOLAR_PANELS_SENSORS_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.solar_panels_sensors); i++)
+        {
+            packet.solar_panels_sensors[i] = data[packageSize++];
+        }
+    }    
+    if(has_flag(flags, MAIN_RADIO_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.main_radio); i++)
+        {
+            packet.main_radio[i] = data[packageSize++];
+        }
+    }
+
+    if(has_flag(flags, SOLAR_PANELS_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.solar_panels); i++)
+        {
+            packet.solar_panels[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, EPS_MISC_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.eps_misc); i++)
+        {
+            packet.eps_misc[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, BATTERY_MONITOR_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.battery_monitor); i++)
+        {
+            packet.battery_monitor[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, TEMPERATURES_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.temperatures); i++)
+        {
+            packet.temperatures[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, ENERGY_LEVEL_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.energy_level); i++)
+        {
+            packet.energy_level[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, PAYLOAD1_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.payload1); i++)
+        {
+            packet.payload1[i] = data[packageSize++];
+        }
+    }
+    if(has_flag(flags, PAYLOAD2_FLAG))
+    {
+        for(i = 0; i < sizeof(packet.payload2); i++)
+        {
+            packet.payload2[i] = data[packageSize++];
+        }
+    }
+    
+
+    packet_flags                = packet.package_flags;
+    reset_counter               = (packet.obdh_status[0] << 16) | (packet.obdh_status[1] << 8) | packet.obdh_status[2];
+    reset_cause                 = packet.obdh_status[3];
+    clock_fault_flags           = packet.obdh_status[4];
+    test_module_flags           = packet.obdh_status[5];
+    imu_status                  = bool((test_module_flags >> 4) & 1);
+    usd_status                  = bool((test_module_flags >> 3) & 1);
+    rush_status                 = bool((test_module_flags >> 1) & 1);
+    eps_status                  = bool((test_module_flags >> 0) & 1);
+    antenna_status              = bool((test_module_flags >> 5) & 1);
+    imu_1_accel_x               = IMUAccelConv((packet.imu[0] << 8) | packet.imu[1]);
+    imu_1_accel_y               = IMUAccelConv((packet.imu[2] << 8) | packet.imu[3]);
+    imu_1_accel_z               = IMUAccelConv((packet.imu[4] << 8) | packet.imu[5]);
+    imu_1_gyro_x                = IMUGyroConv((packet.imu[6] << 8) | packet.imu[7]);
+    imu_1_gyro_y                = IMUGyroConv((packet.imu[8] << 8) | packet.imu[9]);
+    imu_1_gyro_z                = IMUGyroConv((packet.imu[10] << 8) | packet.imu[11]);
+    imu_2_accel_x               = IMUAccelConv((packet.imu[12] << 8) | packet.imu[13]);
+    imu_2_accel_y               = IMUAccelConv((packet.imu[14] << 8) | packet.imu[15]);
+    imu_2_accel_z               = IMUAccelConv((packet.imu[16] << 8) | packet.imu[17]);
+    imu_2_gyro_x                = IMUGyroConv((packet.imu[18] << 8) | packet.imu[19]);
+    imu_2_gyro_y                = IMUGyroConv((packet.imu[20] << 8) | packet.imu[21]);
+    imu_2_gyro_z                = IMUGyroConv((packet.imu[22] << 8) | packet.imu[23]);
+    MSP_temperature             = MSPInternalTempConv((packet.obdh_misc[0] << 8) | packet.obdh_misc[1]);
+    supply_voltage              = OBDHSupplyVoltConv((packet.obdh_misc[2] << 8) | packet.obdh_misc[3]);
+    supply_current              = OBDHSupplyCurrentConv((packet.obdh_misc[4] << 8) | packet.obdh_misc[5]);
+    system_time_sec             = packet.obdh_uptime[0];
+    system_time_min             = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])%60;
+    system_time_hou             = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;            
+    solar_current_1             = SolarPanelCurrentConv((packet.solar_panels[0] << 8) | packet.solar_panels[1]);
+    solar_current_2             = SolarPanelCurrentConv((packet.solar_panels[2] << 8) | packet.solar_panels[3]);
+    solar_current_3             = SolarPanelCurrentConv((packet.solar_panels[4] << 8) | packet.solar_panels[5]);
+    solar_current_4             = SolarPanelCurrentConv((packet.solar_panels[6] << 8) | packet.solar_panels[7]);
+    solar_current_5             = SolarPanelCurrentConv((packet.solar_panels[8] << 8) | packet.solar_panels[9]);
+    solar_current_6             = SolarPanelCurrentConv((packet.solar_panels[10] << 8) | packet.solar_panels[11]);
+    solar_voltage_1             = SolarPanelVoltageConv((packet.solar_panels[12] << 8) | packet.solar_panels[13]);
+    solar_voltage_2             = SolarPanelVoltageConv((packet.solar_panels[14] << 8) | packet.solar_panels[15]);
+    solar_voltage_3             = SolarPanelVoltageConv((packet.solar_panels[16] << 8) | packet.solar_panels[17]);
+    boost_voltage               = ADCVoltConv((packet.eps_misc[0] << 8) | packet.eps_misc[1]);
+    main_power_voltage          = ADCVoltConv((packet.eps_misc[2] << 8) | packet.eps_misc[3]);
+    BEACON_EPS_current          = BeaconEPSCurrentConv((packet.eps_misc[4] << 8) | packet.eps_misc[5]);
+    ADC_temperature             = ADCInternalTempConv((packet.eps_misc[6] << 8) | packet.eps_misc[7]);
+    bat_average_current         = BatCurrentConv((packet.battery_monitor[0] << 8) | packet.battery_monitor[1]);
+    bat_temperature             = BatMonitorTempConv((packet.battery_monitor[2] << 8) | packet.battery_monitor[3]);
+    bat1_voltage                = BatVoltConv((packet.battery_monitor[4] << 8) | packet.battery_monitor[5]);
+    bat2_voltage                = BatVoltConv((packet.battery_monitor[6] << 8) | packet.battery_monitor[7]);
+    bat_current                 = BatCurrentConv((packet.battery_monitor[8] << 8) | packet.battery_monitor[9]);
+    bat_accumulated_current     = BatAccumulatedCurrentConv((packet.battery_monitor[10] << 8) | packet.battery_monitor[11]);
+    protection_register         = packet.battery_monitor[12];
+    status_register             = packet.battery_monitor[13];
+    cycle_counter_register      = CycleCountRegisterConv(packet.battery_monitor[14]);
+    active_absolute_capacity    = RemainingAbsoluteCapacityConv((packet.battery_monitor[15] << 8) | packet.battery_monitor[16]);
+    standby_absolute_capacity   = RemainingAbsoluteCapacityConv((packet.battery_monitor[17] << 8) | packet.battery_monitor[18]);
+    active_relative_capacity    = packet.battery_monitor[19];
+    standby_relative_capacity   = packet.battery_monitor[20];
+    RTD_measurement_1           = ADCConv(packet.temperatures[0] << 16 | (packet.temperatures[1] << 8) | packet.temperatures[2]);
+    RTD_measurement_2           = ADCConv(packet.temperatures[3] << 16 | (packet.temperatures[4] << 8) | packet.temperatures[5]);
+    RTD_measurement_3           = ADCConv(packet.temperatures[6] << 16 | (packet.temperatures[7] << 8) | packet.temperatures[8]);
+    RTD_measurement_4           = ADCConv(packet.temperatures[9] << 16 | (packet.temperatures[10] << 8) | packet.temperatures[11]);
+    RTD_measurement_5           = ADCConv(packet.temperatures[12] << 16 | (packet.temperatures[13] << 8) | packet.temperatures[14]);
+    RTD_measurement_6           = ADCConv(packet.temperatures[15] << 16 | (packet.temperatures[16] << 8) | packet.temperatures[17]);
+    RTD_measurement_7           = ADCConv(packet.temperatures[18] << 16 | (packet.temperatures[19] << 8) | packet.temperatures[20]);
+    EPS_status                  = packet.energy_level[0];
+    
+    this->Display();
+    //    this->Clear();
 }
 
 void TelemetryData::Clear()
@@ -382,9 +538,9 @@ void TelemetryData::Clear()
     EPS_status                  = 0;
 }
 
-string TelemetryData::Log()
+std::string TelemetryData::Log()
 {
-    string log_entry = "";
+    std::string log_entry = "";
     
     log_entry += ToString(int(packet_flags));
     log_entry += ",";
@@ -518,11 +674,11 @@ const char* TelemetryData::getLabel()
     return "TELEMETRY";
 }
 
-void TelemetryData::ForceDisplay(vector<string> data)
+void TelemetryData::ForceDisplay(std::vector<std::string> data)
 {
     while(data.size() < 57)
     {
-        data.push_back(string("-"));
+        data.push_back(std::string("-"));
     }
 
     unsigned int i = 6;
@@ -653,7 +809,7 @@ double TelemetryData::BatCurrentConv(uint16_t val)
 
 double TelemetryData::BatAccumulatedCurrentConv(uint16_t val)
 {
-    return int16_t(val) * (6.25e-6 / 0.01);
+    return uint16_t(val) * (6.25e-6 / 0.01);
 }
 
 double TelemetryData::BatMonitorTempConv(uint16_t val)
@@ -673,7 +829,7 @@ double TelemetryData::RemainingAbsoluteCapacityConv(uint16_t val)
 
 const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
 {
-    stringstream input_str;
+    std::stringstream input_str;
     
     input_str << int(h);
     input_str << ":";
@@ -681,20 +837,20 @@ const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
     input_str << ":";
     input_str << int(s);
     
-    string output = input_str.str();
+    std::string output = input_str.str();
     
     return output.c_str();
 }
 
 const char* TelemetryData::PrintIMUs(double imu_1, double imu_2, unsigned int digits)
 {
-    stringstream input_str;
+    std::stringstream input_str;
     
-    input_str << fixed << setprecision(digits) << imu_1;
+    input_str << std::fixed << std::setprecision(digits) << imu_1;
     input_str << "/";
-    input_str << fixed << setprecision(digits) << imu_2;
+    input_str << std::fixed << std::setprecision(digits) << imu_2;
     
-    string output = input_str.str();
+    std::string output = input_str.str();
     
     return output.c_str();
 }
