@@ -304,11 +304,13 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
     /** Periodic telemetry or first requested frame: ignore the flags cause it has the whole orbit data anyway */
     if (has_flag(flags, WHOLE_ORBIT_DATA_FLAG))   
     {      
-        flags = 0xffff;   
+        flags = 0xffff; 
+        packet_flags = packet.package_flags;  
     }
     else
     {
        flags =  flags & rqt_flags;
+       packet_flags = packet.package_flags;
     }
 
     if(has_flag(flags, OBDH_STATUS_FLAG))
@@ -317,6 +319,15 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.obdh_status[i] = data[packageSize++];
         }
+        reset_counter     = (packet.obdh_status[0] << 16) | (packet.obdh_status[1] << 8) | packet.obdh_status[2];
+        reset_cause       = packet.obdh_status[3];
+        clock_fault_flags = packet.obdh_status[4];
+        test_module_flags = packet.obdh_status[5];
+        imu_status        = bool((test_module_flags >> 4) & 1);
+        usd_status        = bool((test_module_flags >> 3) & 1);
+        rush_status       = bool((test_module_flags >> 1) & 1);
+        eps_status        = bool((test_module_flags >> 0) & 1);
+        antenna_status    = bool((test_module_flags >> 5) & 1);
     }
     if(has_flag(flags, IMU_FLAG))
     {
@@ -324,6 +335,18 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.imu[i] = data[packageSize++];
         }
+        imu_1_accel_x = IMUAccelConv((packet.imu[0] << 8) | packet.imu[1]);
+        imu_1_accel_y = IMUAccelConv((packet.imu[2] << 8) | packet.imu[3]);
+        imu_1_accel_z = IMUAccelConv((packet.imu[4] << 8) | packet.imu[5]);
+        imu_1_gyro_x  = IMUGyroConv((packet.imu[6] << 8) | packet.imu[7]);
+        imu_1_gyro_y  = IMUGyroConv((packet.imu[8] << 8) | packet.imu[9]);
+        imu_1_gyro_z  = IMUGyroConv((packet.imu[10] << 8) | packet.imu[11]);
+        imu_2_accel_x = IMUAccelConv((packet.imu[12] << 8) | packet.imu[13]);
+        imu_2_accel_y = IMUAccelConv((packet.imu[14] << 8) | packet.imu[15]);
+        imu_2_accel_z = IMUAccelConv((packet.imu[16] << 8) | packet.imu[17]);
+        imu_2_gyro_x  = IMUGyroConv((packet.imu[18] << 8) | packet.imu[19]);
+        imu_2_gyro_y  = IMUGyroConv((packet.imu[20] << 8) | packet.imu[21]);
+        imu_2_gyro_z  = IMUGyroConv((packet.imu[22] << 8) | packet.imu[23]);
     }
     if(has_flag(flags, OBDH_MISC_FLAG))
     {
@@ -331,6 +354,9 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.obdh_misc[i] = data[packageSize++];
         }
+        MSP_temperature = MSPInternalTempConv((packet.obdh_misc[0] << 8) | packet.obdh_misc[1]);
+        supply_voltage  = OBDHSupplyVoltConv((packet.obdh_misc[2] << 8) | packet.obdh_misc[3]);
+        supply_current  = OBDHSupplyCurrentConv((packet.obdh_misc[4] << 8) | packet.obdh_misc[5]);
     }
     if(has_flag(flags, OBDH_UPTIME_FLAG))
     {
@@ -338,6 +364,9 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.obdh_uptime[i] = data[packageSize++];
         }
+        system_time_sec = packet.obdh_uptime[0];
+        system_time_min = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])%60;
+        system_time_hou = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;            
     }
     if(has_flag(flags, SOLAR_PANELS_SENSORS_FLAG))
     {
@@ -360,6 +389,15 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.solar_panels[i] = data[packageSize++];
         }
+        solar_current_1 = SolarPanelCurrentConv((packet.solar_panels[0] << 8) | packet.solar_panels[1]);
+        solar_current_2 = SolarPanelCurrentConv((packet.solar_panels[2] << 8) | packet.solar_panels[3]);
+        solar_current_3 = SolarPanelCurrentConv((packet.solar_panels[4] << 8) | packet.solar_panels[5]);
+        solar_current_4 = SolarPanelCurrentConv((packet.solar_panels[6] << 8) | packet.solar_panels[7]);
+        solar_current_5 = SolarPanelCurrentConv((packet.solar_panels[8] << 8) | packet.solar_panels[9]);
+        solar_current_6 = SolarPanelCurrentConv((packet.solar_panels[10] << 8) | packet.solar_panels[11]);
+        solar_voltage_1 = SolarPanelVoltageConv((packet.solar_panels[12] << 8) | packet.solar_panels[13]);
+        solar_voltage_2 = SolarPanelVoltageConv((packet.solar_panels[14] << 8) | packet.solar_panels[15]);
+        solar_voltage_3 = SolarPanelVoltageConv((packet.solar_panels[16] << 8) | packet.solar_panels[17]);
     }
     if(has_flag(flags, EPS_MISC_FLAG))
     {
@@ -367,6 +405,10 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.eps_misc[i] = data[packageSize++];
         }
+        boost_voltage      = ADCVoltConv((packet.eps_misc[0] << 8) | packet.eps_misc[1]);
+        main_power_voltage = ADCVoltConv((packet.eps_misc[2] << 8) | packet.eps_misc[3]);
+        BEACON_EPS_current = BeaconEPSCurrentConv((packet.eps_misc[4] << 8) | packet.eps_misc[5]);
+        ADC_temperature    = ADCInternalTempConv((packet.eps_misc[6] << 8) | packet.eps_misc[7]);
     }
     if(has_flag(flags, BATTERY_MONITOR_FLAG))
     {
@@ -374,6 +416,19 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.battery_monitor[i] = data[packageSize++];
         }
+        bat_average_current       = BatCurrentConv((packet.battery_monitor[0] << 8) | packet.battery_monitor[1]);
+        bat_temperature           = BatMonitorTempConv((packet.battery_monitor[2] << 8) | packet.battery_monitor[3]);
+        bat1_voltage              = BatVoltConv((packet.battery_monitor[4] << 8) | packet.battery_monitor[5]);
+        bat2_voltage              = BatVoltConv((packet.battery_monitor[6] << 8) | packet.battery_monitor[7]);
+        bat_current               = BatCurrentConv((packet.battery_monitor[8] << 8) | packet.battery_monitor[9]);
+        bat_accumulated_current   = BatAccumulatedCurrentConv((packet.battery_monitor[10] << 8) | packet.battery_monitor[11]);
+        protection_register       = packet.battery_monitor[12];
+        status_register           = packet.battery_monitor[13];
+        cycle_counter_register    = CycleCountRegisterConv(packet.battery_monitor[14]);
+        active_absolute_capacity  = RemainingAbsoluteCapacityConv((packet.battery_monitor[15] << 8) | packet.battery_monitor[16]);
+        standby_absolute_capacity = RemainingAbsoluteCapacityConv((packet.battery_monitor[17] << 8) | packet.battery_monitor[18]);
+        active_relative_capacity  = packet.battery_monitor[19];
+        standby_relative_capacity = packet.battery_monitor[20];
     }
     if(has_flag(flags, TEMPERATURES_FLAG))
     {
@@ -381,6 +436,13 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.temperatures[i] = data[packageSize++];
         }
+        RTD_measurement_1 = ADCConv(packet.temperatures[0] << 16 | (packet.temperatures[1] << 8) | packet.temperatures[2]);
+        RTD_measurement_2 = ADCConv(packet.temperatures[3] << 16 | (packet.temperatures[4] << 8) | packet.temperatures[5]);
+        RTD_measurement_3 = ADCConv(packet.temperatures[6] << 16 | (packet.temperatures[7] << 8) | packet.temperatures[8]);
+        RTD_measurement_4 = ADCConv(packet.temperatures[9] << 16 | (packet.temperatures[10] << 8) | packet.temperatures[11]);
+        RTD_measurement_5 = ADCConv(packet.temperatures[12] << 16 | (packet.temperatures[13] << 8) | packet.temperatures[14]);
+        RTD_measurement_6 = ADCConv(packet.temperatures[15] << 16 | (packet.temperatures[16] << 8) | packet.temperatures[17]);
+        RTD_measurement_7 = ADCConv(packet.temperatures[18] << 16 | (packet.temperatures[19] << 8) | packet.temperatures[20]);
     }
     if(has_flag(flags, ENERGY_LEVEL_FLAG))
     {
@@ -388,6 +450,7 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.energy_level[i] = data[packageSize++];
         }
+        EPS_status = packet.energy_level[0];
     }
     if(has_flag(flags, PAYLOAD1_FLAG))
     {
@@ -403,70 +466,6 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
             packet.payload2[i] = data[packageSize++];
         }
     }
-    
-
-    packet_flags                = packet.package_flags;
-    reset_counter               = (packet.obdh_status[0] << 16) | (packet.obdh_status[1] << 8) | packet.obdh_status[2];
-    reset_cause                 = packet.obdh_status[3];
-    clock_fault_flags           = packet.obdh_status[4];
-    test_module_flags           = packet.obdh_status[5];
-    imu_status                  = bool((test_module_flags >> 4) & 1);
-    usd_status                  = bool((test_module_flags >> 3) & 1);
-    rush_status                 = bool((test_module_flags >> 1) & 1);
-    eps_status                  = bool((test_module_flags >> 0) & 1);
-    antenna_status              = bool((test_module_flags >> 5) & 1);
-    imu_1_accel_x               = IMUAccelConv((packet.imu[0] << 8) | packet.imu[1]);
-    imu_1_accel_y               = IMUAccelConv((packet.imu[2] << 8) | packet.imu[3]);
-    imu_1_accel_z               = IMUAccelConv((packet.imu[4] << 8) | packet.imu[5]);
-    imu_1_gyro_x                = IMUGyroConv((packet.imu[6] << 8) | packet.imu[7]);
-    imu_1_gyro_y                = IMUGyroConv((packet.imu[8] << 8) | packet.imu[9]);
-    imu_1_gyro_z                = IMUGyroConv((packet.imu[10] << 8) | packet.imu[11]);
-    imu_2_accel_x               = IMUAccelConv((packet.imu[12] << 8) | packet.imu[13]);
-    imu_2_accel_y               = IMUAccelConv((packet.imu[14] << 8) | packet.imu[15]);
-    imu_2_accel_z               = IMUAccelConv((packet.imu[16] << 8) | packet.imu[17]);
-    imu_2_gyro_x                = IMUGyroConv((packet.imu[18] << 8) | packet.imu[19]);
-    imu_2_gyro_y                = IMUGyroConv((packet.imu[20] << 8) | packet.imu[21]);
-    imu_2_gyro_z                = IMUGyroConv((packet.imu[22] << 8) | packet.imu[23]);
-    MSP_temperature             = MSPInternalTempConv((packet.obdh_misc[0] << 8) | packet.obdh_misc[1]);
-    supply_voltage              = OBDHSupplyVoltConv((packet.obdh_misc[2] << 8) | packet.obdh_misc[3]);
-    supply_current              = OBDHSupplyCurrentConv((packet.obdh_misc[4] << 8) | packet.obdh_misc[5]);
-    system_time_sec             = packet.obdh_uptime[0];
-    system_time_min             = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])%60;
-    system_time_hou             = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;            
-    solar_current_1             = SolarPanelCurrentConv((packet.solar_panels[0] << 8) | packet.solar_panels[1]);
-    solar_current_2             = SolarPanelCurrentConv((packet.solar_panels[2] << 8) | packet.solar_panels[3]);
-    solar_current_3             = SolarPanelCurrentConv((packet.solar_panels[4] << 8) | packet.solar_panels[5]);
-    solar_current_4             = SolarPanelCurrentConv((packet.solar_panels[6] << 8) | packet.solar_panels[7]);
-    solar_current_5             = SolarPanelCurrentConv((packet.solar_panels[8] << 8) | packet.solar_panels[9]);
-    solar_current_6             = SolarPanelCurrentConv((packet.solar_panels[10] << 8) | packet.solar_panels[11]);
-    solar_voltage_1             = SolarPanelVoltageConv((packet.solar_panels[12] << 8) | packet.solar_panels[13]);
-    solar_voltage_2             = SolarPanelVoltageConv((packet.solar_panels[14] << 8) | packet.solar_panels[15]);
-    solar_voltage_3             = SolarPanelVoltageConv((packet.solar_panels[16] << 8) | packet.solar_panels[17]);
-    boost_voltage               = ADCVoltConv((packet.eps_misc[0] << 8) | packet.eps_misc[1]);
-    main_power_voltage          = ADCVoltConv((packet.eps_misc[2] << 8) | packet.eps_misc[3]);
-    BEACON_EPS_current          = BeaconEPSCurrentConv((packet.eps_misc[4] << 8) | packet.eps_misc[5]);
-    ADC_temperature             = ADCInternalTempConv((packet.eps_misc[6] << 8) | packet.eps_misc[7]);
-    bat_average_current         = BatCurrentConv((packet.battery_monitor[0] << 8) | packet.battery_monitor[1]);
-    bat_temperature             = BatMonitorTempConv((packet.battery_monitor[2] << 8) | packet.battery_monitor[3]);
-    bat1_voltage                = BatVoltConv((packet.battery_monitor[4] << 8) | packet.battery_monitor[5]);
-    bat2_voltage                = BatVoltConv((packet.battery_monitor[6] << 8) | packet.battery_monitor[7]);
-    bat_current                 = BatCurrentConv((packet.battery_monitor[8] << 8) | packet.battery_monitor[9]);
-    bat_accumulated_current     = BatAccumulatedCurrentConv((packet.battery_monitor[10] << 8) | packet.battery_monitor[11]);
-    protection_register         = packet.battery_monitor[12];
-    status_register             = packet.battery_monitor[13];
-    cycle_counter_register      = CycleCountRegisterConv(packet.battery_monitor[14]);
-    active_absolute_capacity    = RemainingAbsoluteCapacityConv((packet.battery_monitor[15] << 8) | packet.battery_monitor[16]);
-    standby_absolute_capacity   = RemainingAbsoluteCapacityConv((packet.battery_monitor[17] << 8) | packet.battery_monitor[18]);
-    active_relative_capacity    = packet.battery_monitor[19];
-    standby_relative_capacity   = packet.battery_monitor[20];
-    RTD_measurement_1           = ADCConv(packet.temperatures[0] << 16 | (packet.temperatures[1] << 8) | packet.temperatures[2]);
-    RTD_measurement_2           = ADCConv(packet.temperatures[3] << 16 | (packet.temperatures[4] << 8) | packet.temperatures[5]);
-    RTD_measurement_3           = ADCConv(packet.temperatures[6] << 16 | (packet.temperatures[7] << 8) | packet.temperatures[8]);
-    RTD_measurement_4           = ADCConv(packet.temperatures[9] << 16 | (packet.temperatures[10] << 8) | packet.temperatures[11]);
-    RTD_measurement_5           = ADCConv(packet.temperatures[12] << 16 | (packet.temperatures[13] << 8) | packet.temperatures[14]);
-    RTD_measurement_6           = ADCConv(packet.temperatures[15] << 16 | (packet.temperatures[16] << 8) | packet.temperatures[17]);
-    RTD_measurement_7           = ADCConv(packet.temperatures[18] << 16 | (packet.temperatures[19] << 8) | packet.temperatures[20]);
-    EPS_status                  = packet.energy_level[0];
     
     this->Display();
     //    this->Clear();
