@@ -2637,16 +2637,15 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             //rqt_packet.flags =  (checkbutton_request_packet_flags->get_active()         ?   0x : 0);
             rqt_packet.flags =  (checkbutton_request_obdh_status->get_active()          ?   0x0001 : 0);
             rqt_packet.flags += (checkbutton_request_imu->get_active()                  ?   0x0002 : 0);
-            rqt_packet.flags += (checkbutton_request_obdh_time->get_active()            ?   0x0004 : 0);
-            rqt_packet.flags += (checkbutton_request_obdh_mis->get_active()             ?   0x0008 : 0);
-            rqt_packet.flags += (checkbutton_request_solar_panels_sensors->get_active() ?   0x0010 : 0);
-            rqt_packet.flags += (checkbutton_request_main_radio->get_active()           ?   0x0020 : 0);
-            rqt_packet.flags += (checkbutton_request_solar_panels->get_active()         ?   0x0040 : 0);
-            rqt_packet.flags += (checkbutton_request_eps_misc->get_active()             ?   0x0080 : 0);
-            rqt_packet.flags += (checkbutton_request_battery_monitor->get_active()      ?   0x0100 : 0);
-            rqt_packet.flags += (checkbutton_request_temperatures->get_active()         ?   0x0200 : 0);
-            rqt_packet.flags += (checkbutton_request_task_scheduler->get_active()       ?   0x0400 : 0);
-            rqt_packet.flags += (checkbutton_request_rush->get_active()                 ?   0x0800 : 0);
+            rqt_packet.flags += (checkbutton_request_obdh_mis->get_active()             ?   0x0004 : 0);
+            rqt_packet.flags += (checkbutton_request_solar_panels_sensors->get_active() ?   0x0008 : 0);
+            rqt_packet.flags += (checkbutton_request_main_radio->get_active()           ?   0x0010 : 0);
+            rqt_packet.flags += (checkbutton_request_solar_panels->get_active()         ?   0x0020 : 0);
+            rqt_packet.flags += (checkbutton_request_eps_misc->get_active()             ?   0x0040 : 0);
+            rqt_packet.flags += (checkbutton_request_battery_monitor->get_active()      ?   0x0080 : 0);
+            rqt_packet.flags += (checkbutton_request_temperatures->get_active()         ?   0x0100 : 0);
+            rqt_packet.flags += (checkbutton_request_task_scheduler->get_active()       ?   0x0200 : 0);
+            rqt_packet.flags += (checkbutton_request_rush->get_active()                 ?   0x0400 : 0);
 
 
             

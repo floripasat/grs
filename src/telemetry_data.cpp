@@ -45,16 +45,15 @@
 #define  OBDH_STATUS_FLAG           (0x0001)
 #define  IMU_FLAG                   (0x0002)
 #define  OBDH_MISC_FLAG             (0x0004)
-#define  OBDH_UPTIME_FLAG           (0x0008)
-#define  SOLAR_PANELS_SENSORS_FLAG  (0x0010)
-#define  MAIN_RADIO_FLAG            (0x0020)
-#define  SOLAR_PANELS_FLAG          (0x0040)
-#define  EPS_MISC_FLAG              (0x0080)
-#define  BATTERY_MONITOR_FLAG       (0x0100)
-#define  TEMPERATURES_FLAG          (0x0200)
-#define  ENERGY_LEVEL_FLAG          (0x0400)
-#define  PAYLOAD1_FLAG              (0x0800)
-#define  PAYLOAD2_FLAG              (0x1000)
+#define  SOLAR_PANELS_SENSORS_FLAG  (0x0008)
+#define  MAIN_RADIO_FLAG            (0x0010)
+#define  SOLAR_PANELS_FLAG          (0x0020)
+#define  EPS_MISC_FLAG              (0x0040)
+#define  BATTERY_MONITOR_FLAG       (0x0080)
+#define  TEMPERATURES_FLAG          (0x0100)
+#define  ENERGY_LEVEL_FLAG          (0x0200)
+#define  PAYLOAD1_FLAG              (0x0400)
+#define  PAYLOAD2_FLAG              (0x0800)
 
 #define WHOLE_ORBIT_DATA_FLAG       (0x8000)
 
@@ -313,6 +312,14 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
        packet_flags = packet.package_flags;
     }
 
+    for(i = 0; i < sizeof(packet.obdh_uptime); i++)
+    {
+        packet.obdh_uptime[i] = data[packageSize++];
+    }
+    system_time_sec = packet.obdh_uptime[0];
+    system_time_min = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])%60;
+    system_time_hou = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;            
+
     if(has_flag(flags, OBDH_STATUS_FLAG))
     {
         for(i = 0; i < sizeof(packet.obdh_status); i++)
@@ -357,16 +364,6 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         MSP_temperature = MSPInternalTempConv((packet.obdh_misc[0] << 8) | packet.obdh_misc[1]);
         supply_voltage  = OBDHSupplyVoltConv((packet.obdh_misc[2] << 8) | packet.obdh_misc[3]);
         supply_current  = OBDHSupplyCurrentConv((packet.obdh_misc[4] << 8) | packet.obdh_misc[5]);
-    }
-    if(has_flag(flags, OBDH_UPTIME_FLAG))
-    {
-        for(i = 0; i < sizeof(packet.obdh_uptime); i++)
-        {
-            packet.obdh_uptime[i] = data[packageSize++];
-        }
-        system_time_sec = packet.obdh_uptime[0];
-        system_time_min = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])%60;
-        system_time_hou = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;            
     }
     if(has_flag(flags, SOLAR_PANELS_SENSORS_FLAG))
     {
