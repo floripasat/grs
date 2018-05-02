@@ -2607,7 +2607,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             {
                 system(cmd_str.c_str());
                 
-                //event_log->AddNewEvent("Ping command transmitted.");
+                event_log->AddNewEvent("Ping command transmitted.");
             }
             break;
         case FSAT_GRS_UPLINK_REQUEST:
@@ -2657,7 +2657,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             {
                 system(cmd_str.c_str());
                 
-                //event_log->AddNewEvent("Data request transmitted.");
+                event_log->AddNewEvent("Data request transmitted.");
             }
             break;
         case FSAT_GRS_UPLINK_SHUTDOWN:
@@ -2677,7 +2677,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             {
                 system(cmd_str.c_str());
                 
-                //event_log->AddNewEvent("Shutdown command transmitted.");
+                event_log->AddNewEvent("Shutdown command transmitted.");
             }
             break;
     }
