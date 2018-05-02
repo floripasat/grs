@@ -45,7 +45,7 @@
 #include "packet_data.h"
 #include "protocol_statistic.h"
 
-#define NGHAM_PKT_GEN_FILE      "/tmp/uplink_pkt.bin"
+#define NGHAM_PKT_GEN_FILE      "/tmp/tx_data.bin"
 
 /**
  * \class NGHamPkts
