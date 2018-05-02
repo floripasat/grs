@@ -353,6 +353,9 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_request_task_scheduler;
         Gtk::CheckButton                *checkbutton_request_rush;
         Gtk::Entry                      *entry_uplink_request_pkt_quant;
+        Gtk::Entry                      *entry_uplink_request_offset;
+        Gtk::RadioButton                *radiobutton_uplink_data_request_start;
+        Gtk::RadioButton                *radiobutton_uplink_data_request_end;
         Gtk::Button                     *button_data_request_send;
         Gtk::Button                     *button_data_request_cancel;
         

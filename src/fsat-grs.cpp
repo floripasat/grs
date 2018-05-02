@@ -635,6 +635,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("checkbutton_request_task_scheduler", checkbutton_request_task_scheduler);
     ref_builder->get_widget("checkbutton_request_rush", checkbutton_request_rush);
     ref_builder->get_widget("entry_uplink_request_pkt_quant", entry_uplink_request_pkt_quant);
+    ref_builder->get_widget("entry_uplink_request_offset", entry_uplink_request_offset);
+    ref_builder->get_widget("radiobutton_uplink_data_request_start", radiobutton_uplink_data_request_start);
+    ref_builder->get_widget("radiobutton_uplink_data_request_end", radiobutton_uplink_data_request_end);
     ref_builder->get_widget("button_data_request_send", button_data_request_send);
     ref_builder->get_widget("button_data_request_cancel", button_data_request_cancel);
     
@@ -2616,9 +2619,9 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 request[i] = grs_id[i];
             }
                     
-            rqt_packet.packages_count = std::stoi(entry_uplink_request_pkt_quant->get_text());
-            rqt_packet.packages_origin = NEWER_PACKAGES_ORIGIN;
-            rqt_packet.packages_offset = -2;
+            rqt_packet.packages_count = stoi(entry_uplink_request_pkt_quant->get_text());
+            rqt_packet.packages_origin = radiobutton_uplink_data_request_start->get_active()? NEWER_PACKAGES_ORIGIN : OLDER_PACKAGES_ORIGIN;
+            rqt_packet.packages_offset = stoi(entry_uplink_request_offset->get_text()) - 2;     // -2 ??????
             rqt_packet.flags = 0;
 
             //rqt_packet.flags =  (checkbutton_request_packet_flags->get_active()         ?   0x : 0);
