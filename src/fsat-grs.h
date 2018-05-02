@@ -56,6 +56,12 @@
 
 #define DATA_RECEPTION_SAMPLE_RATE      1000
 
+#define FSAT_GRS_RX_BEACON              0
+#define FSAT_GRS_RX_TELEMETRY           1
+
+#define FSAT_GRS_RX_GRC_SCRIPT          "gfsk_rx.py"
+#define FSAT_GRS_TX_GRC_SCRIPT          "gfsk_tx.py"
+
 #define FSAT_GRS_GRC_BEACON_BIN         "/tmp/bin_data_beacon.bin"
 #define FSAT_GRS_GRC_TELEMETRY_BIN      "/tmp/bin_data_telemetry.bin"
 
@@ -716,7 +722,7 @@ class FSatGRS
          * 
          * \return None
          */
-        void RunGNURadioReceiver(bool beacon_receiver=true);
+        void RunGNURadioReceiver(uint8_t rx_type=FSAT_GRS_RX_BEACON);
         /**
          * \brief 
          * 

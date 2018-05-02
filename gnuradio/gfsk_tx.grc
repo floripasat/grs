@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.9'?>
+<?grc format='1' created='3.7.10'?>
 <flow_graph>
   <timestamp>Sat Nov 18 21:12:40 2017</timestamp>
   <block>
@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>fsat_grs_uplink</value>
+      <value>gfsk_tx</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -78,7 +78,7 @@
     </param>
     <param>
       <key>title</key>
-      <value>FloripaSat GRS Transmitter</value>
+      <value>GFSK TX</value>
     </param>
   </block>
   <block>
@@ -93,34 +93,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(296, 13)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>baudrate</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>2400</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(456, 13)</value>
+      <value>(840, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -147,7 +120,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(200, 85)</value>
+      <value>(1104, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -159,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>5000</value>
+      <value>3200</value>
     </param>
   </block>
   <block>
@@ -174,34 +147,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(200, 13)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>freq</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>437.9318e6</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(736, 13)</value>
+      <value>(1008, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -228,7 +174,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(640, 13)</value>
+      <value>(912, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -255,34 +201,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(528, 13)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>samp_rate_tx</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>4000000</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(384, 13)</value>
+      <value>(768, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -298,11 +217,7 @@
     </param>
   </block>
   <block>
-    <key>blocks_file_sink</key>
-    <param>
-      <key>append</key>
-      <value>False</value>
-    </param>
+    <key>parameter</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -312,20 +227,12 @@
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
       <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>file</key>
-      <value></value>
+      <value>True</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(568, 337)</value>
+      <value>(552, 8)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -333,19 +240,66 @@
     </param>
     <param>
       <key>id</key>
-      <value>blocks_file_sink_0</value>
+      <value>baudrate</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>baudrate</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>b</value>
     </param>
     <param>
       <key>type</key>
-      <value>complex</value>
+      <value>intx</value>
     </param>
     <param>
-      <key>unbuffered</key>
-      <value>False</value>
+      <key>value</key>
+      <value>9600</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
     </param>
     <param>
-      <key>vlen</key>
-      <value>1</value>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(208, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>bin_file_input</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>input_file</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>o</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>string</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>/tmp/tx_data.bin</value>
     </param>
   </block>
   <block>
@@ -368,11 +322,11 @@
     </param>
     <param>
       <key>file</key>
-      <value>/tmp/uplink_pkt.bin</value>
+      <value>/tmp/tx_data.bin</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(8, 255)</value>
+      <value>(8, 276)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -404,61 +358,6 @@
     </param>
   </block>
   <block>
-    <key>blocks_udp_sink</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>ipaddr</key>
-      <value>127.0.0.1</value>
-    </param>
-    <param>
-      <key>port</key>
-      <value>4356</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(568, 410)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_udp_sink_0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>psize</key>
-      <value>1472</value>
-    </param>
-    <param>
-      <key>eof</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
     <key>digital_gfsk_mod</key>
     <param>
       <key>bt</key>
@@ -482,7 +381,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(192, 249)</value>
+      <value>(208, 268)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -515,6 +414,49 @@
     <param>
       <key>verbose</key>
       <value>False</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(440, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>freq</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>frequency</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>f</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>437.5e6</value>
     </param>
   </block>
   <block>
@@ -1429,7 +1371,7 @@
     </param>
     <param>
       <key>args</key>
-      <value>rtl=1</value>
+      <value>sdr_dev</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1437,7 +1379,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(568, 215)</value>
+      <value>(592, 240)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1543,6 +1485,10 @@
       <value>1.0</value>
     </param>
     <param>
+      <key>axislabels</key>
+      <value>True</value>
+    </param>
+    <param>
       <key>bw</key>
       <value>samp_rate</value>
     </param>
@@ -1576,7 +1522,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(568, 130)</value>
+      <value>(592, 384)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -1811,12 +1757,20 @@
       <value>firdes.WIN_BLACKMAN_hARRIS</value>
     </param>
     <param>
+      <key>label</key>
+      <value>Relative Gain</value>
+    </param>
+    <param>
       <key>ymax</key>
       <value>10</value>
     </param>
     <param>
       <key>ymin</key>
       <value>-140</value>
+    </param>
+    <param>
+      <key>units</key>
+      <value>dB</value>
     </param>
   </block>
   <block>
@@ -1847,7 +1801,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(368, 242)</value>
+      <value>(392, 264)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1878,6 +1832,92 @@
       <value>ccc</value>
     </param>
   </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(656, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>samp_rate_tx</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>s</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>intx</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>4000000</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(352, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>sdr_dev</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>sdr_dev</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>d</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>string</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>rtl=0</value>
+    </param>
+  </block>
   <connection>
     <source_block_id>blocks_file_source_0</source_block_id>
     <sink_block_id>digital_gfsk_mod_0</sink_block_id>
@@ -1887,18 +1927,6 @@
   <connection>
     <source_block_id>digital_gfsk_mod_0</source_block_id>
     <sink_block_id>rational_resampler_xxx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>rational_resampler_xxx_0</source_block_id>
-    <sink_block_id>blocks_file_sink_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>rational_resampler_xxx_0</source_block_id>
-    <sink_block_id>blocks_udp_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

@@ -1181,7 +1181,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
             system("touch " FSAT_GRS_GRC_BEACON_BIN);
             
-            thread_downlink_beacon = new thread(&FSatGRS::RunGNURadioReceiver, this, true);
+            thread_downlink_beacon = new thread(&FSatGRS::RunGNURadioReceiver, this, FSAT_GRS_RX_BEACON);
             thread_downlink_beacon->detach();
             
             ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
@@ -1315,7 +1315,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
             system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
             
-            thread_downlink_telemetry = new thread(&FSatGRS::RunGNURadioReceiver, this, false);
+            thread_downlink_telemetry = new thread(&FSatGRS::RunGNURadioReceiver, this, FSAT_GRS_RX_TELEMETRY);
             thread_downlink_telemetry->detach(); 
             
             ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
@@ -2474,83 +2474,75 @@ void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)
 //-- GNURADIO ---------------------------------------------------------------------------------------------------------------------------
 //***************************************************************************************************************************************
 //***************************************************************************************************************************************
-void FSatGRS::RunGNURadioReceiver(bool beacon_receiver)
+void FSatGRS::RunGNURadioReceiver(uint8_t rx_type)
 {
-    if (beacon_receiver)
+    string grc_cmd = "python -u gnuradio/";
+    grc_cmd += FSAT_GRS_RX_GRC_SCRIPT;
+
+    switch(rx_type)
     {
-        string grc_beacon_receiver_cmd = "python -u gnuradio/fsat_grs_beacon.py ";
-        switch(combobox_beacon_sdr_dev->get_active_row_number())
-        {
-            case 0:
-                grc_beacon_receiver_cmd += "rtl=0";
-                break;
-            case 1:
-                grc_beacon_receiver_cmd += "rtl=1";
-                break;
-            case 2:
-                grc_beacon_receiver_cmd += "fcd=0";
-                break;
-            case 3:
-                grc_beacon_receiver_cmd += "fcd=1";
-                break;
-            case 4:
-                grc_beacon_receiver_cmd += "uhd=0";
-                break;
-            case 5:
-                grc_beacon_receiver_cmd += "uhd=1";
-                break;
-            default:
-                this->RaiseErrorMessage("Invalid SDR device!", "Check the SDR connection or model type.");
-                break;
-        }
-        grc_beacon_receiver_cmd += " ";
-        grc_beacon_receiver_cmd += entry_config_downlink_beacon_freq->get_text().c_str();
-        grc_beacon_receiver_cmd += " ";
-        grc_beacon_receiver_cmd += entry_config_downlink_beacon_baudrate->get_text().c_str();
-        grc_beacon_receiver_cmd += " ";
-        grc_beacon_receiver_cmd += entry_config_downlink_beacon_filter->get_text().c_str();
-        grc_beacon_receiver_cmd += " ";
-        grc_beacon_receiver_cmd += entry_config_downlink_beacon_sample_rate->get_text().c_str();
-        
-        system(grc_beacon_receiver_cmd.c_str());
-    }
-    else
-    {
-        string grc_telemetry_receiver_cmd = "python -u gnuradio/fsat_grs_telemetry.py ";
-        switch(combobox_telemetry_sdr_dev->get_active_row_number())
-        {
-            case 0:
-                grc_telemetry_receiver_cmd += "rtl=0";
-                break;
-            case 1:
-                grc_telemetry_receiver_cmd += "rtl=1";
-                break;
-            case 2:
-                grc_telemetry_receiver_cmd += "fcd=0";
-                break;
-            case 3:
-                grc_telemetry_receiver_cmd += "fcd=1";
-                break;
-            case 4:
-                grc_telemetry_receiver_cmd += "uhd=0";
-                break;
-            case 5:
-                grc_telemetry_receiver_cmd += "uhd=1";
-                break;
-            default:
-                this->RaiseErrorMessage("Invalid SDR device!", "Check the SDR connection or model type.");
-                break;
-        }
-        grc_telemetry_receiver_cmd += " ";
-        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_freq->get_text().c_str();
-        grc_telemetry_receiver_cmd += " ";
-        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_baudrate->get_text().c_str();
-        grc_telemetry_receiver_cmd += " ";
-        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_filter->get_text().c_str();
-        grc_telemetry_receiver_cmd += " ";
-        grc_telemetry_receiver_cmd += entry_config_downlink_telemetry_sample_rate->get_text().c_str();
-        
-        system(grc_telemetry_receiver_cmd.c_str());
+        case FSAT_GRS_RX_BEACON:
+            switch(combobox_beacon_sdr_dev->get_active_row_number())
+            {
+                case 0:     grc_cmd += " -d rtl=0";      break;
+                case 1:     grc_cmd += " -d rtl=1";      break;
+                case 2:     grc_cmd += " -d fcd=0";      break;
+                case 3:     grc_cmd += " -d fcd=1";      break;
+                case 4:     grc_cmd += " -d uhd=0";      break;
+                case 5:     grc_cmd += " -d uhd=1";      break;
+                default:    this->RaiseErrorMessage("Invalid SDR device!", "Check the SDR connection or model type.");
+            }
+
+            grc_cmd += " -f ";
+            grc_cmd += entry_config_downlink_beacon_freq->get_text().c_str();
+
+            grc_cmd += " -b ";
+            grc_cmd += entry_config_downlink_beacon_baudrate->get_text().c_str();
+
+            grc_cmd += " -p ";
+            grc_cmd += entry_config_downlink_beacon_filter->get_text().c_str();
+
+            grc_cmd += " -s ";
+            grc_cmd += entry_config_downlink_beacon_sample_rate->get_text().c_str();
+            
+            grc_cmd += " -o ";
+            grc_cmd += FSAT_GRS_GRC_BEACON_BIN;
+
+            system(grc_cmd.c_str());
+
+            break;
+        case FSAT_GRS_RX_TELEMETRY:
+            switch(combobox_telemetry_sdr_dev->get_active_row_number())
+            {
+                case 0:     grc_cmd += " -d rtl=0";      break;
+                case 1:     grc_cmd += " -d rtl=1";      break;
+                case 2:     grc_cmd += " -d fcd=0";      break;
+                case 3:     grc_cmd += " -d fcd=1";      break;
+                case 4:     grc_cmd += " -d uhd=0";      break;
+                case 5:     grc_cmd += " -d uhd=1";      break;
+                default:    this->RaiseErrorMessage("Invalid SDR device!", "Check the SDR connection or model type.");
+            }
+
+            grc_cmd += " -f ";
+            grc_cmd += entry_config_downlink_telemetry_freq->get_text().c_str();
+
+            grc_cmd += " -b ";
+            grc_cmd += entry_config_downlink_telemetry_baudrate->get_text().c_str();
+
+            grc_cmd += " -p ";
+            grc_cmd += entry_config_downlink_telemetry_filter->get_text().c_str();
+
+            grc_cmd += " -s ";
+            grc_cmd += entry_config_downlink_telemetry_sample_rate->get_text().c_str();
+            
+            grc_cmd += " -o ";
+            grc_cmd += FSAT_GRS_GRC_TELEMETRY_BIN;
+            
+            system(grc_cmd.c_str());
+
+            break;
+        default:
+            this->RaiseErrorMessage("Invalid RX type!", "There is no receiver of this type.");
     }
 }
 
@@ -2573,33 +2565,28 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
-    string cmd_str = "python -u gnuradio/fsat_grs_uplink.py ";
+    string cmd_str = "python -u gnuradio/";
+    cmd_str += FSAT_GRS_TX_GRC_SCRIPT;
     switch(combobox_uplink_output_sdr_device->get_active_row_number())
     {
-        case 0:
-            cmd_str += "uhd=0 ";
-            break;
-        case 1:
-            cmd_str += "uhd=1 ";
-            break;
-        case 2:
-            cmd_str += "uhd=2 ";
-            break;
-        default:
-            cmd_str += "uhd=0 ";
-            break;
+        case 0:     cmd_str += " -d uhd=0";    break;
+        case 1:     cmd_str += " -d uhd=1";    break;
+        case 2:     cmd_str += " -d uhd=2";    break;
+        default:    cmd_str += " -d uhd=0";    break;
     }
 
     if (radiobutton_config_uplink_type_telemetry->get_active())
     {
+        cmd_str += " -f ";
         cmd_str += entry_config_uplink_telemetry_frequency->get_text();
-        cmd_str += " ";
+        cmd_str += " -b ";
         cmd_str += entry_config_downlink_telemetry_baudrate->get_text();
     }
     else if (radiobutton_config_uplink_type_beacon->get_active())
     {
+        cmd_str += " -f ";
         cmd_str += entry_config_uplink_beacon_frequency->get_text();
-        cmd_str += " ";
+        cmd_str += " -b ";
         cmd_str += entry_config_downlink_beacon_baudrate->get_text();
     }
     
