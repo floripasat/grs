@@ -29,5 +29,8 @@
 *.out
 *.app
 
+# Compilation outputs
+/build/
+
 # Other softwares extensions
 *.glade~
