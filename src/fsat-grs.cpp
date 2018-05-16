@@ -1968,7 +1968,7 @@ void FSatGRS::OnButtonPlotClicked()
             case 21:
                 cmd2 += " 27";
                 cmd2 += " \"Acceleration [deg/s]\"";
-                cmd2 += " \"IMU 2 Gytoscope Z\"";
+                cmd2 += " \"IMU 2 Gyroscope Z\"";
                 break;
             case 22:
                 cmd2 += " 28";

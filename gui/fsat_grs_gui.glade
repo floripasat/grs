@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkFileFilter" id="filefilter1">
@@ -312,15 +312,6 @@
         <col id="0" translatable="yes">IMU 1 acceleremoter Z</col>
       </row>
       <row>
-        <col id="0" translatable="yes">IMU 2 acceleremoter X</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU 2 acceleremoter Y</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">IMU 2 acceleremoter Z</col>
-      </row>
-      <row>
         <col id="0" translatable="yes">IMU 1 gyroscope X</col>
       </row>
       <row>
@@ -328,6 +319,15 @@
       </row>
       <row>
         <col id="0" translatable="yes">IMU 1 gyroscope Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 accelerometer X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 accelerometer Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IMU 2 accelerometer Z</col>
       </row>
       <row>
         <col id="0" translatable="yes">IMU 2 gyroscope X</col>
@@ -502,6 +502,9 @@
     <property name="window_position">center</property>
     <property name="icon">../icon.png</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
@@ -5587,6 +5590,9 @@ Elder Dominghini Tramontin &lt;elderdtramontin@gmail.com&gt;
 Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="logo">../icon.png</property>
     <property name="license_type">gpl-3-0</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
         <property name="can_focus">False</property>
@@ -5616,6 +5622,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox2">
         <property name="can_focus">False</property>
@@ -7307,6 +7316,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox8">
         <property name="can_focus">False</property>
@@ -7718,6 +7730,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
         <property name="can_focus">False</property>
@@ -7886,6 +7901,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -8188,6 +8206,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="can_focus">False</property>
@@ -8304,6 +8325,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox9">
         <property name="can_focus">False</property>
@@ -8504,6 +8528,9 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox7">
         <property name="can_focus">False</property>
