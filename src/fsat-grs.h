@@ -70,6 +70,7 @@
 #define FSAT_GRS_UPLINK_PING            0
 #define FSAT_GRS_UPLINK_REQUEST         1
 #define FSAT_GRS_UPLINK_SHUTDOWN        2
+#define FSAT_GRS_UPLINK_RESET_CHARGE    3
 
 #define FSAT_GRS_USERS_FILE             "/.fsat_grs/users.key"
 #define FSAT_GRS_USERS_PASSWORDS_FILE   "/.fsat_grs/passwords.key"
@@ -99,6 +100,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_plot;
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
+        Gtk::ToolButton                 *toolbutton_reset_charge;
         Gtk::ToolButton                 *toolbutton_shutdown;
         Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
@@ -156,6 +158,7 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_uplink_telecommands_ping;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_data_request;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_shutdown;
+        Gtk::CheckButton                *checkbutton_uplink_telecommands_reset_eps_charge;
         Gtk::ToggleButton               *togglebutton_play_uplink;
         Gtk::ToggleButton               *togglebutton_pause_uplink;
         Gtk::Button                     *button_stop_uplink;
@@ -523,6 +526,12 @@ class FSatGRS
          * \return None
          */
         void OnToolButtonRequestDataClicked();
+        /**
+         * \brief Resets the charge value from EPS batteries.
+         *
+         * \return None
+         */
+        void OnToolButtonResetChargeClicked();
         /**
          * \brief Shutdown command button click signal handler.
          * 

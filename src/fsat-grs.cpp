@@ -166,6 +166,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     {
         toolbutton_request_data->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonRequestDataClicked));
     }
+
+    ref_builder->get_widget("toolbutton_reset_charge", toolbutton_reset_charge);
+    if (toolbutton_reset_charge)
+    {
+        toolbutton_reset_charge->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonResetChargeClicked));
+    }
     
     ref_builder->get_widget("toolbutton_shutdown", toolbutton_shutdown);
     if (toolbutton_shutdown)
@@ -299,6 +305,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("checkbutton_uplink_telecommands_ping", checkbutton_uplink_telecommands_ping);
     ref_builder->get_widget("checkbutton_uplink_telecommands_data_request", checkbutton_uplink_telecommands_data_request);
     ref_builder->get_widget("checkbutton_uplink_telecommands_shutdown", checkbutton_uplink_telecommands_shutdown);
+    ref_builder->get_widget("checkbutton_uplink_telecommands_reset_eps_charge", checkbutton_uplink_telecommands_reset_eps_charge);
     
     ref_builder->get_widget("togglebutton_play_uplink", togglebutton_play_uplink);
     if (togglebutton_play_uplink)
@@ -1115,6 +1122,19 @@ void FSatGRS::OnToolButtonRequestDataClicked()
     }
 }
 
+void FSatGRS::OnToolButtonResetChargeClicked()
+{
+    string reset_charge_event = "Transmitting ";
+    reset_charge_event += entry_config_uplink_burst->get_text();
+    reset_charge_event += " reset charge command(s)...";
+
+    event_log->AddNewEvent(reset_charge_event.c_str());
+
+    thread thread_reset_charge_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_RESET_CHARGE);
+
+    thread_reset_charge_cmd.detach();
+}
+
 void FSatGRS::OnToolButtonShutdownClicked()
 {
     int response = dialog_shutdown_authentication->run();
@@ -1474,6 +1494,7 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         checkbutton_uplink_telecommands_ping->set_sensitive(false);
         checkbutton_uplink_telecommands_data_request->set_sensitive(false);
         checkbutton_uplink_telecommands_shutdown->set_sensitive(false);
+        checkbutton_uplink_telecommands_reset_eps_charge->set_sensitive(false);
         
         togglebutton_play_uplink->set_sensitive(false);
         togglebutton_pause_uplink->set_sensitive(true);
@@ -1494,6 +1515,11 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             if (checkbutton_uplink_telecommands_shutdown->get_active())
             {
                 toolbutton_shutdown->set_sensitive(true);
+            }
+
+            if (checkbutton_uplink_telecommands_reset_eps_charge->get_active())
+            {
+                toolbutton_reset_charge->set_sensitive(true);
             }
         }
         
@@ -1531,6 +1557,7 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         checkbutton_uplink_telecommands_ping->set_sensitive(true);
         checkbutton_uplink_telecommands_data_request->set_sensitive(true);
         checkbutton_uplink_telecommands_shutdown->set_sensitive(true);
+        checkbutton_uplink_telecommands_reset_eps_charge->set_sensitive(true);
         
         togglebutton_play_uplink->set_sensitive(true);
         togglebutton_pause_uplink->set_sensitive(false);
@@ -1551,6 +1578,11 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             if (checkbutton_uplink_telecommands_shutdown->get_active())
             {
                 toolbutton_shutdown->set_sensitive(false);
+            }
+
+            if (checkbutton_uplink_telecommands_reset_eps_charge->get_active())
+            {
+                toolbutton_reset_charge->set_sensitive(false);
             }
         }
 
@@ -2565,6 +2597,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t ping[9];
     uint8_t request[16];
     uint8_t shutdown[9];
+    uint8_t reset_charge[9];
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
@@ -2681,6 +2714,24 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 system(cmd_str.c_str());
                 
                 event_log->AddNewEvent("Shutdown command transmitted.");
+            }
+            break;
+        case FSAT_GRS_UPLINK_RESET_CHARGE:
+            for(unsigned int i=0; i<6; i++)
+            {
+                reset_charge[i] = grs_id[i];
+            }
+
+            reset_charge[6] = 'c';
+            reset_charge[7] = 'r';
+
+            ngham_uplink_pkt.Generate(reset_charge, 8);
+
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+
+                event_log->AddNewEvent("Reset charge command transmitted.");
             }
             break;
     }

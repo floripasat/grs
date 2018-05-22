@@ -43,6 +43,7 @@
 #define REQUEST_DATA_TELECOMMAND            (0x7764)    /**< uplink command to request whole data orbit - dw    */
 #define REQUEST_SHUTDOWN_TELECOMMAND        (0x6473)    /**< uplink command to request a 24 hours shutdown - sd */
 #define REQUEST_PING_TELECOMMAND            (0x6770)    /**< ping request - pg                                  */
+#define REQUEST_RESET_CHARGE_TELECOMMAND    (0x7263)    /**< Reset EPS charge - cr                              */
 
 #define OLDER_PACKAGES_ORIGIN               0
 #define NEWER_PACKAGES_ORIGIN               1
