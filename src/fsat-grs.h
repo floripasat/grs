@@ -101,6 +101,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
         Gtk::ToolButton                 *toolbutton_reset_charge;
+        Gtk::ToolButton                 *toolbutton_broadcast_message;
         Gtk::ToolButton                 *toolbutton_shutdown;
         Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
@@ -159,6 +160,7 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_uplink_telecommands_data_request;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_shutdown;
         Gtk::CheckButton                *checkbutton_uplink_telecommands_reset_eps_charge;
+        Gtk::CheckButton                *checkbutton_uplink_telecommands_broadcast_message;
         Gtk::ToggleButton               *togglebutton_play_uplink;
         Gtk::ToggleButton               *togglebutton_pause_uplink;
         Gtk::Button                     *button_stop_uplink;
@@ -361,14 +363,20 @@ class FSatGRS
         Gtk::RadioButton                *radiobutton_uplink_data_request_end;
         Gtk::Button                     *button_data_request_send;
         Gtk::Button                     *button_data_request_cancel;
-        
+
+        // Message Broadcast Dialog
+        Gtk::Dialog                     *dialog_broadcast_message;
+        Gtk::Entry                      *entry_dialog_broadcast_message;
+        Gtk::Button                     *dialog_broadcast_message_send;
+        Gtk::Button                     *dialog_broadcast_message_cancel;
+
         // Shutdown Command Authentication Dialog
         Gtk::Dialog                     *dialog_shutdown_authentication;
         Gtk::Entry                      *entry_sd_auth_user;
         Gtk::Entry                      *entry_sd_auth_password;
         Gtk::Button                     *button_sd_auth_send;
         Gtk::Button                     *button_sd_auth_cancel;
-        
+
         // Uplink Scheduler Manager Dialog
         Gtk::Dialog                     *dialog_uplink_scheduler_manager;
         Gtk::TreeView                   *treeview_uplink_scheduler_manager_events;
@@ -533,6 +541,12 @@ class FSatGRS
          */
         void OnToolButtonResetChargeClicked();
         /**
+         * \brief Transmits a broadcast command with a custom message.
+         *
+         * \return None.
+         */
+        void OnToolButtonBroadcastMessageClicked();
+        /**
          * \brief Shutdown command button click signal handler.
          * 
          * \return None
@@ -654,6 +668,18 @@ class FSatGRS
          * \return None
          */
         void OnButtonDataRequestCancelClicked();
+        /**
+         * \brief Sends the broadcast command with a message.
+         *
+         * \return None.
+         */
+        void OnButtonBroadcastDialogSendClicked();
+        /**
+         * \brief Cancel and closes the broadcast message dialog.
+         *
+         * \return None.
+         */
+        void OnButtonBroadcastDialogCancelClicked();
         /**
          * \brief 
          * 

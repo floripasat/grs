@@ -172,7 +172,13 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     {
         toolbutton_reset_charge->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonResetChargeClicked));
     }
-    
+
+    ref_builder->get_widget("toolbutton_broadcast_message", toolbutton_broadcast_message);
+    if (toolbutton_broadcast_message)
+    {
+        toolbutton_broadcast_message->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonBroadcastMessageClicked));
+    }
+
     ref_builder->get_widget("toolbutton_shutdown", toolbutton_shutdown);
     if (toolbutton_shutdown)
     {
@@ -306,6 +312,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     ref_builder->get_widget("checkbutton_uplink_telecommands_data_request", checkbutton_uplink_telecommands_data_request);
     ref_builder->get_widget("checkbutton_uplink_telecommands_shutdown", checkbutton_uplink_telecommands_shutdown);
     ref_builder->get_widget("checkbutton_uplink_telecommands_reset_eps_charge", checkbutton_uplink_telecommands_reset_eps_charge);
+    ref_builder->get_widget("checkbutton_uplink_telecommands_broadcast_message", checkbutton_uplink_telecommands_broadcast_message);
     
     ref_builder->get_widget("togglebutton_play_uplink", togglebutton_play_uplink);
     if (togglebutton_play_uplink)
@@ -657,7 +664,23 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui
     {
         button_data_request_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonDataRequestCancelClicked));
     }
-    
+
+    // Message Broadcast Dialog
+    ref_builder->get_widget("dialog_broadcast_message", dialog_broadcast_message);
+    ref_builder->get_widget("entry_dialog_broadcast_message", entry_dialog_broadcast_message);
+
+    ref_builder->get_widget("dialog_broadcast_message_send", dialog_broadcast_message_send);
+    if (dialog_broadcast_message_send)
+    {
+        dialog_broadcast_message_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonBroadcastDialogSendClicked));
+    }
+
+    ref_builder->get_widget("dialog_broadcast_message_cancel", dialog_broadcast_message_cancel);
+    if (dialog_broadcast_message_cancel)
+    {
+        dialog_broadcast_message_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonBroadcastDialogCancelClicked));
+    }
+
     // Shutdown Command Authentication Dialog
     ref_builder->get_widget("dialog_shutdown_authentication", dialog_shutdown_authentication);
     ref_builder->get_widget("entry_sd_auth_user", entry_sd_auth_user);
@@ -1135,6 +1158,16 @@ void FSatGRS::OnToolButtonResetChargeClicked()
     thread_reset_charge_cmd.detach();
 }
 
+void FSatGRS::OnToolButtonBroadcastMessageClicked()
+{
+    int response = dialog_broadcast_message->run();
+
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_broadcast_message->hide();
+    }
+}
+
 void FSatGRS::OnToolButtonShutdownClicked()
 {
     int response = dialog_shutdown_authentication->run();
@@ -1495,6 +1528,7 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         checkbutton_uplink_telecommands_data_request->set_sensitive(false);
         checkbutton_uplink_telecommands_shutdown->set_sensitive(false);
         checkbutton_uplink_telecommands_reset_eps_charge->set_sensitive(false);
+        checkbutton_uplink_telecommands_broadcast_message->set_sensitive(false);
         
         togglebutton_play_uplink->set_sensitive(false);
         togglebutton_pause_uplink->set_sensitive(true);
@@ -1520,6 +1554,11 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             if (checkbutton_uplink_telecommands_reset_eps_charge->get_active())
             {
                 toolbutton_reset_charge->set_sensitive(true);
+            }
+
+            if (checkbutton_uplink_telecommands_broadcast_message->get_active())
+            {
+                toolbutton_broadcast_message->set_sensitive(true);
             }
         }
         
@@ -1558,7 +1597,8 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         checkbutton_uplink_telecommands_data_request->set_sensitive(true);
         checkbutton_uplink_telecommands_shutdown->set_sensitive(true);
         checkbutton_uplink_telecommands_reset_eps_charge->set_sensitive(true);
-        
+        checkbutton_uplink_telecommands_broadcast_message->set_sensitive(true);
+
         togglebutton_play_uplink->set_sensitive(true);
         togglebutton_pause_uplink->set_sensitive(false);
         button_stop_uplink->set_sensitive(false);
@@ -1583,6 +1623,11 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             if (checkbutton_uplink_telecommands_reset_eps_charge->get_active())
             {
                 toolbutton_reset_charge->set_sensitive(false);
+            }
+
+            if (checkbutton_uplink_telecommands_broadcast_message->get_active())
+            {
+                toolbutton_broadcast_message->set_sensitive(false);
             }
         }
 
@@ -2260,6 +2305,14 @@ void FSatGRS::OnButtonDataRequestSendClicked()
 void FSatGRS::OnButtonDataRequestCancelClicked()
 {
     dialog_data_request->hide();
+}
+
+void FSatGRS::OnButtonBroadcastDialogSendClicked()
+{
+}
+
+void FSatGRS::OnButtonBroadcastDialogCancelClicked()
+{
 }
 
 void FSatGRS::OnButtonShutdownAuthSendClicked()
