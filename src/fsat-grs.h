@@ -67,16 +67,23 @@
 
 #define FSAT_GRS_CONFIG_FILE            "/.fsat_grs/fsat_grs.conf"
 
-#define FSAT_GRS_UPLINK_PING            0
-#define FSAT_GRS_UPLINK_REQUEST         1
-#define FSAT_GRS_UPLINK_SHUTDOWN        2
-#define FSAT_GRS_UPLINK_RESET_CHARGE    3
-
 #define FSAT_GRS_USERS_FILE             "/.fsat_grs/users.key"
 #define FSAT_GRS_USERS_PASSWORDS_FILE   "/.fsat_grs/passwords.key"
 
 #define FSAT_GRS_ADMIN_HASH             "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"
 #define FSAT_GRS_ADMIN_PASSWORD_HASH    "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"
+
+/**
+ * \brief Uplink commands.
+ */
+enum uplink_cmds_t
+{
+    FSAT_GRS_UPLINK_PING = 0,               /**< Ping. */
+    FSAT_GRS_UPLINK_REQUEST,                /**< Data request. */
+    FSAT_GRS_UPLINK_SHUTDOWN,               /**< Shutdown (hibernation). */
+    FSAT_GRS_UPLINK_RESET_CHARGE,           /**< Reset EPS charge. */
+    FSAT_GRS_UPLINK_BROADCAST_MESSAGE       /**< Broadcast message. */
+};
 
 /**
  * \class FSatGRS

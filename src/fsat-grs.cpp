@@ -2309,10 +2309,31 @@ void FSatGRS::OnButtonDataRequestCancelClicked()
 
 void FSatGRS::OnButtonBroadcastDialogSendClicked()
 {
+    if (entry_dialog_broadcast_message->get_text().size() <= 20)
+    {
+        string message_broadcast_event = "Transmitting ";
+        message_broadcast_event += entry_config_uplink_burst->get_text();
+        message_broadcast_event += " message(s) to broadcast...";
+
+        event_log->AddNewEvent(message_broadcast_event.c_str());
+
+        thread thread_broadcast_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_BROADCAST_MESSAGE);
+
+        thread_broadcast_cmd.detach();
+
+        dialog_broadcast_message->hide();
+    }
+    else
+    {
+        this->RaiseErrorMessage("The message is too large!", "The message to broadcast must be lesser or equal to 20 characters.");
+    }
 }
 
 void FSatGRS::OnButtonBroadcastDialogCancelClicked()
 {
+    entry_dialog_broadcast_message->set_text("");
+
+    dialog_broadcast_message->hide();
 }
 
 void FSatGRS::OnButtonShutdownAuthSendClicked()
@@ -2651,6 +2672,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t request[16];
     uint8_t shutdown[9];
     uint8_t reset_charge[9];
+    uint8_t broadcast[30];
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
@@ -2779,6 +2801,27 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 system(cmd_str.c_str());
 
                 event_log->AddNewEvent("Reset charge command transmitted.");
+            }
+            break;
+        case FSAT_GRS_UPLINK_BROADCAST_MESSAGE:
+            for(unsigned int i=0; i<6; i++)
+            {
+                broadcast[i] = grs_id[i];
+            }
+
+            broadcast[6] = 'r';
+            broadcast[7] = 'p';
+
+            for(unsigned int i=0; i<entry_dialog_broadcast_message->get_text().size(); i++)
+            {
+                broadcast[i+7] = entry_dialog_broadcast_message->get_text()[i];
+            }
+
+            ngham_uplink_pkt.Generate(broadcast, 8 + entry_dialog_broadcast_message->get_text().size());
+
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
             }
             break;
     }
