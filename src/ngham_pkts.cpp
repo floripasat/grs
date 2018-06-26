@@ -129,6 +129,21 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                     event_text += char(data[i]);
                 }
             }
+            else if ((data[6] == 'b') and (data[7] == 'r'))
+            {
+                event_text = "Broadcast message received from ";
+                for(uint8_t i=0; i<6; i++)
+                {
+                    event_text += char(data[i]);
+                }
+
+                event_text += ": ";
+
+                for(uint8_t i=8; i<data_len; i++)
+                {
+                    event_text += char(data[i]);
+                }
+            }
             else
             {
                 event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
