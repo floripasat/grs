@@ -2742,8 +2742,6 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             rqt_packet.flags += (checkbutton_request_temperatures->get_active()         ?   0x0100 : 0);
             rqt_packet.flags += (checkbutton_request_task_scheduler->get_active()       ?   0x0200 : 0);
             rqt_packet.flags += (checkbutton_request_rush->get_active()                 ?   0x0400 : 0);
-
-
             
             file_config.write((char *)&(rqt_packet.flags), 2);
             file_config.close();
@@ -2758,7 +2756,6 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             request[13] = rqt_packet.packages_offset>>16 & 0xFF;
             request[14] = rqt_packet.packages_offset>>8  & 0xFF;
             request[15] = rqt_packet.packages_offset     & 0xFF;
-
 
             ngham_uplink_pkt.Generate(request, 16);
             
@@ -2814,7 +2811,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
             for(unsigned int i=0; i<entry_dialog_broadcast_message->get_text().size(); i++)
             {
-                broadcast[i+7] = entry_dialog_broadcast_message->get_text()[i];
+                broadcast[i+8] = entry_dialog_broadcast_message->get_text()[i];
             }
 
             ngham_uplink_pkt.Generate(broadcast, 8 + entry_dialog_broadcast_message->get_text().size());
