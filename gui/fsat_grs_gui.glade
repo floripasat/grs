@@ -2451,7 +2451,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
-                <property name="position">550</property>
+                <property name="position">620</property>
                 <property name="position_set">True</property>
                 <property name="wide_handle">True</property>
                 <child>
