@@ -91,7 +91,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
     switch(ngham_Decode(byte, data, &data_len))
     {
         case PKT_CONDITION_OK:
-            if (data_len < 10)      // Probably an uplink packet from the ground station
+            if (data_len < 8)   // Minimum packet content: ID (6 bytes) + command (2 bytes)
             {
                 return true;
             }
