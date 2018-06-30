@@ -34,4 +34,5 @@
 
 # Other softwares extensions
 *.glade~
+*.glade#
 *.swp
