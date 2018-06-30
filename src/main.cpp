@@ -39,8 +39,6 @@
 
 #include "fsat-grs.h"
 
-#define GLADE_UI_FILE       "glade/fsat_grs_gui.glade"
-
 /**
  * \fn main
  * 
@@ -59,7 +57,7 @@ int main(int argc, char *argv[])
 
     FSatGRS fsat_grs;
     
-    fsat_grs.BuildWidgets(ref_builder, GLADE_UI_FILE);
+    fsat_grs.BuildWidgets(ref_builder);
     
     return fsat_grs.Run(app);
 }

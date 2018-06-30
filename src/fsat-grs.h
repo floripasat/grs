@@ -52,26 +52,37 @@
 #include "read_log.h"
 #include "uplink_event.h"
 
-#define FSAT_PKT_ANA_DEFAULT_UI_FILE    "glade/fsat_grs_gui.glade"
+#define FSAT_PKT_ANA_DEFAULT_UI_FILE        "/usr/share/floripasat-grs/glade/fsat_grs_gui.glade"
+#define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL  "glade/fsat_grs_gui.glade"
 
-#define DATA_RECEPTION_SAMPLE_RATE      1000
+#define DATA_RECEPTION_SAMPLE_RATE          1000
 
-#define FSAT_GRS_RX_BEACON              0
-#define FSAT_GRS_RX_TELEMETRY           1
+#define FSAT_GRS_RX_BEACON                  0
+#define FSAT_GRS_RX_TELEMETRY               1
 
-#define FSAT_GRS_RX_GRC_SCRIPT          "gfsk_rx.py"
-#define FSAT_GRS_TX_GRC_SCRIPT          "gfsk_tx.py"
+#define FSAT_GRS_RX_GRC_SCRIPT              "/usr/share/floripasat-grs/gnuradio/gfsk_rx.py"
+#define FSAT_GRS_TX_GRC_SCRIPT              "/usr/share/floripasat-grs/gnuradio/gfsk_tx.py"
+#define FSAT_GRS_RX_GRC_SCRIPT_LOCAL        "gnuradio/gfsk_rx.py"
+#define FSAT_GRS_TX_GRC_SCRIPT_LOCAL        "gnuradio/gfsk_tx.py"
 
-#define FSAT_GRS_GRC_BEACON_BIN         "/tmp/bin_data_beacon.bin"
-#define FSAT_GRS_GRC_TELEMETRY_BIN      "/tmp/bin_data_telemetry.bin"
+#define FSAT_GRS_PLOT_SCRIPT                "/usr/share/floripasat-grs/matplotlib/csv_plot.py"
+#define FSAT_GRS_PLOT_SCRIPT_LOCAL          "matplotlib/csv_plot.py"
 
-#define FSAT_GRS_CONFIG_FILE            "/.fsat_grs/fsat_grs.conf"
+#define FSAT_GRS_VAL_BEACON_SCRIPT          "/usr/share/floripasat-grs/validate_beacon.csv"
+#define FSAT_GRS_VAL_TELEMETRY_SCRIPT       "/usr/share/floripasat-grs/validate_telemetry.csv"
+#define FSAT_GRS_VAL_BEACON_SCRIPT_LOCAL    "validate_beacon.csv"
+#define FSAT_GRS_VAL_TELEMETRY_SCRIPT_LOCAL "validate_telemetry.csv"
 
-#define FSAT_GRS_USERS_FILE             "/.fsat_grs/users.key"
-#define FSAT_GRS_USERS_PASSWORDS_FILE   "/.fsat_grs/passwords.key"
+#define FSAT_GRS_GRC_BEACON_BIN             "/tmp/bin_data_beacon.bin"
+#define FSAT_GRS_GRC_TELEMETRY_BIN          "/tmp/bin_data_telemetry.bin"
 
-#define FSAT_GRS_ADMIN_HASH             "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"
-#define FSAT_GRS_ADMIN_PASSWORD_HASH    "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"
+#define FSAT_GRS_CONFIG_FILE                "/.fsat_grs/fsat_grs.conf"
+
+#define FSAT_GRS_USERS_FILE                 "/.fsat_grs/users.key"
+#define FSAT_GRS_USERS_PASSWORDS_FILE       "/.fsat_grs/passwords.key"
+
+#define FSAT_GRS_ADMIN_HASH                 "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"
+#define FSAT_GRS_ADMIN_PASSWORD_HASH        "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"
 
 /**
  * \brief Uplink commands.
@@ -802,6 +813,15 @@ class FSatGRS
          * \return None
          */
         void LoadDefaultConfigs();
+
+        /**
+         * \brief Checks the existence of a file.
+         *
+         * \param file is the file to check the existence.
+         *
+         * \return TRUE/FALSE if the file exist or not.
+         */
+        bool CheckFile(const char *file);
     public:
         /**
          * \brief 
@@ -813,11 +833,10 @@ class FSatGRS
          * \brief 
          * 
          * \param ref_builder
-         * \param ui_file
          * 
          * \return None
          */
-        FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file);
+        FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder);
         /**
          * \brief 
          * 
@@ -828,11 +847,10 @@ class FSatGRS
          * \brief 
          * 
          * \param ref_builder
-         * \param ui_file
          * 
          * \return Status code.
          */
-        int BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file);
+        int BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder);
         /**
          * \brief 
          * 

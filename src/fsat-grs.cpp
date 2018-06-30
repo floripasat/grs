@@ -39,6 +39,7 @@
 #include <string>
 #include <cstdio>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #include "fsat-grs.h"
 #include "aux.hpp"
@@ -56,9 +57,9 @@ FSatGRS::FSatGRS()
     
 }
 
-FSatGRS::FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
+FSatGRS::FSatGRS(Glib::RefPtr<Gtk::Builder> ref_builder)
 {
-    this->BuildWidgets(ref_builder, ui_file);
+    this->BuildWidgets(ref_builder);
 }
 
 FSatGRS::~FSatGRS()
@@ -72,11 +73,18 @@ FSatGRS::~FSatGRS()
     delete window_fsat_grs;
 }
 
-int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder, const char *ui_file)
+int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
 {
     try
     {
-        ref_builder->add_from_file(ui_file);
+        if (this->CheckFile(FSAT_PKT_ANA_DEFAULT_UI_FILE))
+        {
+            ref_builder->add_from_file(FSAT_PKT_ANA_DEFAULT_UI_FILE);
+        }
+        else
+        {
+            ref_builder->add_from_file(FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL);
+        }
     }
     catch(const Glib::FileError& ex)
     {
@@ -1731,7 +1739,16 @@ void FSatGRS::OnButtonPlotClicked()
         return;
     }
     
-    string cmd = "python matplotlib/csv_plot.py";
+    string cmd = "python ";
+
+    if (this->CheckFile(FSAT_GRS_PLOT_SCRIPT))
+    {
+        cmd += FSAT_GRS_PLOT_SCRIPT;
+    }
+    else
+    {
+        cmd += FSAT_GRS_PLOT_SCRIPT_LOCAL;
+    }
     
     if (filechooserbutton_plot_beacon->get_filename().size() > 0)  
     {
@@ -2272,11 +2289,25 @@ void FSatGRS::OnButtonRunAnalysisClicked()
         
         if(radio_button_log_analysis_telemetry->get_active())
         {
-            textview_log_analysis_result_buffer->set_text(log_analysis->Validate("validate_telemetry.csv").c_str());
+            if (this->CheckFile(FSAT_GRS_VAL_TELEMETRY_SCRIPT))
+            {
+                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_TELEMETRY_SCRIPT).c_str());
+            }
+            else
+            {
+                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_TELEMETRY_SCRIPT_LOCAL).c_str());
+            }
         }
         if(radio_button_log_analysis_beacon->get_active())
         {
-            textview_log_analysis_result_buffer->set_text(log_analysis->Validate("validate_beacon.csv").c_str());
+            if (this->CheckFile(FSAT_GRS_VAL_BEACON_SCRIPT))
+            {
+                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_BEACON_SCRIPT).c_str());
+            }
+            else
+            {
+                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_BEACON_SCRIPT_LOCAL).c_str());
+            }
         }
         
         delete log_analysis;
@@ -2585,8 +2616,16 @@ void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)
 //***************************************************************************************************************************************
 void FSatGRS::RunGNURadioReceiver(uint8_t rx_type)
 {
-    string grc_cmd = "python -u gnuradio/";
-    grc_cmd += FSAT_GRS_RX_GRC_SCRIPT;
+    string grc_cmd = "python -u ";
+
+    if (this->CheckFile(FSAT_GRS_RX_GRC_SCRIPT))
+    {
+        grc_cmd += FSAT_GRS_RX_GRC_SCRIPT;
+    }
+    else
+    {
+        grc_cmd += FSAT_GRS_RX_GRC_SCRIPT_LOCAL;
+    }
 
     switch(rx_type)
     {
@@ -2676,8 +2715,17 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
-    string cmd_str = "python -u gnuradio/";
-    cmd_str += FSAT_GRS_TX_GRC_SCRIPT;
+    string cmd_str = "python -u ";
+
+    if (this->CheckFile(FSAT_GRS_TX_GRC_SCRIPT))
+    {
+        cmd_str += FSAT_GRS_TX_GRC_SCRIPT;
+    }
+    else
+    {
+        cmd_str += FSAT_GRS_TX_GRC_SCRIPT_LOCAL;
+    }
+
     switch(combobox_uplink_output_sdr_device->get_active_row_number())
     {
         case 0:     cmd_str += " -d uhd=0";    break;
@@ -2959,6 +3007,13 @@ void FSatGRS::LoadDefaultConfigs()
     entry_config_uplink_beacon_frequency->set_text("145.911e6");
     radiobutton_config_uplink_type_telemetry->set_active(true);
     radiobutton_config_uplink_type_beacon->set_active(false);
+}
+
+bool FSatGRS::CheckFile(const char *file)
+{
+    struct stat buffer;
+
+    return (stat(file, &buffer) == 0) ? true : false;
 }
 
 //! \} End of fsat_pkt_ana group
