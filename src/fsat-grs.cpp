@@ -1355,8 +1355,19 @@ void FSatGRS::OnButtonStopBeaconClicked()
     togglebutton_pause_beacon->set_active(false);
     
     // Save bin stream for further analysis
-    system("mkdir -p bindata");
-    system("cp -a /tmp/bin_data_beacon.bin bindata/BEACON_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin");
+    string bindata_dir = FSAT_GRS_OUTPUT_DIR;
+    bindata_dir += FSAT_GRS_BINDATA_DIR;
+
+    string cmd = "mkdir -p ";
+    cmd += bindata_dir;
+    system(cmd.c_str());
+
+    cmd = "cp -a ";
+    cmd += FSAT_GRS_GRC_BEACON_BIN;
+    cmd += " ";
+    cmd += bindata_dir;
+    cmd += "/BEACON_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin";
+    system(cmd.c_str());
 }
 
 void FSatGRS::OnButtonClearAllBeaconClicked()
@@ -1487,8 +1498,19 @@ void FSatGRS::OnButtonStopTelemetryClicked()
     togglebutton_pause_telemetry->set_active(false);
     
     // Save bin stream for further analysis
-    system("mkdir -p bindata");
-    system("cp -a /tmp/bin_data_telemetry.bin bindata/TELEMETRY_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin");
+    string bindata_dir = FSAT_GRS_OUTPUT_DIR;
+    bindata_dir += FSAT_GRS_BINDATA_DIR;
+
+    string cmd = "mkdir -p ";
+    cmd += bindata_dir;
+    system(cmd.c_str());
+
+    cmd = "cp -a ";
+    cmd += FSAT_GRS_GRC_TELEMETRY_BIN;
+    cmd += " ";
+    cmd += bindata_dir;
+    cmd += "/TELEMETRY_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin";
+    system(cmd.c_str());
 }
 
 void FSatGRS::OnButtonClearAllTelemetryClicked()

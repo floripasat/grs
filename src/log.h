@@ -42,7 +42,7 @@
 #include <fstream>
 #include <string>
 
-#define LOG_DEFAULT_DIR             "fsat-logs"
+#define LOG_DEFAULT_DIR             "floripasat-grs"
 
 #define LOG_DATA_TIME_FOR_FILE      0
 #define LOG_DATA_TIME_FOR_LOG       1

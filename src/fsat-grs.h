@@ -76,6 +76,9 @@
 #define FSAT_GRS_GRC_BEACON_BIN             "/tmp/bin_data_beacon.bin"
 #define FSAT_GRS_GRC_TELEMETRY_BIN          "/tmp/bin_data_telemetry.bin"
 
+#define FSAT_GRS_OUTPUT_DIR                 "$HOME/floripasat-grs/"
+#define FSAT_GRS_BINDATA_DIR                "bindata"
+
 #define FSAT_GRS_CONFIG_FILE                "/.fsat_grs/fsat_grs.conf"
 
 #define FSAT_GRS_USERS_FILE                 "/.fsat_grs/users.key"
