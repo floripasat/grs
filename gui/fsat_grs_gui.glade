@@ -4327,6 +4327,31 @@
                                                             <property name="top_attach">1</property>
                                                             </packing>
                                                             </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label73">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="halign">start</property>
+                                                            <property name="label" translatable="yes">Angle (º):</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">0</property>
+                                                            <property name="top_attach">2</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label_telemetry_data_imu_gyro_z">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="halign">end</property>
+                                                            <property name="label" translatable="yes">-</property>
+                                                            <property name="justify">right</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="top_attach">2</property>
+                                                            </packing>
+                                                            </child>
                                                           </object>
                                                         </child>
                                                       </object>
