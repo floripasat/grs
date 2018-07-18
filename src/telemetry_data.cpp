@@ -1,36 +1,36 @@
 /*
  * telemetry_data.cpp
- * 
+ *
  * Copyright (C) 2017, Federal University of Santa Catarina.
- * 
+ *
  * This file is part of FloripaSat-GRS.
- * 
+ *
  * FloripaSat-GRS is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * FloripaSat-GRS is distributed in the hope that it will be
  * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with FloripaSat-GRS. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 
 /**
  * \file telemetry_data.cpp
- * 
+ *
  * \brief Telemetry data class implementation.
- * 
+ *
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
+ *
  * \version 1.0-dev
- * 
+ *
  * \date 08/10/2017
- * 
+ *
  * \addtogroup telemetry_data
  * \{
  */
@@ -69,7 +69,7 @@ typedef struct {
     uint8_t solar_panels_sensors    [12];
     uint8_t main_radio              [19];
     //eps
-    uint8_t solar_panels            [18];    
+    uint8_t solar_panels            [18];
     uint8_t eps_misc                [8];
     uint8_t battery_monitor         [21];
     uint8_t temperatures            [21];
@@ -83,13 +83,13 @@ using namespace std;
 
 TelemetryData::TelemetryData()
 {
-    
+
 }
 
 TelemetryData::TelemetryData(std::vector<Gtk::Label *> lbs)
 {
     unsigned int pos = 0;
-    
+
     label_telemetry_data_status_reset_counter   = lbs[pos++];
     label_telemetry_data_status_reset_cause     = lbs[pos++];
     label_telemetry_data_status_clock           = lbs[pos++];
@@ -142,7 +142,7 @@ TelemetryData::TelemetryData(std::vector<Gtk::Label *> lbs)
     label_telemetry_data_eps_misc_beacon_i      = lbs[pos++];
     label_telemetry_data_eps_misc_uc_temp       = lbs[pos++];
     label_telemetry_data_eps_misc_energy_level  = lbs[pos++];
-    
+
     this->Clear();
 }
 
@@ -212,7 +212,7 @@ void TelemetryData::Display(bool no_data)
         label_telemetry_data_status_usd->set_text(usd_status? "\u2714" : "\u2718");
         label_telemetry_data_status_rush->set_text(rush_status? "\u2714" : "\u2718");
         label_telemetry_data_status_eps->set_text(eps_status? "\u2714" : "\u2718");
-        label_telemetry_data_status_antenna->set_text(antenna_status? "\u2714" : "\u2718");        
+        label_telemetry_data_status_antenna->set_text(antenna_status? "\u2714" : "\u2718");
         label_telemetry_data_uc_temp->set_text(ToConstChar(MSP_temperature));
         label_telemetry_data_uc_voltage->set_text(ToConstChar(supply_voltage));
         label_telemetry_data_uc_current->set_text(ToConstChar(supply_current));
@@ -292,19 +292,19 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
     unsigned int i;
 
     string homepath = getenv("HOME");
-            
+
     ifstream file_flags((homepath + "/.fsat_grs/packet_flags.txt").c_str(), ifstream::in);
     if (file_flags.is_open())
     {
         file_flags.read((char *)&rqt_flags, 2);
-        file_flags.close();    
-    }    
+        file_flags.close();
+    }
 
     /** Periodic telemetry or first requested frame: ignore the flags cause it has the whole orbit data anyway */
-    if (has_flag(flags, WHOLE_ORBIT_DATA_FLAG))   
-    {      
-        flags = 0xffff; 
-        packet_flags = packet.package_flags;  
+    if (has_flag(flags, WHOLE_ORBIT_DATA_FLAG))
+    {
+        flags = 0xffff;
+        packet_flags = packet.package_flags;
     }
     else
     {
@@ -318,7 +318,7 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
     }
     system_time_sec = packet.obdh_uptime[0];
     system_time_min = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])%60;
-    system_time_hou = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;            
+    system_time_hou = ((packet.obdh_uptime[1] << 16) | (packet.obdh_uptime[2] << 8) | packet.obdh_uptime[3])/60;
 
     if(has_flag(flags, OBDH_STATUS_FLAG))
     {
@@ -351,9 +351,10 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         imu_2_accel_x = IMUAccelConv((packet.imu[12] << 8) | packet.imu[13]);
         imu_2_accel_y = IMUAccelConv((packet.imu[14] << 8) | packet.imu[15]);
         imu_2_accel_z = IMUAccelConv((packet.imu[16] << 8) | packet.imu[17]);
-        imu_2_gyro_x  = IMUGyroConv((packet.imu[18] << 8) | packet.imu[19]);
-        imu_2_gyro_y  = IMUGyroConv((packet.imu[20] << 8) | packet.imu[21]);
-        imu_2_gyro_z  = IMUGyroConv((packet.imu[22] << 8) | packet.imu[23]);
+        // TODO: Add conversions
+        imu_2_gyro_x  = ((packet.imu[18] << 8) | packet.imu[19]);
+        imu_2_gyro_y  = ((packet.imu[20] << 8) | packet.imu[21]);
+        imu_2_gyro_z  = ((packet.imu[22] << 8) | packet.imu[23]); // can be the angle
     }
     if(has_flag(flags, OBDH_MISC_FLAG))
     {
@@ -371,7 +372,7 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         {
             packet.solar_panels_sensors[i] = data[packageSize++];
         }
-    }    
+    }
     if(has_flag(flags, MAIN_RADIO_FLAG))
     {
         for(i = 0; i < sizeof(packet.main_radio); i++)
@@ -463,7 +464,7 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
             packet.payload2[i] = data[packageSize++];
         }
     }
-    
+
     this->Display();
     //    this->Clear();
 }
@@ -537,7 +538,7 @@ void TelemetryData::Clear()
 std::string TelemetryData::Log()
 {
     std::string log_entry = "";
-    
+
     log_entry += ToString(int(packet_flags));
     log_entry += ",";
     log_entry += ToString(int(reset_counter));
@@ -661,7 +662,7 @@ std::string TelemetryData::Log()
     log_entry += ToString(RTD_measurement_7);
     log_entry += ",";
     log_entry += ToString(int(EPS_status));
-    
+
     return log_entry;
 }
 
@@ -760,7 +761,7 @@ double TelemetryData::SolarPanelVoltageConv(uint16_t val)
 
 double TelemetryData::IMUAccelConv(uint16_t val)
 {
-    return int16_t(val)*16.0/32768.0; 
+    return int16_t(val)*16.0/32768.0;
 }
 
 double TelemetryData::IMUGyroConv(uint16_t val)
@@ -826,28 +827,28 @@ double TelemetryData::RemainingAbsoluteCapacityConv(uint16_t val)
 const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
 {
     std::stringstream input_str;
-    
+
     input_str << int(h);
     input_str << ":";
     input_str << int(m);
     input_str << ":";
     input_str << int(s);
-    
+
     std::string output = input_str.str();
-    
+
     return output.c_str();
 }
 
 const char* TelemetryData::PrintIMUs(double imu_1, double imu_2, unsigned int digits)
 {
     std::stringstream input_str;
-    
+
     input_str << std::fixed << std::setprecision(digits) << imu_1;
     input_str << "/";
     input_str << std::fixed << std::setprecision(digits) << imu_2;
-    
+
     std::string output = input_str.str();
-    
+
     return output.c_str();
 }
 
