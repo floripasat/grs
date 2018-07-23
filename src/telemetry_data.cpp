@@ -352,9 +352,9 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
         imu_2_accel_y = IMUAccelConv((packet.imu[14] << 8) | packet.imu[15]);
         imu_2_accel_z = IMUAccelConv((packet.imu[16] << 8) | packet.imu[17]);
         // TODO: Add conversions
-        imu_2_gyro_x  = ((packet.imu[18] << 8) | packet.imu[19]);
-        imu_2_gyro_y  = ((packet.imu[20] << 8) | packet.imu[21]);
-        imu_2_gyro_z  = ((packet.imu[22] << 8) | packet.imu[23]); // can be the angle
+        imu_2_gyro_x  = int16_t((packet.imu[18] << 8) | packet.imu[19]) * 2.0 / 32768.0;
+        imu_2_gyro_y  = int16_t((packet.imu[20] << 8) | packet.imu[21]) * 2.0 / 32768.0;
+        imu_2_gyro_z  = int16_t((packet.imu[22] << 8) | packet.imu[23]) * 180.0 / 32768.0; // can be the angle
     }
     if(has_flag(flags, OBDH_MISC_FLAG))
     {
@@ -843,8 +843,8 @@ const char* TelemetryData::PrintIMUs(double imu_1, double imu_2, unsigned int di
 {
     std::stringstream input_str;
 
-    input_str << std::fixed << std::setprecision(digits) << imu_1;
-    input_str << "/";
+    //input_str << std::fixed << std::setprecision(digits) << imu_1;
+    //input_str << "/";
     input_str << std::fixed << std::setprecision(digits) << imu_2;
 
     std::string output = input_str.str();
