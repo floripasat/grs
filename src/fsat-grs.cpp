@@ -1302,7 +1302,10 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
     else
     {
         delete ngham_pkts_beacon;
-        delete thread_downlink_beacon;
+        if (togglebutton_play_beacon->get_active())
+        {
+            delete thread_downlink_beacon;
+        }
 
         toolbutton_open_log_file->set_sensitive(true);
         toolbutton_close_log_file->set_sensitive(false);
@@ -1446,7 +1449,10 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
     else
     {
         delete ngham_pkts_telemetry;
-        delete thread_downlink_telemetry;
+        if (radiobutton_telemetry_src_sdr->get_active())
+        {
+            delete thread_downlink_telemetry;
+        }
         
         toolbutton_open_log_file->set_sensitive(true);
         toolbutton_close_log_file->set_sensitive(false);
