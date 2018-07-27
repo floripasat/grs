@@ -575,11 +575,13 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("checkbutton_plot_beacon_connect_points", checkbutton_plot_beacon_connect_points);
     ref_builder->get_widget("checkbutton_plot_beacon_best_curve", checkbutton_plot_beacon_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_beacon", checkbutton_plot_save_pdf_beacon);
+    ref_builder->get_widget("checkbutton_plot_use_sat_time_beacon", checkbutton_plot_use_sat_time_beacon);
     ref_builder->get_widget("filechooserbutton_plot_telemetry", filechooserbutton_plot_telemetry);
     ref_builder->get_widget("combobox_plot_telemetry_data", combobox_plot_telemetry_data);
     ref_builder->get_widget("checkbutton_plot_telemetry_connect_points", checkbutton_plot_telemetry_connect_points);
     ref_builder->get_widget("checkbutton_plot_telemetry_best_curve", checkbutton_plot_telemetry_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_telemetry", checkbutton_plot_save_pdf_telemetry);
+    ref_builder->get_widget("checkbutton_plot_use_sat_time_telemetry", checkbutton_plot_use_sat_time_telemetry);
     ref_builder->get_widget("button_plot", button_plot);
     
     if (button_plot)
@@ -1967,7 +1969,9 @@ void FSatGRS::OnButtonPlotClicked()
                 default:    cmd += " plots/beacon_plot.pdf";                           break;
             };
         }
-        
+
+        cmd += checkbutton_plot_use_sat_time_beacon->get_active()? " \"1\"" : " \"0\"";
+
         thread thread_matplotlib_beacon(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
         thread_matplotlib_beacon.detach();
@@ -2296,7 +2300,9 @@ void FSatGRS::OnButtonPlotClicked()
                 default:    cmd2 += " plots/telemetry_plot.pdf";                         break;
             };
         }
-        
+
+        cmd2 += checkbutton_plot_use_sat_time_telemetry->get_active()? " \"1\"" : " \"0\"";
+
         thread thread_matplotlib_telemetry(&FSatGRS::RunMatPlotLib, this, cmd2.c_str());
 
         thread_matplotlib_telemetry.detach();

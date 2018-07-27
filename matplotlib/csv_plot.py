@@ -75,38 +75,74 @@ def main(args):
         print "\t- 5th argument (OPTIONAL) is the connect points flag (True/False)"
         print "\t- 6th argument (OPTIONAL) is the plot best curve flag (True/False)"
         print "\t- 7th argument (OPTIONAL) is the name of the pdf file to save the plot"
+        print "\t- 8th argument (OPTIONAL) is the option to use the system or the satellite time for the x-axis reference"
         
         return 0
-    
+
+    use_sat_time = False
+    if (len(args) == 9):
+        if args[8] == "1":
+            use_sat_time = True
+
     column = list()
     time_sec = list()
+    sat_time_sec = list()
     with open(args[1], 'rb') as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='|')
         try:
             for row in reader:
                 if len(row) > int(args[2]):
                     column.append(float(row[int(args[2])]))
-                    time_sec.append(datetime.datetime(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4]), int(row[5])))
+                    if use_sat_time:
+                        sat_time_sec.append((int(row[31])*60*60) + (int(row[32])*60) + int(row[33]))
+                    else:
+                        time_sec.append(datetime.datetime(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4]), int(row[5])))
         except:
             pass
     
-    initial_time_sec = time_sec[0]
     i = 0
-    for i in range(len(time_sec)):
-        time_sec[i] = (time_sec[i] - initial_time_sec).seconds
-    
-    if len(args) == 4:
-        plot_data(time_sec, column, args[3])
-    elif len(args) == 5:
-        plot_data(time_sec, column, args[3], args[4])
-    elif len(args) == 6:
-        plot_data(time_sec, column, args[3], args[4], args[5])
-    elif len(args) == 7:
-        plot_data(time_sec, column, args[3], args[4], args[5], args[6])
-    elif len(args) == 8:
-        plot_data(time_sec, column, args[3], args[4], args[5], args[6], args[7])
+    if use_sat_time:
+        initial_sat_time_sec = sat_time_sec[0]
+        for i in range(len(sat_time_sec)):
+            sat_time_sec[i] = sat_time_sec[i] - initial_sat_time_sec
+            if (i > 1) and (sat_time_sec[i-1] > sat_time_sec[i]):
+                sat_time_sec[i] = sat_time_sec[i-1]
+            print sat_time_sec[i]
     else:
-        plot_data(time_sec, column)
+        initial_time_sec = time_sec[0]
+        for i in range(len(time_sec)):
+            time_sec[i] = (time_sec[i] - initial_time_sec).seconds
+
+    if len(args) == 4:
+        if use_sat_time:
+            plot_data(sat_time_sec, column, args[3])
+        else:
+            plot_data(time_sec, column, args[3])
+    elif len(args) == 5:
+        if use_sat_time:
+            plot_data(sat_time_sec, column, args[3], args[4])
+        else:
+            plot_data(time_sec, column, args[3], args[4])
+    elif len(args) == 6:
+        if use_sat_time:
+            plot_data(sat_time_sec, column, args[3], args[4], args[5])
+        else:
+            plot_data(time_sec, column, args[3], args[4], args[5])
+    elif len(args) == 7:
+        if use_sat_time:
+            plot_data(sat_time_sec, column, args[3], args[4], args[5], args[6])
+        else:
+            plot_data(time_sec, column, args[3], args[4], args[5], args[6])
+    elif len(args) == 8:
+        if use_sat_time:
+            plot_data(sat_time_sec, column, args[3], args[4], args[5], args[6], args[7])
+        else:
+            plot_data(time_sec, column, args[3], args[4], args[5], args[6], args[7])
+    else:
+        if use_sat_time:
+            plot_data(sat_time_sec, column)
+        else:
+            plot_data(time_sec, column)
     
     return 0
 
