@@ -2809,7 +2809,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                     
             rqt_packet.packages_count = stoi(entry_uplink_request_pkt_quant->get_text());
             rqt_packet.packages_origin = radiobutton_uplink_data_request_start->get_active()? NEWER_PACKAGES_ORIGIN : OLDER_PACKAGES_ORIGIN;
-            rqt_packet.packages_offset = stoi(entry_uplink_request_offset->get_text()) - 2;     // -2 ??????
+            rqt_packet.packages_offset = stoi(entry_uplink_request_offset->get_text());
             rqt_packet.flags = 0;
 
             //rqt_packet.flags =  (checkbutton_request_packet_flags->get_active()         ?   0x : 0);
