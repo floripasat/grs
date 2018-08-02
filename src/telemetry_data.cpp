@@ -823,7 +823,7 @@ double TelemetryData::RemainingAbsoluteCapacityConv(uint16_t val)
     return val * 1.6;
 }
 
-const char* TelemetryData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
+const char* TelemetryData::PrintTime(uint16_t h, uint8_t m, uint8_t s)
 {
     std::stringstream input_str;
     

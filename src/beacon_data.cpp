@@ -455,7 +455,7 @@ double BeaconData::IMUGyroConv(uint16_t val)
     return int16_t(val)*250.0/32768.0;
 }
 
-const char* BeaconData::PrintTime(uint8_t h, uint8_t m, uint8_t s)
+const char* BeaconData::PrintTime(uint16_t h, uint8_t m, uint8_t s)
 {
     std::stringstream input_str;
     

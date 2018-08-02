@@ -193,7 +193,7 @@ class BeaconData: public PacketData
          * 
          * \return 
          */
-        const char* PrintTime(uint8_t h, uint8_t m, uint8_t s);
+        const char* PrintTime(uint16_t h, uint8_t m, uint8_t s);
     public:
         /**
          * \brief 
