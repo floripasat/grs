@@ -1,7 +1,7 @@
 /*
  * fsat-grs.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,17 +21,16 @@
  */
 
 /**
- * \file fsat-grs.cpp
- * 
  * \brief Implementation of the main class of the FSatGRS.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.2.1
  * 
  * \date 10/09/2017
  * 
  * \addtogroup fsat_grs
+ * \ingroup src
  * \{
  */
 
@@ -42,6 +41,7 @@
 #include <sys/stat.h>
 
 #include "fsat-grs.h"
+#include "version.h"
 #include "aux.hpp"
 #include "beacon_data.h"
 #include "telemetry_data.h"
@@ -1227,9 +1227,11 @@ void FSatGRS::OnToolButtonOpenGQRXClicked()
 }
 
 void FSatGRS::OnToolButtonAboutClicked()
-{    
+{
+    this->aboutdialog->set_version(GRS_SOFTWARE_VERSION);
+
     int response = aboutdialog->run();
-    
+
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
         aboutdialog->hide();
