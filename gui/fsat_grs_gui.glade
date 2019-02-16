@@ -698,6 +698,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkToolButton" id="tootbutton_payload_x">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Payload X control</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-close</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id="toolbutton_schedule_cmd">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
