@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.1
+ * \version 0.2.3
  * 
  * \date 10/09/2017
  * 
@@ -192,7 +192,13 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     {
         toolbutton_shutdown->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonShutdownClicked));
     }
-    
+
+    ref_builder->get_widget("toolbutton_payload_x", toolbutton_payload_x);
+    if (toolbutton_payload_x)
+    {
+        toolbutton_payload_x->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonPayloadXClicked));
+    }
+
     ref_builder->get_widget("toolbutton_schedule_cmd", toolbutton_schedule_cmd);
     if (toolbutton_schedule_cmd)
     {
@@ -1188,6 +1194,15 @@ void FSatGRS::OnToolButtonShutdownClicked()
     }
 }
 
+void FSatGRS::OnToolButtonPayloadXClicked()
+{
+    event_log->AddNewEvent("Transmitting swap command to Payload X...");
+
+    thread thread_payload_x_swap_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_SWAP);
+
+    thread_payload_x_swap_cmd.detach();
+}
+
 void FSatGRS::OnToolButtonCmdSchedulerClicked()
 {
     int response = dialog_uplink_scheduler_manager->run();
@@ -1600,6 +1615,8 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             {
                 toolbutton_broadcast_message->set_sensitive(true);
             }
+
+            toolbutton_payload_x->set_sensitive(true);
         }
         
         event_log->AddNewEvent("New uplink stream started");
@@ -1669,6 +1686,8 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             {
                 toolbutton_broadcast_message->set_sensitive(false);
             }
+
+            toolbutton_payload_x->set_sensitive(false);
         }
 
         event_log->AddNewEvent("Uplink stream finished");
@@ -2748,6 +2767,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t shutdown[9];
     uint8_t reset_charge[9];
     uint8_t broadcast[30];
+    uint8_t payload_x[30];
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
@@ -2897,6 +2917,22 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
 
             ngham_uplink_pkt.Generate(broadcast, 8 + entry_dialog_broadcast_message->get_text().size());
+
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+            }
+            break;
+        case FSAT_GRS_UPLINK_PAYLOAD_X_SWAP:
+            for(unsigned int i=0; i<6; i++)
+            {
+                payload_x[i] = grs_id[i];
+            }
+
+            payload_x[6] = 'X';
+            payload_x[7] = 'C';
+
+            ngham_uplink_pkt.Generate(payload_x, 8 + entry_dialog_broadcast_message->get_text().size());
 
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {

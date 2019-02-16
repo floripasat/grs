@@ -698,7 +698,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="tootbutton_payload_x">
+              <object class="GtkToolButton" id="toolbutton_payload_x">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">False</property>

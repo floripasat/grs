@@ -21,13 +21,11 @@
  */
 
 /**
- * \file fsat-grs.h
- * 
  * \brief Main class for the FSatGRS.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.2.3
  * 
  * \date 10/09/2017
  * 
@@ -96,13 +94,12 @@ enum uplink_cmds_t
     FSAT_GRS_UPLINK_REQUEST,                /**< Data request. */
     FSAT_GRS_UPLINK_SHUTDOWN,               /**< Shutdown (hibernation). */
     FSAT_GRS_UPLINK_RESET_CHARGE,           /**< Reset EPS charge. */
-    FSAT_GRS_UPLINK_BROADCAST_MESSAGE       /**< Broadcast message. */
+    FSAT_GRS_UPLINK_BROADCAST_MESSAGE,      /**< Broadcast message. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_SWAP          /**< Payload X swap. */
 };
 
 /**
- * \class FSatGRS
- * 
- * \brief 
+ * \brief FSat GRS class.
  */
 class FSatGRS
 {
@@ -124,6 +121,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_reset_charge;
         Gtk::ToolButton                 *toolbutton_broadcast_message;
         Gtk::ToolButton                 *toolbutton_shutdown;
+        Gtk::ToolButton                 *toolbutton_payload_x;
         Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
         Gtk::ToolButton                 *toolbutton_open_grqx;
@@ -575,6 +573,12 @@ class FSatGRS
          * \return None
          */
         void OnToolButtonShutdownClicked();
+        /**
+         * \brief Payload X control click signal handler.
+         *
+         * \return None.
+         */
+        void OnToolButtonPayloadXClicked();
         /**
          * \brief Telecommand scheduler button click signal handler.
          * 
