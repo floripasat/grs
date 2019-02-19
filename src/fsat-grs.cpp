@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.3
+ * \version 0.2.4
  * 
  * \date 10/09/2017
  * 
@@ -2932,7 +2932,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             payload_x[6] = 'X';
             payload_x[7] = 'C';
 
-            ngham_uplink_pkt.Generate(payload_x, 8 + entry_dialog_broadcast_message->get_text().size());
+            ngham_uplink_pkt.Generate(payload_x, 8);
 
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
