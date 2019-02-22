@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.8
+ * \version 0.2.9
  * 
  * \date 10/09/2017
  * 
@@ -751,6 +751,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     // Payload X Control
     ref_builder->get_widget("window_payload_x_control", window_payload_x_control);
     ref_builder->get_widget("button_payload_x_request_status", button_payload_x_request_status);
+
+    if (button_payload_x_request_status)
+    {
+        button_payload_x_request_status->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPayloadXRequestStatusClicked));
+    }
+
     ref_builder->get_widget("filechooser_payload_x_bitfile", filechooser_payload_x_bitfile);
     ref_builder->get_widget("label_payload_x_bitfile_transferred", label_payload_x_bitfile_transferred);
     ref_builder->get_widget("label_payload_x_bitfile_total", label_payload_x_bitfile_total);
@@ -2885,6 +2891,22 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 system(cmd_str.c_str());
             }
             break;
+        case FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS:
+            for(unsigned int i=0; i<6; i++)
+            {
+                payload_x[i] = grs_id[i];
+            }
+
+            payload_x[6] = 'X';
+            payload_x[7] = 'S';
+
+            ngham_uplink_pkt.Generate(payload_x, 8);
+
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+            }
+            break;
     }
 }
 
@@ -2903,6 +2925,15 @@ void FSatGRS::RunMatPlotLib(const char *cmd)
 //-- PAYLOAD X --------------------------------------------------------------------------------------------------------------------------
 //***************************************************************************************************************************************
 //***************************************************************************************************************************************
+
+void FSatGRS::OnButtonPayloadXRequestStatusClicked()
+{
+    event_log->AddNewEvent("Transmitting \"Request Status\" command to Payload X...");
+
+    thread thread_payload_x_request_status_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS);
+
+    thread_payload_x_request_status_cmd.detach();
+}
 
 void FSatGRS::OnButtonPayloadXSwapClicked()
 {

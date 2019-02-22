@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.8
+ * \version 0.2.9
  * 
  * \date 10/09/2017
  * 
@@ -90,12 +90,13 @@
  */
 enum uplink_cmds_t
 {
-    FSAT_GRS_UPLINK_PING = 0,               /**< Ping. */
-    FSAT_GRS_UPLINK_REQUEST,                /**< Data request. */
-    FSAT_GRS_UPLINK_SHUTDOWN,               /**< Shutdown (hibernation). */
-    FSAT_GRS_UPLINK_RESET_CHARGE,           /**< Reset EPS charge. */
-    FSAT_GRS_UPLINK_BROADCAST_MESSAGE,      /**< Broadcast message. */
-    FSAT_GRS_UPLINK_PAYLOAD_X_SWAP          /**< Payload X swap. */
+    FSAT_GRS_UPLINK_PING = 0,                   /**< Ping. */
+    FSAT_GRS_UPLINK_REQUEST,                    /**< Data request. */
+    FSAT_GRS_UPLINK_SHUTDOWN,                   /**< Shutdown (hibernation). */
+    FSAT_GRS_UPLINK_RESET_CHARGE,               /**< Reset EPS charge. */
+    FSAT_GRS_UPLINK_BROADCAST_MESSAGE,          /**< Broadcast message. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_SWAP,             /**< Payload X swap. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS    /**< Payload X request status. */
 };
 
 /**
@@ -778,6 +779,13 @@ class FSatGRS
          * \return None
          */
         void OnButtonUplinkSchedulerManagerNewEventCancelClicked();
+
+        /**
+         * \brief "Request Status" button clicked signal handler.
+         *
+         * \return None.
+         */
+        void OnButtonPayloadXRequestStatusClicked();
 
         /**
          * \brief Swap button clicked signal handle.
