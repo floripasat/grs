@@ -27,7 +27,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.2.10
  * 
  * \date 06/10/2017
  * 
@@ -142,6 +142,20 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 for(uint8_t i=8; i<data_len; i++)
                 {
                     event_text += char(data[i]);
+                }
+            }
+            else if ((data[6] == 'X') and (data[7] == 'S'))
+            {
+                event_text = "Payload X status received: ";
+
+                for(uint8_t i=8; i<data_len; i++)
+                {
+                    event_text += HexToStr(data[i]);
+
+                    if (i < data_len-1)
+                    {
+                        event_text += ", ";
+                    }
                 }
             }
             else
