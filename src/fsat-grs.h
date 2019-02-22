@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.7
+ * \version 0.2.8
  * 
  * \date 10/09/2017
  * 
@@ -413,6 +413,16 @@ class FSatGRS
         Gtk::Button                     *button_uplink_scheduler_manager_new_event_add;
         Gtk::Button                     *button_uplink_scheduler_manager_new_event_cancel;
 
+        // Payload X Control
+        Gtk::Window                     *window_payload_x_control;
+        Gtk::Button                     *button_payload_x_request_status;
+        Gtk::FileChooser                *filechooser_payload_x_bitfile;
+        Gtk::Label                      *label_payload_x_bitfile_transferred;
+        Gtk::Label                      *label_payload_x_bitfile_total;
+        Gtk::ProgressBar                *progreebar_payload_x_packet_transfer;
+        Gtk::Button                     *button_payload_x_bitfile_send;
+        Gtk::Button                     *button_payload_x_bitfile_swap;
+
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
         
@@ -768,6 +778,13 @@ class FSatGRS
          * \return None
          */
         void OnButtonUplinkSchedulerManagerNewEventCancelClicked();
+
+        /**
+         * \brief Swap button clicked signal handle.
+         *
+         * \return None.
+         */
+        void OnButtonPayloadXSwapClicked();
 
         /**
          * \brief 

@@ -240,6 +240,7 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="liststore_payload_x_status_events"/>
   <object class="GtkListStore" id="liststore_sdr_devices">
     <columns>
       <!-- column-name sdrs_devs -->
@@ -3556,6 +3557,7 @@
                         <property name="label" translatable="yes">Beacon Data</property>
                       </object>
                       <packing>
+                        <property name="tab_fill">False</property>
                         <property name="reorderable">True</property>
                       </packing>
                     </child>
@@ -5462,6 +5464,7 @@
                       </object>
                       <packing>
                         <property name="position">1</property>
+                        <property name="tab_fill">False</property>
                         <property name="reorderable">True</property>
                       </packing>
                     </child>
@@ -9166,6 +9169,311 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="window_payload_x_control">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Payload X Control</property>
+    <property name="resizable">False</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">10</property>
+        <property name="margin_right">10</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">10</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="GtkFrame">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0.05000000074505806</property>
+            <child>
+              <object class="GtkAlignment">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">5</property>
+                <property name="bottom_padding">10</property>
+                <property name="left_padding">10</property>
+                <property name="right_padding">10</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="width_request">480</property>
+                        <property name="height_request">240</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="treeview_payload_x_status_log">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="model">liststore_payload_x_status_events</property>
+                            <property name="fixed_height_mode">True</property>
+                            <property name="enable_grid_lines">vertical</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="event_time">
+                                <property name="sizing">fixed</property>
+                                <property name="fixed_width">150</property>
+                                <property name="title" translatable="yes">Date/Time</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="event_data">
+                                <property name="sizing">fixed</property>
+                                <property name="title" translatable="yes">Event/Data</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_payload_x_request_status">
+                        <property name="label" translatable="yes">Request Status</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Request Payload X Status</property>
+                        <property name="halign">end</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Status:</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0.05000000074505806</property>
+            <child>
+              <object class="GtkAlignment">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">5</property>
+                <property name="bottom_padding">10</property>
+                <property name="left_padding">10</property>
+                <property name="right_padding">10</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">File:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFileChooserButton" id="filechooser_payload_x_bitfile">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Bitfile</property>
+                            <property name="hexpand">True</property>
+                            <property name="create_folders">False</property>
+                            <property name="title" translatable="yes"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Transferred Packets:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_payload_x_bitfile_transferred">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">/</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_payload_x_bitfile_total">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkProgressBar" id="progreebar_payload_x_packet_transfer">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="pulse_step">0.01</property>
+                        <property name="show_text">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="spacing">5</property>
+                        <property name="homogeneous">True</property>
+                        <child>
+                          <object class="GtkButton" id="button_payload_x_bitfile_send">
+                            <property name="label" translatable="yes">Send</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Send the new bitfile</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_payload_x_bitfile_swap">
+                            <property name="label" translatable="yes">Swap</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Swap the bitfile</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Bitfile:</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>

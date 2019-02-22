@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.7
+ * \version 0.2.8
  * 
  * \date 10/09/2017
  * 
@@ -748,6 +748,20 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         button_uplink_scheduler_manager_new_event_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonUplinkSchedulerManagerNewEventCancelClicked));
     }
 
+    // Payload X Control
+    ref_builder->get_widget("window_payload_x_control", window_payload_x_control);
+    ref_builder->get_widget("button_payload_x_request_status", button_payload_x_request_status);
+    ref_builder->get_widget("filechooser_payload_x_bitfile", filechooser_payload_x_bitfile);
+    ref_builder->get_widget("label_payload_x_bitfile_transferred", label_payload_x_bitfile_transferred);
+    ref_builder->get_widget("label_payload_x_bitfile_total", label_payload_x_bitfile_total);
+    ref_builder->get_widget("progreebar_payload_x_packet_transfer", progreebar_payload_x_packet_transfer);
+    ref_builder->get_widget("button_payload_x_bitfile_send", button_payload_x_bitfile_send);
+    ref_builder->get_widget("button_payload_x_bitfile_swap", button_payload_x_bitfile_swap);
+    if (button_payload_x_bitfile_swap)
+    {
+        button_payload_x_bitfile_swap->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPayloadXSwapClicked));
+    }
+
     // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
     
@@ -772,7 +786,7 @@ int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
     
     auto timer_slot = sigc::mem_fun(*this, &FSatGRS::Timer);
     auto conn = Glib::signal_timeout().connect(timer_slot, DATA_RECEPTION_SAMPLE_RATE);
-    
+
     return app->run(*window_fsat_grs);
 }
 /*
@@ -1182,11 +1196,7 @@ void FSatGRS::OnToolButtonShutdownClicked()
 
 void FSatGRS::OnToolButtonPayloadXClicked()
 {
-    event_log->AddNewEvent("Transmitting swap command to Payload X...");
-
-    thread thread_payload_x_swap_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_SWAP);
-
-    thread_payload_x_swap_cmd.detach();
+    window_payload_x_control->show();
 }
 
 void FSatGRS::OnToolButtonCmdSchedulerClicked()
@@ -2886,6 +2896,21 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 void FSatGRS::RunMatPlotLib(const char *cmd)
 {
     system(cmd);
+}
+
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+//-- PAYLOAD X --------------------------------------------------------------------------------------------------------------------------
+//***************************************************************************************************************************************
+//***************************************************************************************************************************************
+
+void FSatGRS::OnButtonPayloadXSwapClicked()
+{
+    event_log->AddNewEvent("Transmitting swap command to Payload X...");
+
+    thread thread_payload_x_swap_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_SWAP);
+
+    thread_payload_x_swap_cmd.detach();
 }
 
 //***************************************************************************************************************************************
