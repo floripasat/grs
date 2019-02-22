@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.4
+ * \version 0.2.7
  * 
  * \date 10/09/2017
  * 
@@ -322,11 +322,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("entry_uplink_server_ip", entry_uplink_server_ip);
     ref_builder->get_widget("entry_uplink_server_port", entry_uplink_server_port);
     ref_builder->get_widget("radiobutton_uplink_manual_control", radiobutton_uplink_manual_control);
-    ref_builder->get_widget("checkbutton_uplink_telecommands_ping", checkbutton_uplink_telecommands_ping);
-    ref_builder->get_widget("checkbutton_uplink_telecommands_data_request", checkbutton_uplink_telecommands_data_request);
-    ref_builder->get_widget("checkbutton_uplink_telecommands_shutdown", checkbutton_uplink_telecommands_shutdown);
-    ref_builder->get_widget("checkbutton_uplink_telecommands_reset_eps_charge", checkbutton_uplink_telecommands_reset_eps_charge);
-    ref_builder->get_widget("checkbutton_uplink_telecommands_broadcast_message", checkbutton_uplink_telecommands_broadcast_message);
     
     ref_builder->get_widget("togglebutton_play_uplink", togglebutton_play_uplink);
     if (togglebutton_play_uplink)
@@ -939,52 +934,43 @@ bool FSatGRS::Timer()
             {
                 if (uplink_events[i].CanTransmit())
                 {
-                    if (checkbutton_uplink_telecommands_ping->get_active())
+                    if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_PING)
                     {
-                        if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_PING)
-                        {
-                            string ping_event = "Transmitting ";
-                            ping_event += entry_config_uplink_burst->get_text();
-                            ping_event += " ping command(s)...";
-                            
-                            event_log->AddNewEvent(ping_event.c_str());
-                            
-                            thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
-                            
-                            thread_ping_cmd.detach();
-                        }
+                        string ping_event = "Transmitting ";
+                        ping_event += entry_config_uplink_burst->get_text();
+                        ping_event += " ping command(s)...";
+
+                        event_log->AddNewEvent(ping_event.c_str());
+
+                        thread thread_ping_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PING);
+
+                        thread_ping_cmd.detach();
                     }
 
-                    if (checkbutton_uplink_telecommands_data_request->get_active())
+                    if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_DATA_REQUEST)
                     {
-                        if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_DATA_REQUEST)
-                        {
-                            string data_request_event = "Transmitting ";
-                            data_request_event += entry_config_uplink_burst->get_text();
-                            data_request_event += " data request(s)...";
-                            
-                            event_log->AddNewEvent(data_request_event.c_str());
-                            
-                            thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
-                            
-                            thread_request_cmd.detach();
-                        }
+                        string data_request_event = "Transmitting ";
+                        data_request_event += entry_config_uplink_burst->get_text();
+                        data_request_event += " data request(s)...";
+
+                        event_log->AddNewEvent(data_request_event.c_str());
+
+                        thread thread_request_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_REQUEST);
+
+                        thread_request_cmd.detach();
                     }
 
-                    if (checkbutton_uplink_telecommands_shutdown->get_active())
+                    if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_SHUTDOWN)
                     {
-                        if (uplink_events[i].GetType() == UPLINK_EVENT_TYPE_SHUTDOWN)
-                        {
-                            string shutdown_event = "Transmitting ";
-                            shutdown_event += entry_config_uplink_burst->get_text();
-                            shutdown_event += " shutdown command(s)...";
-                            
-                            event_log->AddNewEvent(shutdown_event.c_str());
-                            
-                            thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
-                            
-                            thread_shutdown_cmd.detach();
-                        }
+                        string shutdown_event = "Transmitting ";
+                        shutdown_event += entry_config_uplink_burst->get_text();
+                        shutdown_event += " shutdown command(s)...";
+
+                        event_log->AddNewEvent(shutdown_event.c_str());
+
+                        thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+
+                        thread_shutdown_cmd.detach();
                     }
                 }
             }
@@ -1579,11 +1565,6 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         entry_uplink_server_ip->set_sensitive(false);
         entry_uplink_server_port->set_sensitive(false);
         radiobutton_uplink_manual_control->set_sensitive(false);
-        checkbutton_uplink_telecommands_ping->set_sensitive(false);
-        checkbutton_uplink_telecommands_data_request->set_sensitive(false);
-        checkbutton_uplink_telecommands_shutdown->set_sensitive(false);
-        checkbutton_uplink_telecommands_reset_eps_charge->set_sensitive(false);
-        checkbutton_uplink_telecommands_broadcast_message->set_sensitive(false);
         
         togglebutton_play_uplink->set_sensitive(false);
         togglebutton_pause_uplink->set_sensitive(true);
@@ -1591,30 +1572,11 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         
         if (radiobutton_uplink_manual_control->get_active())
         {
-            if (checkbutton_uplink_telecommands_ping->get_active())
-            {
-                toolbutton_ping->set_sensitive(true);
-            }
-            
-            if (checkbutton_uplink_telecommands_data_request->get_active())
-            {
-                toolbutton_request_data->set_sensitive(true);
-            }
-            
-            if (checkbutton_uplink_telecommands_shutdown->get_active())
-            {
-                toolbutton_shutdown->set_sensitive(true);
-            }
-
-            if (checkbutton_uplink_telecommands_reset_eps_charge->get_active())
-            {
-                toolbutton_reset_charge->set_sensitive(true);
-            }
-
-            if (checkbutton_uplink_telecommands_broadcast_message->get_active())
-            {
-                toolbutton_broadcast_message->set_sensitive(true);
-            }
+            toolbutton_ping->set_sensitive(true);
+            toolbutton_request_data->set_sensitive(true);
+            toolbutton_shutdown->set_sensitive(true);
+            toolbutton_reset_charge->set_sensitive(true);
+            toolbutton_broadcast_message->set_sensitive(true);
 
             toolbutton_payload_x->set_sensitive(true);
         }
@@ -1650,43 +1612,17 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         entry_uplink_server_ip->set_sensitive(true);
         entry_uplink_server_port->set_sensitive(true);
         radiobutton_uplink_manual_control->set_sensitive(true);
-        checkbutton_uplink_telecommands_ping->set_sensitive(true);
-        checkbutton_uplink_telecommands_data_request->set_sensitive(true);
-        checkbutton_uplink_telecommands_shutdown->set_sensitive(true);
-        checkbutton_uplink_telecommands_reset_eps_charge->set_sensitive(true);
-        checkbutton_uplink_telecommands_broadcast_message->set_sensitive(true);
-
         togglebutton_play_uplink->set_sensitive(true);
         togglebutton_pause_uplink->set_sensitive(false);
         button_stop_uplink->set_sensitive(false);
 
         if (radiobutton_uplink_manual_control->get_active())
         {
-            if (checkbutton_uplink_telecommands_ping->get_active())
-            {
-                toolbutton_ping->set_sensitive(false);
-            }
-            
-            if (checkbutton_uplink_telecommands_data_request->get_active())
-            {
-                toolbutton_request_data->set_sensitive(false);
-            }
-
-            if (checkbutton_uplink_telecommands_shutdown->get_active())
-            {
-                toolbutton_shutdown->set_sensitive(false);
-            }
-
-            if (checkbutton_uplink_telecommands_reset_eps_charge->get_active())
-            {
-                toolbutton_reset_charge->set_sensitive(false);
-            }
-
-            if (checkbutton_uplink_telecommands_broadcast_message->get_active())
-            {
-                toolbutton_broadcast_message->set_sensitive(false);
-            }
-
+            toolbutton_ping->set_sensitive(false);
+            toolbutton_request_data->set_sensitive(false);
+            toolbutton_shutdown->set_sensitive(false);
+            toolbutton_reset_charge->set_sensitive(false);
+            toolbutton_broadcast_message->set_sensitive(false);
             toolbutton_payload_x->set_sensitive(false);
         }
 

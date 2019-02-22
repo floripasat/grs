@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.3
+ * \version 0.2.7
  * 
  * \date 10/09/2017
  * 
@@ -175,11 +175,6 @@ class FSatGRS
         Gtk::Entry                      *entry_uplink_server_ip;
         Gtk::Entry                      *entry_uplink_server_port;
         Gtk::RadioButton                *radiobutton_uplink_manual_control;
-        Gtk::CheckButton                *checkbutton_uplink_telecommands_ping;
-        Gtk::CheckButton                *checkbutton_uplink_telecommands_data_request;
-        Gtk::CheckButton                *checkbutton_uplink_telecommands_shutdown;
-        Gtk::CheckButton                *checkbutton_uplink_telecommands_reset_eps_charge;
-        Gtk::CheckButton                *checkbutton_uplink_telecommands_broadcast_message;
         Gtk::ToggleButton               *togglebutton_play_uplink;
         Gtk::ToggleButton               *togglebutton_pause_uplink;
         Gtk::Button                     *button_stop_uplink;
