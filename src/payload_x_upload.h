@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.12
+ * \version 0.2.13
  * 
  * \date 23/02/2019
  * 
@@ -41,7 +41,7 @@
 #include <vector>
 #include <stdint.h>
 
-#define PAYLOAD_X_UPLOAD_DEFAULT_BLOCKS_SIZE            84
+#define PAYLOAD_X_UPLOAD_DEFAULT_BLOCKS_SIZE            82
 
 /**
  * \brief Payload X upload command.

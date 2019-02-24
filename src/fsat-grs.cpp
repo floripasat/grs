@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.12
+ * \version 0.2.13
  * 
  * \date 10/09/2017
  * 
@@ -2936,15 +2936,18 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             payload_x[6] = 'X';
             payload_x[7] = 'U';
 
+            payload_x[8] = payload_x_upload->get_number_of_transmitted_blocks() & 0x00FF;
+            payload_x[9] = payload_x_upload->get_number_of_transmitted_blocks() >> 8;
+
             for(unsigned j=0; j<payload_x_upload->get_number_of_required_blocks(); j++)
             {
                 auto block = payload_x_upload->get_next_block();
                 for(unsigned int i=0; i<block.size(); i++)
                 {
-                    payload_x[i+8] = block[i];
+                    payload_x[i+10] = block[i];
                 }
 
-                ngham_uplink_pkt.Generate(payload_x, 8+block.size());
+                ngham_uplink_pkt.Generate(payload_x, 10+block.size());
 
                 for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
                 {
@@ -2977,7 +2980,7 @@ void FSatGRS::RunMatPlotLib(const char *cmd)
 
 void FSatGRS::OnFileChooserPayloadXBitfileSelectionChanged()
 {
-    payload_x_upload = make_unique<PayloadXUpload>(filechooser_payload_x_bitfile->get_filename(), 84);
+    payload_x_upload = make_unique<PayloadXUpload>(filechooser_payload_x_bitfile->get_filename(), 82);
 
     if (!payload_x_upload->is_open())
     {
