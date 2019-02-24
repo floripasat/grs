@@ -6,7 +6,7 @@ ifndef BUILD_DIR
 endif
 
 CXX=g++
-CXXFLAGS=-std=c++11
+CXXFLAGS=-std=c++14
 GTKMM_FLAGS=`pkg-config --cflags --libs gtkmm-3.0`
 
 all:

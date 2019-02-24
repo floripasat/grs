@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.9
+ * \version 0.2.12
  * 
  * \date 10/09/2017
  * 
@@ -37,6 +37,7 @@
 #include <fstream>
 #include <string>
 #include <cstdio>
+#include <memory>
 #include <stdlib.h>
 #include <sys/stat.h>
 
@@ -758,10 +759,22 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     }
 
     ref_builder->get_widget("filechooser_payload_x_bitfile", filechooser_payload_x_bitfile);
+
+    if (filechooser_payload_x_bitfile)
+    {
+        filechooser_payload_x_bitfile->signal_selection_changed().connect(sigc::mem_fun(*this, &FSatGRS::OnFileChooserPayloadXBitfileSelectionChanged));
+    }
+
     ref_builder->get_widget("label_payload_x_bitfile_transferred", label_payload_x_bitfile_transferred);
     ref_builder->get_widget("label_payload_x_bitfile_total", label_payload_x_bitfile_total);
-    ref_builder->get_widget("progreebar_payload_x_packet_transfer", progreebar_payload_x_packet_transfer);
+    ref_builder->get_widget("progressbar_payload_x_packet_transfer", progressbar_payload_x_packet_transfer);
     ref_builder->get_widget("button_payload_x_bitfile_send", button_payload_x_bitfile_send);
+
+    if (button_payload_x_bitfile_send)
+    {
+        button_payload_x_bitfile_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPayloadXUploadClicked));
+    }
+
     ref_builder->get_widget("button_payload_x_bitfile_swap", button_payload_x_bitfile_swap);
     if (button_payload_x_bitfile_swap)
     {
@@ -2719,7 +2732,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     uint8_t shutdown[9];
     uint8_t reset_charge[9];
     uint8_t broadcast[30];
-    uint8_t payload_x[30];
+    uint8_t payload_x[300];
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
@@ -2907,6 +2920,42 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 system(cmd_str.c_str());
             }
             break;
+        case FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD:
+            if (filechooser_payload_x_bitfile->get_filename().size() == 0)
+            {
+//                this->RaiseErrorMessage("No bitfile found!", "Select a bitfile before trying to upload.");
+
+                break;
+            }
+
+            for(unsigned int i=0; i<6; i++)
+            {
+                payload_x[i] = grs_id[i];
+            }
+
+            payload_x[6] = 'X';
+            payload_x[7] = 'U';
+
+            for(unsigned j=0; j<payload_x_upload->get_number_of_required_blocks(); j++)
+            {
+                auto block = payload_x_upload->get_next_block();
+                for(unsigned int i=0; i<block.size(); i++)
+                {
+                    payload_x[i+8] = block[i];
+                }
+
+                ngham_uplink_pkt.Generate(payload_x, 8+block.size());
+
+                for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+                {
+                    system(cmd_str.c_str());
+                }
+
+                label_payload_x_bitfile_transferred->set_text(to_string(payload_x_upload->get_number_of_transmitted_blocks()));
+                progressbar_payload_x_packet_transfer->set_fraction(payload_x_upload->get_progress()/100);
+            }
+
+            break;
     }
 }
 
@@ -2926,6 +2975,23 @@ void FSatGRS::RunMatPlotLib(const char *cmd)
 //***************************************************************************************************************************************
 //***************************************************************************************************************************************
 
+void FSatGRS::OnFileChooserPayloadXBitfileSelectionChanged()
+{
+    payload_x_upload = make_unique<PayloadXUpload>(filechooser_payload_x_bitfile->get_filename(), 84);
+
+    if (!payload_x_upload->is_open())
+    {
+        this->RaiseErrorMessage("Error opening the given file!", "Error :)");
+
+        return;
+    }
+
+    label_payload_x_bitfile_transferred->set_text(to_string(payload_x_upload->get_number_of_transmitted_blocks()));
+    label_payload_x_bitfile_total->set_text(to_string(payload_x_upload->get_number_of_required_blocks()));
+
+    progressbar_payload_x_packet_transfer->set_fraction(0);
+}
+
 void FSatGRS::OnButtonPayloadXRequestStatusClicked()
 {
     event_log->AddNewEvent("Transmitting \"Request Status\" command to Payload X...");
@@ -2933,6 +2999,15 @@ void FSatGRS::OnButtonPayloadXRequestStatusClicked()
     thread thread_payload_x_request_status_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS);
 
     thread_payload_x_request_status_cmd.detach();
+}
+
+void FSatGRS::OnButtonPayloadXUploadClicked()
+{
+    event_log->AddNewEvent("Uploading a new bitfile to Payload X...");
+
+    thread thread_payload_x_upload_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD);
+
+    thread_payload_x_upload_cmd.detach();
 }
 
 void FSatGRS::OnButtonPayloadXSwapClicked()

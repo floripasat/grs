@@ -1,7 +1,7 @@
 /*
  * fsat-grs.h
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Federal University of Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.9
+ * \version 0.2.12
  * 
  * \date 10/09/2017
  * 
@@ -49,6 +49,7 @@
 #include "ngham_pkts.h"
 #include "read_log.h"
 #include "uplink_event.h"
+#include "payload_x_upload.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE        "/usr/share/floripasat-grs/glade/fsat_grs_gui.glade"
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL  "glade/fsat_grs_gui.glade"
@@ -96,7 +97,8 @@ enum uplink_cmds_t
     FSAT_GRS_UPLINK_RESET_CHARGE,               /**< Reset EPS charge. */
     FSAT_GRS_UPLINK_BROADCAST_MESSAGE,          /**< Broadcast message. */
     FSAT_GRS_UPLINK_PAYLOAD_X_SWAP,             /**< Payload X swap. */
-    FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS    /**< Payload X request status. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS,   /**< Payload X request status. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD            /**< Payload X upload. */
 };
 
 /**
@@ -420,9 +422,11 @@ class FSatGRS
         Gtk::FileChooser                *filechooser_payload_x_bitfile;
         Gtk::Label                      *label_payload_x_bitfile_transferred;
         Gtk::Label                      *label_payload_x_bitfile_total;
-        Gtk::ProgressBar                *progreebar_payload_x_packet_transfer;
+        Gtk::ProgressBar                *progressbar_payload_x_packet_transfer;
         Gtk::Button                     *button_payload_x_bitfile_send;
         Gtk::Button                     *button_payload_x_bitfile_swap;
+
+        std::unique_ptr<PayloadXUpload> payload_x_upload;
 
         // Message Dialog
         Gtk::MessageDialog              *msg_dialog;
@@ -781,11 +785,25 @@ class FSatGRS
         void OnButtonUplinkSchedulerManagerNewEventCancelClicked();
 
         /**
+         * \brief Bitfile file chooser selection changed signal handler.
+         *
+         * \return None.
+         */
+        void OnFileChooserPayloadXBitfileSelectionChanged();
+
+        /**
          * \brief "Request Status" button clicked signal handler.
          *
          * \return None.
          */
         void OnButtonPayloadXRequestStatusClicked();
+
+        /**
+         * \brief "Upload" button clicked signal handler.
+         *
+         * \return None.
+         */
+        void OnButtonPayloadXUploadClicked();
 
         /**
          * \brief Swap button clicked signal handle.
