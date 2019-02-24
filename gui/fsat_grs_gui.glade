@@ -9215,7 +9215,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="width_request">480</property>
+                        <property name="width_request">800</property>
                         <property name="height_request">240</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -9240,7 +9240,14 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                             <child>
                               <object class="GtkTreeViewColumn" id="event_data">
                                 <property name="sizing">fixed</property>
-                                <property name="title" translatable="yes">Event/Data</property>
+                                <property name="fixed_width">80</property>
+                                <property name="title" translatable="yes">Number</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="sizing">fixed</property>
+                                <property name="title" translatable="yes">Status</property>
                               </object>
                             </child>
                           </object>
@@ -9352,7 +9359,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Transferred Packets:</property>
+                            <property name="label" translatable="yes">Transferred Blocks:</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9404,7 +9411,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkProgressBar" id="progreebar_payload_x_packet_transfer">
+                      <object class="GtkProgressBar" id="progressbar_payload_x_packet_transfer">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="pulse_step">0.01</property>
@@ -9425,7 +9432,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                         <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkButton" id="button_payload_x_bitfile_send">
-                            <property name="label" translatable="yes">Send</property>
+                            <property name="label" translatable="yes">Upload</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
