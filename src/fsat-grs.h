@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.12
+ * \version 0.3.0
  * 
  * \date 10/09/2017
  * 
@@ -422,6 +422,8 @@ class FSatGRS
         Gtk::FileChooser                *filechooser_payload_x_bitfile;
         Gtk::Label                      *label_payload_x_bitfile_transferred;
         Gtk::Label                      *label_payload_x_bitfile_total;
+        Gtk::Entry                      *entry_payload_x_bitfile_block_start;
+        Gtk::Entry                      *entry_payload_x_bitfile_block_end;
         Gtk::ProgressBar                *progressbar_payload_x_packet_transfer;
         Gtk::Button                     *button_payload_x_bitfile_send;
         Gtk::Button                     *button_payload_x_bitfile_swap;

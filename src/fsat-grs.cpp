@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.13
+ * \version 0.3.0
  * 
  * \date 10/09/2017
  * 
@@ -767,6 +767,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
 
     ref_builder->get_widget("label_payload_x_bitfile_transferred", label_payload_x_bitfile_transferred);
     ref_builder->get_widget("label_payload_x_bitfile_total", label_payload_x_bitfile_total);
+    ref_builder->get_widget("entry_payload_x_bitfile_block_start", entry_payload_x_bitfile_block_start);
+    ref_builder->get_widget("entry_payload_x_bitfile_block_end", entry_payload_x_bitfile_block_end);
     ref_builder->get_widget("progressbar_payload_x_packet_transfer", progressbar_payload_x_packet_transfer);
     ref_builder->get_widget("button_payload_x_bitfile_send", button_payload_x_bitfile_send);
 
@@ -2923,8 +2925,6 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD:
             if (filechooser_payload_x_bitfile->get_filename().size() == 0)
             {
-//                this->RaiseErrorMessage("No bitfile found!", "Select a bitfile before trying to upload.");
-
                 break;
             }
 
@@ -2942,6 +2942,12 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             for(unsigned j=0; j<payload_x_upload->get_number_of_required_blocks(); j++)
             {
                 auto block = payload_x_upload->get_next_block();
+
+                if (j < stoi(entry_payload_x_bitfile_block_start->get_text(), nullptr) or (j > stoi(entry_payload_x_bitfile_block_end->get_text(), nullptr)))
+                {
+                    continue;
+                }
+
                 for(unsigned int i=0; i<block.size(); i++)
                 {
                     payload_x[i+10] = block[i];
@@ -2992,6 +2998,10 @@ void FSatGRS::OnFileChooserPayloadXBitfileSelectionChanged()
     label_payload_x_bitfile_transferred->set_text(to_string(payload_x_upload->get_number_of_transmitted_blocks()));
     label_payload_x_bitfile_total->set_text(to_string(payload_x_upload->get_number_of_required_blocks()));
 
+    entry_payload_x_bitfile_block_start->set_text(to_string(payload_x_upload->get_number_of_transmitted_blocks()));
+
+    entry_payload_x_bitfile_block_end->set_text(to_string(payload_x_upload->get_number_of_required_blocks()-1));
+
     progressbar_payload_x_packet_transfer->set_fraction(0);
 }
 
@@ -3006,6 +3016,27 @@ void FSatGRS::OnButtonPayloadXRequestStatusClicked()
 
 void FSatGRS::OnButtonPayloadXUploadClicked()
 {
+    if (filechooser_payload_x_bitfile->get_filename().size() == 0)
+    {
+        this->RaiseErrorMessage("No bitfile found!", "Select a bitfile before trying to upload.");
+
+        return;
+    }
+
+    if ((stoi(entry_payload_x_bitfile_block_start->get_text(), nullptr) < 0) or (stoi(entry_payload_x_bitfile_block_start->get_text(), nullptr) >= payload_x_upload->get_number_of_required_blocks()))
+    {
+        this->RaiseErrorMessage("The start of the blocks interval is invalid!", "Verify the number of the required packets.");
+
+        return;
+    }
+
+    if ((stoi(entry_payload_x_bitfile_block_end->get_text(), nullptr) < 0) or (stoi(entry_payload_x_bitfile_block_end->get_text(), nullptr) >= payload_x_upload->get_number_of_required_blocks()))
+    {
+        this->RaiseErrorMessage("The end of the blocks interval is invalid!", "Verify the number of the required packets.");
+
+        return;
+    }
+
     event_log->AddNewEvent("Uploading a new bitfile to Payload X...");
 
     thread thread_payload_x_upload_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD);
