@@ -1,5 +1,5 @@
 SOURCE=main.cpp
-TARGET=fsat-grs
+TARGET=floripasat-grs
 
 ifndef BUILD_DIR
 	BUILD_DIR=build
@@ -13,7 +13,7 @@ all:
 	mkdir -p $(BUILD_DIR)
 	$(MAKE) BUILD_DIR=$(CURDIR)/$(BUILD_DIR) -C libs
 	$(MAKE) BUILD_DIR=$(CURDIR)/$(BUILD_DIR) -C src
-	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/*.o $(BUILD_DIR)/*.a -o $(BUILD_DIR)/$(TARGET).x $(GTKMM_FLAGS)
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/*.o $(BUILD_DIR)/*.a -o $(BUILD_DIR)/$(TARGET) $(GTKMM_FLAGS)
 	mkdir -p $(BUILD_DIR)/glade
 	mkdir -p $(BUILD_DIR)/gnuradio
 	mkdir -p $(BUILD_DIR)/matplotlib
@@ -27,5 +27,5 @@ all:
 	cp src/*.csv $(BUILD_DIR)/
 
 clean:
-	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/*.x $(BUILD_DIR)/*.a
+	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/*.a
 
