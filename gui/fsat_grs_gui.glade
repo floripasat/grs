@@ -999,7 +999,35 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="height">2</property>
+                            <property name="height">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">S. Rate [Hz]:</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry_beacon_udp_sample_rate">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Sample rate in Hertz</property>
+                            <property name="width_chars">15</property>
+                            <property name="max_width_chars">16</property>
+                            <property name="text" translatable="yes">48000</property>
+                            <property name="caps_lock_warning">False</property>
+                            <property name="input_purpose">digits</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">2</property>
                           </packing>
                         </child>
                       </object>
@@ -1436,7 +1464,35 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="height">2</property>
+                                <property name="height">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">S. Rate [Hz]:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entry_downlink_udp_sample_rate">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Sample rate in Hertz</property>
+                                <property name="width_chars">15</property>
+                                <property name="max_width_chars">15</property>
+                                <property name="text" translatable="yes">48000</property>
+                                <property name="caps_lock_warning">False</property>
+                                <property name="input_purpose">digits</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                           </object>
@@ -5460,7 +5516,7 @@
                       <object class="GtkLabel" id="label41">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Telemetry Data</property>
+                        <property name="label" translatable="yes">Downlink Data</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -5527,7 +5583,7 @@
     <property name="transient_for">window_fsat_grs</property>
     <property name="program_name">FloripaSat GRS</property>
     <property name="version">0.2</property>
-    <property name="copyright" translatable="yes">Copyright (c) 2017-2018, Universidade Federal de Santa Catarina - UFSC</property>
+    <property name="copyright" translatable="yes">Copyright (C) 2017-2019, Universidade Federal de Santa Catarina - UFSC</property>
     <property name="website">https://github.com/floripasat/grs</property>
     <property name="website_label" translatable="yes">https://github.com/floripasat/grs</property>
     <property name="authors">André Martins Pio de Mattos  &lt;andrempmattos@gmail.com&gt;
