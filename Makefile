@@ -6,7 +6,7 @@ ifndef BUILD_DIR
 endif
 
 CXX=g++
-CXXFLAGS=-std=c++14
+CXXFLAGS=-std=c++14 -lpython2.7
 GTKMM_FLAGS=`pkg-config --cflags --libs gtkmm-3.0`
 
 all:
@@ -19,13 +19,14 @@ all:
 	mkdir -p $(BUILD_DIR)/matplotlib
 	grcc gnuradio/gfsk_rx.grc -d $(BUILD_DIR)/gnuradio
 	grcc gnuradio/gfsk_tx.grc -d $(BUILD_DIR)/gnuradio
-	grcc gnuradio/udp_decode.grc -d $(BUILD_DIR)/gnuradio
+#	grcc gnuradio/udp_decode.grc -d $(BUILD_DIR)/gnuradio
 	cp gui/fsat_grs_gui.glade $(BUILD_DIR)/glade/
 	cp img/icon.png $(BUILD_DIR)/
 	cp img/gpredict-icon.png $(BUILD_DIR)/
 	cp img/gqrx-icon.png $(BUILD_DIR)/
 	cp matplotlib/csv_plot.py $(BUILD_DIR)/matplotlib/
 	cp src/*.csv $(BUILD_DIR)/
+	cp gnuradio/udp_decoder.py $(BUILD_DIR)/gnuradio
 
 clean:
 	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/*.a

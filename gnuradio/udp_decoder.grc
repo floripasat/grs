@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>top_block</value>
+      <value>udp_decoder</value>
     </param>
     <param>
       <key>max_nouts</key>
