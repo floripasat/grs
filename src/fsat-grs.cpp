@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.0
+ * \version 0.3.2
  * 
  * \date 10/09/2017
  * 
@@ -234,8 +234,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("radiobutton_beacon_src_sdr", radiobutton_beacon_src_sdr);
     ref_builder->get_widget("combobox_beacon_sdr_dev", combobox_beacon_sdr_dev);
     ref_builder->get_widget("radiobutton_beacon_src_tcp", radiobutton_beacon_src_tcp);
-    ref_builder->get_widget("entry_beacon_tcp_ip", entry_beacon_tcp_ip);
-    ref_builder->get_widget("entry_beacon_tcp_port", entry_beacon_tcp_port);
+    ref_builder->get_widget("entry_beacon_udp_ip", entry_beacon_udp_ip);
+    ref_builder->get_widget("entry_beacon_udp_port", entry_beacon_udp_port);
+    ref_builder->get_widget("entry_beacon_udp_sample_rate", entry_beacon_udp_sample_rate);
     ref_builder->get_widget("radiobutton_beacon_src_serial", radiobutton_beacon_src_serial);
     ref_builder->get_widget("entry_beacon_serial_port", entry_beacon_serial_port);
     ref_builder->get_widget("combobox_beacon_baudrate", combobox_beacon_baudrate);
@@ -270,8 +271,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("radiobutton_telemetry_src_sdr", radiobutton_telemetry_src_sdr);
     ref_builder->get_widget("combobox_telemetry_sdr_dev", combobox_telemetry_sdr_dev);
     ref_builder->get_widget("radiobutton_telemetry_src_tcp", radiobutton_telemetry_src_tcp);
-    ref_builder->get_widget("entry_telemetry_tcp_ip", entry_telemetry_tcp_ip);
-    ref_builder->get_widget("entry_telemetry_tcp_port", entry_telemetry_tcp_port);
+    ref_builder->get_widget("entry_downlink_udp_ip", entry_downlink_udp_ip);
+    ref_builder->get_widget("entry_downlink_udp_port", entry_downlink_udp_port);
+    ref_builder->get_widget("entry_downlink_udp_sample_rate", entry_downlink_udp_sample_rate);
     ref_builder->get_widget("radiobutton_telemetry_src_serial", radiobutton_telemetry_src_serial);
     ref_builder->get_widget("entry_telemetry_serial_port", entry_telemetry_serial_port);
     ref_builder->get_widget("combobox_telemetry_baudrate", combobox_telemetry_baudrate);
@@ -1275,22 +1277,34 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
     if (togglebutton_play_beacon->get_active())
     {
         ngham_pkts_beacon = new NGHamPkts(event_log, beacon_data, ngham_statistic, checkbutton_log_ngham_packets->get_active(), checkbutton_log_beacon_data->get_active());
-        
+
         if (radiobutton_beacon_src_sdr->get_active())
         {
             system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
             system("touch " FSAT_GRS_GRC_BEACON_BIN);
-            
+
             thread_downlink_beacon = new thread(&FSatGRS::RunGNURadioReceiver, this, FSAT_GRS_RX_BEACON);
             thread_downlink_beacon->detach();
-            
+
             ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
         }
-        /*else if (radiobutton_beacon_src_tcp->get_active())
+        else if (radiobutton_beacon_src_tcp->get_active())
         {
-            
+            system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
+            system("touch " FSAT_GRS_GRC_BEACON_BIN);
+
+            udp_decoder_beacon = make_unique<udp_decoder>(entry_beacon_udp_ip->get_text(),
+                                                          stoi(entry_beacon_udp_port->get_text(), nullptr),
+                                                          stoi(entry_beacon_udp_sample_rate->get_text(), nullptr),
+                                                          stoi(entry_config_downlink_beacon_baudrate->get_text(), nullptr),
+                                                          string(FSAT_GRS_GRC_BEACON_BIN));
+
+            thread_beacon_udp_decoder = make_unique<thread>(&udp_decoder::run, *udp_decoder_beacon, this->CheckFile(FSAT_GRS_UDP_DEC_GRC_SCRIPT)? FSAT_GRS_UDP_DEC_GRC_SCRIPT : FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL);
+            thread_beacon_udp_decoder->detach();
+
+            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
         }
-        else if (radiobutton_beacon_src_serial->get_active())
+        /*else if (radiobutton_beacon_src_serial->get_active())
         {
             
         }*/
@@ -1308,8 +1322,9 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             radiobutton_beacon_src_sdr->set_sensitive(false);
             combobox_beacon_sdr_dev->set_sensitive(false);
             radiobutton_beacon_src_tcp->set_sensitive(false);
-            entry_beacon_tcp_ip->set_sensitive(false);
-            entry_beacon_tcp_port->set_sensitive(false);
+            entry_beacon_udp_ip->set_sensitive(false);
+            entry_beacon_udp_port->set_sensitive(false);
+            entry_beacon_udp_sample_rate->set_sensitive(false);
             radiobutton_beacon_src_serial->set_sensitive(false);
             entry_beacon_serial_port->set_sensitive(false);
             combobox_beacon_baudrate->set_sensitive(false);
@@ -1340,8 +1355,16 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         delete ngham_pkts_beacon;
         if (togglebutton_play_beacon->get_active())
         {
-            delete thread_downlink_beacon;
+            if (radiobutton_beacon_src_sdr->get_active())
+            {
+                delete thread_downlink_beacon;
+            }
         }
+
+        string kill_process = "pkill ";
+        kill_process += FSAT_GRS_UDP_DEC_GRS_PROCESS;
+
+        system(kill_process.c_str());
 
         toolbutton_open_log_file->set_sensitive(true);
         toolbutton_close_log_file->set_sensitive(false);
@@ -1350,8 +1373,9 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         radiobutton_beacon_src_sdr->set_sensitive(true);
         combobox_beacon_sdr_dev->set_sensitive(true);
         radiobutton_beacon_src_tcp->set_sensitive(true);
-        entry_beacon_tcp_ip->set_sensitive(true);
-        entry_beacon_tcp_port->set_sensitive(true);
+        entry_beacon_udp_ip->set_sensitive(true);
+        entry_beacon_udp_port->set_sensitive(true);
+        entry_beacon_udp_sample_rate->set_sensitive(true);
         radiobutton_beacon_src_serial->set_sensitive(true);
         entry_beacon_serial_port->set_sensitive(true);
         combobox_beacon_baudrate->set_sensitive(true);
@@ -1456,8 +1480,9 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             radiobutton_telemetry_src_sdr->set_sensitive(false);
             combobox_telemetry_sdr_dev->set_sensitive(false);
             radiobutton_telemetry_src_tcp->set_sensitive(false);
-            entry_telemetry_tcp_ip->set_sensitive(false);
-            entry_telemetry_tcp_port->set_sensitive(false);
+            entry_downlink_udp_ip->set_sensitive(false);
+            entry_downlink_udp_port->set_sensitive(false);
+            entry_downlink_udp_sample_rate->set_sensitive(false);
             radiobutton_telemetry_src_serial->set_sensitive(false);
             entry_telemetry_serial_port->set_sensitive(false);
             combobox_telemetry_baudrate->set_sensitive(false);
@@ -1497,8 +1522,9 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         radiobutton_telemetry_src_sdr->set_sensitive(true);
         combobox_telemetry_sdr_dev->set_sensitive(true);
         radiobutton_telemetry_src_tcp->set_sensitive(true);
-        entry_telemetry_tcp_ip->set_sensitive(true);
-        entry_telemetry_tcp_port->set_sensitive(true);
+        entry_downlink_udp_ip->set_sensitive(true);
+        entry_downlink_udp_port->set_sensitive(true);
+        entry_downlink_udp_sample_rate->set_sensitive(true);
         radiobutton_telemetry_src_serial->set_sensitive(true);
         entry_telemetry_serial_port->set_sensitive(true);
         combobox_telemetry_baudrate->set_sensitive(true);

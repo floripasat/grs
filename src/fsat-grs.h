@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.0
+ * \version 0.3.2
  * 
  * \date 10/09/2017
  * 
@@ -50,6 +50,7 @@
 #include "read_log.h"
 #include "uplink_event.h"
 #include "payload_x_upload.h"
+#include "udp_decoder.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE        "/usr/share/floripasat-grs/glade/fsat_grs_gui.glade"
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL  "glade/fsat_grs_gui.glade"
@@ -63,6 +64,9 @@
 #define FSAT_GRS_TX_GRC_SCRIPT              "/usr/share/floripasat-grs/gnuradio/gfsk_tx.py"
 #define FSAT_GRS_RX_GRC_SCRIPT_LOCAL        "gnuradio/gfsk_rx.py"
 #define FSAT_GRS_TX_GRC_SCRIPT_LOCAL        "gnuradio/gfsk_tx.py"
+#define FSAT_GRS_UDP_DEC_GRC_SCRIPT         "/usr/share/floripasat-grs/gnuradio/udp_decoder.py"
+#define FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL   "gnuradio/udp_decoder.py"
+#define FSAT_GRS_UDP_DEC_GRS_PROCESS        "grs_udp_decoder"
 
 #define FSAT_GRS_PLOT_SCRIPT                "/usr/share/floripasat-grs/matplotlib/csv_plot.py"
 #define FSAT_GRS_PLOT_SCRIPT_LOCAL          "matplotlib/csv_plot.py"
@@ -135,8 +139,9 @@ class FSatGRS
         Gtk::RadioButton                *radiobutton_beacon_src_sdr;
         Gtk::ComboBox                   *combobox_beacon_sdr_dev;
         Gtk::RadioButton                *radiobutton_beacon_src_tcp;
-        Gtk::Entry                      *entry_beacon_tcp_ip;
-        Gtk::Entry                      *entry_beacon_tcp_port;
+        Gtk::Entry                      *entry_beacon_udp_ip;
+        Gtk::Entry                      *entry_beacon_udp_port;
+        Gtk::Entry                      *entry_beacon_udp_sample_rate;
         Gtk::RadioButton                *radiobutton_beacon_src_serial;
         Gtk::Entry                      *entry_beacon_serial_port;
         Gtk::ComboBox                   *combobox_beacon_baudrate;
@@ -146,13 +151,17 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_beacon;
         Gtk::Button                     *button_stop_beacon;
         Gtk::Button                     *button_clear_all_beacon;
-        
+
+        std::unique_ptr<udp_decoder>    udp_decoder_beacon;
+        std::unique_ptr<std::thread>    thread_beacon_udp_decoder;
+
         // Telemetry stream
         Gtk::RadioButton                *radiobutton_telemetry_src_sdr;
         Gtk::ComboBox                   *combobox_telemetry_sdr_dev;
         Gtk::RadioButton                *radiobutton_telemetry_src_tcp;
-        Gtk::Entry                      *entry_telemetry_tcp_ip;
-        Gtk::Entry                      *entry_telemetry_tcp_port;
+        Gtk::Entry                      *entry_downlink_udp_ip;
+        Gtk::Entry                      *entry_downlink_udp_port;
+        Gtk::Entry                      *entry_downlink_udp_sample_rate;
         Gtk::RadioButton                *radiobutton_telemetry_src_serial;
         Gtk::Entry                      *entry_telemetry_serial_port;
         Gtk::ComboBox                   *combobox_telemetry_baudrate;

@@ -929,7 +929,7 @@
                         <property name="column_spacing">5</property>
                         <property name="row_homogeneous">True</property>
                         <child>
-                          <object class="GtkEntry" id="entry_beacon_tcp_ip">
+                          <object class="GtkEntry" id="entry_beacon_udp_ip">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Server IP address</property>
@@ -946,7 +946,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entry_beacon_tcp_port">
+                          <object class="GtkEntry" id="entry_beacon_udp_port">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Server port</property>
@@ -1393,7 +1393,7 @@
                             <property name="column_spacing">5</property>
                             <property name="row_homogeneous">True</property>
                             <child>
-                              <object class="GtkEntry" id="entry_telemetry_tcp_ip">
+                              <object class="GtkEntry" id="entry_downlink_udp_ip">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Server IP address</property>
@@ -1410,7 +1410,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entry_telemetry_tcp_port">
+                              <object class="GtkEntry" id="entry_downlink_udp_port">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Server port</property>
