@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.2
+ * \version 0.3.3
  * 
  * \date 10/09/2017
  * 
@@ -171,7 +171,10 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_telemetry;
         Gtk::Button                     *button_stop_telemetry;
         Gtk::Button                     *button_clear_all_telemetry;
-        
+
+        std::unique_ptr<udp_decoder>    udp_decoder_downlink;
+        std::unique_ptr<std::thread>    thread_downlink_udp_decoder;
+
         // Uplink stream
         Gtk::RadioButton                *radiobutton_uplink_output_sdr;
         Gtk::ComboBox                   *combobox_uplink_output_sdr_device;

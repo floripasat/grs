@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.2
+ * \version 0.3.3
  * 
  * \date 10/09/2017
  * 
@@ -1458,11 +1458,23 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             
             ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
         }
-        /*else if (radiobutton_telemetry_src_tcp->get_active())
+        else if (radiobutton_telemetry_src_tcp->get_active())
         {
-            
+            system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
+            system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
+
+            udp_decoder_downlink = make_unique<udp_decoder>(entry_downlink_udp_ip->get_text(),
+                                                            stoi(entry_downlink_udp_port->get_text(), nullptr),
+                                                            stoi(entry_downlink_udp_sample_rate->get_text(), nullptr),
+                                                            stoi(entry_config_downlink_telemetry_baudrate->get_text(), nullptr),
+                                                            string(FSAT_GRS_GRC_TELEMETRY_BIN));
+
+            thread_downlink_udp_decoder = make_unique<thread>(&udp_decoder::run, *udp_decoder_downlink, this->CheckFile(FSAT_GRS_UDP_DEC_GRC_SCRIPT)? FSAT_GRS_UDP_DEC_GRC_SCRIPT : FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL);
+            thread_downlink_udp_decoder->detach();
+
+            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
         }
-        else if (radiobutton_telemetry_src_serial->get_active())
+        /*else if (radiobutton_telemetry_src_serial->get_active())
         {
             
         }*/
@@ -1514,7 +1526,12 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         {
             delete thread_downlink_telemetry;
         }
-        
+
+        string kill_process = "pkill ";
+        kill_process += FSAT_GRS_UDP_DEC_GRS_PROCESS;
+
+        system(kill_process.c_str());
+
         toolbutton_open_log_file->set_sensitive(true);
         toolbutton_close_log_file->set_sensitive(false);
         toolbutton_prev_log_line->set_sensitive(false);
