@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.3
+ * \version 0.3.4
  * 
  * \date 10/09/2017
  * 
@@ -1299,7 +1299,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
                                                           stoi(entry_config_downlink_beacon_baudrate->get_text(), nullptr),
                                                           string(FSAT_GRS_GRC_BEACON_BIN));
 
-            thread_beacon_udp_decoder = make_unique<thread>(&udp_decoder::run, *udp_decoder_beacon, this->CheckFile(FSAT_GRS_UDP_DEC_GRC_SCRIPT)? FSAT_GRS_UDP_DEC_GRC_SCRIPT : FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL);
+            thread_beacon_udp_decoder = make_unique<thread>(&udp_decoder::run, *udp_decoder_beacon, this->CheckFile(FSAT_GRS_UDP_DEC_GRC_SCRIPT_BEACON)? FSAT_GRS_UDP_DEC_GRC_SCRIPT_BEACON : FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL_BEACON);
             thread_beacon_udp_decoder->detach();
 
             ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
@@ -1362,7 +1362,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         }
 
         string kill_process = "pkill ";
-        kill_process += FSAT_GRS_UDP_DEC_GRS_PROCESS;
+        kill_process += FSAT_GRS_UDP_DEC_GRS_PROCESS_BEACON;
 
         system(kill_process.c_str());
 
@@ -1469,7 +1469,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
                                                             stoi(entry_config_downlink_telemetry_baudrate->get_text(), nullptr),
                                                             string(FSAT_GRS_GRC_TELEMETRY_BIN));
 
-            thread_downlink_udp_decoder = make_unique<thread>(&udp_decoder::run, *udp_decoder_downlink, this->CheckFile(FSAT_GRS_UDP_DEC_GRC_SCRIPT)? FSAT_GRS_UDP_DEC_GRC_SCRIPT : FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL);
+            thread_downlink_udp_decoder = make_unique<thread>(&udp_decoder::run, *udp_decoder_downlink, this->CheckFile(FSAT_GRS_UDP_DEC_GRC_SCRIPT_DOWNLINK)? FSAT_GRS_UDP_DEC_GRC_SCRIPT_DOWNLINK : FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL_DOWNLINK);
             thread_downlink_udp_decoder->detach();
 
             ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
@@ -1528,7 +1528,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         }
 
         string kill_process = "pkill ";
-        kill_process += FSAT_GRS_UDP_DEC_GRS_PROCESS;
+        kill_process += FSAT_GRS_UDP_DEC_GRS_PROCESS_DOWNLINK;
 
         system(kill_process.c_str());
 

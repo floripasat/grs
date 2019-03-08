@@ -114,7 +114,7 @@ def set_procname(newname):
 
 
 def main(top_block_cls=udp_decoder, options=None):
-    set_procname("grs_udp_decoder")
+    set_procname("grs_downlink")
     if options is None:
         options, _ = argument_parser().parse_args()
     if gr.enable_realtime_scheduling() != gr.RT_OK:

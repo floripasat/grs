@@ -26,7 +26,8 @@ all:
 	cp img/gqrx-icon.png $(BUILD_DIR)/
 	cp matplotlib/csv_plot.py $(BUILD_DIR)/matplotlib/
 	cp src/*.csv $(BUILD_DIR)/
-	cp gnuradio/udp_decoder.py $(BUILD_DIR)/gnuradio
+	cp gnuradio/udp_decoder_beacon.py $(BUILD_DIR)/gnuradio
+	cp gnuradio/udp_decoder_downlink.py $(BUILD_DIR)/gnuradio
 
 clean:
 	rm $(BUILD_DIR)/*.o $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/*.a
