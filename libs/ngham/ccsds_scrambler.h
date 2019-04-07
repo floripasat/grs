@@ -1,8 +1,8 @@
 /*
  * ccsds_scrambler.h
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file ccsds_scrambler.h
+ * \brief CCSDS scrambler definition.
  * 
- * \brief .
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -44,35 +43,25 @@
 
 /**
  * \brief CCSDS polynomial.
- * 
- * \{
  */
 extern const uint8_t ccsds_poly[255];
-//! \}
 
 /**
- * \fn ngham_CCSDS_ScramblerInit
- * 
  * \brief
  * 
- * \return None
+ * \return None.
  */
-void ngham_CCSDS_ScramblerInit();
+void ngham_ccsds_scrambler_init();
 
 /**
- * \fn ngham_CCSDS_ScramblerXor
+ * \brief Data should be Xored with the sequence, starting from index zero.
  * 
- * \brief 
+ * \param[in] data
  * 
- * Data should be Xored with the sequence, starting from index zero.
- * 
- * \param data
- * 
- * \return None
+ * \return None.
  */
-uint8_t ngham_CCSDS_ScramblerXor(uint8_t data);
+uint8_t ngham_ccsds_scrambler_xor(uint8_t data);
 
 #endif // CCSDS_SCRAMBLER_H_
 
 //! \} End of ccsds_scrambler group
-

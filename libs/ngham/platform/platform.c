@@ -1,8 +1,8 @@
 /*
  * platform.c
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file platform.c
+ * \brief Platform implementation.
  * 
- * \brief .
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -36,35 +35,35 @@
  * \{
  */
 
+#include <stdint.h>
+
 #include "../ngham_packets.h"       // Packet structs, NA-values etc.
 #include "../ngham_extension.h"
 
 #include "platform.h"
 
-#include <stdint.h>
-
 // Temporary buffer for the decoder, rx packet variable and state variable.
 uint8_t rx_buf[255];	// Should hold the largest packet - ie. 255 B
 uint16_t rx_buf_len;
-NGHam_RX_Packet rx_pkt;
+ngham_rx_packet_t rx_pkt;
 uint8_t decoder_state;
 
-uint8_t ngham_ActionGetRSSI()
+uint8_t ngham_action_get_rssi()
 {
     return RSSI_NA;
 }
 
-uint8_t ngham_ActionGetNoiseFloor()
+uint8_t ngham_action_get_noise_floor()
 {
     return RSSI_NA;
 }
 
-void ngham_ActionSetPacketSize(uint8_t size)
+void ngham_action_set_packet_size(uint8_t size)
 {
-    
+
 }
 
-void ngham_ActionSendData(uint8_t *d, uint16_t d_len, uint8_t priority, uint8_t *pkt, uint16_t *pkt_len)
+void ngham_action_send_data(uint8_t *d, uint16_t d_len, uint8_t priority, uint8_t *pkt, uint16_t *pkt_len)
 {
     int16_t i = 0;
     switch (priority)
@@ -81,7 +80,7 @@ void ngham_ActionSendData(uint8_t *d, uint16_t d_len, uint8_t priority, uint8_t 
     }
 }
 
-void ngham_ActionHandlePacket(uint8_t condition, NGHam_RX_Packet *p, uint8_t *msg, uint8_t *msg_len)
+void ngham_action_handle_packet(uint8_t condition, ngham_rx_packet_t *p, uint8_t *msg, uint8_t *msg_len)
 {
     uint8_t i = 0;
     switch (condition)
@@ -104,17 +103,17 @@ void ngham_ActionHandlePacket(uint8_t condition, NGHam_RX_Packet *p, uint8_t *ms
     }
 
     // Reset RX packet content
-    ngham_RxPktInit(&rx_pkt);
+    ngham_rx_pkt_init(&rx_pkt);
 }
 
-void ngham_ActionReceptionStarted()
+void ngham_action_reception_started()
 {
     // rx_pkt.timestamp = ;
 }
 
-void ngham_ActionReceptionHalfway()
+void ngham_action_reception_halfway()
 {
-    
+
 }
 
-//! \} End of platform implementation group
+//! \} End of platform group

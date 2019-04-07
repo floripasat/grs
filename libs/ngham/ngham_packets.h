@@ -1,8 +1,8 @@
 /*
  * ngham_packets.h
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,18 +22,17 @@
  */
 
 /**
- * \file ngham_packets.h
+ * \brief NGHam packets definition.
  * 
- * \brief Packets.
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
- * \defgroup ngham_packets NGHam Packets
- * \ingroup NGHam
+ * \defgroup ngham_packets Packets
+ * \ingroup ngham
  * \{
  */
 
@@ -42,67 +41,31 @@
 
 #include <stdint.h>
 
-/**
- * \brief Possible packet conditions.
- * 
- * \{
- */
-#define PKT_CONDITION_OK                0   /**< Successfully received packet */
-#define PKT_CONDITION_FAIL              1   /**< Receiption failed after receiving the packet */
-#define PKT_CONDITION_PREFAIL           2   /**< Reception failed before receiving the whole packet */
-//! \}
+// Possible packet conditions.
+#define PKT_CONDITION_OK                0       /**< Successfully received packet */
+#define PKT_CONDITION_FAIL              1       /**< Receiption failed after receiving the packet */
+#define PKT_CONDITION_PREFAIL           2       /**< Reception failed before receiving the whole packet */
 
-/**
- * \brief Packet priority in transmission.
- * 
- * \{
- */
+// Packet priority in transmission.
 #define PKT_PRIORITY_NORMAL             0
-#define PKT_PRIORITY_FIRST_IN_SLOT      10  /**< Should be put first in the next time slot for timing purposes. */
-//! \}
+#define PKT_PRIORITY_FIRST_IN_SLOT      10      /**< Should be put first in the next time slot for timing purposes. */
 
-/**
- * \brief Size of payload in packet struct
- * 
- * \{
- */
-#define PKT_PL_SIZE                     512
-//! \}
+#define PKT_PL_SIZE                     512     /**< Size of payload in packet struct. */
 
-/**
- * \brief Basic "not available"-values.
- * 
- * \{
- */
+// Basic "not available"-values.
 #define RSSI_NA                         0xFF
 #define TIMESTAMP_NA                    0xFFFFFFFF
-//! \}
 
-/**
- * \brief If the following flag is set in a packet, NGHam extensions are used and first byte is type.
- * 
- * \{
- */
-#define NGHAM_FLAG_TYPE_EXTENSION       0x01
-//! \}
+#define NGHAM_FLAG_TYPE_EXTENSION       0x01    /**< If the following flag is set in a packet, NGHam extensions are used and first byte is type.. */
 
-#define SPP_PL_MAX                      255 // Not a power of two, so no ring buffers!
+#define SPP_PL_MAX                      255     /**< Not a power of two, so no ring buffers! */
 
-/**
- * \brief NGHam max. lenght of the payload.
- * 
- * \{
- */
-#define NGHAM_PL_MAX                    220
-//! \}
+#define NGHAM_PL_MAX                    220     /**< NGHam max. lenght of the payload. */
 
 #define ATTRIBUTE_PACKED __attribute__ ((packed))
 
 /**
- * \struct rx_pkt_t
- * 
  * \brief 
- * 
  */
 typedef struct ATTRIBUTE_PACKED
 {
@@ -113,13 +76,10 @@ typedef struct ATTRIBUTE_PACKED
     uint8_t ngham_flags;
     uint8_t pl[PKT_PL_SIZE];
     uint16_t pl_len;
-} NGHam_RX_Packet;
+} ngham_rx_packet_t;
 
 /**
- * \struct tx_pkt_t
- * 
  * \brief 
- * 
  */
 typedef struct ATTRIBUTE_PACKED
 {
@@ -127,13 +87,10 @@ typedef struct ATTRIBUTE_PACKED
     uint8_t ngham_flags;
     uint8_t pl[PKT_PL_SIZE];
     uint16_t pl_len;
-} NGHam_TX_Packet;
+} ngham_tx_packet_t;
 
 /**
- * \struct ngh_spphdr_t
- * 
  * \brief NGHam SPP header.
- * 
  */
 typedef struct ATTRIBUTE_PACKED
 {
@@ -144,30 +101,24 @@ typedef struct ATTRIBUTE_PACKED
 } ngh_spphdr_t;
 
 /**
- * \fn ngham_RxPktInit
- * 
  * \brief RX packet initialization.
  * 
  * \param *p is a pointer to a NGHam packet.
  * 
  * \return None
  */
-void ngham_RxPktInit(NGHam_RX_Packet *p);
+void ngham_rx_pkt_init(ngham_rx_packet_t *p);
 
 /**
- * \fn ngham_TxPktInit
- * 
  * \brief TX packet initialization.
  * 
  * \param *p is a pointer to a NGHam packet.
  * 
  * \return None
  */
-void ngham_TxPktInit(NGHam_TX_Packet *p);
+void ngham_tx_pkt_init(ngham_tx_packet_t *p);
 
 /**
- * \fn ngham_TxPktGen
- * 
  * \brief Generates a TX packet with a given payload.
  * 
  * \param *p is packet to be generated.
@@ -176,7 +127,7 @@ void ngham_TxPktInit(NGHam_TX_Packet *p);
  * 
  * \return None
  */
-void ngham_TxPktGen(NGHam_TX_Packet *p, uint8_t *pl, uint8_t pl_len);
+void ngham_tx_pkt_gen(ngham_tx_packet_t *p, uint8_t *pl, uint8_t pl_len);
 
 #endif // NGHAM_PACKETS_H_
 

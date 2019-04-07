@@ -1,8 +1,8 @@
 /*
  * ngham.h
  * 
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,16 +22,17 @@
  */
 
 /**
- * \file ngham.h
+ * \brief NGHam definition.
  * 
- * \brief NGHam protocol functions.
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
+ * \version 0.3.6
  * 
  * \date 10/02/2017
  * 
  * \defgroup ngham NGHam
- * \ingroup fsat_pkt_ana
+ * \ingroup libs
  * \{
  */
 
@@ -62,82 +63,50 @@
  * 
  * There are seven different sizes.
  * Each size has a correlation tag for size, a total size, a maximum payload size and a parity data size.
- * 
- * \{
  */
 #define NGH_SIZES                       7
-//! \}
 
-/**
- * \brief Decoder states.
- * 
- * \{
- */
+// Decoder states
 #define NGH_STATE_SIZE_TAG              0
 #define NGH_STATE_SIZE_TAG_2            1
 #define NGH_STATE_SIZE_TAG_3            2
 #define NGH_STATE_SIZE_KNOWN            3
 #define NGH_STATE_STATUS                4
 #define NGH_STATE_STATUS_2              5
-//! \}
 
-/**
- * \brief Maximum number of errors in the size tag.
- * 
- * \{
- */
-#define NGH_SIZE_TAG_MAX_ERROR          6
-//! \}
+#define NGH_SIZE_TAG_MAX_ERROR          6           // Maximum number of errors in the size tag
 
 #define NGH_HAMMING_DISTANCE_GREATER    0x00
 #define NGH_HAMMING_DISTANCE_SMALLER    0x01
 
-/**
- * \brief 
- * 
- * \{
- */
-extern const uint8_t NGH_PL_SIZE[];         /**< Actual payload */
-extern const uint8_t NGH_PL_SIZE_FULL[];    /**< Size with LEN, payload and CRC */
-extern const uint8_t NGH_PL_PAR_SIZE[];     /**< Size with RS parity added */
+extern const uint8_t NGH_PL_SIZE[];                 /**< Actual payload */
+extern const uint8_t NGH_PL_SIZE_FULL[];            /**< Size with LEN, payload and CRC */
+extern const uint8_t NGH_PL_PAR_SIZE[];             /**< Size with RS parity added */
 extern const uint8_t NGH_PAR_SIZE[];
-//! \}
 
 extern const uint8_t NGH_SYNC[];
 
 extern const uint32_t NGH_SIZE_TAG[];
 
-/**
- * \brief Preamble and synchronization vector.
- * 
- * \{
- */
+// Preamble and synchronization vector
 extern const uint8_t NGH_PREAMBLE;
 extern const uint8_t NGH_SYNC[];
 extern const uint8_t NGH_PREAMBLE_FOUR_LEVEL;
 extern const uint8_t NGH_SYNC_FOUR_LEVEL[];
-//! \}
 
 /**
  * \brief Reed Solomon control blocks for the different NGHAM sizes.
- * 
- * \{
  */
 extern RS rs_cb[NGH_SIZES];
-//! \}
 
 /**
- * \fn ngham_Init
- * 
  * \brief NGHam initialization.
  * 
  * \return None
  */
-void ngham_Init();
+void ngham_init();
 
 /**
- * \fn ngham_InitArrays
- * 
  * \brief Generates Reed Solomon tables.
  * 
  * Run only once - generates reed solomon tables for all 7 packet sizes
@@ -145,20 +114,16 @@ void ngham_Init();
  * 
  * \return None
  */
-void ngham_InitArrays();
+void ngham_init_arrays();
 
 /**
- * \fn ngham_DeinitArrays
- * 
  * \brief Free Reed Solomon tables.
  * 
  * \return None
  */
-void ngham_DeinitArrays();
+void ngham_deinit_arrays();
 
 /**
- * \fn ngham_Encode
- * 
  * \brief Packet encoding.
  * 
  * Packets to be transmitted are passed to this function - max. length 220 B
@@ -169,11 +134,9 @@ void ngham_DeinitArrays();
  * 
  * \return None
  */
-void ngham_Encode(NGHam_TX_Packet *p, uint8_t *pkt, uint16_t *pkt_len);
+void ngham_encode(ngham_tx_packet_t *p, uint8_t *pkt, uint16_t *pkt_len);
 
 /**
- * \fn ngham_Decode
- * 
  * \brief Packet decoding.
  * 
  * Packet to be decoded (Without preamble and sync. bytes).
@@ -184,8 +147,8 @@ void ngham_Encode(NGHam_TX_Packet *p, uint8_t *pkt, uint16_t *pkt_len);
  * 
  * \return None
  */
-uint8_t ngham_Decode(uint8_t d, uint8_t *msg, uint8_t *msg_len);
+uint8_t ngham_decode(uint8_t d, uint8_t *msg, uint8_t *msg_len);
 
 #endif // NGHAM_H_
 
-//! \} End of NGHam group
+//! \} End of ngham group

@@ -1,8 +1,8 @@
 /*
  * fec.h
  *
- * Copyright (C) 2004, Phil Karn
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file fec.h
+ * \brief Forward error correction definition.
  * 
- * \brief Forward error correction.
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Phil Karn <karn@ka9q.net>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 13/04/2017
  * 
@@ -47,8 +46,6 @@
 #endif // MIN
 
 /**
- * \struct rs
- * 
  * \brief Reed-Solomon codec control block.
  */
 typedef struct rs
@@ -66,7 +63,7 @@ typedef struct rs
 } RS;
 
 /**
- * \fn free_rs_char
+ * \brief .
  * 
  * \param rs_ptr
  * 
@@ -75,8 +72,8 @@ typedef struct rs
 void free_rs_char(RS *rs_ptr);
 
 /**
- * \fn encode_rs_char
- * 
+ * \brief .
+ *
  * \param *rs_ptr
  * \param *data
  * \param *parity
@@ -86,8 +83,8 @@ void free_rs_char(RS *rs_ptr);
 void encode_rs_char(RS *rs_ptr, uint8_t *data, uint8_t *parity);
 
 /**
- * \fn decode_rs_char
- * 
+ * \brief .
+ *
  * \param *rs_ptr
  * \param *data
  * \param *eras_pos
@@ -98,8 +95,6 @@ void encode_rs_char(RS *rs_ptr, uint8_t *data, uint8_t *parity);
 int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_eras);
 
 /**
- * \fn modnn
- * 
  * \brief 
  * 
  * \param *rs

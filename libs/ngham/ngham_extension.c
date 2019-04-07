@@ -1,8 +1,8 @@
 /*
  * ngham_extension.c
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file ngham_externsion.c
- * 
  * \brief .
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -68,40 +67,40 @@ const uint16_t PKT_TYPE_SIZES[] = {
     1
 };		
 
-uint8_t* ngham_ExtAllocatePkt(NGHam_TX_Packet *p, uint8_t pkt_type, uint16_t data_len)
+uint8_t* ngham_ext_allocate_pkt(ngham_tx_packet_t *p, uint8_t pkt_type, uint16_t data_len)
 {
     if ((p->pl_len + 2 + data_len) > NGHAM_PL_MAX)
     {
         return NULL;
     }
-    
+
     p->pl[p->pl_len] = pkt_type;
     p->pl[p->pl_len+1] = data_len;
     p->pl_len += 2 + data_len;
-    
+
     return p->pl+p->pl_len-data_len;
 }
 
-void ngh_ExtAppendPkt(NGHam_TX_Packet *p, uint8_t type, uint8_t *data, uint16_t size)
+void ngh_ext_append_pkt(ngham_tx_packet_t *p, uint8_t type, uint8_t *data, uint16_t size)
 {
 	if ((p->pl_len + 2 + size) > NGHAM_PL_MAX)
     {
         return;
     }
-	
+
     p->pl[p->pl_len] = type;
 	p->pl[p->pl_len+1] = size;
 	memcpy(&p->pl[p->pl_len+2], data, size);
 	p->pl_len += 2 + size;
 }
 
-uint16_t ngham_ExtNumPkts(uint8_t *d, uint16_t d_len)
+uint16_t ngham_ext_num_pkts(uint8_t *d, uint16_t d_len)
 {
 	// Go through all sub packets
 	uint16_t start, packets;
 	start = 0;
 	packets = 0;
-	
+
 	while((d_len >= (start + 2)) && (d_len >= (start + 2 + d[start + 1])))
     {
 		// If PKT_TYPE is invalid valid or packet type does not have correct length
@@ -112,11 +111,11 @@ uint16_t ngham_ExtNumPkts(uint8_t *d, uint16_t d_len)
 		packets++;
 		start += d[start + 1] + 2; // next start
 	}
-    
+
 	return packets;
 }
 
-uint8_t ngham_ExtEncodeCallsign(uint8_t *enc_callsign, int8_t *callsign)
+uint8_t ngham_ext_encode_callsign(uint8_t *enc_callsign, int8_t *callsign)
 {
 	uint32_t temp;
 	uint8_t j, copy[7], ssid = 0;
@@ -134,7 +133,7 @@ uint8_t ngham_ExtEncodeCallsign(uint8_t *enc_callsign, int8_t *callsign)
     {
         copy[j] = 0;    // Zero terminate if preliminary end
     }
-	
+
 	// Get SSID, if any
 	if (callsign[j] == '-')
     {
@@ -161,7 +160,7 @@ uint8_t ngham_ExtEncodeCallsign(uint8_t *enc_callsign, int8_t *callsign)
             return 0;
         }
 	}
-	
+
 	temp = (((uint32_t)copy[0] << 18) & 0xFC0000) | (((uint32_t)copy[1] << 12) & 0x3F000) | (((uint32_t)copy[2] << 6) & 0xFC0) | ((uint32_t)copy[3] & 0x3F);
 	enc_callsign[0] = (temp >> 16) & 0xFF;
 	enc_callsign[1] = (temp >> 8) & 0xFF;
@@ -175,7 +174,7 @@ uint8_t ngham_ExtEncodeCallsign(uint8_t *enc_callsign, int8_t *callsign)
 	return 1;
 }
 
-void ngham_ExtDecodeCallsign(int8_t *callsign, uint8_t *enc_callsign)
+void ngham_ext_decode_callsign(int8_t *callsign, uint8_t *enc_callsign)
 {
     uint32_t temp;
     uint8_t j, ssid;
@@ -213,4 +212,4 @@ void ngham_ExtDecodeCallsign(int8_t *callsign, uint8_t *enc_callsign)
     }
 }
 
-//! \} End of ngham_extension implementation group
+//! \} End of ngham_extension group

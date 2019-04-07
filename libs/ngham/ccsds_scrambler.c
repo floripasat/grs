@@ -1,8 +1,8 @@
 /*
  * ccsds_scrambler.c
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file ccsds_scrambler.c
+ * \brief CCSDS scrambler implementation.
  * 
- * \brief .
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -36,9 +35,9 @@
  * \{
  */
 
-#include "ccsds_scrambler.h"
-
 #include <stdint.h>
+
+#include "ccsds_scrambler.h"
 
 // Repeats after 255 bits, but repeats byte-aligning after 255 byte
 const uint8_t ccsds_poly[255] = {
@@ -66,12 +65,12 @@ const uint8_t ccsds_poly[255] = {
 
 uint8_t ccsds_poly_pos;
 
-void ngham_CCSDS_ScramblerInit()
+void ngham_ccsds_scrambler_init()
 {
     ccsds_poly_pos = 0;
 }
 
-uint8_t ngham_CCSDS_ScramblerXor(uint8_t data)
+uint8_t ngham_ccsds_scrambler_xor(uint8_t data)
 {
     if (ccsds_poly_pos == 0xFF)
     {
@@ -81,4 +80,4 @@ uint8_t ngham_CCSDS_ScramblerXor(uint8_t data)
     return (data ^ ccsds_poly[ccsds_poly_pos++]);
 }
 
-//! \} End of ccsds_scrambler implementation group
+//! \} End of ccsds_scrambler group

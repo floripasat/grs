@@ -1,8 +1,8 @@
 /*
  * crc_ccitt.h
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file crc_ccitt.h
+ * \brief CRC-CCITT definition.
  * 
- * \brief CRC-CCITT.
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -43,8 +42,6 @@
 #include <stdint.h>
 
 /**
- * \fn ngham_CRC_CCITTByte
- * 
  * \brief 
  * 
  * \param buf
@@ -52,11 +49,9 @@
  * 
  * \return 
  */
-uint16_t ngham_CRC_CCITTByte(uint8_t buf, uint16_t crc);
+uint16_t ngham_crc_ccitt_byte(uint8_t buf, uint16_t crc);
 
 /**
- * \fn ngham_CRC_CCITT
- * 
  * \brief 
  * 
  * \param *buf
@@ -64,7 +59,7 @@ uint16_t ngham_CRC_CCITTByte(uint8_t buf, uint16_t crc);
  * 
  * \return 
  */
-uint16_t ngham_CRC_CCITT(uint8_t *buf, uint16_t buf_len);
+uint16_t ngham_crc_ccitt(uint8_t *buf, uint16_t buf_len);
 
 #endif // CRC_CCITT_H_
 
