@@ -40,7 +40,7 @@
 
 #include <map>
 
-#include <payload.h>
+#include "../payload.h"
 
 /**
  * \brief Packet object.
