@@ -1,8 +1,8 @@
 /*
  * crc_ccitt.c
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file crc_ccitt.c
+ * \brief CRC-CCITT implementation.
  * 
- * \brief .
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -73,24 +72,24 @@ const uint16_t crc_ccitt_table[] = {
     0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
 
-uint16_t ngham_CRC_CCITTByte(uint8_t buf, uint16_t crc)
+uint16_t ngham_crc_ccitt_byte(uint8_t buf, uint16_t crc)
 {
     return ((crc >> 8) & 0xFF) ^ crc_ccitt_table[(crc ^ buf) & 0xFF];
 }
 
-uint16_t ngham_CRC_CCITT(uint8_t *buf, uint16_t buf_len)
+uint16_t ngham_crc_ccitt(uint8_t *buf, uint16_t buf_len)
 {
     uint16_t crc = 0xFFFF;
     uint16_t j;
-    
+
     for(j=0; j<buf_len; j++)
     {
         crc = ((crc >> 8) & 0xFF) ^ crc_ccitt_table[(crc ^ buf[j]) & 0xFF];
     }
-    
+
     crc ^= 0xFFFF;
-    
+
     return crc;
 }
 
-//! \} End of crc_ccitt implementation group
+//! \} End of crc_ccitt group.

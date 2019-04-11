@@ -1,7 +1,7 @@
 /*
  * ngham_pkts.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file ngham_pks.cpp
- * 
  * \brief NGHam Packets class implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.2.10
+ * \version 0.3.6
  * 
  * \date 06/10/2017
  * 
@@ -51,8 +49,8 @@ NGHamPkts::NGHamPkts()
 {
     make_log = false;
     make_data_log = false;
-    
-    ngham_Init();
+
+    ngham_init();
 }
 
 NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *ngham_stat, bool l, bool pdl)
@@ -60,26 +58,26 @@ NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *
     event_log = ev_log;
     packet_data = pkt_data;
     protocol_statistic = ngham_stat;
-    
+
     make_log = l;
-    
+
     if (make_log)
     {
         log_pkts = new Log;
         log_pkts->open((LOG_DEFAULT_DIR "/NGHAM_" + log_pkts->CurrentDateTime() + ".csv").c_str(), ofstream::out);
     }
-    
+
     make_data_log = pdl;
-    
+
     if (make_data_log)
     {
         log_data_pkts = new Log;
         log_data_pkts->open((LOG_DEFAULT_DIR "/" + ToString(packet_data->getLabel()) + "_" + log_data_pkts->CurrentDateTime() + ".csv").c_str(), ofstream::out);
     }
-    
+
     this->InitPkts();
     
-    ngham_Init();
+    ngham_init();
 }
 
 bool NGHamPkts::ProcessByte(uint8_t byte)
@@ -87,32 +85,32 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
     uint8_t data[256];
     uint8_t data_len;
     string event_text;
-    
-    switch(ngham_Decode(byte, data, &data_len))
+
+    switch(ngham_decode(byte, data, &data_len))
     {
         case PKT_CONDITION_OK:
             if (data_len < 8)   // Minimum packet content: ID (6 bytes) + command (2 bytes)
             {
                 return true;
             }
-            
+
             if (make_log)
             {
                 *log_pkts << "V," << log_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV);
             }
-            
+
             for(unsigned int j=0; j<data_len; j++)
             {
                 stringstream byte_str;
                 byte_str << (char)data[j];
                 string b = byte_str.str();
-                
+
                 if (make_log)
                 {
                     *log_pkts << HexToStr(data[j]) << ",";
                 }
             }
-            
+
             if ((data[0] == 'H') and (data[1] == 'e') and (data[2] == 'l'))
             {
                 event_text = "Ping result received: ";
@@ -162,45 +160,45 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             {
                 event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
             }
-            
+
             if (make_log)
             {
                 *log_pkts << "\n";
             }
-            
+
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
-            
+
             protocol_statistic->AddValidPkt();
-            
+
             packet_data->Update(data, data_len);
-            
+
             if (make_data_log)
             {
                 *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << packet_data->Log() << "\n";
             }
-            
+
             receive_pkt = false;
-            
+
             return true;
-            
+
             break;
         case PKT_CONDITION_PREFAIL:
             return false;
             break;
         case PKT_CONDITION_FAIL:
             event_text = "New invalid NGHAM packet from " + string(packet_data->getLabel());
-        
+
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_INVALID_PACKET);
-            
+
             if (make_log)
             {
                 *log_pkts << "I," << log_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << "\n";
             }
-            
+
             protocol_statistic->AddInvalidPkt();
-            
+
             receive_pkt = false;
-            
+
             return true;
             break;
     }
@@ -208,22 +206,22 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 
 void NGHamPkts::Generate(uint8_t *data, uint8_t len)
 {
-    NGHam_TX_Packet ngham_packet;
-    
-    ngham_TxPktGen(&ngham_packet, data, len);
-    
+    ngham_tx_packet_t ngham_packet;
+
+    ngham_tx_pkt_gen(&ngham_packet, data, len);
+
     uint8_t pkt_str[300];
     uint16_t pkt_str_len;
-    
-    ngham_Encode(&ngham_packet, pkt_str, &pkt_str_len);
-    
+
+    ngham_encode(&ngham_packet, pkt_str, &pkt_str_len);
+
     ofstream file(NGHAM_PKT_GEN_FILE, ofstream::out);
-    
+
     for(uint8_t i=0; i<pkt_str_len; i++)
     {
         file << pkt_str[i];
     }
-    
+
     file.close();
 }
 

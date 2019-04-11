@@ -1,44 +1,58 @@
 /*
- * version.h
+ * ax25.cpp
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
  * FloripaSat-GRS is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
  * FloripaSat-GRS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with FloripaSat-GRS. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
 
 /**
- * \brief Version control.
+ * \brief AX25 encoder and decoder implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.3.7
  * 
- * \date 13/02/2019
+ * \date 10/04/2019
  * 
- * \defgroup version Version Control
- * \ingroup src
+ * \addtogroup ax25
  * \{
  */
 
-#ifndef VERSION_H_
-#define VERSION_H_
+#include "ax25.h"
 
-#define GRS_SOFTWARE_VERSION            "0.4.0"
+using namespace std;
 
-#endif // VERSION_H_
+AX25::AX25()
+{
+}
 
-//! \} End of version group
+AX25::~AX25()
+{
+}
+
+vector<uint8_t> AX25::decode(vector<uint8_t> pkt)
+{
+    return vector<uint8_t>();
+}
+
+vector<uint8_t> AX25::encode(vector<uint8_t> data)
+{
+    return vector<uint8_t>();
+}
+
+//! \} End of ax25 group

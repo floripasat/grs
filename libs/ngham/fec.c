@@ -1,8 +1,8 @@
 /*
  * fec.c
  *
- * Copyright (C) 2004, Phil Karn
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file fec.c
- * 
  * \brief Forward error correction implementation.
  * 
- * \author Phil Karn <karn@ka9q.net>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 13/04/2017
  * 
@@ -55,7 +54,7 @@ void encode_rs_char(RS *rs_ptr, uint8_t *data, uint8_t *parity)
     //uint8_t feedback;
 
     memset(parity, 0, rs_ptr->nroots*sizeof(uint8_t));
-    
+
     // *******************************
     // -- TO FIX ---------------------
     // *******************************
@@ -148,12 +147,16 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
             {
                 tmp = rs_ptr->index_of[lambda[j - 1]];
                 if (tmp != rs_ptr->nn)
+                {
                     lambda[j] ^= rs_ptr->alpha_to[modnn(rs_ptr, u + tmp)];
+                }
             }
         }
     }
     for(i=0; i<rs_ptr->nroots+1; i++)
+    {
         b[i] = rs_ptr->index_of[lambda[i]];
+    }
 
     // Begin Berlekamp-Massey algorithm to determine error+erasure locator polynomial
     r = no_eras;
@@ -183,9 +186,13 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
             for(i=0; i<rs_ptr->nroots; i++)
             {
                 if(b[i] != rs_ptr->nn)
+                {
                     t[i+1] = lambda[i+1] ^ rs_ptr->alpha_to[modnn(rs_ptr, discr_r + b[i])];
+                }
                 else
+                {
                     t[i+1] = lambda[i+1];
+                }
             }
             if (2 * el <= r + no_eras - 1)
             {
@@ -213,7 +220,9 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
     {
         lambda[i] = rs_ptr->index_of[lambda[i]];
         if (lambda[i] != rs_ptr->nn)
+        {
             deg_lambda = i;
+        }
     }
     // Find roots of the error+erasure locator polynomial by Chien search
     memcpy(&reg[1], &lambda[1], rs_ptr->nroots*sizeof(reg[0]));
@@ -230,7 +239,9 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
             }
         }
         if (q != 0)
+        {
             continue;   // Not a root
+        }
         // store root (index-form) and error location number
         root[count] = i;
         loc[count] = k;
@@ -238,7 +249,9 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
         * abort the search to save time
         */
         if (++count == deg_lambda)
+        {
             break;
+        }
     }
     if (deg_lambda != count)
     {
@@ -255,7 +268,9 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
         for(j=i; j>=0; j--)
         {
             if ((s[i - j] != rs_ptr->nn) && (lambda[j] != rs_ptr->nn))
+            {
                 tmp ^= rs_ptr->alpha_to[modnn(rs_ptr, s[i - j] + lambda[j])];
+            }
         }
         omega[i] = rs_ptr->index_of[tmp];
     }
@@ -267,7 +282,9 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
         for(i=deg_omega; i>=0; i--)
         {
             if (omega[i] != rs_ptr->nn)
+            {
                 num1  ^= rs_ptr->alpha_to[modnn(rs_ptr, omega[i] + i * root[j])];
+            }
         }
         num2 = rs_ptr->alpha_to[modnn(rs_ptr, root[j] * (rs_ptr->fcr - 1) + rs_ptr->nn)];
         den = 0;
@@ -276,7 +293,9 @@ int16_t decode_rs_char(RS *rs_ptr, uint8_t *data, int16_t *eras_pos, int16_t no_
         for(i=MIN(deg_lambda, rs_ptr->nroots-1) & ~1; i>=0; i-=2)
         {
             if (lambda[i+1] != rs_ptr->nn)
+            {
                 den ^= rs_ptr->alpha_to[modnn(rs_ptr, lambda[i+1] + i * root[j])];
+            }
         }
 
         // Apply error to data
@@ -294,7 +313,7 @@ finish:
         }
     }
     retval = count;
-  
+
     return retval;
 }
 
@@ -305,8 +324,8 @@ int16_t modnn(RS *rs_ptr, int16_t x)
         x -= rs_ptr->nn;
         x = (x >> rs_ptr->mm) + (x & rs_ptr->nn);
     }
-    
+
     return x;
 }
 
-//! \} End of fec implementation group
+//! \} End of fec group

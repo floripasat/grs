@@ -1,8 +1,8 @@
 /*
  * ngham_packets.c
  *
- * Copyright (C) 2014, Jon Petter Skagmo
- * Copyright (C) 2017, Gabriel Mariano Marcelino
+ * Copyright (C) 2014, Jon Petter Skagmo.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS
  *
@@ -22,13 +22,12 @@
  */
 
 /**
- * \file ngham_packets.h
+ * \brief NGHam packets implementation.
  * 
- * \brief .
+ * \author Jon Petter Skagmo <web@skagmo.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \author Jon Petter Skagmo <web@skagmo.com>; Mods. for FloripaSat-TTC by Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
- * 
- * \version 1.0-dev
+ * \version 0.3.6
  * 
  * \date 27/04/2017
  * 
@@ -38,7 +37,7 @@
 
 #include "ngham_packets.h"
 
-void ngham_RxPktInit(NGHam_RX_Packet *p)
+void ngham_rx_pkt_init(ngham_rx_packet_t *p)
 {
     p->pl_len           = 0;
     p->ngham_flags      = 0;
@@ -48,25 +47,24 @@ void ngham_RxPktInit(NGHam_RX_Packet *p)
     p->timestamp_toh_us = TIMESTAMP_NA;
 }
 
-void ngham_TxPktInit(NGHam_TX_Packet *p)
+void ngham_tx_pkt_init(ngham_tx_packet_t *p)
 {
-    p->pl_len       = 0;
-    p->ngham_flags  = 0;
-    p->priority     = PKT_PRIORITY_NORMAL;
+    p->pl_len           = 0;
+    p->ngham_flags      = 0;
+    p->priority         = PKT_PRIORITY_NORMAL;
 }
 
-void ngham_TxPktGen(NGHam_TX_Packet *p, uint8_t *pl, uint8_t pl_len)
+void ngham_tx_pkt_gen(ngham_tx_packet_t *p, uint8_t *pl, uint8_t pl_len)
 {
-    p->pl_len         = pl_len;
-    p->ngham_flags    = 0;
-    p->priority       = PKT_PRIORITY_NORMAL;
-    
-    
+    p->pl_len           = pl_len;
+    p->ngham_flags      = 0;
+    p->priority         = PKT_PRIORITY_NORMAL;
+
     if (pl_len > NGHAM_PL_MAX)
     {
         pl_len = NGHAM_PL_MAX;
     }
-    
+
     uint8_t i;
     for(i=0; i<pl_len; i++)
     {
@@ -74,4 +72,4 @@ void ngham_TxPktGen(NGHam_TX_Packet *p, uint8_t *pl, uint8_t pl_len)
     }
 }
 
-//! \} End of ngham_packets implementation group
+//! \} End of ngham_packets group
