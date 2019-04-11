@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.7
+ * \version 0.4.0
  * 
  * \date 07/04/2019
  * 
@@ -49,6 +49,7 @@ NGHamPlus::NGHamPlus()
 
 NGHamPlus::~NGHamPlus()
 {
+    ngham_deinit_arrays();
 }
 
 vector<uint8_t> NGHamPlus::decode(vector<uint8_t> pkt)
