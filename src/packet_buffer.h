@@ -1,5 +1,5 @@
 /*
- * packet_buffer.hpp
+ * packet_buffer.h
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
@@ -21,11 +21,11 @@
  */
 
 /**
- * \brief Packet buffer object.
+ * \brief Packet buffer definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.7
+ * \version 0.4.0
  * 
  * \date 06/04/2019
  * 
@@ -33,8 +33,8 @@
  * \{
  */
 
-#ifndef PACKET_BUFFER_HPP_
-#define PACKET_BUFFER_HPP_
+#ifndef PACKET_BUFFER_H_
+#define PACKET_BUFFER_H_
 
 #include <stdint.h>
 
@@ -55,10 +55,7 @@ class PacketBuffer: public std::vector<uint8_t>
          *
          * \return None.
          */
-        PacketBuffer(unsigned int max=256)
-        {
-            this->set_max_size(max);
-        }
+        PacketBuffer(unsigned int max=256);
 
         /**
          * \brief Sets the maximum number of bytes of the buffer.
@@ -67,30 +64,21 @@ class PacketBuffer: public std::vector<uint8_t>
          *
          * \return None.
          */
-        void set_max_size(unsigned int max)
-        {
-            this->max_size = max;
-        }
+        void set_max_size(unsigned int max);
 
         /**
          * \brief Gets the maximum number of bytes of the buffer.
          *
          * \return The maximum number of bytes.
          */
-        unsigned int get_max_size()
-        {
-            return this->max_size;
-        }
+        unsigned int get_max_size();
 
         /**
          * \brief Verifies if the buffer is full or not.
          *
          * \return TRUE/FALSE if the buffer is full or not.
          */
-        bool is_full()
-        {
-            return this->size() >= this->get_max_size();
-        }
+        bool is_full();
 
         /**
          * \brief Pushes a new byte to the buffer.
@@ -99,23 +87,14 @@ class PacketBuffer: public std::vector<uint8_t>
          *
          * \return None.
          */
-        void push(uint8_t byte)
-        {
-            if (this->size() < this->get_max_size())
-            {
-                this->push_back(byte);
-            }
-        }
+        void push(uint8_t byte);
 
         /**
          * \brief Pops the first byte of the buffer.
          *
          * \return None.
          */
-        void pop()
-        {
-            this->erase(this->begin());
-        }
+        void pop();
 
         /**
          * \brief cout overload.
@@ -125,20 +104,7 @@ class PacketBuffer: public std::vector<uint8_t>
          *
          * \return An ostream object.
          */
-        friend std::ostream& operator<<(std::ostream& os, const PacketBuffer& packet_buffer)
-        {
-            for(unsigned int i=0; i<packet_buffer.size(); i++)
-            {
-                os << int(packet_buffer.at(i));
-
-                if (i < packet_buffer.size()-1)
-                {
-                    os << ",";
-                }
-            }
-
-            return os;
-        }
+        friend std::ostream& operator<<(std::ostream& os, const PacketBuffer& packet_buffer);
 
     private:
 
@@ -148,6 +114,6 @@ class PacketBuffer: public std::vector<uint8_t>
         unsigned int max_size;
 };
 
-#endif // PACKET_BUFFER_HPP_
+#endif // PACKET_BUFFER_H_
 
 //! \} End of packet_buffer group

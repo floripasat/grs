@@ -1,5 +1,5 @@
 /*
- * byte_buffer.hpp
+ * byte_buffer.h
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
@@ -21,11 +21,11 @@
  */
 
 /**
- * \brief Byte buffer object.
+ * \brief Byte buffer definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.7
+ * \version 0.4.0
  * 
  * \date 06/04/2019
  * 
@@ -33,8 +33,8 @@
  * \{
  */
 
-#ifndef BYTE_BUFFER_HPP_
-#define BYTE_BUFFER_HPP_
+#ifndef BYTE_BUFFER_H_
+#define BYTE_BUFFER_H_
 
 #include <bitset>
 
@@ -50,28 +50,14 @@ class ByteBuffer: public std::bitset<8>
          *
          * \return None.
          */
-        ByteBuffer()
-            : std::bitset<8>()
-        {
-            this->clear();
-        }
+        ByteBuffer();
 
         /**
          * \brief Checks if the buffer is full or not (1 byte = 8 bits).
          *
          * \return TRUE/FALSE if the buffer is full or not.
          */
-        bool is_full()
-        {
-            if (this->pos > 7)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        bool is_full();
 
         /**
          * \brief Push a new bit to the buffer.
@@ -80,35 +66,21 @@ class ByteBuffer: public std::bitset<8>
          *
          * \return None.
          */
-        void push(bool bit)
-        {
-            if (this->pos < 8)
-            {
-                this->set(this->pos--, bit);
-            }
-        }
+        void push(bool bit);
 
         /**
          * \brief Clears the contents of buffer.
          *
          * \return None.
          */
-        void clear()
-        {
-            this->reset();
-
-            this->pos = 7;
-        }
+        void clear();
 
         /**
          * \brief Converts the buffer elements to a byte.
          *
          * \return The equivalent byte of the bitset sequence.
          */
-        uint8_t to_byte()
-        {
-            return this->to_ulong() & 0xFF;
-        }
+        uint8_t to_byte();
 
     private:
 
@@ -118,6 +90,6 @@ class ByteBuffer: public std::bitset<8>
         unsigned int pos;
 };
 
-#endif // BYTE_BUFFER_HPP_
+#endif // BYTE_BUFFER_H_
 
 //! \} End of byte_buffer group
