@@ -42,53 +42,122 @@
 
 #include "../payload.h"
 
-/**
- * \brief Packet object.
- */
-class Packet: public std::map<int, double>
+namespace grs
 {
-    public:
 
-        /**
-         * \brief Declaration constructor.
-         *
-         * \return None.
-         */
-        Packet();
+    /**
+     * \brief Packet object.
+     */
+    class Packet: public std::map<int, double>
+    {
+        public:
 
-        /**
-         * \brief Constructor with initialization (overloaded).
-         *
-         * \return None.
-         */
-        Packet(Payload pl);
+            /**
+             * \brief Declaration constructor.
+             *
+             * \return None.
+             */
+            Packet();
 
-        /**
-         * \brief Destructor.
-         *
-         * \return None.
-         */
-        ~Packet();
+            /**
+             * \brief Constructor with initialization (overloaded).
+             *
+             * \return None.
+             */
+            Packet(Payload pl);
 
-        /**
-         * \brief .
-         *
-         * \param[in] pl
-         *
-         * \return None.
-         */
-        void decode(Payload pl);
+            /**
+             * \brief Destructor.
+             *
+             * \return None.
+             */
+            ~Packet();
 
-        /**
-         * \brief .
-         */
-        uint8_t id;
+            /**
+             * \brief .
+             *
+             * \param[in] pl
+             *
+             * \return None.
+             */
+            void decode(Payload pl);
 
-        /**
-         * \brief .
-         */
-        std::string src_callsign;
-};
+            /**
+             * \brief Packet ID code.
+             */
+            uint8_t id;
+
+            /**
+             * \brief Packet source callsign.
+             */
+            std::string src_callsign;
+
+        protected:
+
+            /**
+             * \brief Computes a battery voltage from a raw value.
+             *
+             * \param[in] val is the raw value of a battery voltage.
+             *
+             * \return The given battery voltage in Volts.
+             */
+            virtual double calc_battery_voltage(uint16_t val) = 0;
+
+            /**
+             * \brief Computes a battery temperature from a raw value.
+             *
+             * \param[in] val is the raw value of a battery temperature
+             *
+             * \return The given battery temperature in Celsius.
+             */
+            virtual double calc_battery_temperature(uint32_t val) = 0;
+
+            /**
+             * \brief Computes a battery charge from a raw value.
+             *
+             * \param[in] val is the raw value of a battery charge.
+             *
+             * \return The given battery charge in Ah.
+             */
+            virtual double calc_battery_charge(uint16_t val) = 0;
+
+            /**
+             * \brief Computes a solar panel current from a raw value.
+             *
+             * \param[in] val is the raw value of a solar panel current.
+             *
+             * \return The given solar panel current in Ampere.
+             */
+            virtual double calc_solar_panel_current(uint16_t val) = 0;
+
+            /**
+             * \brief Computes a solar panel voltage from a raw value.
+             *
+             * \param[in] val is the raw value of a solar panel voltage.
+             *
+             * \return The given solar panel voltage in Volts.
+             */
+            virtual double calc_solar_panel_voltage(uint16_t val) = 0;
+
+            /**
+             * \brief Computes an IMU acceleration from a raw value.
+             *
+             * \param[in] val is the raw value of a IMU acceleration.
+             *
+             * \return The given IMU acceleration in ??.
+             */
+            virtual double calc_imu_accel(uint16_t val) = 0;
+
+            /**
+             * \brief Computes an IMU gyroscope acceleration from a raw value.
+             *
+             * \param[in] val is the raw value of a IMU gyroscope acceleration.
+             *
+             * \return The given IMU gyroscope acceleration in ??.
+             */
+            virtual double calc_imu_gyro(uint16_t val) = 0;
+    };
+}
 
 #endif // PACKET_H_
 

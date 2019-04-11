@@ -36,6 +36,7 @@
 #include "eps_data.h"
 
 using namespace std;
+using namespace grs;
 
 void EPSData::decode(Payload pl)
 {

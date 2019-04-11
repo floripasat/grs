@@ -128,76 +128,80 @@ enum beacon_data_id
     BEACON_DATA_OBDH_RESETS                         /**< Number of resets of the OBDH module. */
 };
 
-/**
- * \brief Beacon data packet.
- */
-class BeaconData: public Packet
+namespace grs
 {
-    protected:
 
-        /**
-         * \brief Computes a battery voltage from a raw value.
-         *
-         * \param[in] val is the raw value of a battery voltage.
-         *
-         * \return The given battery voltage in Volts.
-         */
-        double calc_battery_voltage(uint16_t val);
+    /**
+     * \brief Beacon data packet.
+     */
+    class BeaconData: public grs::Packet
+    {
+        protected:
 
-        /**
-         * \brief Computes a battery temperature from a raw value.
-         *
-         * \param[in] val is the raw value of a battery temperature
-         *
-         * \return The given battery temperature in Celsius.
-         */
-        double calc_battery_temperature(uint32_t val);
+            /**
+             * \brief Computes a battery voltage from a raw value.
+             *
+             * \param[in] val is the raw value of a battery voltage.
+             *
+             * \return The given battery voltage in Volts.
+             */
+            double calc_battery_voltage(uint16_t val);
 
-        /**
-         * \brief Computes a battery charge from a raw value.
-         *
-         * \param[in] val is the raw value of a battery charge.
-         *
-         * \return The given battery charge in Ah.
-         */
-        double calc_battery_charge(uint16_t val);
+            /**
+             * \brief Computes a battery temperature from a raw value.
+             *
+             * \param[in] val is the raw value of a battery temperature
+             *
+             * \return The given battery temperature in Celsius.
+             */
+            double calc_battery_temperature(uint32_t val);
 
-        /**
-         * \brief Computes a solar panel current from a raw value.
-         *
-         * \param[in] val is the raw value of a solar panel current.
-         *
-         * \return The given solar panel current in Ampere.
-         */
-        double calc_solar_panel_current(uint16_t val);
+            /**
+             * \brief Computes a battery charge from a raw value.
+             *
+             * \param[in] val is the raw value of a battery charge.
+             *
+             * \return The given battery charge in Ah.
+             */
+            double calc_battery_charge(uint16_t val);
 
-        /**
-         * \brief Computes a solar panel voltage from a raw value.
-         *
-         * \param[in] val is the raw value of a solar panel voltage.
-         *
-         * \return The given solar panel voltage in Volts.
-         */
-        double calc_solar_panel_voltage(uint16_t val);
+            /**
+             * \brief Computes a solar panel current from a raw value.
+             *
+             * \param[in] val is the raw value of a solar panel current.
+             *
+             * \return The given solar panel current in Ampere.
+             */
+            double calc_solar_panel_current(uint16_t val);
 
-        /**
-         * \brief Computes an IMU acceleration from a raw value.
-         *
-         * \param[in] val is the raw value of a IMU acceleration.
-         *
-         * \return The given IMU acceleration in ??.
-         */
-        double calc_imu_accel(uint16_t val);
+            /**
+             * \brief Computes a solar panel voltage from a raw value.
+             *
+             * \param[in] val is the raw value of a solar panel voltage.
+             *
+             * \return The given solar panel voltage in Volts.
+             */
+            double calc_solar_panel_voltage(uint16_t val);
 
-        /**
-         * \brief Computes an IMU gyroscope acceleration from a raw value.
-         *
-         * \param[in] val is the raw value of a IMU gyroscope acceleration.
-         *
-         * \return The given IMU gyroscope acceleration in ??.
-         */
-        double calc_imu_gyro(uint16_t val);
-};
+            /**
+             * \brief Computes an IMU acceleration from a raw value.
+             *
+             * \param[in] val is the raw value of a IMU acceleration.
+             *
+             * \return The given IMU acceleration in ??.
+             */
+            double calc_imu_accel(uint16_t val);
+
+            /**
+             * \brief Computes an IMU gyroscope acceleration from a raw value.
+             *
+             * \param[in] val is the raw value of a IMU gyroscope acceleration.
+             *
+             * \return The given IMU gyroscope acceleration in ??.
+             */
+            double calc_imu_gyro(uint16_t val);
+    };
+}
 
 #endif // BEACON_DATA_H_
 

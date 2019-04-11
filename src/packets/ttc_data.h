@@ -39,22 +39,26 @@
 
 #include "beacon_data.h"
 
-/**
- * \brief TTC data packet.
- */
-class TTCData: public BeaconData
+namespace grs
 {
-    public:
 
-        /**
-         * \brief Decodes the TTC data from a beacon packet payload.
-         *
-         * \param[in] pl is the payload to decode.
-         *
-         * \return None.
-         */
-        void decode(Payload pl);
-};
+    /**
+     * \brief TTC data packet.
+     */
+    class TTCData: public grs::BeaconData
+    {
+        public:
+
+            /**
+             * \brief Decodes the TTC data from a beacon packet payload.
+             *
+             * \param[in] pl is the payload to decode.
+             *
+             * \return None.
+             */
+            void decode(Payload pl);
+    };
+}
 
 #endif // TTC_DATA_H_
 

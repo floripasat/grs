@@ -39,22 +39,26 @@
 
 #include "eps_data.h"
 
-/**
- * \brief OBDH data packet.
- */
-class OBDHData: public EPSData
+namespace grs
 {
-    public:
 
-        /**
-         * \brief Decodes the OBDH data from a beacon packet payload.
-         *
-         * \param[in] pl is the payload to decode.
-         *
-         * \return None.
-         */
-        void decode(Payload pl);
-};
+    /**
+     * \brief OBDH data packet.
+     */
+    class OBDHData: public grs::EPSData
+    {
+        public:
+
+            /**
+             * \brief Decodes the OBDH data from a beacon packet payload.
+             *
+             * \param[in] pl is the payload to decode.
+             *
+             * \return None.
+             */
+            void decode(Payload pl);
+    };
+}
 
 #endif // OBDH_DATA_H_
 

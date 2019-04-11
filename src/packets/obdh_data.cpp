@@ -36,6 +36,7 @@
 #include "obdh_data.h"
 
 using namespace std;
+using namespace grs;
 
 void OBDHData::decode(Payload pl)
 {

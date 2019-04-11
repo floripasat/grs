@@ -36,6 +36,7 @@
 #include "ttc_data.h"
 
 using namespace std;
+using namespace grs;
 
 void TTCData::decode(Payload pl)
 {

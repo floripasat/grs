@@ -39,22 +39,26 @@
 
 #include "beacon_data.h"
 
-/**
- * \brief EPS data packet.
- */
-class EPSData: public BeaconData
+namespace grs
 {
-    public:
 
-        /**
-         * \brief Decodes the EPS data from a beacon packet payload.
-         *
-         * \param[in] pl is the payload to decode.
-         *
-         * \return None.
-         */
-        void decode(Payload pl);
-};
+    /**
+     * \brief EPS data packet.
+     */
+    class EPSData: public grs::BeaconData
+    {
+        public:
+
+            /**
+             * \brief Decodes the EPS data from a beacon packet payload.
+             *
+             * \param[in] pl is the payload to decode.
+             *
+             * \return None.
+             */
+            void decode(Payload pl);
+    };
+}
 
 #endif // EPS_DATA_H_
 

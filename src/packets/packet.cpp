@@ -35,6 +35,8 @@
 
 #include "packet.h"
 
+using namespace grs;
+
 Packet::Packet()
 {
     this->id = 0xFF;

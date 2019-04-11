@@ -35,6 +35,8 @@
 
 #include "beacon_data.h"
 
+using namespace grs;
+
 double BeaconData::calc_battery_voltage(uint16_t val)
 {
     return (val/32.0)*4.883e-3;
@@ -49,7 +51,6 @@ double BeaconData::calc_battery_charge(uint16_t val)
 {
     return val*(6.25*1e-4);
 }
-
 
 double BeaconData::calc_solar_panel_current(uint16_t val)
 {
