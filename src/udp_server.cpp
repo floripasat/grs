@@ -26,7 +26,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.5
+ * \version 0.4.0
  * 
  * \date 05/04/2019
  * 
@@ -42,9 +42,22 @@
 
 using namespace std;
 
+udp_server::udp_server()
+{
+
+}
+
 udp_server::udp_server(const string& addr, int port)
     : f_port(port), f_addr(addr)
 {
+    this->connect(addr, port);
+}
+
+bool udp_server::connect(const string& addr, int port)
+{
+    this->f_addr = addr;
+    this->f_port = port;
+
     char decimal_port[16];
     snprintf(decimal_port, sizeof(decimal_port), "%d", f_port);
     decimal_port[sizeof(decimal_port) / sizeof(decimal_port[0]) - 1] = '\0';
@@ -59,6 +72,8 @@ udp_server::udp_server(const string& addr, int port)
     if (r != 0 || f_addrinfo == NULL)
     {
         throw runtime_error(("Invalid address or port for UDP socket: \"" + addr + ":" + decimal_port + "\"").c_str());
+
+        return false;
     }
 
     f_socket = socket(f_addrinfo->ai_family, SOCK_DGRAM | SOCK_CLOEXEC, IPPROTO_UDP);
@@ -66,6 +81,8 @@ udp_server::udp_server(const string& addr, int port)
     {
         freeaddrinfo(f_addrinfo);
         throw runtime_error(("Could not create UDP socket for: \"" + addr + ":" + decimal_port + "\"").c_str());
+
+        return false;
     }
 
     r = bind(f_socket, f_addrinfo->ai_addr, f_addrinfo->ai_addrlen);
@@ -74,7 +91,11 @@ udp_server::udp_server(const string& addr, int port)
         freeaddrinfo(f_addrinfo);
         close(f_socket);
         throw runtime_error(("Could not bind UDP socket with: \"" + addr + ":" + decimal_port + "\"").c_str());
+
+        return false;
     }
+
+    return true;
 }
 
 udp_server::~udp_server()

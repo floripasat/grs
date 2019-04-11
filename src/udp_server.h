@@ -26,7 +26,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.5
+ * \version 0.4.0
  * 
  * \date 05/04/2019
  * 
@@ -52,7 +52,24 @@ class udp_server
     public:
 
         /**
-         * \brief Initialize a UDP server object.
+         * \brief Declaration constructor.
+         *
+         * \return None.
+         */
+        udp_server();
+
+        /**
+         * \brief Connect constructor (overloaded).
+         *
+         * \param[in] addr The address we receive on.
+         * \param[in] port The port we receive from.
+         *
+         * \return None.
+         */
+        udp_server(const std::string& addr, int port);
+
+        /**
+         * \brief Connects to an UDP client.
          *
          * This function initializes a UDP server object making it ready to
          * receive messages.
@@ -84,7 +101,7 @@ class udp_server
          *
          * \return None.
          */
-        udp_server(const std::string& addr, int port);
+        bool connect(const std::string& addr, int port);
 
         /**
          * \brief Clean up the UDP server.
