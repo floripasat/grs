@@ -21,11 +21,11 @@
  */
 
 /**
- * \brief Main class for the FSatGRS.
+ * \brief FloripaSat-GRS main class definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.4
+ * \version 0.4.1
  * 
  * \date 10/09/2017
  * 
@@ -51,6 +51,7 @@
 #include "uplink_event.h"
 #include "payload_x_upload.h"
 #include "udp_decoder.h"
+#include "packets/beacon_data.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE                "/usr/share/floripasat-grs/glade/fsat_grs_gui.glade"
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL          "glade/fsat_grs_gui.glade"
@@ -516,6 +517,16 @@ class FSatGRS
          * \return
          */
         bool Timer();
+
+        /**
+         * \brief Updates the beacon data tab.
+         *
+         * \param[in] beacon is a beacon packet to display.
+         *
+         * \return None.
+         */
+        void UpdateBeaconDataTab(grs::BeaconData beacon);
+
         /**
          * \brief 
          * 

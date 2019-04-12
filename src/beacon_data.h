@@ -1,7 +1,7 @@
 /*
  * beacon_data.h
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file beacon_data.h
- * 
- * \brief Beacon data class.
+ * \brief Beacon data definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.4.1
  * 
  * \date 12/09/2017
  * 
@@ -36,8 +34,8 @@
  * \{
  */
 
-#ifndef BEACON_DATA_H_
-#define BEACON_DATA_H_
+#ifndef BEACON_DATA_OLD_H_
+#define BEACON_DATA_OLD_H_
 
 #include <gtkmm.h>
 #include <vector>
@@ -254,6 +252,6 @@ class BeaconData: public PacketData
         void ForceDisplay(std::vector<std::string> data);
 };
 
-#endif // BEACON_DATA_H_
+#endif // BEACON_DATA_OLD_H_
 
 //! \} End of beacon_data group

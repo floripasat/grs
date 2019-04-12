@@ -21,11 +21,11 @@
  */
 
 /**
- * \brief Implementation of the main class of the FSatGRS.
+ * \brief FloripaSat-GRS main class implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.4
+ * \version 0.4.1
  * 
  * \date 10/09/2017
  * 
@@ -50,6 +50,7 @@
 #include "data_processing.hpp"
 #include "sha256.h"
 #include "uplink_events_columns.h"
+#include "packets/packets_ids.h"
 
 using namespace std;
 
@@ -1015,6 +1016,53 @@ bool FSatGRS::Timer()
     }
 
 	return true;
+}
+
+void FSatGRS::UpdateBeaconDataTab(grs::BeaconData beacon)
+{
+    // EPS data
+    if ((beacon.id == FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA) or
+        (beacon.id == FLORIPASAT_PACKET_BEACON_AX25_OBDH_DATA)  or
+        (beacon.id == FLORIPASAT_PACKET_BEACON_NGHAM_EPS_DATA)  or
+        (beacon.id == FLORIPASAT_PACKET_BEACON_AX25_EPS_DATA))
+    {
+        label_beacon_data_bat1_v_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_VOLTAGE_CELL_1]));
+        label_beacon_data_bat2_v_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_VOLTAGE_CELL_2]));
+        label_beacon_data_bat1_t_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1]));
+        label_beacon_data_bat2_t_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2]));
+        label_beacon_data_bat_c_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_CHARGE]));
+        label_beacon_data_sp_i_my->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_0]));
+        label_beacon_data_sp_i_px->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_1]));
+        label_beacon_data_sp_i_mx->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_2]));
+        label_beacon_data_sp_i_pz->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_3]));
+        label_beacon_data_sp_i_mz->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_4]));
+        label_beacon_data_sp_i_py->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_5]));
+        label_beacon_data_sp_v_mypx->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_0]));
+        label_beacon_data_sp_v_mxpz->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_1]));
+        label_beacon_data_sp_v_mzpy->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_2]));
+        label_beacon_data_status_energy_level->set_text(to_string(beacon[BEACON_DATA_ENERGY_LEVEL]));
+    }
+
+    // OBDH data
+    if ((beacon.id == FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA) or
+        (beacon.id == FLORIPASAT_PACKET_BEACON_AX25_OBDH_DATA))
+    {
+        label_beacon_data_status_imu->set_text(beacon[BEACON_DATA_IMU_STATUS] == 1 ? "\u2714" : "\u2718");
+        label_beacon_data_status_usd->set_text(beacon[BEACON_DATA_SD_CARD_STATUS] == 1 ? "\u2714" : "\u2718");
+        label_beacon_data_status_rush->set_text(beacon[BEACON_DATA_RUSH_STATUS] == 1 ? "\u2714" : "\u2718");
+        label_beacon_data_status_eps->set_text(beacon[BEACON_DATA_EPS_STATUS] == 1 ? "\u2714" : "\u2718");
+        label_beacon_data_status_antenna->set_text(beacon[BEACON_DATA_ANTENNA_STATUS] == 1 ? "\u2714" : "\u2718");
+        label_beacon_data_imu_accel_x->set_text(to_string(beacon[BEACON_DATA_IMU_ACCEL_X]));
+        label_beacon_data_imu_accel_y->set_text(to_string(beacon[BEACON_DATA_IMU_ACCEL_Y]));
+        label_beacon_data_imu_accel_z->set_text(to_string(beacon[BEACON_DATA_IMU_ACCEL_Z]));
+        label_beacon_data_imu_gyro_x->set_text(to_string(beacon[BEACON_DATA_IMU_GYRO_X]));
+        label_beacon_data_imu_gyro_y->set_text(to_string(beacon[BEACON_DATA_IMU_GYRO_Y]));
+        label_beacon_data_imu_gyro_z->set_text(to_string(beacon[BEACON_DATA_IMU_GYRO_Z]));
+        label_beacon_data_obdh_rst_value->set_text(to_string(beacon[BEACON_DATA_OBDH_RESETS]));
+        label_beacon_data_system_time_value->set_text(to_string(beacon[BEACON_SYSTEM_TIME_HOUR]) + ":" +
+                                                      to_string(beacon[BEACON_SYSTEM_TIME_MINUTE]) + ":" +
+                                                      to_string(beacon[BEACON_SYSTEM_TIME_SECOND]));
+    }
 }
 
 void FSatGRS::OnToolButtonOpenClicked()
