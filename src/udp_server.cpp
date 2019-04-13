@@ -26,7 +26,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.1
  * 
  * \date 05/04/2019
  * 
@@ -42,18 +42,18 @@
 
 using namespace std;
 
-udp_server::udp_server()
+UDPServer::UDPServer()
 {
 
 }
 
-udp_server::udp_server(const string& addr, int port)
+UDPServer::UDPServer(const string& addr, int port)
     : f_port(port), f_addr(addr)
 {
     this->connect(addr, port);
 }
 
-bool udp_server::connect(const string& addr, int port)
+bool UDPServer::connect(const string& addr, int port)
 {
     this->f_addr = addr;
     this->f_port = port;
@@ -98,33 +98,33 @@ bool udp_server::connect(const string& addr, int port)
     return true;
 }
 
-udp_server::~udp_server()
+UDPServer::~UDPServer()
 {
     freeaddrinfo(f_addrinfo);
     close(f_socket);
 }
 
-int udp_server::get_socket() const
+int UDPServer::get_socket() const
 {
     return f_socket;
 }
 
-int udp_server::get_port() const
+int UDPServer::get_port() const
 {
     return f_port;
 }
 
-string udp_server::get_addr() const
+string UDPServer::get_addr() const
 {
     return f_addr;
 }
 
-int udp_server::recv(char *msg, size_t max_size)
+int UDPServer::recv(char *msg, size_t max_size)
 {
     return ::recv(f_socket, msg, max_size, 0);
 }
 
-vector<uint8_t> udp_server::receive(size_t max_size)
+vector<uint8_t> UDPServer::receive(size_t max_size)
 {
     char msg[USHRT_MAX];
 
@@ -145,7 +145,7 @@ vector<uint8_t> udp_server::receive(size_t max_size)
     return pkt;
 }
 
-int udp_server::timed_recv(char *msg, size_t max_size, int max_wait_ms)
+int UDPServer::timed_recv(char *msg, size_t max_size, int max_wait_ms)
 {
     fd_set s;
     FD_ZERO(&s);
@@ -173,7 +173,7 @@ int udp_server::timed_recv(char *msg, size_t max_size, int max_wait_ms)
     return -1;
 }
 
-vector<uint8_t> udp_server::receive(size_t max_size, unsigned int timeout)
+vector<uint8_t> UDPServer::receive(size_t max_size, unsigned int timeout)
 {
     char msg[USHRT_MAX];
     int ret = this->timed_recv(msg, max_size, timeout);
