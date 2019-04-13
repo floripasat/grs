@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.2
  * 
  * \date 09/04/2019
  * 
@@ -38,10 +38,75 @@
 using namespace std;
 using namespace grs;
 
+OBDHData::OBDHData(Payload pl)
+{
+    this->decode(pl);
+}
+
 void OBDHData::decode(Payload pl)
 {
     Packet::decode(pl);
-    EPSData::decode(pl);
+
+    this->clear();
+
+    // Battery cell 1 voltage
+    uint16_t raw_battery_voltage = (pl[BEACON_DATA_BATTERY_VOLTAGE_CELL_1_POS] << 8) | pl[BEACON_DATA_BATTERY_VOLTAGE_CELL_1_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_BATTERY_VOLTAGE_CELL_1, this->calc_battery_voltage(raw_battery_voltage)));
+
+    // Battery cell 2 voltage
+    raw_battery_voltage = (pl[BEACON_DATA_BATTERY_VOLTAGE_CELL_2_POS] << 8) | pl[BEACON_DATA_BATTERY_VOLTAGE_CELL_2_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_BATTERY_VOLTAGE_CELL_2, this->calc_battery_voltage(raw_battery_voltage)));
+
+    // Battery cell 1 temperature
+    uint32_t raw_battery_temperature = (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS] << 16) | (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS+1] << 8) | pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS+2];
+    this->insert(pair<int, double>(BEACON_DATA_BATTERY_TEMPERATURE_CELL_1, this->calc_battery_temperature(raw_battery_temperature)));
+
+    // Battery cell 2 temperature
+    raw_battery_temperature = (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS] << 16) | (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS+1] << 8) | pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS+2];
+    this->insert(pair<int, double>(BEACON_DATA_BATTERY_TEMPERATURE_CELL_2, this->calc_battery_temperature(raw_battery_temperature)));
+
+    // Battery charge
+    uint16_t raw_battery_charge = (pl[BEACON_DATA_BATTERY_CHARGE_POS] << 8) | pl[BEACON_DATA_BATTERY_CHARGE_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_BATTERY_CHARGE, this->calc_battery_charge(raw_battery_charge)));
+
+    // Solar panel current 0
+    uint16_t raw_solar_panel_current = (pl[BEACON_DATA_SOLAR_PANEL_CURRENT_0_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_CURRENT_0_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_CURRENT_0, this->calc_solar_panel_current(raw_solar_panel_current)));
+
+    // Solar panel current 1
+    raw_solar_panel_current = (pl[BEACON_DATA_SOLAR_PANEL_CURRENT_1_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_CURRENT_1_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_CURRENT_1, this->calc_solar_panel_current(raw_solar_panel_current)));
+
+    // Solar panel current 2
+    raw_solar_panel_current = (pl[BEACON_DATA_SOLAR_PANEL_CURRENT_2_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_CURRENT_2_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_CURRENT_2, this->calc_solar_panel_current(raw_solar_panel_current)));
+
+    // Solar panel current 3
+    raw_solar_panel_current = (pl[BEACON_DATA_SOLAR_PANEL_CURRENT_3_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_CURRENT_3_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_CURRENT_3, this->calc_solar_panel_current(raw_solar_panel_current)));
+
+    // Solar panel current 4
+    raw_solar_panel_current = (pl[BEACON_DATA_SOLAR_PANEL_CURRENT_4_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_CURRENT_4_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_CURRENT_4, this->calc_solar_panel_current(raw_solar_panel_current)));
+
+    // Solar panel current 5
+    raw_solar_panel_current = (pl[BEACON_DATA_SOLAR_PANEL_CURRENT_5_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_CURRENT_5_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_CURRENT_5, this->calc_solar_panel_current(raw_solar_panel_current)));
+
+    // Solar panel voltage 0
+    uint16_t raw_solar_panel_voltage = (pl[BEACON_DATA_SOLAR_PANEL_VOLTAGE_0_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_VOLTAGE_0_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_VOLTAGE_0, this->calc_solar_panel_voltage(raw_solar_panel_voltage)));
+
+    // Solar panel voltage 1
+    raw_solar_panel_voltage = (pl[BEACON_DATA_SOLAR_PANEL_VOLTAGE_1_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_VOLTAGE_1_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_VOLTAGE_1, this->calc_solar_panel_voltage(raw_solar_panel_voltage)));
+
+    // Solar panel voltage 2
+    raw_solar_panel_voltage = (pl[BEACON_DATA_SOLAR_PANEL_VOLTAGE_2_POS] << 8) | pl[BEACON_DATA_SOLAR_PANEL_VOLTAGE_2_POS+1];
+    this->insert(pair<int, double>(BEACON_DATA_SOLAR_PANEL_VOLTAGE_2, this->calc_solar_panel_voltage(raw_solar_panel_voltage)));
+
+    // Energy level
+    this->insert(pair<int, double>(BEACON_DATA_ENERGY_LEVEL, pl[BEACON_DATA_ENERGY_LEVEL_POS]));
 
     // IMU status
     double imu_status = (pl[BEACON_DATA_IMU_STATUS_POS] >> 4) & 1;

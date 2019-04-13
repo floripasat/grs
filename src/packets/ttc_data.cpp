@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.2
  * 
  * \date 11/04/2019
  * 
@@ -37,6 +37,11 @@
 
 using namespace std;
 using namespace grs;
+
+TTCData::TTCData(Payload pl)
+{
+    this->decode(pl);
+}
 
 void TTCData::decode(Payload pl)
 {

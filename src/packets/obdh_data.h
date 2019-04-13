@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.2
  * 
  * \date 10/04/2019
  * 
@@ -45,9 +45,18 @@ namespace grs
     /**
      * \brief OBDH data packet.
      */
-    class OBDHData: public grs::EPSData
+    class OBDHData: public grs::BeaconData
     {
         public:
+
+            /**
+             * \brief Constructor with initialization (overloaded).
+             *
+             * \param[in] pl is the payload to decode.
+             *
+             * \return None.
+             */
+            OBDHData(Payload pl);
 
             /**
              * \brief Decodes the OBDH data from a beacon packet payload.

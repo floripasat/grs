@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.2
  * 
  * \date 10/04/2019
  * 
@@ -48,6 +48,15 @@ namespace grs
     class EPSData: public grs::BeaconData
     {
         public:
+
+            /**
+             * \brief Constructor with initialization (overloaded).
+             *
+             * \param[in] pl is the payload to decode.
+             *
+             * \return None.
+             */
+            EPSData(Payload pl);
 
             /**
              * \brief Decodes the EPS data from a beacon packet payload.
