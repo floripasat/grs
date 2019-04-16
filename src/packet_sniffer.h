@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.7
+ * \version 0.4.0
  * 
  * \date 05/04/2019
  * 
@@ -41,10 +41,10 @@
 #include <vector>
 #include <climits>
 
-#include "sync_word.hpp"
-#include "bit_buffer.hpp"
-#include "byte_buffer.hpp"
-#include "packet_buffer.hpp"
+#include "sync_word.h"
+#include "bit_buffer.h"
+#include "byte_buffer.h"
+#include "packet_buffer.h"
 
 /**
  * \brief Sync word detector.

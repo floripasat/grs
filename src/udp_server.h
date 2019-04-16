@@ -26,7 +26,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.1
  * 
  * \date 05/04/2019
  * 
@@ -47,7 +47,7 @@
 /**
  * \brief UDP server.
  */
-class udp_server
+class UDPServer
 {
     public:
 
@@ -56,7 +56,7 @@ class udp_server
          *
          * \return None.
          */
-        udp_server();
+        UDPServer();
 
         /**
          * \brief Connect constructor (overloaded).
@@ -66,7 +66,7 @@ class udp_server
          *
          * \return None.
          */
-        udp_server(const std::string& addr, int port);
+        UDPServer(const std::string& addr, int port);
 
         /**
          * \brief Connects to an UDP client.
@@ -110,7 +110,7 @@ class udp_server
          *
          * \return None.
          */
-        ~udp_server();
+        ~UDPServer();
 
         /**
          * \brief The socket used by this UDP server.

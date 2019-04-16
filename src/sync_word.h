@@ -1,5 +1,5 @@
 /*
- * sync_word.hpp
+ * sync_word.h
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
@@ -21,11 +21,11 @@
  */
 
 /**
- * \brief Sync Word object.
+ * \brief Sync Word definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.7
+ * \version 0.4.0
  * 
  * \date 06/04/2019
  * 
@@ -33,8 +33,8 @@
  * \{
  */
 
-#ifndef SYNC_WORD_HPP_
-#define SYNC_WORD_HPP_
+#ifndef SYNC_WORD_H_
+#define SYNC_WORD_H_
 
 #include <stdint.h>
 
@@ -42,8 +42,6 @@
 #include <string>
 #include <bitset>
 #include <iostream>
-
-#include "byte_buffer.hpp"
 
 /**
  * \brief Sync Word object.
@@ -57,9 +55,7 @@ class SyncWord: public std::vector<bool>
          *
          * \return None.
          */
-        SyncWord()
-        {
-        }
+        SyncWord();
 
         /**
          * \brief Constructor (overloaded).
@@ -68,10 +64,7 @@ class SyncWord: public std::vector<bool>
          *
          * \return None.
          */
-        SyncWord(std::vector<uint8_t> bytes)
-        {
-            this->set_sync_word(bytes);
-        }
+        SyncWord(std::vector<uint8_t> bytes);
 
         /**
          * \brief Sets the sync word.
@@ -80,15 +73,7 @@ class SyncWord: public std::vector<bool>
          *
          * \return None.
          */
-        void set_sync_word(std::vector<uint8_t> bytes)
-        {
-            this->clear();
-
-            for(unsigned int i=0; i<bytes.size(); i++)
-            {
-                this->append(bytes[i]);
-            }
-        }
+        void set_sync_word(std::vector<uint8_t> bytes);
 
         /**
          * \brief Appends a new byte to the sync word sequence.
@@ -97,43 +82,14 @@ class SyncWord: public std::vector<bool>
          *
          * \return None.
          */
-        void append(uint8_t byte)
-        {
-            std::string byte_str = std::bitset<8>(byte).to_string();
-
-            for(unsigned int i=0; i<byte_str.size(); i++)
-            {
-                switch(byte_str[i])
-                {
-                    case '0':   this->push_back(false);   break;
-                    case '1':   this->push_back(true);    break;
-                }
-            }
-        }
+        void append(uint8_t byte);
 
         /**
          * \brief Gets the sync word bytes.
          *
          * \return The sync word as a vector of bytes.
          */
-        std::vector<uint8_t> get_bytes()
-        {
-            ByteBuffer byte_buffer;
-            vector<uint8_t> sync_word_bytes;
-
-            for(unsigned int i=0; i<this->size(); i++)
-            {
-                byte_buffer.push(this->at(i));
-
-                if (byte_buffer.is_full())
-                {
-                    sync_word_bytes.push_back(byte_buffer.to_byte());
-                    byte_buffer.clear();
-                }
-            }
-
-            return sync_word_bytes;
-        }
+        std::vector<uint8_t> get_bytes();
 
         /**
          * \brief cout overload.
@@ -143,17 +99,9 @@ class SyncWord: public std::vector<bool>
          *
          * \return An ostream object.
          */
-        friend std::ostream& operator<<(std::ostream& os, const SyncWord& sync_word)
-        {
-            for(unsigned int i=0; i<sync_word.size(); i++)
-            {
-                os << sync_word.at(i);
-            }
-
-            return os;
-        }
+        friend std::ostream& operator<<(std::ostream& os, const SyncWord& sync_word);
 };
 
-#endif // SYNC_WORD_HPP_
+#endif // SYNC_WORD_H_
 
 //! \} End of sync_word group

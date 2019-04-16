@@ -1,5 +1,5 @@
 /*
- * bit_buffer.hpp
+ * bit_buffer.h
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
@@ -21,11 +21,11 @@
  */
 
 /**
- * \brief Bit buffer object.
+ * \brief Bit buffer definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.7
+ * \version 0.4.0
  * 
  * \date 06/04/2019
  * 
@@ -33,8 +33,8 @@
  * \{
  */
 
-#ifndef BIT_BUFFER_HPP_
-#define BIT_BUFFER_HPP_
+#ifndef BIT_BUFFER_H_
+#define BIT_BUFFER_H_
 
 #include <vector>
 #include <iostream>
@@ -51,9 +51,7 @@ class BitBuffer: public std::vector<bool>
          *
          * \return None.
          */
-        BitBuffer()
-        {
-        }
+        BitBuffer();
 
         /**
          * \brief .
@@ -62,10 +60,7 @@ class BitBuffer: public std::vector<bool>
          *
          * \return None.
          */
-        BitBuffer(unsigned int max_size)
-        {
-            this->set_max_size(max_size);
-        }
+        BitBuffer(unsigned int max_size);
 
         /**
          * \brief Sets the maximum size of the buffer.
@@ -74,20 +69,14 @@ class BitBuffer: public std::vector<bool>
          *
          * \return None.
          */
-        void set_max_size(unsigned int max)
-        {
-            this->max_size = max;
-        }
+        void set_max_size(unsigned int max);
 
         /**
          * \brief Gets the maximum size of the buffer.
          *
          * \return The maximum size of the buffer in bits.
          */
-        unsigned int get_max_size()
-        {
-            return this->max_size;
-        }
+        unsigned int get_max_size();
 
         /**
          * \brief Push a new bit to the buffer.
@@ -96,15 +85,7 @@ class BitBuffer: public std::vector<bool>
          *
          * \return None.
          */
-        void push(bool bit)
-        {
-            if (this->size() == this->get_max_size())
-            {
-                this->erase(this->begin());
-            }
-
-            this->push_back(bit);
-        }
+        void push(bool bit);
 
         /**
          * \brief cout overload.
@@ -114,15 +95,7 @@ class BitBuffer: public std::vector<bool>
          *
          * \return An ostream object.
          */
-        friend std::ostream& operator<<(std::ostream& os, const BitBuffer& bit_buffer)
-        {
-            for(unsigned int i=0; i<bit_buffer.size(); i++)
-            {
-                os << bit_buffer.at(i);
-            }
-
-            return os;
-        }
+        friend std::ostream& operator<<(std::ostream& os, const BitBuffer& bit_buffer);
 
     private:
 
@@ -132,6 +105,6 @@ class BitBuffer: public std::vector<bool>
         unsigned int max_size;
 };
 
-#endif // BIT_BUFFER_HPP_
+#endif // BIT_BUFFER_H_
 
 //! \} End of bit_buffer group
