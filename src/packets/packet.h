@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.3
  * 
  * \date 09/04/2019
  * 
@@ -37,6 +37,7 @@
 #define PACKET_H_
 
 #include <stdint.h>
+#include <string>
 
 #include <map>
 
@@ -92,70 +93,23 @@ namespace grs
              */
             std::string src_callsign;
 
+            /**
+             * \brief Gets the callsign of the command requester.
+             *
+             * \return The callsign of the command requester in ASCII.
+             */
+            virtual std::string get_requester_callsign() = 0;
+
         protected:
 
             /**
-             * \brief Computes a battery voltage from a raw value.
+             * \brief Gets a callsign from a 7 characters substring.
              *
-             * \param[in] val is the raw value of a battery voltage.
+             * \param[in] cs is substring with a callsign (7 characters).
              *
-             * \return The given battery voltage in Volts.
+             * \return The given callsign as an string.
              */
-            virtual double calc_battery_voltage(uint16_t val) = 0;
-
-            /**
-             * \brief Computes a battery temperature from a raw value.
-             *
-             * \param[in] val is the raw value of a battery temperature
-             *
-             * \return The given battery temperature in Celsius.
-             */
-            virtual double calc_battery_temperature(uint32_t val) = 0;
-
-            /**
-             * \brief Computes a battery charge from a raw value.
-             *
-             * \param[in] val is the raw value of a battery charge.
-             *
-             * \return The given battery charge in Ah.
-             */
-            virtual double calc_battery_charge(uint16_t val) = 0;
-
-            /**
-             * \brief Computes a solar panel current from a raw value.
-             *
-             * \param[in] val is the raw value of a solar panel current.
-             *
-             * \return The given solar panel current in Ampere.
-             */
-            virtual double calc_solar_panel_current(uint16_t val) = 0;
-
-            /**
-             * \brief Computes a solar panel voltage from a raw value.
-             *
-             * \param[in] val is the raw value of a solar panel voltage.
-             *
-             * \return The given solar panel voltage in Volts.
-             */
-            virtual double calc_solar_panel_voltage(uint16_t val) = 0;
-
-            /**
-             * \brief Computes an IMU acceleration from a raw value.
-             *
-             * \param[in] val is the raw value of a IMU acceleration.
-             *
-             * \return The given IMU acceleration in ??.
-             */
-            virtual double calc_imu_accel(uint16_t val) = 0;
-
-            /**
-             * \brief Computes an IMU gyroscope acceleration from a raw value.
-             *
-             * \param[in] val is the raw value of a IMU gyroscope acceleration.
-             *
-             * \return The given IMU gyroscope acceleration in ??.
-             */
-            virtual double calc_imu_gyro(uint16_t val) = 0;
+            std::string substr_to_callsign(std::string cs);
     };
 }
 

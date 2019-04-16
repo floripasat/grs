@@ -1,5 +1,5 @@
 /*
- * version.h
+ * message_broadcast.cpp
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
@@ -21,24 +21,44 @@
  */
 
 /**
- * \brief Version control.
+ * \brief Message broadcast packet implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
  * \version 0.4.3
  * 
- * \date 13/02/2019
+ * \date 15/04/2019
  * 
- * \defgroup version Version Control
- * \ingroup src
+ * \addtogroup message_broadcast
  * \{
  */
 
-#ifndef VERSION_H_
-#define VERSION_H_
+#include "message_broadcast.h"
 
-#define GRS_SOFTWARE_VERSION            "0.4.3"
+using namespace std;
+using namespace grs;
 
-#endif // VERSION_H_
+void MessageBroadcast::decode(Payload pl)
+{
+    // ID, source callsign and requester callsign
+    DownlinkData::decode(pl);
 
-//! \} End of version group
+    // Destination callsign
+    this->destination_callsign = Packet::substr_to_callsign(string(pl.begin() + MESSAGE_BROADCAST_DST_CALLSIGN_POS,
+                                                                   pl.begin() + MESSAGE_BROADCAST_MESSAGE_POS));
+
+    // Received message
+    this->message.assign(pl.begin() + MESSAGE_BROADCAST_MESSAGE_POS, pl.end());
+}
+
+string MessageBroadcast::get_destination_callsign()
+{
+    return this->destination_callsign;
+}
+
+string MessageBroadcast::get_message()
+{
+    return this->message;
+}
+
+//! \} End of message_broadcast group

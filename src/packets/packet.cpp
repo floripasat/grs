@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.3
  * 
  * \date 09/04/2019
  * 
@@ -35,6 +35,7 @@
 
 #include "packet.h"
 
+using namespace std;
 using namespace grs;
 
 Packet::Packet()
@@ -56,6 +57,31 @@ void Packet::decode(Payload pl)
 {
     this->id = pl.id;
     this->src_callsign = pl.source_callsign;
+}
+
+string Packet::substr_to_callsign(string cs)
+{
+    string callsign;
+
+    // The minimum length of a callsign is 4 characters, the maximum is 7
+    if ((cs[0] == '0') and (cs[+1] == '0') and (cs[+2] == '0'))     // 4 characters ("000XXXX")
+    {
+        callsign.assign(cs.begin() + 3, cs.end());
+    }
+    else if ((cs[0] == '0') and (cs[1] == '0'))                     // 5 characters ("00XXXXX")
+    {
+        callsign.assign(cs.begin() + 2, cs.end());
+    }
+    else if (cs[0] == '0')                                          // 6 characters ("0XXXXXX")
+    {
+        callsign.assign(cs.begin() + 1, cs.end());
+    }
+    else                                                            // 7 characters ("XXXXXXX")
+    {
+        callsign = cs;
+    }
+
+    return callsign;
 }
 
 //! \} End of packet group
