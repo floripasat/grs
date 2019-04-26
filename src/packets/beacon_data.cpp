@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.8
  * 
  * \date 09/04/2019
  * 
@@ -35,7 +35,13 @@
 
 #include "beacon_data.h"
 
+using namespace std;
 using namespace grs;
+
+string BeaconData::get_requester_callsign()
+{
+    return string();
+}
 
 double BeaconData::calc_battery_voltage(uint16_t val)
 {
