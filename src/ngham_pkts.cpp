@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.6
+ * \version 0.4.8
  * 
  * \date 06/10/2017
  * 
@@ -42,6 +42,7 @@ extern "C"
 
 #include "ngham_pkts.h"
 #include "aux.hpp"
+#include "packets/packets_ids.h"
 
 using namespace std;
 
@@ -159,6 +160,19 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             else
             {
                 event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
+
+                switch(data[0])
+                {
+                    case FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA:
+                        event_text += " containing OBDH data!";
+                        break;
+                    case FLORIPASAT_PACKET_BEACON_NGHAM_EPS_DATA:
+                        event_text += " containing EPS data!";
+                        break;
+                    case FLORIPASAT_PACKET_BEACON_NGHAM_TTC_DATA:
+                        event_text += " containing TTC data!";
+                        break;
+                }
             }
 
             if (make_log)
