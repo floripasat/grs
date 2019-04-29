@@ -1044,6 +1044,7 @@
                         <child>
                           <object class="GtkEntry" id="entry_beacon_serial_port">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Serial address</property>
                             <property name="width_chars">14</property>
@@ -1058,6 +1059,7 @@
                         <child>
                           <object class="GtkComboBox" id="combobox_beacon_baudrate">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="model">liststore_baudrates</property>
@@ -1077,6 +1079,7 @@
                         <child>
                           <object class="GtkLabel" id="label_port">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
@@ -1090,6 +1093,7 @@
                         <child>
                           <object class="GtkLabel" id="label_baudrate">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
@@ -1103,6 +1107,7 @@
                         <child>
                           <object class="GtkRadioButton" id="radiobutton_beacon_src_serial">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
@@ -1509,6 +1514,7 @@
                             <child>
                               <object class="GtkRadioButton" id="radiobutton_telemetry_src_serial">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_stock">True</property>
@@ -1526,6 +1532,7 @@
                             <child>
                               <object class="GtkLabel" id="label105">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Device:</property>
@@ -1538,6 +1545,7 @@
                             <child>
                               <object class="GtkLabel" id="label106">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Baudrate:</property>
@@ -1550,6 +1558,7 @@
                             <child>
                               <object class="GtkEntry" id="entry_telemetry_serial_port">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Serial address</property>
                                 <property name="width_chars">14</property>
@@ -1564,6 +1573,7 @@
                             <child>
                               <object class="GtkComboBox" id="combobox_telemetry_baudrate">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="model">liststore_baudrates</property>
@@ -1955,6 +1965,7 @@
                                     <child>
                                       <object class="GtkRadioButton" id="radiobutton_uplink_output_serial">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_stock">True</property>
@@ -1972,6 +1983,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label205">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Device:</property>
@@ -1984,6 +1996,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label206">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Baudrate:</property>
@@ -1996,6 +2009,7 @@
                                     <child>
                                       <object class="GtkEntry" id="entry_uplink_output_serial_dev">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Serial address</property>
                                         <property name="hexpand">True</property>
@@ -2010,6 +2024,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="combobox_uplink_output_serial_baudrate">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">liststore_baudrates</property>
                                         <property name="active">10</property>
