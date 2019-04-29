@@ -1,5 +1,5 @@
 /*
- * beacon_data.cpp
+ * payload_x_status.cpp
  * 
  * Copyright (C) 2019, Universidade Federal de Santa Catarina.
  * 
@@ -21,61 +21,42 @@
  */
 
 /**
- * \brief Beacon data packet implementation.
+ * \brief Payload X status packet implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.8
+ * \version 0.4.5
  * 
- * \date 09/04/2019
+ * \date 13/04/2019
  * 
- * \addtogroup beacon_data
+ * \addtogroup payload_x_status
  * \{
  */
 
-#include "beacon_data.h"
+#include "payload_x_status.h"
 
 using namespace std;
 using namespace grs;
 
-string BeaconData::get_requester_callsign()
+void PayloadXStatus::decode(Payload pl)
 {
-    return string();
+    Packet::decode(pl);
+
+    // Sequence number
+    this->sequence_number = (pl[PAYLOAD_X_STATUS_SEQUENCE_NUMBER_POS] << 8) | pl[PAYLOAD_X_STATUS_SEQUENCE_NUMBER_POS+1];
+
+    // Status bytes
+    this->status.assign(pl.begin() + PAYLOAD_X_STATUS_STATUS_POS, pl.end());
 }
 
-double BeaconData::calc_battery_voltage(uint16_t val)
+uint16_t PayloadXStatus::get_sequence_number()
 {
-    return (val/32.0)*4.883e-3;
+    return this->sequence_number;
 }
 
-double BeaconData::calc_battery_temperature(uint32_t val)
+vector<uint8_t> PayloadXStatus::get_status()
 {
-    return (val*0.125)/32.0;
+    return this->status;
 }
 
-double BeaconData::calc_battery_charge(uint16_t val)
-{
-    return val*(6.25*1e-4);
-}
-
-double BeaconData::calc_solar_panel_current(uint16_t val)
-{
-    return val*(2.5/4095)*(1/(0.05*0.025*3300));
-}
-
-double BeaconData::calc_solar_panel_voltage(uint16_t val)
-{
-    return val*(2.5/4095)*(100e3 + 93.1e3)/100e3;
-}
-
-double BeaconData::calc_imu_accel(uint16_t val)
-{
-    return int16_t(val)*16.0/32768.0;
-}
-
-double BeaconData::calc_imu_gyro(uint16_t val)
-{
-    return int16_t(val)*250.0/32768.0;
-}
-
-//! \} End of beacon_data group
+//! \} End of payload_x_status group

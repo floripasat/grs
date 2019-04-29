@@ -1,7 +1,7 @@
 /*
  * beacon_data.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file beacon_data.cpp
- * 
  * \brief Beacon data class implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.4.6
  * 
  * \date 12/09/2017
  * 
@@ -38,17 +36,17 @@
 #include <cmath>
 #include <iomanip>
 
-#include "beacon_data.h"
+#include "beacon_data_old.h"
 #include "aux.hpp"
 
 using namespace std;
 
-BeaconData::BeaconData()
+BeaconDataOld::BeaconDataOld()
 {
     
 }
 
-BeaconData::BeaconData(vector<Gtk::Label *> lbs)
+BeaconDataOld::BeaconDataOld(vector<Gtk::Label *> lbs)
 {
     unsigned int pos = 0;
     
@@ -84,7 +82,7 @@ BeaconData::BeaconData(vector<Gtk::Label *> lbs)
     this->Clear();
 }
 
-void BeaconData::Display(uint8_t pkt_type)
+void BeaconDataOld::Display(uint8_t pkt_type)
 {
     label_beacon_data_bat1_v_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_bat2_v_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
@@ -177,7 +175,7 @@ void BeaconData::Display(uint8_t pkt_type)
     }
 }
 
-void BeaconData::Update(uint8_t *data, uint8_t len)
+void BeaconDataOld::Update(uint8_t *data, uint8_t len)
 {
     if (len > 10)
     {
@@ -263,7 +261,7 @@ void BeaconData::Update(uint8_t *data, uint8_t len)
     }
 }
 
-void BeaconData::Clear()
+void BeaconDataOld::Clear()
 {
     bat1_voltage        = 0;
     bat2_voltage        = 0;
@@ -297,7 +295,7 @@ void BeaconData::Clear()
     obdh_resets         = 0;
 }
 
-string BeaconData::Log()
+string BeaconDataOld::Log()
 {
     string log_entry = "";
     
@@ -376,12 +374,12 @@ string BeaconData::Log()
     return log_entry;
 }
 
-const char* BeaconData::getLabel()
+const char* BeaconDataOld::getLabel()
 {
     return "BEACON";
 }
 
-void BeaconData::ForceDisplay(vector<string> data)
+void BeaconDataOld::ForceDisplay(vector<string> data)
 {
     while(data.size() < 34)
     {
@@ -420,42 +418,42 @@ void BeaconData::ForceDisplay(vector<string> data)
     label_beacon_data_system_time_value->set_text(data[i++]);
 }
 
-double BeaconData::BatVoltConv(uint16_t val)
+double BeaconDataOld::BatVoltConv(uint16_t val)
 {
     return (val/32.0)*4.883e-3;
 }
 
-double BeaconData::BatTempConv(uint32_t val)
+double BeaconDataOld::BatTempConv(uint32_t val)
 {
     return (val*0.125)/32.0;
 }
 
-double BeaconData::BatChargeConv(uint16_t val)
+double BeaconDataOld::BatChargeConv(uint16_t val)
 {
     return val*(6.25*1e-4);
 }
 
-double BeaconData::SolarPanelCurrentConv(uint16_t val)
+double BeaconDataOld::SolarPanelCurrentConv(uint16_t val)
 {
     return val*(2.5/4095)*(1/(0.05*0.025*3300));
 }
 
-double BeaconData::SolarPanelVoltageConv(uint16_t val)
+double BeaconDataOld::SolarPanelVoltageConv(uint16_t val)
 {
     return val*(2.5/4095)*(100e3 + 93.1e3)/100e3;
 }
 
-double BeaconData::IMUAccelConv(uint16_t val)
+double BeaconDataOld::IMUAccelConv(uint16_t val)
 {
     return int16_t(val)*16.0/32768.0;
 }
 
-double BeaconData::IMUGyroConv(uint16_t val)
+double BeaconDataOld::IMUGyroConv(uint16_t val)
 {
     return int16_t(val)*250.0/32768.0;
 }
 
-const char* BeaconData::PrintTime(uint16_t h, uint8_t m, uint8_t s)
+const char* BeaconDataOld::PrintTime(uint16_t h, uint8_t m, uint8_t s)
 {
     std::stringstream input_str;
     

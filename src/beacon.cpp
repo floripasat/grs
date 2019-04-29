@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.1
+ * \version 0.4.8
  * 
  * \date 07/04/2019
  * 
@@ -144,7 +144,7 @@ void Beacon::run(FSatGRS *caller)
                     default:                                        this->data = BeaconData();          break;
                 }
 
-                caller->notify_new_beacon_data();
+//                caller->notify_new_beacon_data();
             }
 
             auto ax25_pl = this->ax25->decode(pkt);     // Removing the sync word bytes before the ngham decodification
@@ -163,7 +163,7 @@ void Beacon::run(FSatGRS *caller)
                     default:                                        this->data = BeaconData();          break;
                 }
 
-                caller->notify_new_beacon_data();
+//                caller->notify_new_beacon_data();
             }
         }
     }

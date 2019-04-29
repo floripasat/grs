@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.1
+ * \version 0.4.6
  * 
  * \date 12/09/2017
  * 
@@ -60,7 +60,7 @@
  * 
  * \brief 
  */
-class BeaconData: public PacketData
+class BeaconDataOld: public PacketData
 {
     private:
         Gtk::Label *label_beacon_data_bat1_v_value;
@@ -198,7 +198,7 @@ class BeaconData: public PacketData
          * 
          * \return None
          */
-        BeaconData();
+        BeaconDataOld();
         /**
          * \brief 
          * 
@@ -206,7 +206,7 @@ class BeaconData: public PacketData
          * 
          * \return None
          */
-        BeaconData(std::vector<Gtk::Label *> lbs);
+        BeaconDataOld(std::vector<Gtk::Label *> lbs);
         /**
          * \brief 
          * 

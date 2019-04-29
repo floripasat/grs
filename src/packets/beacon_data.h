@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.4.8
  * 
  * \date 09/04/2019
  * 
@@ -36,6 +36,8 @@
 
 #ifndef BEACON_DATA_H_
 #define BEACON_DATA_H_
+
+#include <string>
 
 #include "packet.h"
 
@@ -136,6 +138,17 @@ namespace grs
      */
     class BeaconData: public grs::Packet
     {
+        public:
+
+            /**
+             * \brief Gets the callsign of the command requester.
+             *
+             * \note The beacon packets does not have a requester. This method returns an empty string.
+             *
+             * \return The callsign of the command requester in ASCII.
+             */
+            std::string get_requester_callsign();
+
         protected:
 
             /**

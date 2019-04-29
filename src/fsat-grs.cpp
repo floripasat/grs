@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.1
+ * \version 0.4.8
  * 
  * \date 10/09/2017
  * 
@@ -44,7 +44,7 @@
 #include "fsat-grs.h"
 #include "version.h"
 #include "aux.hpp"
-#include "beacon_data.h"
+#include "beacon_data_old.h"
 #include "telemetry_data.h"
 #include "telecommands.h" 
 #include "data_processing.hpp"
@@ -455,7 +455,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     beacon_data_labels.push_back(label_beacon_data_obdh_rst_value);
     beacon_data_labels.push_back(label_beacon_data_system_time_value);
     
-    beacon_data = new BeaconData(beacon_data_labels);
+    beacon_data = new BeaconDataOld(beacon_data_labels);
     
     // Telemetry data
     ref_builder->get_widget("label_telemetry_data_status_reset_counter", label_telemetry_data_status_reset_counter);
