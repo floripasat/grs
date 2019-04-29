@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.1
+ * \version 0.4.9
  * 
  * \date 10/09/2017
  * 
@@ -125,7 +125,6 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_close_log_file;
         Gtk::ToolButton                 *toolbutton_prev_log_line;
         Gtk::ToolButton                 *toolbutton_next_log_line;
-        Gtk::ToolButton                 *toolbutton_statistics;
         Gtk::ToolButton                 *toolbutton_plot;
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
@@ -369,14 +368,6 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_plot_use_sat_time_telemetry;
         Gtk::Button                     *button_plot;
         
-        // Log Analysis Dialog
-        Gtk::Dialog                     *dialog_log_statistics;
-        Gtk::FileChooserButton          *filechooserbutton_log_analysis;
-        Gtk::TextView                   *textview_log_analysis_result;
-        Gtk::Button                     *button_run_log_analysis;
-        Gtk::RadioButton                *radio_button_log_analysis_beacon;
-        Gtk::RadioButton                *radio_button_log_analysis_telemetry;
-        
         // Data Request Dialog
         Gtk::Dialog                     *dialog_data_request;
         Gtk::CheckButton                *checkbutton_request_packet_flags;
@@ -563,12 +554,7 @@ class FSatGRS
          * \return 
          */
         void OnToolButtonNextClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnToolButtonStatisticsClicked();
+
         /**
          * \brief 
          * 

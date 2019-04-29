@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.8
+ * \version 0.4.9
  * 
  * \date 06/10/2017
  * 
@@ -216,6 +216,8 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             return true;
             break;
     }
+
+    return false;
 }
 
 void NGHamPkts::Generate(uint8_t *data, uint8_t len)

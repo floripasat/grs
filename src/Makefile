@@ -9,7 +9,7 @@ LIBS=../
 FLAGS=-std=c++14 -I$(LIBS)
 GTKMM_FLAGS=`pkg-config --cflags --libs gtkmm-3.0`
 
-all: $(BUILD_DIR)/main.o $(BUILD_DIR)/aux.o $(BUILD_DIR)/fsat-grs.o $(BUILD_DIR)/log.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/protocol_statistic.o $(BUILD_DIR)/packet_data.o $(BUILD_DIR)/beacon_data_old.o $(BUILD_DIR)/telemetry_data.o $(BUILD_DIR)/event_log.o $(BUILD_DIR)/packets.o $(BUILD_DIR)/ngham_pkts.o $(BUILD_DIR)/data_processing.o $(BUILD_DIR)/ax25_pkts.o $(BUILD_DIR)/sha256.o $(BUILD_DIR)/read_log.o $(BUILD_DIR)/uplink_event.o $(BUILD_DIR)/payload_x_upload.o $(BUILD_DIR)/udp_decoder.o $(BUILD_DIR)/udp_server.o $(BUILD_DIR)/bit_buffer.o $(BUILD_DIR)/byte_buffer.o $(BUILD_DIR)/ngham_plus.o $(BUILD_DIR)/packet_buffer.o $(BUILD_DIR)/packet_sniffer.o $(BUILD_DIR)/sync_word.o $(BUILD_DIR)/payload.o $(BUILD_DIR)/ax25.o $(BUILD_DIR)/beacon.o
+all: $(BUILD_DIR)/main.o $(BUILD_DIR)/aux.o $(BUILD_DIR)/fsat-grs.o $(BUILD_DIR)/log.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/protocol_statistic.o $(BUILD_DIR)/packet_data.o $(BUILD_DIR)/beacon_data_old.o $(BUILD_DIR)/telemetry_data.o $(BUILD_DIR)/event_log.o $(BUILD_DIR)/packets.o $(BUILD_DIR)/ngham_pkts.o $(BUILD_DIR)/ax25_pkts.o $(BUILD_DIR)/sha256.o $(BUILD_DIR)/read_log.o $(BUILD_DIR)/uplink_event.o $(BUILD_DIR)/payload_x_upload.o $(BUILD_DIR)/udp_decoder.o $(BUILD_DIR)/udp_server.o $(BUILD_DIR)/bit_buffer.o $(BUILD_DIR)/byte_buffer.o $(BUILD_DIR)/ngham_plus.o $(BUILD_DIR)/packet_buffer.o $(BUILD_DIR)/packet_sniffer.o $(BUILD_DIR)/sync_word.o $(BUILD_DIR)/payload.o $(BUILD_DIR)/ax25.o $(BUILD_DIR)/beacon.o
 	$(MAKE) BUILD_DIR=$(BUILD_DIR) -C packets
 
 $(BUILD_DIR)/main.o: main.cpp
@@ -46,9 +46,6 @@ $(BUILD_DIR)/packets.o: packets.cpp packets.h
 	$(CXX) $(GTKMM_FLAGS) $(FLAGS) -c $< -o $@
 
 $(BUILD_DIR)/ngham_pkts.o: ngham_pkts.cpp ngham_pkts.h
-	$(CXX) $(GTKMM_FLAGS) $(FLAGS) -c $< -o $@
-
-$(BUILD_DIR)/data_processing.o: data_processing.cpp data_processing.hpp
 	$(CXX) $(GTKMM_FLAGS) $(FLAGS) -c $< -o $@
 
 $(BUILD_DIR)/ax25_pkts.o: ax25_pkts.cpp ax25_pkts.h
