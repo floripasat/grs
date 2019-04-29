@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: Udp Decoder
 # Author: Gabriel Mariano Marcelino
-# Generated: Mon Mar  4 01:03:32 2019
+# Generated: Mon Apr  8 13:10:05 2019
 ##################################################
 
 
@@ -19,16 +19,17 @@ from optparse import OptionParser
 
 class udp_decoder(gr.top_block):
 
-    def __init__(self, baudrate=1200, host_address='127.0.0.1', host_port=7355, output_file="/tmp/rx_data.bin", samp_rate=48000):
+    def __init__(self, baudrate=2400, client_address='127.0.0.1', client_port=4337, host_address='127.0.0.1', host_port=4327, samp_rate=48000):
         gr.top_block.__init__(self, "Udp Decoder")
 
         ##################################################
         # Parameters
         ##################################################
         self.baudrate = baudrate
+        self.client_address = client_address
+        self.client_port = client_port
         self.host_address = host_address
         self.host_port = host_port
-        self.output_file = output_file
         self.samp_rate = samp_rate
 
         ##################################################
@@ -37,9 +38,8 @@ class udp_decoder(gr.top_block):
         self.digital_clock_recovery_mm_xx_0 = digital.clock_recovery_mm_ff(samp_rate/baudrate, 0.001, 0, 0.25, 0.001)
         self.digital_binary_slicer_fb_0 = digital.binary_slicer_fb()
         self.blocks_udp_source_0 = blocks.udp_source(gr.sizeof_short*1, host_address, host_port, 1472, True)
+        self.blocks_udp_sink_0 = blocks.udp_sink(gr.sizeof_char*1, client_address, client_port, 1472, True)
         self.blocks_short_to_float_0 = blocks.short_to_float(1, 32767)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, output_file, False)
-        self.blocks_file_sink_0.set_unbuffered(False)
 
 
 
@@ -48,7 +48,7 @@ class udp_decoder(gr.top_block):
         ##################################################
         self.connect((self.blocks_short_to_float_0, 0), (self.digital_clock_recovery_mm_xx_0, 0))
         self.connect((self.blocks_udp_source_0, 0), (self.blocks_short_to_float_0, 0))
-        self.connect((self.digital_binary_slicer_fb_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.digital_binary_slicer_fb_0, 0), (self.blocks_udp_sink_0, 0))
         self.connect((self.digital_clock_recovery_mm_xx_0, 0), (self.digital_binary_slicer_fb_0, 0))
 
     def get_baudrate(self):
@@ -57,6 +57,18 @@ class udp_decoder(gr.top_block):
     def set_baudrate(self, baudrate):
         self.baudrate = baudrate
         self.digital_clock_recovery_mm_xx_0.set_omega(self.samp_rate/self.baudrate)
+
+    def get_client_address(self):
+        return self.client_address
+
+    def set_client_address(self, client_address):
+        self.client_address = client_address
+
+    def get_client_port(self):
+        return self.client_port
+
+    def set_client_port(self, client_port):
+        self.client_port = client_port
 
     def get_host_address(self):
         return self.host_address
@@ -70,13 +82,6 @@ class udp_decoder(gr.top_block):
     def set_host_port(self, host_port):
         self.host_port = host_port
 
-    def get_output_file(self):
-        return self.output_file
-
-    def set_output_file(self, output_file):
-        self.output_file = output_file
-        self.blocks_file_sink_0.open(self.output_file)
-
     def get_samp_rate(self):
         return self.samp_rate
 
@@ -88,17 +93,20 @@ class udp_decoder(gr.top_block):
 def argument_parser():
     parser = OptionParser(usage="%prog: [options]", option_class=eng_option)
     parser.add_option(
-        "-b", "--baudrate", dest="baudrate", type="intx", default=1200,
+        "-b", "--baudrate", dest="baudrate", type="intx", default=2400,
         help="Set baudrate [default=%default]")
+    parser.add_option(
+        "-d", "--client-address", dest="client_address", type="string", default='127.0.0.1',
+        help="Set client_address [default=%default]")
+    parser.add_option(
+        "-c", "--client-port", dest="client_port", type="intx", default=4337,
+        help="Set client_port [default=%default]")
     parser.add_option(
         "-a", "--host-address", dest="host_address", type="string", default='127.0.0.1',
         help="Set host_address [default=%default]")
     parser.add_option(
-        "-p", "--host-port", dest="host_port", type="intx", default=7355,
+        "-p", "--host-port", dest="host_port", type="intx", default=4327,
         help="Set host_port [default=%default]")
-    parser.add_option(
-        "-o", "--output-file", dest="output_file", type="string", default="/tmp/rx_data.bin",
-        help="Set output_file [default=%default]")
     parser.add_option(
         "-s", "--samp-rate", dest="samp_rate", type="intx", default=48000,
         help="Set samp_rate [default=%default]")
@@ -120,7 +128,7 @@ def main(top_block_cls=udp_decoder, options=None):
     if gr.enable_realtime_scheduling() != gr.RT_OK:
         print "Error: failed to enable real-time scheduling."
 
-    tb = top_block_cls(baudrate=options.baudrate, host_address=options.host_address, host_port=options.host_port, output_file=options.output_file, samp_rate=options.samp_rate)
+    tb = top_block_cls(baudrate=options.baudrate, client_address=options.client_address, client_port=options.client_port, host_address=options.host_address, host_port=options.host_port, samp_rate=options.samp_rate)
     tb.start()
     tb.wait()
 
