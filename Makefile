@@ -19,6 +19,7 @@ all:
 	mkdir -p $(BUILD_DIR)/matplotlib
 	grcc gnuradio/gfsk_rx.grc -d $(BUILD_DIR)/gnuradio
 	grcc gnuradio/gfsk_tx.grc -d $(BUILD_DIR)/gnuradio
+	grcc gnuradio/audio_decoder.grc -d $(BUILD_DIR)/gnuradio
 #	grcc gnuradio/udp_decode.grc -d $(BUILD_DIR)/gnuradio
 	cp gui/fsat_grs_gui.glade $(BUILD_DIR)/glade/
 	cp img/icon.png $(BUILD_DIR)/

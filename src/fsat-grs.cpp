@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.9
+ * \version 0.4.11
  * 
  * \date 10/09/2017
  * 
@@ -916,16 +916,7 @@ bool FSatGRS::Timer()
     {
         if (!togglebutton_pause_beacon->get_active())
         {
-            if (filechooserbutton_beacon->get_filename().size() > 0)
-            {
-                ngham_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
-                //ax25_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
-            }
-            else
-            {
-                ngham_pkts_beacon->Search(FSAT_GRS_GRC_BEACON_BIN);
-                //ax25_pkts_beacon->Search(FSAT_PKT_ANA_GRC_BEACON_BIN);
-            }
+            ngham_pkts_beacon->Search(FSAT_GRS_GRC_BEACON_BIN);
         }
     }
     
@@ -933,14 +924,7 @@ bool FSatGRS::Timer()
     {
         if (!togglebutton_pause_telemetry->get_active())
         {
-            if (filechooserbutton_telemetry->get_filename().size() > 0)
-            {
-                ngham_pkts_telemetry->Search(filechooserbutton_telemetry->get_filename().c_str());
-            }
-            else
-            {
-                ngham_pkts_telemetry->Search(FSAT_GRS_GRC_TELEMETRY_BIN);
-            }
+            ngham_pkts_telemetry->Search(FSAT_GRS_GRC_TELEMETRY_BIN);
         }
     }
     
@@ -1328,7 +1312,15 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         }*/
         else if (radiobutton_beacon_src_file->get_active())
         {
-            ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), ifstream::in);
+            system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
+            system("touch " FSAT_GRS_GRC_BEACON_BIN);
+
+            beacon_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_beacon->get_filename().c_str(), 48000, 1200, FSAT_GRS_GRC_BEACON_BIN);
+
+            thread_beacon_audio_decoder = make_unique<thread>(&AudioDecoder::run, *beacon_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
+            thread_beacon_audio_decoder->detach();
+
+            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
         }
         
         if (ngham_pkts_beacon->is_open())
