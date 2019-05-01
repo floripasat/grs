@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.8
+ * \version 0.4.12
  * 
  * \date 10/09/2017
  * 
@@ -47,7 +47,6 @@
 #include "beacon_data_old.h"
 #include "telemetry_data.h"
 #include "telecommands.h" 
-#include "data_processing.hpp"
 #include "sha256.h"
 #include "uplink_events_columns.h"
 #include "packets/packets_ids.h"
@@ -153,12 +152,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         toolbutton_next_log_line->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonNextClicked));
     }
 
-    ref_builder->get_widget("toolbutton_statistics", toolbutton_statistics);
-    if (toolbutton_statistics)
-    {
-        toolbutton_statistics->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonStatisticsClicked));
-    }
-    
     ref_builder->get_widget("toolbutton_plot", toolbutton_plot);
     if (toolbutton_plot)
     {
@@ -593,20 +586,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     {
         button_plot->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPlotClicked));
     }
-    
-    // Log Analysis Dialog
-    ref_builder->get_widget("dialog_log_statistics", dialog_log_statistics);
-    ref_builder->get_widget("filechooserbutton_log_analysis", filechooserbutton_log_analysis);
-    ref_builder->get_widget("textview_log_analysis_result", textview_log_analysis_result);
-    ref_builder->get_widget("button_run_log_analysis", button_run_log_analysis);
-    ref_builder->get_widget("radio_button_log_analysis_beacon", radio_button_log_analysis_beacon);
-    ref_builder->get_widget("radio_button_log_analysis_telemetry", radio_button_log_analysis_telemetry);
-    
-    if (button_run_log_analysis)
-    {
-        button_run_log_analysis->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonRunAnalysisClicked));
-    }
-    
+
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
     ref_builder->get_widget("entry_config_general_gs_id", entry_config_general_gs_id);
@@ -936,16 +916,7 @@ bool FSatGRS::Timer()
     {
         if (!togglebutton_pause_beacon->get_active())
         {
-            if (filechooserbutton_beacon->get_filename().size() > 0)
-            {
-                ngham_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
-                //ax25_pkts_beacon->Search(filechooserbutton_beacon->get_filename().c_str());
-            }
-            else
-            {
-                ngham_pkts_beacon->Search(FSAT_GRS_GRC_BEACON_BIN);
-                //ax25_pkts_beacon->Search(FSAT_PKT_ANA_GRC_BEACON_BIN);
-            }
+            ngham_pkts_beacon->Search(FSAT_GRS_GRC_BEACON_BIN);
         }
     }
     
@@ -953,14 +924,7 @@ bool FSatGRS::Timer()
     {
         if (!togglebutton_pause_telemetry->get_active())
         {
-            if (filechooserbutton_telemetry->get_filename().size() > 0)
-            {
-                ngham_pkts_telemetry->Search(filechooserbutton_telemetry->get_filename().c_str());
-            }
-            else
-            {
-                ngham_pkts_telemetry->Search(FSAT_GRS_GRC_TELEMETRY_BIN);
-            }
+            ngham_pkts_telemetry->Search(FSAT_GRS_GRC_TELEMETRY_BIN);
         }
     }
     
@@ -1189,16 +1153,6 @@ void FSatGRS::OnButtonConfigDefaultClicked()
     this->LoadDefaultConfigs();
 }
 
-void FSatGRS::OnToolButtonStatisticsClicked()
-{
-    int response = dialog_log_statistics->run();
-    
-    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
-    {
-        dialog_log_statistics->hide();
-    }
-}
-
 void FSatGRS::OnToolButtonPlotClicked()
 {
     int response = dialog_plot->run();
@@ -1358,7 +1312,15 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         }*/
         else if (radiobutton_beacon_src_file->get_active())
         {
-            ngham_pkts_beacon->open(filechooserbutton_beacon->get_filename().c_str(), ifstream::in);
+            system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
+            system("touch " FSAT_GRS_GRC_BEACON_BIN);
+
+            beacon_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_beacon->get_filename().c_str(), 48000, 1200, FSAT_GRS_GRC_BEACON_BIN);
+
+            thread_beacon_audio_decoder = make_unique<thread>(&AudioDecoder::run, *beacon_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
+            thread_beacon_audio_decoder->detach();
+
+            ngham_pkts_beacon->open(FSAT_GRS_GRC_BEACON_BIN, ifstream::in);
         }
         
         if (ngham_pkts_beacon->is_open())
@@ -1528,7 +1490,15 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         }*/
         else if (radiobutton_telemetry_src_file->get_active())
         {
-            ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), ifstream::in);
+            system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
+            system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
+
+            downlink_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_telemetry->get_filename().c_str(), 48000, 2400, FSAT_GRS_GRC_TELEMETRY_BIN);
+
+            thread_downlink_audio_decoder = make_unique<thread>(&AudioDecoder::run, *downlink_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
+            thread_downlink_audio_decoder->detach();
+
+            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
         }
         
         if (ngham_pkts_telemetry->is_open())
@@ -2388,47 +2358,6 @@ void FSatGRS::OnButtonPlotClicked()
     }
     
     dialog_plot->hide();
-}
-
-void FSatGRS::OnButtonRunAnalysisClicked()
-{
-    string log_file(filechooserbutton_log_analysis->get_filename().c_str());
-    
-    if (log_file.size() > 0)
-    {
-        DataProcessing *log_analysis = new DataProcessing(log_file);
-        
-        Glib::RefPtr<Gtk::TextBuffer> textview_log_analysis_result_buffer = textview_log_analysis_result->get_buffer();
-        
-        if(radio_button_log_analysis_telemetry->get_active())
-        {
-            if (this->CheckFile(FSAT_GRS_VAL_TELEMETRY_SCRIPT))
-            {
-                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_TELEMETRY_SCRIPT).c_str());
-            }
-            else
-            {
-                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_TELEMETRY_SCRIPT_LOCAL).c_str());
-            }
-        }
-        if(radio_button_log_analysis_beacon->get_active())
-        {
-            if (this->CheckFile(FSAT_GRS_VAL_BEACON_SCRIPT))
-            {
-                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_BEACON_SCRIPT).c_str());
-            }
-            else
-            {
-                textview_log_analysis_result_buffer->set_text(log_analysis->Validate(FSAT_GRS_VAL_BEACON_SCRIPT_LOCAL).c_str());
-            }
-        }
-        
-        delete log_analysis;
-    }
-    else
-    {
-        this->RaiseErrorMessage("No log file provided!", "To run a analysis, a log file must be provided.");
-    }
 }
 
 void FSatGRS::OnButtonDataRequestSendClicked()

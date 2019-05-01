@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.1
+ * \version 0.4.12
  * 
  * \date 10/09/2017
  * 
@@ -52,6 +52,7 @@
 #include "payload_x_upload.h"
 #include "udp_decoder.h"
 #include "packets/beacon_data.h"
+#include "audio_decoder.h"
 
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE                "/usr/share/floripasat-grs/glade/fsat_grs_gui.glade"
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL          "glade/fsat_grs_gui.glade"
@@ -71,6 +72,8 @@
 #define FSAT_GRS_UDP_DEC_GRC_SCRIPT_LOCAL_DOWNLINK  "gnuradio/udp_decoder_downlink.py"
 #define FSAT_GRS_UDP_DEC_GRS_PROCESS_BEACON         "grs_beacon"
 #define FSAT_GRS_UDP_DEC_GRS_PROCESS_DOWNLINK       "grs_downlink"
+#define FSAT_GRS_AUDIO_DEC_GRC_SCRIPT               "/usr/share/floripasat-grs/gnuradio/audio_decoder.py"
+#define FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL         "gnuradio/audio_decoder.py"
 
 #define FSAT_GRS_PLOT_SCRIPT                        "/usr/share/floripasat-grs/matplotlib/csv_plot.py"
 #define FSAT_GRS_PLOT_SCRIPT_LOCAL                  "matplotlib/csv_plot.py"
@@ -125,7 +128,6 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_close_log_file;
         Gtk::ToolButton                 *toolbutton_prev_log_line;
         Gtk::ToolButton                 *toolbutton_next_log_line;
-        Gtk::ToolButton                 *toolbutton_statistics;
         Gtk::ToolButton                 *toolbutton_plot;
         Gtk::ToolButton                 *toolbutton_ping;
         Gtk::ToolButton                 *toolbutton_request_data;
@@ -156,6 +158,9 @@ class FSatGRS
         Gtk::Button                     *button_stop_beacon;
         Gtk::Button                     *button_clear_all_beacon;
 
+        std::unique_ptr<AudioDecoder>   beacon_audio_decoder;
+        std::unique_ptr<std::thread>    thread_beacon_audio_decoder;
+
         std::unique_ptr<udp_decoder>    udp_decoder_beacon;
         std::unique_ptr<std::thread>    thread_beacon_udp_decoder;
 
@@ -175,6 +180,9 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_telemetry;
         Gtk::Button                     *button_stop_telemetry;
         Gtk::Button                     *button_clear_all_telemetry;
+
+        std::unique_ptr<AudioDecoder>   downlink_audio_decoder;
+        std::unique_ptr<std::thread>    thread_downlink_audio_decoder;
 
         std::unique_ptr<udp_decoder>    udp_decoder_downlink;
         std::unique_ptr<std::thread>    thread_downlink_udp_decoder;
@@ -262,7 +270,7 @@ class FSatGRS
         Gtk::Label                      *label_beacon_data_imu_gyro_z;
         Gtk::Label                      *label_beacon_data_obdh_rst_value;
         Gtk::Label                      *label_beacon_data_system_time_value;
-        
+
         // Telemetry Data
         Gtk::Label                      *label_telemetry_data_status_reset_counter;
         Gtk::Label                      *label_telemetry_data_status_reset_cause;
@@ -316,7 +324,7 @@ class FSatGRS
         Gtk::Label                      *label_telemetry_data_eps_misc_beacon_i;
         Gtk::Label                      *label_telemetry_data_eps_misc_uc_temp;
         Gtk::Label                      *label_telemetry_data_eps_misc_energy_level;
-        
+
         // Telemetry Packets Statistic
         Gtk::Label                      *label_telemetry_pkt_statistic_total;
         Gtk::Label                      *label_telemetry_pkt_statistic_lost;
@@ -368,14 +376,6 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_plot_save_pdf_telemetry;
         Gtk::CheckButton                *checkbutton_plot_use_sat_time_telemetry;
         Gtk::Button                     *button_plot;
-        
-        // Log Analysis Dialog
-        Gtk::Dialog                     *dialog_log_statistics;
-        Gtk::FileChooserButton          *filechooserbutton_log_analysis;
-        Gtk::TextView                   *textview_log_analysis_result;
-        Gtk::Button                     *button_run_log_analysis;
-        Gtk::RadioButton                *radio_button_log_analysis_beacon;
-        Gtk::RadioButton                *radio_button_log_analysis_telemetry;
         
         // Data Request Dialog
         Gtk::Dialog                     *dialog_data_request;
@@ -563,12 +563,7 @@ class FSatGRS
          * \return 
          */
         void OnToolButtonNextClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnToolButtonStatisticsClicked();
+
         /**
          * \brief 
          * 

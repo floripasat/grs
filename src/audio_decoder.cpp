@@ -1,0 +1,157 @@
+/*
+ * audio_decoder.cpp
+ * 
+ * Copyright (C) 2019, Universidade Federal de Santa Catarina.
+ * 
+ * This file is part of FloripaSat-GRS.
+ * 
+ * FloripaSat-GRS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * FloripaSat-GRS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with FloripaSat-GRS. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
+
+/**
+ * \brief Audio decoder implementation.
+ * 
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
+ * 
+ * \version 0.4.11
+ * 
+ * \date 29/04/2019
+ * 
+ * \addtogroup audio_decoder
+ * \{
+ */
+
+#include <python2.7/Python.h>
+
+#include "audio_decoder.h"
+
+using namespace std;
+
+AudioDecoder::AudioDecoder()
+{
+    this->set_input_file(AUDIO_DECODER_DEFAULT_INPUT_FILE);
+    this->set_sample_rate(AUDIO_DECODER_DEFAULT_SAMPLE_RATE_HZ);
+    this->set_baudrate(AUDIO_DECODER_DEFAULT_BAUDRATE_BPS);
+    this->set_output_file(AUDIO_DECODER_DEFAULT_OUTPUT_FILE);
+}
+
+AudioDecoder::AudioDecoder(string input, unsigned int samp, unsigned int baud, string output)
+    : AudioDecoder()
+{
+    this->set_input_file(input);
+    this->set_sample_rate(samp);
+    this->set_baudrate(baud);
+    this->set_output_file(output);
+}
+
+AudioDecoder::~AudioDecoder()
+{
+}
+
+void AudioDecoder::set_input_file(string input)
+{
+    this->input_file = input;
+}
+
+void AudioDecoder::set_sample_rate(unsigned int samp)
+{
+    this->sample_rate = samp;
+}
+
+void AudioDecoder::set_baudrate(unsigned int baud)
+{
+    this->baudrate = baud;
+}
+
+void AudioDecoder::set_output_file(std::string output)
+{
+    this->output_file = output;
+}
+
+void AudioDecoder::run(string script)
+{
+    auto args = this->gen_script_args(script);
+
+    string cmd = "python ";
+
+    for(unsigned int i=0; i<args.size(); i++)
+    {
+        cmd += args[i];
+        if (i < args.size()-1)
+        {
+            cmd += " ";
+        }
+    }
+
+    system(cmd.c_str());
+}
+
+void AudioDecoder::run_using_python_api(std::string script)
+{
+    auto args = this->gen_script_args(script);
+
+    string cmd = "import sys\n";
+
+    cmd += "sys.argv = [";
+
+    for(unsigned int i=0; i<args.size(); i++)
+    {
+        cmd += "'";
+        cmd += args[i];
+        if (i == args.size()-1)
+        {
+            cmd += "'";
+        }
+        else
+        {
+            cmd += "',";
+        }
+    }
+
+    cmd += "]\n";
+    cmd += "execfile(\"";
+    cmd += script;
+    cmd += "\")\n";
+
+    Py_Initialize();
+
+    PyRun_SimpleString(cmd.c_str());
+
+    Py_Finalize();
+}
+
+vector<string> AudioDecoder::gen_script_args(string script)
+{
+    vector<string> args;
+
+    args.push_back(AUDIO_DECODER_GRC_PYTHON_ARG);
+    args.push_back(script);
+
+    args.push_back(AUDIO_DECODER_GRC_INPUT_FILE_ARG);
+    args.push_back(this->input_file);
+
+    args.push_back(AUDIO_DECODER_GRC_SAMPLE_RATE_ARG);
+    args.push_back(to_string(this->sample_rate));
+
+    args.push_back(AUDIO_DECODER_GRC_BAUDRATE_ARG);
+    args.push_back(to_string(this->baudrate));
+
+    args.push_back(AUDIO_DECODER_GRC_OUTPUT_FILE_ARG);
+    args.push_back(this->output_file);
+
+    return args;
+}
+
+//! \} End of AudioDecoder group

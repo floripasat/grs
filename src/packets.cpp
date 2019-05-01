@@ -1,7 +1,7 @@
 /*
  * packets.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file packets.cpp
- * 
  * \brief Packets class implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.4.9
  * 
  * \date 06/10/2017
  * 
@@ -194,7 +192,7 @@ void Packets::Search(const char *file)
 
 string Packets::LogPayload()
 {
-    
+    return string();
 }
 
 //! \} End of packets group

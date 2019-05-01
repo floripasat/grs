@@ -10,6 +10,14 @@
       <pattern>*.csv</pattern>
     </patterns>
   </object>
+  <object class="GtkFileFilter" id="filefilter_wav">
+    <mime-types>
+      <mime-type>audio/wav</mime-type>
+    </mime-types>
+    <patterns>
+      <pattern>*.wav</pattern>
+    </patterns>
+  </object>
   <object class="GtkImage" id="image_clear_beacon_data">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -593,19 +601,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton_statistics">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Log analysis</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-info</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkToolButton" id="toolbutton_plot">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -1057,6 +1052,7 @@
                         <child>
                           <object class="GtkEntry" id="entry_beacon_serial_port">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Serial address</property>
                             <property name="width_chars">14</property>
@@ -1071,6 +1067,7 @@
                         <child>
                           <object class="GtkComboBox" id="combobox_beacon_baudrate">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="model">liststore_baudrates</property>
@@ -1090,6 +1087,7 @@
                         <child>
                           <object class="GtkLabel" id="label_port">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
@@ -1103,6 +1101,7 @@
                         <child>
                           <object class="GtkLabel" id="label_baudrate">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
@@ -1116,6 +1115,7 @@
                         <child>
                           <object class="GtkRadioButton" id="radiobutton_beacon_src_serial">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
@@ -1172,14 +1172,41 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkFileChooserButton" id="filechooserbutton_beacon">
+                          <object class="GtkBox" id="box_beacon_audio_input">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="create_folders">False</property>
-                            <property name="preview_widget_active">False</property>
-                            <property name="use_preview_label">False</property>
-                            <property name="width_chars">20</property>
+                            <property name="spacing">5</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Audio:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkFileChooserButton" id="filechooserbutton_beacon">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Audio file</property>
+                                <property name="hexpand">True</property>
+                                <property name="create_folders">False</property>
+                                <property name="filter">filefilter_wav</property>
+                                <property name="preview_widget_active">False</property>
+                                <property name="use_preview_label">False</property>
+                                <property name="title" translatable="yes">Select an Audio File</property>
+                                <property name="width_chars">16</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1522,6 +1549,7 @@
                             <child>
                               <object class="GtkRadioButton" id="radiobutton_telemetry_src_serial">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_stock">True</property>
@@ -1539,6 +1567,7 @@
                             <child>
                               <object class="GtkLabel" id="label105">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Device:</property>
@@ -1551,6 +1580,7 @@
                             <child>
                               <object class="GtkLabel" id="label106">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Baudrate:</property>
@@ -1563,6 +1593,7 @@
                             <child>
                               <object class="GtkEntry" id="entry_telemetry_serial_port">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Serial address</property>
                                 <property name="width_chars">14</property>
@@ -1577,6 +1608,7 @@
                             <child>
                               <object class="GtkComboBox" id="combobox_telemetry_baudrate">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="model">liststore_baudrates</property>
@@ -1635,14 +1667,41 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkFileChooserButton" id="filechooserbutton_telemetry">
+                              <object class="GtkBox" id="box_downlink_audio_input">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="hexpand">True</property>
-                                <property name="create_folders">False</property>
-                                <property name="preview_widget_active">False</property>
-                                <property name="use_preview_label">False</property>
-                                <property name="width_chars">20</property>
+                                <property name="spacing">5</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Audio:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkFileChooserButton" id="filechooserbutton_telemetry">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">Audio file</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="create_folders">False</property>
+                                    <property name="filter">filefilter_wav</property>
+                                    <property name="preview_widget_active">False</property>
+                                    <property name="use_preview_label">False</property>
+                                    <property name="title" translatable="yes">Select an Audio File</property>
+                                    <property name="width_chars">16</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1968,6 +2027,7 @@
                                     <child>
                                       <object class="GtkRadioButton" id="radiobutton_uplink_output_serial">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_stock">True</property>
@@ -1985,6 +2045,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label205">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Device:</property>
@@ -1997,6 +2058,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label206">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Baudrate:</property>
@@ -2009,6 +2071,7 @@
                                     <child>
                                       <object class="GtkEntry" id="entry_uplink_output_serial_dev">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Serial address</property>
                                         <property name="hexpand">True</property>
@@ -2023,6 +2086,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="combobox_uplink_output_serial_baudrate">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">liststore_baudrates</property>
                                         <property name="active">10</property>
@@ -7777,175 +7841,6 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
-  <object class="GtkDialog" id="dialog_log_statistics">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Log Analysis</property>
-    <property name="window_position">center</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">window_fsat_grs</property>
-    <child>
-      <placeholder/>
-    </child>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox4">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area4">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="button_run_log_analysis">
-                <property name="label" translatable="yes">Run</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid23">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
-            <property name="margin_top">10</property>
-            <property name="row_spacing">10</property>
-            <property name="column_spacing">10</property>
-            <child>
-              <object class="GtkLabel" id="label85">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Log file:</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFileChooserButton" id="filechooserbutton_log_analysis">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="width_request">500</property>
-                <property name="height_request">300</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTextView" id="textview_log_analysis_result">
-                    <property name="width_request">500</property>
-                    <property name="height_request">300</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="editable">False</property>
-                    <property name="wrap_mode">char</property>
-                    <property name="cursor_visible">False</property>
-                    <property name="monospace">True</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label87">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Analysis Results:</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box25">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="homogeneous">True</property>
-                <child>
-                  <object class="GtkRadioButton" id="radio_button_log_analysis_telemetry">
-                    <property name="label" translatable="yes">Telemetry</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radio_button_log_analysis_beacon</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="radio_button_log_analysis_beacon">
-                    <property name="label" translatable="yes">Beacon</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radio_button_log_analysis_telemetry</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
