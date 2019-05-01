@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.11
+ * \version 0.4.12
  * 
  * \date 10/09/2017
  * 
@@ -1490,7 +1490,15 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         }*/
         else if (radiobutton_telemetry_src_file->get_active())
         {
-            ngham_pkts_telemetry->open(filechooserbutton_telemetry->get_filename().c_str(), ifstream::in);
+            system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
+            system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
+
+            downlink_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_telemetry->get_filename().c_str(), 48000, 2400, FSAT_GRS_GRC_TELEMETRY_BIN);
+
+            thread_downlink_audio_decoder = make_unique<thread>(&AudioDecoder::run, *downlink_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
+            thread_downlink_audio_decoder->detach();
+
+            ngham_pkts_telemetry->open(FSAT_GRS_GRC_TELEMETRY_BIN, ifstream::in);
         }
         
         if (ngham_pkts_telemetry->is_open())

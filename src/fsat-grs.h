@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.11
+ * \version 0.4.12
  * 
  * \date 10/09/2017
  * 
@@ -182,6 +182,7 @@ class FSatGRS
         Gtk::Button                     *button_clear_all_telemetry;
 
         std::unique_ptr<AudioDecoder>   downlink_audio_decoder;
+        std::unique_ptr<std::thread>    thread_downlink_audio_decoder;
 
         std::unique_ptr<udp_decoder>    udp_decoder_downlink;
         std::unique_ptr<std::thread>    thread_downlink_udp_decoder;
