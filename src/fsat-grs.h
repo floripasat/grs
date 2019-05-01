@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.13
+ * \version 0.4.14
  * 
  * \date 10/09/2017
  * 
@@ -177,6 +177,7 @@ class FSatGRS
         Gtk::ComboBox                   *combobox_telemetry_baudrate;
         Gtk::RadioButton                *radiobutton_telemetry_src_file;
         Gtk::FileChooserButton          *filechooserbutton_telemetry;
+        Gtk::Entry                      *entry_downlink_audio_sample_rate;
         Gtk::ToggleButton               *togglebutton_play_telemetry;
         Gtk::ToggleButton               *togglebutton_pause_telemetry;
         Gtk::Button                     *button_stop_telemetry;
