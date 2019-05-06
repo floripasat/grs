@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.3.2
+ * \version 0.4.15
  * 
  * \date 03/03/2019
  * 
@@ -132,6 +132,7 @@ void udp_decoder::run(string script)
 
 void udp_decoder::run_using_python_api(std::string script)
 {
+/*
     auto args = this->gen_script_args(script);
 
     string cmd = "import sys\n";
@@ -162,6 +163,7 @@ void udp_decoder::run_using_python_api(std::string script)
     PyRun_SimpleString(cmd.c_str());
 
     Py_Finalize();
+*/
 }
 
 //! \} End of udp_decoder group

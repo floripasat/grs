@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.12
+ * \version 0.4.14
  * 
  * \date 10/09/2017
  * 
@@ -236,6 +236,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("combobox_beacon_baudrate", combobox_beacon_baudrate);
     ref_builder->get_widget("radiobutton_beacon_src_file", radiobutton_beacon_src_file);
     ref_builder->get_widget("filechooserbutton_beacon", filechooserbutton_beacon);
+    ref_builder->get_widget("entry_beacon_audio_sample_rate", entry_beacon_audio_sample_rate);
     
     ref_builder->get_widget("togglebutton_play_beacon", togglebutton_play_beacon);
     if (togglebutton_play_beacon)
@@ -273,7 +274,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("combobox_telemetry_baudrate", combobox_telemetry_baudrate);
     ref_builder->get_widget("radiobutton_telemetry_src_file", radiobutton_telemetry_src_file);
     ref_builder->get_widget("filechooserbutton_telemetry", filechooserbutton_telemetry);
-    
+    ref_builder->get_widget("entry_downlink_audio_sample_rate", entry_downlink_audio_sample_rate);
+
     ref_builder->get_widget("togglebutton_play_telemetry", togglebutton_play_telemetry);
     if (togglebutton_play_telemetry)
     {
@@ -1315,7 +1317,10 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
             system("touch " FSAT_GRS_GRC_BEACON_BIN);
 
-            beacon_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_beacon->get_filename().c_str(), 48000, 1200, FSAT_GRS_GRC_BEACON_BIN);
+            beacon_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_beacon->get_filename().c_str(),
+                                                             stoi(entry_beacon_audio_sample_rate->get_text(), nullptr),
+                                                             1200,
+                                                             FSAT_GRS_GRC_BEACON_BIN);
 
             thread_beacon_audio_decoder = make_unique<thread>(&AudioDecoder::run, *beacon_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
             thread_beacon_audio_decoder->detach();
@@ -1340,7 +1345,8 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
             combobox_beacon_baudrate->set_sensitive(false);
             radiobutton_beacon_src_file->set_sensitive(false);
             filechooserbutton_beacon->set_sensitive(false);
-            
+            entry_beacon_audio_sample_rate->set_sensitive(false);
+
             togglebutton_play_beacon->set_sensitive(false);
             togglebutton_pause_beacon->set_sensitive(true);
             button_stop_beacon->set_sensitive(true);
@@ -1391,7 +1397,8 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
         combobox_beacon_baudrate->set_sensitive(true);
         radiobutton_beacon_src_file->set_sensitive(true);
         filechooserbutton_beacon->set_sensitive(true);
-        
+        entry_beacon_audio_sample_rate->set_sensitive(true);
+
         togglebutton_play_beacon->set_sensitive(true);
         togglebutton_pause_beacon->set_sensitive(false);
         button_stop_beacon->set_sensitive(false);
@@ -1493,7 +1500,10 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
             system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
 
-            downlink_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_telemetry->get_filename().c_str(), 48000, 2400, FSAT_GRS_GRC_TELEMETRY_BIN);
+            downlink_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_telemetry->get_filename().c_str(),
+                                                               stoi(entry_downlink_audio_sample_rate->get_text(), nullptr),
+                                                               2400,
+                                                               FSAT_GRS_GRC_TELEMETRY_BIN);
 
             thread_downlink_audio_decoder = make_unique<thread>(&AudioDecoder::run, *downlink_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
             thread_downlink_audio_decoder->detach();
@@ -1518,6 +1528,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
             combobox_telemetry_baudrate->set_sensitive(false);
             radiobutton_telemetry_src_file->set_sensitive(false);
             filechooserbutton_telemetry->set_sensitive(false);
+            entry_downlink_audio_sample_rate->set_sensitive(false);
             
             togglebutton_play_telemetry->set_sensitive(false);
             togglebutton_pause_telemetry->set_sensitive(true);
@@ -1565,6 +1576,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
         combobox_telemetry_baudrate->set_sensitive(true);
         radiobutton_telemetry_src_file->set_sensitive(true);
         filechooserbutton_telemetry->set_sensitive(true);
+        entry_downlink_audio_sample_rate->set_sensitive(true);
         
         togglebutton_play_telemetry->set_sensitive(true);
         togglebutton_pause_telemetry->set_sensitive(false);
