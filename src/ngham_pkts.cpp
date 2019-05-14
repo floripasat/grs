@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.9
+ * \version 0.5.0
  * 
  * \date 06/10/2017
  * 
@@ -159,19 +159,36 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             }
             else
             {
-                event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
+                string callsign = "";
+
+                for(unsigned int i=1; i<8; i++)
+                {
+                    callsign += data[i];
+                }
 
                 switch(data[0])
                 {
                     case FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA:
+                        event_text = "New valid BEACON packet from ";
+                        event_text += substr_to_callsign(callsign);
                         event_text += " containing OBDH data!";
                         break;
                     case FLORIPASAT_PACKET_BEACON_NGHAM_EPS_DATA:
+                        event_text = "New valid BEACON packet from ";
+                        event_text += substr_to_callsign(callsign);
                         event_text += " containing EPS data!";
                         break;
                     case FLORIPASAT_PACKET_BEACON_NGHAM_TTC_DATA:
+                        event_text = "New valid BEACON packet from ";
+                        event_text += substr_to_callsign(callsign);
                         event_text += " containing TTC data!";
                         break;
+                    case FLORIPASAT_PACKET_DOWNLINK_TELEMETRY:
+                        event_text = "New valid DOWNLINK packet ";
+                        event_text += " containing TELEMETRY data!";
+                        break;
+                    default:
+                        event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
                 }
             }
 
@@ -239,6 +256,31 @@ void NGHamPkts::Generate(uint8_t *data, uint8_t len)
     }
 
     file.close();
+}
+
+string NGHamPkts::substr_to_callsign(string cs)
+{
+    string callsign;
+
+    // The minimum length of a callsign is 4 characters, the maximum is 7
+    if ((cs[0] == '0') and (cs[+1] == '0') and (cs[+2] == '0'))     // 4 characters ("000XXXX")
+    {
+        callsign.assign(cs.begin() + 3, cs.end());
+    }
+    else if ((cs[0] == '0') and (cs[1] == '0'))                     // 5 characters ("00XXXXX")
+    {
+        callsign.assign(cs.begin() + 2, cs.end());
+    }
+    else if (cs[0] == '0')                                          // 6 characters ("0XXXXXX")
+    {
+        callsign.assign(cs.begin() + 1, cs.end());
+    }
+    else                                                            // 7 characters ("XXXXXXX")
+    {
+        callsign = cs;
+    }
+
+    return callsign;
 }
 
 //! \} End of ngham_pkts group

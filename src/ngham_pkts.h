@@ -1,7 +1,7 @@
 /*
  * ngham_pkts.h
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file ngham_pks.h
- * 
- * \brief NGHam Packets class.
+ * \brief NGHam Packets class definition.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.5.0
  * 
  * \date 06/10/2017
  * 
@@ -40,6 +38,7 @@
 #define NGHAM_PKS_H_
 
 #include <stdint.h>
+#include <string>
 
 #include "packets.h"
 #include "packet_data.h"
@@ -48,9 +47,7 @@
 #define NGHAM_PKT_GEN_FILE      "/tmp/tx_data.bin"
 
 /**
- * \class NGHamPkts
- * 
- * \brief 
+ * \brief NGHamPkts
  */
 class NGHamPkts: public Packets
 {
@@ -90,6 +87,15 @@ class NGHamPkts: public Packets
          * \return None
          */
         void Generate(uint8_t *data, uint8_t len);
+
+        /**
+         * \brief Gets a callsign from a 7 characters substring.
+         *
+         * \param[in] cs is substring with a callsign (7 characters).
+         *
+         * \return The given callsign as an string.
+         */
+        std::string substr_to_callsign(std::string cs);
 };
 
 #endif // NGHAM_PKTS_H_
