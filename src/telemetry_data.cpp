@@ -1,7 +1,7 @@
 /*
  * telemetry_data.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file telemetry_data.cpp
- * 
  * \brief Telemetry data class implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.4.16
  * 
  * \date 08/10/2017
  * 
@@ -63,7 +61,7 @@ typedef struct {
     uint16_t package_flags;
     //obdh
     uint8_t obdh_status             [6];
-    uint8_t imu                     [24];
+    uint8_t imu                     [12];
     uint8_t obdh_misc               [6];
     uint8_t obdh_uptime             [4];
     uint8_t solar_panels_sensors    [12];
