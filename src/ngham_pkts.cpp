@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.0
+ * \version 0.5.1
  * 
  * \date 06/10/2017
  * 
@@ -184,7 +184,8 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         event_text += " containing TTC data!";
                         break;
                     case FLORIPASAT_PACKET_DOWNLINK_TELEMETRY:
-                        event_text = "New valid DOWNLINK packet ";
+                        event_text = "New valid DOWNLINK packet from ";
+                        event_text += substr_to_callsign(callsign);
                         event_text += " containing TELEMETRY data!";
                         break;
                     default:
