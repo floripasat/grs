@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.14
+ * \version 0.5.3
  * 
  * \date 10/09/2017
  * 
@@ -104,7 +104,7 @@ enum uplink_cmds_t
 {
     FSAT_GRS_UPLINK_PING = 0,                   /**< Ping. */
     FSAT_GRS_UPLINK_REQUEST,                    /**< Data request. */
-    FSAT_GRS_UPLINK_SHUTDOWN,                   /**< Shutdown (hibernation). */
+    FSAT_GRS_UPLINK_HIBERNATION,                /**< Hibernation. */
     FSAT_GRS_UPLINK_RESET_CHARGE,               /**< Reset EPS charge. */
     FSAT_GRS_UPLINK_BROADCAST_MESSAGE,          /**< Broadcast message. */
     FSAT_GRS_UPLINK_PAYLOAD_X_SWAP,             /**< Payload X swap. */
@@ -133,7 +133,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_request_data;
         Gtk::ToolButton                 *toolbutton_reset_charge;
         Gtk::ToolButton                 *toolbutton_broadcast_message;
-        Gtk::ToolButton                 *toolbutton_shutdown;
+        Gtk::ToolButton                 *toolbutton_hibernation;
         Gtk::ToolButton                 *toolbutton_payload_x;
         Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
@@ -334,12 +334,6 @@ class FSatGRS
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
         Gtk::Entry                      *entry_config_general_gs_id;
-        Gtk::Entry                      *entry_config_general_admin_user;
-        Gtk::Entry                      *entry_config_general_admin_password;
-        Gtk::Entry                      *entry_config_general_new_user;
-        Gtk::Entry                      *entry_config_general_new_password;
-        Gtk::Entry                      *entry_config_general_admin_password_confirmation;
-        Gtk::Button                     *button_config_general_add_new_user;
         Gtk::CheckButton                *checkbutton_log_ngham_packets;
         Gtk::CheckButton                *checkbutton_log_ax25_packets;
         Gtk::CheckButton                *checkbutton_log_beacon_data;
@@ -407,12 +401,12 @@ class FSatGRS
         Gtk::Button                     *dialog_broadcast_message_send;
         Gtk::Button                     *dialog_broadcast_message_cancel;
 
-        // Shutdown Command Authentication Dialog
-        Gtk::Dialog                     *dialog_shutdown_authentication;
-        Gtk::Entry                      *entry_sd_auth_user;
-        Gtk::Entry                      *entry_sd_auth_password;
-        Gtk::Button                     *button_sd_auth_send;
-        Gtk::Button                     *button_sd_auth_cancel;
+        // Hibernation dialog
+        Gtk::Dialog                     *dialog_hibernation;
+        Gtk::Entry                      *entry_hibernation_duration;
+        Gtk::Entry                      *entry_hibernation_key;
+        Gtk::Button                     *button_hibernation_send;
+        Gtk::Button                     *button_hibernation_cancel;
 
         // Uplink Scheduler Manager Dialog
         Gtk::Dialog                     *dialog_uplink_scheduler_manager;
@@ -602,12 +596,14 @@ class FSatGRS
          * \return None.
          */
         void OnToolButtonBroadcastMessageClicked();
+
         /**
-         * \brief Shutdown command button click signal handler.
+         * \brief Hibernation command button click signal handler.
          * 
          * \return None
          */
-        void OnToolButtonShutdownClicked();
+        void OnToolButtonHibernationClicked();
+
         /**
          * \brief Payload X control click signal handler.
          *
@@ -742,24 +738,21 @@ class FSatGRS
          * \return None.
          */
         void OnButtonBroadcastDialogCancelClicked();
+
         /**
-         * \brief 
+         * \brief Sends an hibernation telecommand.
          * 
          * \return None
          */
-        void OnButtonShutdownAuthSendClicked();
+        void OnButtonHibernationSendClicked();
+
         /**
-         * \brief 
+         * \brief Closes the hibernation telecommand dialog.
          * 
          * \return None
          */
-        void OnButtonShutdownAuthCancelClicked();
-        /**
-         * \brief 
-         * 
-         * \return None
-         */
-        void OnButtonAddNewUserClicked();
+        void OnButtonHibernationCancelClicked();
+
         /**
          * \brief 
          * 

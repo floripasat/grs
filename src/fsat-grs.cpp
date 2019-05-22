@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.2
+ * \version 0.5.3
  * 
  * \date 10/09/2017
  * 
@@ -183,10 +183,10 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         toolbutton_broadcast_message->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonBroadcastMessageClicked));
     }
 
-    ref_builder->get_widget("toolbutton_shutdown", toolbutton_shutdown);
-    if (toolbutton_shutdown)
+    ref_builder->get_widget("toolbutton_hibernation", toolbutton_hibernation);
+    if (toolbutton_hibernation)
     {
-        toolbutton_shutdown->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonShutdownClicked));
+        toolbutton_hibernation->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonHibernationClicked));
     }
 
     ref_builder->get_widget("toolbutton_payload_x", toolbutton_payload_x);
@@ -593,17 +593,6 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
     ref_builder->get_widget("entry_config_general_gs_id", entry_config_general_gs_id);
-    ref_builder->get_widget("entry_config_general_admin_user", entry_config_general_admin_user);
-    ref_builder->get_widget("entry_config_general_admin_password", entry_config_general_admin_password);
-    ref_builder->get_widget("entry_config_general_new_user", entry_config_general_new_user);
-    ref_builder->get_widget("entry_config_general_new_password", entry_config_general_new_password);
-    ref_builder->get_widget("entry_config_general_admin_password_confirmation", entry_config_general_admin_password_confirmation);
-    
-    ref_builder->get_widget("button_config_general_add_new_user", button_config_general_add_new_user);
-    if (button_config_general_add_new_user)
-    {
-        button_config_general_add_new_user->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonAddNewUserClicked));
-    }
     
     ref_builder->get_widget("entry_config_downlink_beacon_freq", entry_config_downlink_beacon_freq);
     ref_builder->get_widget("entry_config_downlink_beacon_baudrate", entry_config_downlink_beacon_baudrate);
@@ -679,23 +668,23 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         dialog_broadcast_message_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonBroadcastDialogCancelClicked));
     }
 
-    // Shutdown Command Authentication Dialog
-    ref_builder->get_widget("dialog_shutdown_authentication", dialog_shutdown_authentication);
-    ref_builder->get_widget("entry_sd_auth_user", entry_sd_auth_user);
-    ref_builder->get_widget("entry_sd_auth_password", entry_sd_auth_password);
-    
-    ref_builder->get_widget("button_sd_auth_send", button_sd_auth_send);
-    if (button_sd_auth_send)
+    // Hibernation Dialog
+    ref_builder->get_widget("dialog_hibernation", dialog_hibernation);
+    ref_builder->get_widget("entry_hibernation_duration", entry_hibernation_duration);
+    ref_builder->get_widget("entry_hibernation_key", entry_hibernation_key);
+
+    ref_builder->get_widget("button_hibernation_send", button_hibernation_send);
+    if (button_hibernation_send)
     {
-        button_sd_auth_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonShutdownAuthSendClicked));
+        button_hibernation_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonHibernationSendClicked));
     }
-    
-    ref_builder->get_widget("button_sd_auth_cancel", button_sd_auth_cancel);
-    if (button_sd_auth_cancel)
+
+    ref_builder->get_widget("button_hibernation_cancel", button_hibernation_cancel);
+    if (button_hibernation_cancel)
     {
-        button_sd_auth_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonShutdownAuthCancelClicked));
+        button_hibernation_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonHibernationCancelClicked));
     }
-    
+
     // Uplink Scheduler Manager Dialog
     ref_builder->get_widget("dialog_uplink_scheduler_manager", dialog_uplink_scheduler_manager);
     ref_builder->get_widget("treeview_uplink_scheduler_manager_events", treeview_uplink_scheduler_manager_events);
@@ -969,11 +958,11 @@ bool FSatGRS::Timer()
                     {
                         string shutdown_event = "Transmitting ";
                         shutdown_event += entry_config_uplink_burst->get_text();
-                        shutdown_event += " shutdown command(s)...";
+                        shutdown_event += " hibernation command(s)...";
 
                         event_log->AddNewEvent(shutdown_event.c_str());
 
-                        thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
+                        thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_HIBERNATION);
 
                         thread_shutdown_cmd.detach();
                     }
@@ -1212,13 +1201,13 @@ void FSatGRS::OnToolButtonBroadcastMessageClicked()
     }
 }
 
-void FSatGRS::OnToolButtonShutdownClicked()
+void FSatGRS::OnToolButtonHibernationClicked()
 {
-    int response = dialog_shutdown_authentication->run();
+    int response = dialog_hibernation->run();
     
     if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
     {
-        dialog_shutdown_authentication->hide();
+        dialog_hibernation->hide();
     }
 }
 
@@ -1679,7 +1668,7 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         {
             toolbutton_ping->set_sensitive(true);
             toolbutton_request_data->set_sensitive(true);
-            toolbutton_shutdown->set_sensitive(true);
+            toolbutton_hibernation->set_sensitive(true);
             toolbutton_reset_charge->set_sensitive(true);
             toolbutton_broadcast_message->set_sensitive(true);
 
@@ -1725,7 +1714,7 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
         {
             toolbutton_ping->set_sensitive(false);
             toolbutton_request_data->set_sensitive(false);
-            toolbutton_shutdown->set_sensitive(false);
+            toolbutton_hibernation->set_sensitive(false);
             toolbutton_reset_charge->set_sensitive(false);
             toolbutton_broadcast_message->set_sensitive(false);
             toolbutton_payload_x->set_sensitive(false);
@@ -2422,126 +2411,24 @@ void FSatGRS::OnButtonBroadcastDialogCancelClicked()
     dialog_broadcast_message->hide();
 }
 
-void FSatGRS::OnButtonShutdownAuthSendClicked()
+void FSatGRS::OnButtonHibernationSendClicked()
 {
-    string user_hash = sha256(entry_sd_auth_user->get_text());
-    string password_hash = sha256(entry_sd_auth_password->get_text());
-    
-    string homepath = getenv("HOME");
-    
-    ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), ifstream::in);
-    ifstream file_passwords_read((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), ifstream::in);
-    
-    if (file_users_read.is_open() and file_passwords_read.is_open())
-    {
-        string file_users_line;
-        string file_passwords_line;
-        
-        while(getline(file_users_read, file_users_line) and getline(file_passwords_read, file_passwords_line))
-        {
-            if (file_users_line == user_hash)
-            {
-                if (file_passwords_line == password_hash)
-                {
-                    string shutdown_event = "Transmitting ";
-                    shutdown_event += entry_config_uplink_burst->get_text();
-                    shutdown_event += " shutdown command(s)...";
-                    
-                    event_log->AddNewEvent(shutdown_event.c_str());
-                    
-                    thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_SHUTDOWN);
-                    
-                    thread_shutdown_cmd.detach();
-                    
-                    entry_sd_auth_user->set_text("");
-                    entry_sd_auth_password->set_text("");
-                    
-                    dialog_shutdown_authentication->hide();
-                    
-                    return;
-                }
-            }
-        }
-        
-        this->RaiseErrorMessage("Incorrect user or password!", "Try it again.");
-    }
-    else
-    {
-        this->RaiseErrorMessage("Users or passwords database not found!", "Try to create a new user in the preferences dialog.");
-    }
+    string hibernation_event = "Transmitting ";
+    hibernation_event += entry_config_uplink_burst->get_text();
+    hibernation_event += " hibernation command(s)...";
+
+    event_log->AddNewEvent(hibernation_event.c_str());
+
+    thread thread_hibernation_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_HIBERNATION);
+
+    thread_hibernation_cmd.detach();
+
+    dialog_hibernation->hide();
 }
 
-void FSatGRS::OnButtonShutdownAuthCancelClicked()
+void FSatGRS::OnButtonHibernationCancelClicked()
 {
-    entry_sd_auth_user->set_text("");
-    entry_sd_auth_password->set_text("");
-    
-    dialog_shutdown_authentication->hide();
-}
-
-void FSatGRS::OnButtonAddNewUserClicked()
-{
-    string new_user = sha256(entry_config_general_new_user->get_text());
-    
-    if (sha256(entry_config_general_admin_user->get_text()) == FSAT_GRS_ADMIN_HASH)
-    {
-        if (sha256(entry_config_general_admin_password->get_text()) == FSAT_GRS_ADMIN_PASSWORD_HASH)
-        {
-            string homepath = getenv("HOME");
-            
-            ifstream file_users_read((homepath + FSAT_GRS_USERS_FILE).c_str(), ifstream::in);
-            
-            if (file_users_read.is_open())
-            {
-                string file_users_line;
-                
-                while(getline(file_users_read, file_users_line))
-                {
-                    if ((file_users_line == new_user) or (new_user == FSAT_GRS_ADMIN_HASH))
-                    {
-                        this->RaiseErrorMessage("This user already exist!", "Enter another user name.");
-                        
-                        return;
-                    }
-                }
-            }
-            
-            if ((entry_config_general_new_password->get_text() == entry_config_general_admin_password_confirmation->get_text()) or (entry_config_general_new_password->get_text() == ""))
-            {
-                ofstream file_users((homepath + FSAT_GRS_USERS_FILE).c_str(), ofstream::out | ofstream::app);
-                
-                file_users << sha256(entry_config_general_new_user->get_text()) << "\n";
-                
-                file_users.close();
-                
-                ofstream file_users_passwords((homepath + FSAT_GRS_USERS_PASSWORDS_FILE).c_str(), ofstream::out | ofstream::app);
-                
-                file_users_passwords << sha256(entry_config_general_new_password->get_text()) << "\n";
-                
-                file_users_passwords.close();
-                
-                entry_config_general_admin_user->set_text("");
-                entry_config_general_admin_password->set_text("");
-                entry_config_general_new_user->set_text("");
-                entry_config_general_new_password->set_text("");
-                entry_config_general_admin_password_confirmation->set_text("");
-                
-                event_log->AddNewEvent("New user created!");
-            }
-            else
-            {
-                this->RaiseErrorMessage("The new user's passwords are not equal!", "Or the password field is empty. Try it again.");
-            }
-        }
-        else
-        {
-            this->RaiseErrorMessage("Wrong admin password!", "Try it again.");
-        }
-    }
-    else
-    {
-        this->RaiseErrorMessage("Wrong admin user!", "This user can't do that or does not exist.");
-    }
+    dialog_hibernation->hide();
 }
 
 //***************************************************************************************************************************************
@@ -2593,7 +2480,7 @@ void FSatGRS::OnButtonUplinkSchedulerManagerNewEventAddClicked()
             uplink_events.push_back(UplinkEvent(UPLINK_EVENT_TYPE_DATA_REQUEST));
             break;
         case 2:
-            cmd_name = "Shutdown";
+            cmd_name = "Hibernation";
             uplink_events.push_back(UplinkEvent(UPLINK_EVENT_TYPE_SHUTDOWN));
             break;
         default:
@@ -2775,7 +2662,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
     uint8_t ping[9];
     uint8_t request[16];
-    uint8_t shutdown[9];
+    uint8_t hibernation[19];
     uint8_t reset_charge[9];
     uint8_t broadcast[30];
     uint8_t payload_x[300];
@@ -2880,17 +2767,29 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 system(cmd_str.c_str());
             }
             break;
-        case FSAT_GRS_UPLINK_SHUTDOWN:
-            for(unsigned int i=0; i<6; i++)
+        case FSAT_GRS_UPLINK_HIBERNATION:
+
+            // Packet ID code
+            hibernation[0] = FLORIPASAT_PACKET_UPLINK_ENTER_HIBERNATION;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                shutdown[i] = grs_callsign[i];
+                hibernation[i+1] = grs_callsign[i];
             }
-            
-            shutdown[6] = 's';
-            shutdown[7] = 'd';
-            
-            ngham_uplink_pkt.Generate(shutdown, 8);
-            
+
+            // Hibernation duration in hours
+            hibernation[8] = (stoi(entry_hibernation_duration->get_text(), nullptr) & 0xFF00) >> 8;
+            hibernation[9] = stoi(entry_hibernation_duration->get_text(), nullptr) & 0x00FF;
+
+            // Hibernation key
+            for(unsigned int i=0; i<entry_hibernation_key->get_text().size(); i++)
+            {
+                hibernation[i+10] = entry_hibernation_key->get_text()[i];
+            }
+
+            ngham_uplink_pkt.Generate(hibernation, 1+7+2+8);
+
             packets_number = stoi(entry_config_uplink_burst->get_text(), nullptr);
 
             for(unsigned int i=0; i<packets_number; i++)
@@ -3123,11 +3022,6 @@ void FSatGRS::LoadConfigs()
         file_config.close();
         
         entry_config_general_gs_id->set_text(configs_str[0]);
-        entry_config_general_admin_user->set_text("");
-        entry_config_general_admin_password->set_text("");
-        entry_config_general_new_user->set_text("");
-        entry_config_general_new_password->set_text("");
-        entry_config_general_admin_password_confirmation->set_text("");
         checkbutton_log_ngham_packets->set_active((configs_str[1] == "1"? true : false));
         checkbutton_log_ax25_packets->set_active((configs_str[2] == "1"? true : false));
         checkbutton_log_beacon_data->set_active((configs_str[3] == "1"? true : false));
@@ -3201,11 +3095,6 @@ void FSatGRS::SaveConfigs()
 void FSatGRS::LoadDefaultConfigs()
 {
     entry_config_general_gs_id->set_text("PY0EFS");
-    entry_config_general_admin_user->set_text("");
-    entry_config_general_admin_password->set_text("");
-    entry_config_general_new_user->set_text("");
-    entry_config_general_new_password->set_text("");
-    entry_config_general_admin_password_confirmation->set_text("");
     checkbutton_log_ngham_packets->set_active(true);
     checkbutton_log_ax25_packets->set_active(true);
     checkbutton_log_beacon_data->set_active(true);
