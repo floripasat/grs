@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.6
+ * \version 0.5.7
  * 
  * \date 10/09/2017
  * 
@@ -2910,56 +2910,65 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
             break;
         case FSAT_GRS_UPLINK_PAYLOAD_X_SWAP:
-            for(unsigned int i=0; i<6; i++)
+
+            // Packet ID code
+            payload_x[0] = FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_SWAP;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                payload_x[i] = grs_callsign[i];
+                payload_x[i+1] = grs_callsign[i];
             }
 
-            payload_x[6] = 'X';
-            payload_x[7] = 'C';
-
-            ngham_uplink_pkt.Generate(payload_x, 8);
+            ngham_uplink_pkt.Generate(payload_x, 1+7);
 
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
             }
+
             break;
         case FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS:
-            for(unsigned int i=0; i<6; i++)
+
+            // Packet ID code
+            payload_x[0] = FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_STATUS_REQUEST;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                payload_x[i] = grs_callsign[i];
+                payload_x[i+1] = grs_callsign[i];
             }
 
-            payload_x[6] = 'X';
-            payload_x[7] = 'S';
-
-            ngham_uplink_pkt.Generate(payload_x, 8);
+            ngham_uplink_pkt.Generate(payload_x, 1+7);
 
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
             }
+
             break;
         case FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD:
+
             if (filechooser_payload_x_bitfile->get_filename().size() == 0)
             {
                 break;
             }
 
-            for(unsigned int i=0; i<6; i++)
+            // Packet ID code
+            payload_x[0] = FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_DATA_UPLOAD;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                payload_x[i] = grs_callsign[i];
+                payload_x[i+1] = grs_callsign[i];
             }
 
-            payload_x[6] = 'X';
-            payload_x[7] = 'U';
-
-            payload_x[8] = payload_x_upload->get_number_of_transmitted_blocks() & 0x00FF;
-            payload_x[9] = payload_x_upload->get_number_of_transmitted_blocks() >> 8;
-
-            for(unsigned j=0; j<payload_x_upload->get_number_of_required_blocks(); j++)
+            for(unsigned i=0; i<payload_x_upload->get_number_of_required_blocks(); i++)
             {
+                // Sequence number
+                payload_x[8] = payload_x_upload->get_number_of_transmitted_blocks() & 0x00FF;
+                payload_x[9] = payload_x_upload->get_number_of_transmitted_blocks() >> 8;
+
                 auto block = payload_x_upload->get_next_block();
 
                 if (j < stoi(entry_payload_x_bitfile_block_start->get_text(), nullptr) or (j > stoi(entry_payload_x_bitfile_block_end->get_text(), nullptr)))
@@ -2967,14 +2976,15 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                     continue;
                 }
 
-                for(unsigned int i=0; i<block.size(); i++)
+                // Bitstream block
+                for(unsigned int j=0; j<block.size(); j++)
                 {
                     payload_x[i+10] = block[i];
                 }
 
                 ngham_uplink_pkt.Generate(payload_x, 10+block.size());
 
-                for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+                for(unsigned int j=0; j<stoi(entry_config_uplink_burst->get_text(), nullptr); j++)
                 {
                     system(cmd_str.c_str());
                 }
