@@ -7440,11 +7440,13 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox8">
         <property name="can_focus">False</property>
+        <property name="margin_bottom">8</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area8">
             <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button_data_request_send">
@@ -7485,8 +7487,8 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">2</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
             <property name="orientation">vertical</property>
             <property name="spacing">5</property>
             <child>
@@ -7661,7 +7663,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_request_rush">
-                        <property name="label" translatable="yes">RUSH</property>
+                        <property name="label" translatable="yes">RUSH data</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

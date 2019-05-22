@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.5
+ * \version 0.5.6
  * 
  * \date 10/09/2017
  * 
@@ -2759,11 +2759,17 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
             break;
         case FSAT_GRS_UPLINK_REQUEST:
-            for(unsigned int i=0; i<6; i++)
+
+            // Packet ID code
+            request[0] = FLORIPASAT_PACKET_UPLINK_DATA_REQUEST;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                request[i] = grs_callsign[i];
+                request[i+1] = grs_callsign[i];
             }
-                    
+
+            // Data
             rqt_packet.packages_count = stoi(entry_uplink_request_pkt_quant->get_text());
             rqt_packet.packages_origin = radiobutton_uplink_data_request_start->get_active()? NEWER_PACKAGES_ORIGIN : OLDER_PACKAGES_ORIGIN;
             rqt_packet.packages_offset = stoi(entry_uplink_request_offset->get_text());
@@ -2781,27 +2787,26 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             rqt_packet.flags += (checkbutton_request_temperatures->get_active()         ?   0x0100 : 0);
             rqt_packet.flags += (checkbutton_request_task_scheduler->get_active()       ?   0x0200 : 0);
             rqt_packet.flags += (checkbutton_request_rush->get_active()                 ?   0x0400 : 0);
-            
+
             file_config.write((char *)&(rqt_packet.flags), 2);
             file_config.close();
 
-            request[6]  = REQUEST_DATA_TELECOMMAND    & 0xFF;
-            request[7]  = REQUEST_DATA_TELECOMMAND>>8 & 0xFF;
-            request[8]  = rqt_packet.flags>>8;
+            request[8]  = rqt_packet.flags >> 8;
             request[9]  = rqt_packet.flags & 0xFF;
             request[10] = rqt_packet.packages_count;
             request[11] = rqt_packet.packages_origin;
-            request[12] = rqt_packet.packages_offset>>24 & 0xFF;
-            request[13] = rqt_packet.packages_offset>>16 & 0xFF;
-            request[14] = rqt_packet.packages_offset>>8  & 0xFF;
-            request[15] = rqt_packet.packages_offset     & 0xFF;
+            request[12] = (rqt_packet.packages_offset >> 24) & 0xFF;
+            request[13] = (rqt_packet.packages_offset >> 16) & 0xFF;
+            request[14] = (rqt_packet.packages_offset >> 8)  & 0xFF;
+            request[15] = rqt_packet.packages_offset & 0xFF;
 
-            ngham_uplink_pkt.Generate(request, 16);
-            
+            ngham_uplink_pkt.Generate(request, 1+7+2+1+1+4);
+
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
             }
+
             break;
         case FSAT_GRS_UPLINK_HIBERNATION:
 

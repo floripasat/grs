@@ -1,7 +1,7 @@
 /*
  * telecommands.h
  * 
- * Copyright (C) 2018, Federal University of Santa Catarina.
+ * Copyright (C) 2018-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,12 @@
  */
 
 /**
- * \file telecommands.h
- * 
- * \brief .
+ * \brief Telecommands definition.
  * 
  * \author Elder Dominghini Tramontin <elderdtramontin@gmail.com>
+ * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.5.6
  * 
  * \date 13/04/2018
  * 
@@ -39,18 +38,10 @@
 #ifndef TELECOMMANDS_H_
 #define TELECOMMANDS_H_
 
-//UPLINK COMMANDS
-#define REQUEST_DATA_TELECOMMAND            (0x7764)    /**< uplink command to request whole data orbit - dw    */
-#define REQUEST_SHUTDOWN_TELECOMMAND        (0x6473)    /**< uplink command to request a 24 hours shutdown - sd */
-#define REQUEST_PING_TELECOMMAND            (0x6770)    /**< ping request - pg                                  */
-#define REQUEST_RESET_CHARGE_TELECOMMAND    (0x7263)    /**< Reset EPS charge - cr                              */
-
 #define OLDER_PACKAGES_ORIGIN               0
 #define NEWER_PACKAGES_ORIGIN               1
 
 /**
- * \struct request_data_packet_t
- *
  * \brief .
  */
 typedef struct {
@@ -61,8 +52,6 @@ typedef struct {
 } request_data_packet_t;
 
 /**
- * \struct telecommand_t
- *
  * \brief .
  */
 typedef struct {
