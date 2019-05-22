@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.7
+ * \version 0.5.8
  * 
  * \date 10/09/2017
  * 
@@ -2898,7 +2898,10 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             // Message
             for(unsigned int i=0; i<entry_dialog_broadcast_message->get_text().size(); i++)
             {
-                broadcast[i+15] = entry_dialog_broadcast_message->get_text()[i];
+                if (i < 38)
+                {
+                    broadcast[i+15] = entry_dialog_broadcast_message->get_text()[i];
+                }
             }
 
             ngham_uplink_pkt.Generate(broadcast, 1+7+7+entry_dialog_broadcast_message->get_text().size());
@@ -2971,7 +2974,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
                 auto block = payload_x_upload->get_next_block();
 
-                if (j < stoi(entry_payload_x_bitfile_block_start->get_text(), nullptr) or (j > stoi(entry_payload_x_bitfile_block_end->get_text(), nullptr)))
+                if (i < stoi(entry_payload_x_bitfile_block_start->get_text(), nullptr) or (i > stoi(entry_payload_x_bitfile_block_end->get_text(), nullptr)))
                 {
                     continue;
                 }
