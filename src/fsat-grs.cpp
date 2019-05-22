@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.4
+ * \version 0.5.5
  * 
  * \date 10/09/2017
  * 
@@ -654,6 +654,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
 
     // Message Broadcast Dialog
     ref_builder->get_widget("dialog_broadcast_message", dialog_broadcast_message);
+    ref_builder->get_widget("entry_broadcast_dst_callsign", entry_broadcast_dst_callsign);
     ref_builder->get_widget("entry_dialog_broadcast_message", entry_dialog_broadcast_message);
 
     ref_builder->get_widget("dialog_broadcast_message_send", dialog_broadcast_message_send);
@@ -2678,6 +2679,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     ofstream file_config((homepath + "/.fsat_grs/packet_flags.txt").c_str(), ofstream::out);    
 
     string grs_callsign = entry_config_general_gs_id->get_text();
+    string dst_callsign;
 
     if ((grs_callsign.size() < 4) or (grs_callsign.size() > 7))
     {
@@ -2857,25 +2859,50 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
             break;
         case FSAT_GRS_UPLINK_BROADCAST_MESSAGE:
-            for(unsigned int i=0; i<6; i++)
+
+            // Packet ID code
+            broadcast[0] = FLORIPASAT_PACKET_UPLINK_BROADCAST_MESSAGE;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                broadcast[i] = grs_callsign[i];
+                broadcast[i+1] = grs_callsign[i];
             }
 
-            broadcast[6] = 'r';
-            broadcast[7] = 'p';
+            // Destination callsign
+            if (entry_broadcast_dst_callsign->get_text().size() > 7)
+            {
+                dst_callsign = "0000000";
+            }
+            else
+            {
+                string zero_str;
+                for(unsigned int i=0; i<(7-entry_broadcast_dst_callsign->get_text().size()); i++)
+                {
+                    zero_str += "0";
+                }
 
+                dst_callsign = zero_str + entry_broadcast_dst_callsign->get_text();
+            }
+
+            for(unsigned int i=0; i<7; i++)
+            {
+                broadcast[i+8] = dst_callsign[i];
+            }
+
+            // Message
             for(unsigned int i=0; i<entry_dialog_broadcast_message->get_text().size(); i++)
             {
-                broadcast[i+8] = entry_dialog_broadcast_message->get_text()[i];
+                broadcast[i+15] = entry_dialog_broadcast_message->get_text()[i];
             }
 
-            ngham_uplink_pkt.Generate(broadcast, 8 + entry_dialog_broadcast_message->get_text().size());
+            ngham_uplink_pkt.Generate(broadcast, 1+7+7+entry_dialog_broadcast_message->get_text().size());
 
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
             }
+
             break;
         case FSAT_GRS_UPLINK_PAYLOAD_X_SWAP:
             for(unsigned int i=0; i<6; i++)

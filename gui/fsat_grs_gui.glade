@@ -5710,7 +5710,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
   </object>
   <object class="GtkDialog" id="dialog_broadcast_message">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Message to Broadcast</property>
+    <property name="title" translatable="yes">Broadcast Message</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
@@ -5722,15 +5722,13 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="box_dialog_broadcast_message">
         <property name="can_focus">False</property>
-        <property name="margin_left">10</property>
-        <property name="margin_right">10</property>
-        <property name="margin_top">5</property>
-        <property name="margin_bottom">5</property>
+        <property name="margin_bottom">8</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="buttonbox_dialog_broadcast_message">
             <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="dialog_broadcast_message_send">
@@ -5766,21 +5764,26 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box_broadcast_message_input">
+          <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_top">5</property>
             <property name="margin_bottom">5</property>
-            <property name="spacing">5</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <property name="row_homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="label_dialog_broadcast_message">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Message:</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -5790,9 +5793,30 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="can_focus">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Dest. callsign:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_broadcast_dst_callsign">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>

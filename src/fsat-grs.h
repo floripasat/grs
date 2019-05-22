@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.4
+ * \version 0.5.5
  * 
  * \date 10/09/2017
  * 
@@ -397,6 +397,7 @@ class FSatGRS
 
         // Message Broadcast Dialog
         Gtk::Dialog                     *dialog_broadcast_message;
+        Gtk::Entry                      *entry_broadcast_dst_callsign;
         Gtk::Entry                      *entry_dialog_broadcast_message;
         Gtk::Button                     *dialog_broadcast_message_send;
         Gtk::Button                     *dialog_broadcast_message_cancel;
