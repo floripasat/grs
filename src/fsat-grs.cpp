@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.14
+ * \version 0.5.2
  * 
  * \date 10/09/2017
  * 
@@ -35,6 +35,7 @@
  */
 
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <cstdio>
 #include <memory>
@@ -2751,16 +2752,27 @@ void FSatGRS::RunGNURadioReceiver(uint8_t rx_type)
 void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 {
     NGHamPkts ngham_uplink_pkt;
-    
+
     string homepath = getenv("HOME");        
     ofstream file_config((homepath + "/.fsat_grs/packet_flags.txt").c_str(), ofstream::out);    
-    
-    string grs_id = entry_config_general_gs_id->get_text();
-    while(grs_id.size() < 6)
+
+    string grs_callsign = entry_config_general_gs_id->get_text();
+
+    if ((grs_callsign.size() < 4) or (grs_callsign.size() > 7))
     {
-        grs_id += " ";
+        grs_callsign = "0000000";
     }
-    
+    else
+    {
+        string zero_str;
+        for(unsigned int i=0; i<(7-grs_callsign.size()); i++)
+        {
+            zero_str += "0";
+        }
+
+        grs_callsign = zero_str + entry_config_general_gs_id->get_text();
+    }
+
     uint8_t ping[9];
     uint8_t request[16];
     uint8_t shutdown[9];
@@ -2807,16 +2819,17 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     switch(uplink_type)
     {
         case FSAT_GRS_UPLINK_PING:
-            for(unsigned int i=0; i<6; i++)
+
+            // Packet ID code
+            ping[0] = FLORIPASAT_PACKET_UPLINK_PING_REQUEST;
+
+            for(unsigned int i=0; i<7; i++)
             {
-                ping[i] = grs_id[i];
+                ping[i+1] = grs_callsign[i];
             }
-            
-            ping[6] = 'p';
-            ping[7] = 'g';
-            
+
             ngham_uplink_pkt.Generate(ping, 8);
-            
+
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
@@ -2825,7 +2838,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_REQUEST:
             for(unsigned int i=0; i<6; i++)
             {
-                request[i] = grs_id[i];
+                request[i] = grs_callsign[i];
             }
                     
             rqt_packet.packages_count = stoi(entry_uplink_request_pkt_quant->get_text());
@@ -2870,7 +2883,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_SHUTDOWN:
             for(unsigned int i=0; i<6; i++)
             {
-                shutdown[i] = grs_id[i];
+                shutdown[i] = grs_callsign[i];
             }
             
             shutdown[6] = 's';
@@ -2888,7 +2901,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_RESET_CHARGE:
             for(unsigned int i=0; i<6; i++)
             {
-                reset_charge[i] = grs_id[i];
+                reset_charge[i] = grs_callsign[i];
             }
 
             reset_charge[6] = 'c';
@@ -2904,7 +2917,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_BROADCAST_MESSAGE:
             for(unsigned int i=0; i<6; i++)
             {
-                broadcast[i] = grs_id[i];
+                broadcast[i] = grs_callsign[i];
             }
 
             broadcast[6] = 'r';
@@ -2925,7 +2938,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_PAYLOAD_X_SWAP:
             for(unsigned int i=0; i<6; i++)
             {
-                payload_x[i] = grs_id[i];
+                payload_x[i] = grs_callsign[i];
             }
 
             payload_x[6] = 'X';
@@ -2941,7 +2954,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         case FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS:
             for(unsigned int i=0; i<6; i++)
             {
-                payload_x[i] = grs_id[i];
+                payload_x[i] = grs_callsign[i];
             }
 
             payload_x[6] = 'X';
@@ -2962,7 +2975,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
 
             for(unsigned int i=0; i<6; i++)
             {
-                payload_x[i] = grs_id[i];
+                payload_x[i] = grs_callsign[i];
             }
 
             payload_x[6] = 'X';
