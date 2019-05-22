@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.3
+ * \version 0.5.4
  * 
  * \date 10/09/2017
  * 
@@ -408,6 +408,12 @@ class FSatGRS
         Gtk::Button                     *button_hibernation_send;
         Gtk::Button                     *button_hibernation_cancel;
 
+        // Charge reset dialog
+        Gtk::Dialog                     *dialog_charge_reset;
+        Gtk::Entry                      *entry_charge_reset_key;
+        Gtk::Button                     *button_reset_charge_send;
+        Gtk::Button                     *button_reset_charge_cancel;
+
         // Uplink Scheduler Manager Dialog
         Gtk::Dialog                     *dialog_uplink_scheduler_manager;
         Gtk::TreeView                   *treeview_uplink_scheduler_manager_events;
@@ -752,6 +758,20 @@ class FSatGRS
          * \return None
          */
         void OnButtonHibernationCancelClicked();
+
+        /**
+         * \brief Sends an charge reset telecommand.
+         *
+         * \return None.
+         */
+        void OnButtonChargeResetSendClicked();
+
+        /**
+         * \brief Closes the charge reset telecommand dialog.
+         *
+         * \return None.
+         */
+        void OnButtonChargeResetCancelClicked();
 
         /**
          * \brief 

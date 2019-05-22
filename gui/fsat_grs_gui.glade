@@ -5805,6 +5805,104 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
       </object>
     </child>
   </object>
+  <object class="GtkDialog" id="dialog_charge_reset">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Reset EPS Charge</property>
+    <property name="resizable">False</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="margin_bottom">8</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_reset_charge_send">
+                <property name="label" translatable="yes">Send</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_reset_charge_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Key:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_charge_reset_key">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="visibility">False</property>
+                <property name="input_purpose">password</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkDialog" id="dialog_config">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
@@ -7741,7 +7839,6 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
           <object class="GtkButtonBox" id="dialog-action_area6">
             <property name="can_focus">False</property>
             <property name="margin_right">6</property>
-            <property name="margin_top">5</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button_hibernation_send">
@@ -7782,8 +7879,8 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">2</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
             <property name="row_spacing">10</property>
             <property name="column_spacing">10</property>
             <child>
@@ -7825,7 +7922,6 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="visibility">False</property>
-                <property name="invisible_char">*</property>
                 <property name="input_purpose">password</property>
               </object>
               <packing>

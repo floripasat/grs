@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.3
+ * \version 0.5.4
  * 
  * \date 10/09/2017
  * 
@@ -685,6 +685,21 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         button_hibernation_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonHibernationCancelClicked));
     }
 
+    // Charge Reset Dialog
+    ref_builder->get_widget("dialog_charge_reset", dialog_charge_reset);
+    ref_builder->get_widget("entry_charge_reset_key", entry_charge_reset_key);
+    ref_builder->get_widget("button_reset_charge_send", button_reset_charge_send);
+    if (button_reset_charge_send)
+    {
+        button_reset_charge_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonChargeResetSendClicked));
+    }
+
+    ref_builder->get_widget("button_reset_charge_cancel", button_reset_charge_cancel);
+    if (button_reset_charge_cancel)
+    {
+        button_reset_charge_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonChargeResetCancelClicked));
+    }
+
     // Uplink Scheduler Manager Dialog
     ref_builder->get_widget("dialog_uplink_scheduler_manager", dialog_uplink_scheduler_manager);
     ref_builder->get_widget("treeview_uplink_scheduler_manager_events", treeview_uplink_scheduler_manager_events);
@@ -1180,15 +1195,12 @@ void FSatGRS::OnToolButtonRequestDataClicked()
 
 void FSatGRS::OnToolButtonResetChargeClicked()
 {
-    string reset_charge_event = "Transmitting ";
-    reset_charge_event += entry_config_uplink_burst->get_text();
-    reset_charge_event += " reset charge command(s)...";
+    int response = dialog_charge_reset->run();
 
-    event_log->AddNewEvent(reset_charge_event.c_str());
-
-    thread thread_reset_charge_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_RESET_CHARGE);
-
-    thread_reset_charge_cmd.detach();
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_charge_reset->hide();
+    }
 }
 
 void FSatGRS::OnToolButtonBroadcastMessageClicked()
@@ -2431,6 +2443,28 @@ void FSatGRS::OnButtonHibernationCancelClicked()
     dialog_hibernation->hide();
 }
 
+void FSatGRS::OnButtonChargeResetSendClicked()
+{
+    string reset_charge_event = "Transmitting ";
+    reset_charge_event += entry_config_uplink_burst->get_text();
+    reset_charge_event += " reset charge command(s)...";
+
+    event_log->AddNewEvent(reset_charge_event.c_str());
+
+    thread thread_reset_charge_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_RESET_CHARGE);
+
+    thread_reset_charge_cmd.detach();
+
+    dialog_charge_reset->hide();
+}
+
+void FSatGRS::OnButtonChargeResetCancelClicked()
+{
+    entry_charge_reset_key->set_text("");
+
+    dialog_charge_reset->hide();
+}
+
 //***************************************************************************************************************************************
 //***************************************************************************************************************************************
 //-- UPLINK SCHEDULER MANAGER DIALOG ----------------------------------------------------------------------------------------------------
@@ -2798,20 +2832,29 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
             break;
         case FSAT_GRS_UPLINK_RESET_CHARGE:
-            for(unsigned int i=0; i<6; i++)
+
+            // Packet ID code
+            reset_charge[0] = FLORIPASAT_PACKET_UPLINK_CHARGE_RESET;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
             {
-                reset_charge[i] = grs_callsign[i];
+                reset_charge[i+1] = grs_callsign[i];
             }
 
-            reset_charge[6] = 'c';
-            reset_charge[7] = 'r';
+            // Charge reset key
+            for(unsigned int i=0; i<entry_charge_reset_key->get_text().size(); i++)
+            {
+                reset_charge[i+8] = entry_charge_reset_key->get_text()[i];
+            }
 
-            ngham_uplink_pkt.Generate(reset_charge, 8);
+            ngham_uplink_pkt.Generate(reset_charge, 1+7+8);
 
             for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
             {
                 system(cmd_str.c_str());
             }
+
             break;
         case FSAT_GRS_UPLINK_BROADCAST_MESSAGE:
             for(unsigned int i=0; i<6; i++)
