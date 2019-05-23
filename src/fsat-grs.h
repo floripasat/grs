@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.9
+ * \version 0.5.10
  * 
  * \date 10/09/2017
  * 
@@ -104,7 +104,8 @@ enum uplink_cmds_t
 {
     FSAT_GRS_UPLINK_PING = 0,                   /**< Ping. */
     FSAT_GRS_UPLINK_REQUEST,                    /**< Data request. */
-    FSAT_GRS_UPLINK_HIBERNATION,                /**< Hibernation. */
+    FSAT_GRS_UPLINK_ENTER_HIBERNATION,          /**< Enter hibernation. */
+    FSAT_GRS_UPLINK_LEAVE_HIBERNATION,          /**< Leave hibernation. */
     FSAT_GRS_UPLINK_RESET_CHARGE,               /**< Reset EPS charge. */
     FSAT_GRS_UPLINK_BROADCAST_MESSAGE,          /**< Broadcast message. */
     FSAT_GRS_UPLINK_PAYLOAD_X_SWAP,             /**< Payload X swap. */
@@ -408,7 +409,8 @@ class FSatGRS
         Gtk::Dialog                     *dialog_hibernation;
         Gtk::Entry                      *entry_hibernation_duration;
         Gtk::Entry                      *entry_hibernation_key;
-        Gtk::Button                     *button_hibernation_send;
+        Gtk::Button                     *button_hibernation_enable;
+        Gtk::Button                     *button_hibernation_disable;
         Gtk::Button                     *button_hibernation_cancel;
 
         // Charge reset dialog
@@ -763,11 +765,18 @@ class FSatGRS
         void OnButtonBroadcastDialogCancelClicked();
 
         /**
-         * \brief Sends an hibernation telecommand.
+         * \brief Sends an enter hibernation telecommand.
          * 
          * \return None
          */
-        void OnButtonHibernationSendClicked();
+        void OnButtonHibernationEnableClicked();
+
+        /**
+         * \brief Sends an leave hibernation telecommand.
+         *
+         * \return None.
+         */
+        void OnButtonHibernationDisableClicked();
 
         /**
          * \brief Closes the hibernation telecommand dialog.

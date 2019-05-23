@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.9
+ * \version 0.5.10
  * 
  * \date 10/09/2017
  * 
@@ -680,10 +680,16 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("entry_hibernation_duration", entry_hibernation_duration);
     ref_builder->get_widget("entry_hibernation_key", entry_hibernation_key);
 
-    ref_builder->get_widget("button_hibernation_send", button_hibernation_send);
-    if (button_hibernation_send)
+    ref_builder->get_widget("button_hibernation_enable", button_hibernation_enable);
+    if (button_hibernation_enable)
     {
-        button_hibernation_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonHibernationSendClicked));
+        button_hibernation_enable->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonHibernationEnableClicked));
+    }
+
+    ref_builder->get_widget("button_hibernation_disable", button_hibernation_disable);
+    if (button_hibernation_disable)
+    {
+        button_hibernation_disable->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonHibernationDisableClicked));
     }
 
     ref_builder->get_widget("button_hibernation_cancel", button_hibernation_cancel);
@@ -999,7 +1005,7 @@ bool FSatGRS::Timer()
 
                         event_log->AddNewEvent(shutdown_event.c_str());
 
-                        thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_HIBERNATION);
+                        thread thread_shutdown_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_ENTER_HIBERNATION);
 
                         thread_shutdown_cmd.detach();
                     }
@@ -2456,15 +2462,30 @@ void FSatGRS::OnButtonBroadcastDialogCancelClicked()
     dialog_broadcast_message->hide();
 }
 
-void FSatGRS::OnButtonHibernationSendClicked()
+void FSatGRS::OnButtonHibernationEnableClicked()
 {
     string hibernation_event = "Transmitting ";
     hibernation_event += entry_config_uplink_burst->get_text();
-    hibernation_event += " hibernation command(s)...";
+    hibernation_event += " enter hibernation command(s)...";
 
     event_log->AddNewEvent(hibernation_event.c_str());
 
-    thread thread_hibernation_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_HIBERNATION);
+    thread thread_hibernation_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_ENTER_HIBERNATION);
+
+    thread_hibernation_cmd.detach();
+
+    dialog_hibernation->hide();
+}
+
+void FSatGRS::OnButtonHibernationDisableClicked()
+{
+    string hibernation_event = "Transmitting ";
+    hibernation_event += entry_config_uplink_burst->get_text();
+    hibernation_event += " leave hibernation command(s)...";
+
+    event_log->AddNewEvent(hibernation_event.c_str());
+
+    thread thread_hibernation_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_LEAVE_HIBERNATION);
 
     thread_hibernation_cmd.detach();
 
@@ -2841,7 +2862,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
 
             break;
-        case FSAT_GRS_UPLINK_HIBERNATION:
+        case FSAT_GRS_UPLINK_ENTER_HIBERNATION:
 
             // Packet ID code
             hibernation[0] = FLORIPASAT_PACKET_UPLINK_ENTER_HIBERNATION;
@@ -2870,6 +2891,31 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             {
                 system(cmd_str.c_str());
             }
+            break;
+        case FSAT_GRS_UPLINK_LEAVE_HIBERNATION:
+
+            // Packet ID code
+            hibernation[0] = FLORIPASAT_PACKET_UPLINK_LEAVE_HIBERNATION;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
+            {
+                hibernation[i+1] = grs_callsign[i];
+            }
+
+            // Hibernation key
+            for(unsigned int i=0; i<entry_hibernation_key->get_text().size(); i++)
+            {
+                hibernation[i+8] = entry_hibernation_key->get_text()[i];
+            }
+
+            ngham_uplink_pkt.Generate(hibernation, 1+7+8);
+
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+            }
+
             break;
         case FSAT_GRS_UPLINK_RESET_CHARGE:
 
