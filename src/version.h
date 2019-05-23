@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.8
+ * \version 0.5.9
  * 
  * \date 13/02/2019
  * 
@@ -37,7 +37,7 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-#define GRS_SOFTWARE_VERSION            "0.5.8"
+#define GRS_SOFTWARE_VERSION            "0.5.9"
 
 #endif // VERSION_H_
 

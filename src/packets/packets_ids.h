@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.5.9
  * 
  * \date 10/04/2019
  * 
@@ -63,6 +63,7 @@
 #define FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_STATUS_REQUEST   0x26    /**< Payload X status request. */
 #define FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_SWAP             0x27    /**< Payload X swap. */
 #define FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_DATA_UPLOAD      0x28    /**< Payload data upload. */
+#define FLORIPASAT_PACKET_UPLINK_RUSH_ENABLE                0x29    /**< RUSH enable. */
 
 #endif // PACKETS_IDS_H_
 

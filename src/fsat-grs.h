@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.5
+ * \version 0.5.9
  * 
  * \date 10/09/2017
  * 
@@ -109,7 +109,8 @@ enum uplink_cmds_t
     FSAT_GRS_UPLINK_BROADCAST_MESSAGE,          /**< Broadcast message. */
     FSAT_GRS_UPLINK_PAYLOAD_X_SWAP,             /**< Payload X swap. */
     FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS,   /**< Payload X request status. */
-    FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD            /**< Payload X upload. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD,           /**< Payload X upload. */
+    FSAT_GRS_UPLINK_RUSH_ENABLE                 /**< RUSH enable. */
 };
 
 /**
@@ -135,6 +136,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_broadcast_message;
         Gtk::ToolButton                 *toolbutton_hibernation;
         Gtk::ToolButton                 *toolbutton_payload_x;
+        Gtk::ToolButton                 *toolbutton_rush;
         Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
         Gtk::ToolButton                 *toolbutton_open_grqx;
@@ -447,6 +449,12 @@ class FSatGRS
         Gtk::Button                     *button_payload_x_bitfile_send;
         Gtk::Button                     *button_payload_x_bitfile_swap;
 
+        // RUSH Dialog
+        Gtk::Dialog                     *dialog_rush;
+        Gtk::Entry                      *entry_rush_key;
+        Gtk::Button                     *button_rush_send;
+        Gtk::Button                     *button_rush_cancel;
+
         std::unique_ptr<PayloadXUpload> payload_x_upload;
 
         // Message Dialog
@@ -617,6 +625,14 @@ class FSatGRS
          * \return None.
          */
         void OnToolButtonPayloadXClicked();
+
+        /**
+         * \brief RUSH enable click signal handler.
+         *
+         * \return None.
+         */
+        void OnToolButtonRUSHClicked();
+
         /**
          * \brief Telecommand scheduler button click signal handler.
          * 
@@ -850,6 +866,20 @@ class FSatGRS
          * \return None.
          */
         void OnButtonPayloadXSwapClicked();
+
+        /**
+         * \brief RUSH send button clicked signal handle.
+         *
+         * \return None.
+         */
+        void OnButtonRUSHSendClicked();
+
+        /**
+         * \brief RUSH cancel button clicked signal handler.
+         *
+         * \return None.
+         */
+        void OnButtonRUSHCancelClicked();
 
         /**
          * \brief 

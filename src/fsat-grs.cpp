@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.8
+ * \version 0.5.9
  * 
  * \date 10/09/2017
  * 
@@ -193,6 +193,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     if (toolbutton_payload_x)
     {
         toolbutton_payload_x->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonPayloadXClicked));
+    }
+
+    ref_builder->get_widget("toolbutton_rush", toolbutton_rush);
+    if (toolbutton_rush)
+    {
+        toolbutton_rush->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonRUSHClicked));
     }
 
     ref_builder->get_widget("toolbutton_schedule_cmd", toolbutton_schedule_cmd);
@@ -774,6 +780,21 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         button_payload_x_bitfile_swap->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPayloadXSwapClicked));
     }
 
+    // RUSH dialog
+    ref_builder->get_widget("dialog_rush", dialog_rush);
+    ref_builder->get_widget("entry_rush_key", entry_rush_key);
+    ref_builder->get_widget("button_rush_send", button_rush_send);
+    if (button_rush_send)
+    {
+        button_rush_send->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonRUSHSendClicked));
+    }
+
+    ref_builder->get_widget("button_rush_cancel", button_rush_cancel);
+    if (button_rush_cancel)
+    {
+        button_rush_cancel->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonRUSHCancelClicked));
+    }
+
     // About dialog
     ref_builder->get_widget("aboutdialog", aboutdialog);
     
@@ -1227,6 +1248,16 @@ void FSatGRS::OnToolButtonHibernationClicked()
 void FSatGRS::OnToolButtonPayloadXClicked()
 {
     window_payload_x_control->show();
+}
+
+void FSatGRS::OnToolButtonRUSHClicked()
+{
+    int response = dialog_rush->run();
+
+    if ((response == Gtk::RESPONSE_DELETE_EVENT) or (response == Gtk::RESPONSE_CANCEL))
+    {
+        dialog_rush->hide();
+    }
 }
 
 void FSatGRS::OnToolButtonCmdSchedulerClicked()
@@ -1684,8 +1715,8 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             toolbutton_hibernation->set_sensitive(true);
             toolbutton_reset_charge->set_sensitive(true);
             toolbutton_broadcast_message->set_sensitive(true);
-
             toolbutton_payload_x->set_sensitive(true);
+            toolbutton_rush->set_sensitive(true);
         }
         
         event_log->AddNewEvent("New uplink stream started");
@@ -1731,6 +1762,7 @@ void FSatGRS::OnToggleButtonPlayUplinkStreamToggled()
             toolbutton_reset_charge->set_sensitive(false);
             toolbutton_broadcast_message->set_sensitive(false);
             toolbutton_payload_x->set_sensitive(false);
+            toolbutton_rush->set_sensitive(false);
         }
 
         event_log->AddNewEvent("Uplink stream finished");
@@ -2696,12 +2728,13 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         grs_callsign = zero_str + entry_config_general_gs_id->get_text();
     }
 
-    uint8_t ping[9];
-    uint8_t request[16];
-    uint8_t hibernation[19];
-    uint8_t reset_charge[9];
-    uint8_t broadcast[30];
+    uint8_t ping[32];
+    uint8_t request[32];
+    uint8_t hibernation[32];
+    uint8_t reset_charge[32];
+    uint8_t broadcast[60];
     uint8_t payload_x[300];
+    uint8_t rush[32];
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
@@ -2997,6 +3030,31 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
 
             break;
+        case FSAT_GRS_UPLINK_RUSH_ENABLE:
+
+            // Packet ID code
+            rush[0] = FLORIPASAT_PACKET_UPLINK_RUSH_ENABLE;
+
+            // Source callsign
+            for(unsigned int i=0; i<7; i++)
+            {
+                rush[i+1] = grs_callsign[i];
+            }
+
+            // RUSH enable key
+            for(unsigned int i=0; i<entry_rush_key->get_text().size(); i++)
+            {
+                rush[i+8] = entry_rush_key->get_text()[i];
+            }
+
+            ngham_uplink_pkt.Generate(rush, 1+7+8);
+
+            for(unsigned int i=0; i<stoi(entry_config_uplink_burst->get_text(), nullptr); i++)
+            {
+                system(cmd_str.c_str());
+            }
+
+            break;
     }
 }
 
@@ -3083,6 +3141,24 @@ void FSatGRS::OnButtonPayloadXSwapClicked()
     thread thread_payload_x_swap_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_PAYLOAD_X_SWAP);
 
     thread_payload_x_swap_cmd.detach();
+}
+
+void FSatGRS::OnButtonRUSHSendClicked()
+{
+    event_log->AddNewEvent("Transmitting enable command to RUSH...");
+
+    thread thread_rush_cmd(&FSatGRS::RunGNURadioTransmitter, this, FSAT_GRS_UPLINK_RUSH_ENABLE);
+
+    thread_rush_cmd.detach();
+
+    dialog_rush->hide();
+}
+
+void FSatGRS::OnButtonRUSHCancelClicked()
+{
+    entry_rush_key->set_text("");
+
+    dialog_rush->hide();
 }
 
 //***************************************************************************************************************************************

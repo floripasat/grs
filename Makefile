@@ -25,6 +25,7 @@ all:
 	cp img/icon.png $(BUILD_DIR)/
 	cp img/gpredict-icon.png $(BUILD_DIR)/
 	cp img/gqrx-icon.png $(BUILD_DIR)/
+	cp img/rush-icon.png $(BUILD_DIR)/
 	cp matplotlib/csv_plot.py $(BUILD_DIR)/matplotlib/
 	cp gnuradio/udp_decoder_beacon.py $(BUILD_DIR)/gnuradio
 	cp gnuradio/udp_decoder_downlink.py $(BUILD_DIR)/gnuradio
