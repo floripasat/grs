@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.10
+ * \version 0.5.11
  * 
  * \date 10/09/2017
  * 
@@ -788,6 +788,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
 
     // RUSH dialog
     ref_builder->get_widget("dialog_rush", dialog_rush);
+    ref_builder->get_widget("entry_rush_timeout", entry_rush_timeout);
     ref_builder->get_widget("entry_rush_key", entry_rush_key);
     ref_builder->get_widget("button_rush_send", button_rush_send);
     if (button_rush_send)
@@ -3087,10 +3088,24 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
                 rush[i+1] = grs_callsign[i];
             }
 
+            // Timeout
+            if (stoi(entry_hibernation_duration->get_text()) < 1)
+            {
+                return;
+            }
+            else if (stoi(entry_hibernation_duration->get_text()) > 30)
+            {
+                rush[1+7] = 30;
+            }
+            else
+            {
+                rush[1+7] = stoi(entry_hibernation_duration->get_text());
+            }
+
             // RUSH enable key
             for(unsigned int i=0; i<entry_rush_key->get_text().size(); i++)
             {
-                rush[i+8] = entry_rush_key->get_text()[i];
+                rush[i+1+7+1] = entry_rush_key->get_text()[i];
             }
 
             ngham_uplink_pkt.Generate(rush, 1+7+8);

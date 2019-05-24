@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.10
+ * \version 0.5.11
  * 
  * \date 10/09/2017
  * 
@@ -453,6 +453,7 @@ class FSatGRS
 
         // RUSH Dialog
         Gtk::Dialog                     *dialog_rush;
+        Gtk::Entry                      *entry_rush_timeout;
         Gtk::Entry                      *entry_rush_key;
         Gtk::Button                     *button_rush_send;
         Gtk::Button                     *button_rush_cancel;
