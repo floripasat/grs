@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.11
+ * \version 0.5.13
  * 
  * \date 10/09/2017
  * 
@@ -3089,17 +3089,17 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
             }
 
             // Timeout
-            if (stoi(entry_hibernation_duration->get_text()) < 1)
+            if (stoi(entry_rush_timeout->get_text()) < 1)
             {
                 return;
             }
-            else if (stoi(entry_hibernation_duration->get_text()) > 30)
+            else if (stoi(entry_rush_timeout->get_text()) > 30)
             {
                 rush[1+7] = 30;
             }
             else
             {
-                rush[1+7] = stoi(entry_hibernation_duration->get_text());
+                rush[1+7] = stoi(entry_rush_timeout->get_text());
             }
 
             // RUSH enable key
