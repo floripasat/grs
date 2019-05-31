@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.14
+ * \version 0.5.11
  * 
  * \date 10/09/2017
  * 
@@ -104,12 +104,14 @@ enum uplink_cmds_t
 {
     FSAT_GRS_UPLINK_PING = 0,                   /**< Ping. */
     FSAT_GRS_UPLINK_REQUEST,                    /**< Data request. */
-    FSAT_GRS_UPLINK_SHUTDOWN,                   /**< Shutdown (hibernation). */
+    FSAT_GRS_UPLINK_ENTER_HIBERNATION,          /**< Enter hibernation. */
+    FSAT_GRS_UPLINK_LEAVE_HIBERNATION,          /**< Leave hibernation. */
     FSAT_GRS_UPLINK_RESET_CHARGE,               /**< Reset EPS charge. */
     FSAT_GRS_UPLINK_BROADCAST_MESSAGE,          /**< Broadcast message. */
     FSAT_GRS_UPLINK_PAYLOAD_X_SWAP,             /**< Payload X swap. */
     FSAT_GRS_UPLINK_PAYLOAD_X_REQUEST_STATUS,   /**< Payload X request status. */
-    FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD            /**< Payload X upload. */
+    FSAT_GRS_UPLINK_PAYLOAD_X_UPLOAD,           /**< Payload X upload. */
+    FSAT_GRS_UPLINK_RUSH_ENABLE                 /**< RUSH enable. */
 };
 
 /**
@@ -133,8 +135,9 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_request_data;
         Gtk::ToolButton                 *toolbutton_reset_charge;
         Gtk::ToolButton                 *toolbutton_broadcast_message;
-        Gtk::ToolButton                 *toolbutton_shutdown;
+        Gtk::ToolButton                 *toolbutton_hibernation;
         Gtk::ToolButton                 *toolbutton_payload_x;
+        Gtk::ToolButton                 *toolbutton_rush;
         Gtk::ToolButton                 *toolbutton_schedule_cmd;
         Gtk::ToolButton                 *toolbutton_open_gpredict;
         Gtk::ToolButton                 *toolbutton_open_grqx;
@@ -334,12 +337,6 @@ class FSatGRS
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
         Gtk::Entry                      *entry_config_general_gs_id;
-        Gtk::Entry                      *entry_config_general_admin_user;
-        Gtk::Entry                      *entry_config_general_admin_password;
-        Gtk::Entry                      *entry_config_general_new_user;
-        Gtk::Entry                      *entry_config_general_new_password;
-        Gtk::Entry                      *entry_config_general_admin_password_confirmation;
-        Gtk::Button                     *button_config_general_add_new_user;
         Gtk::CheckButton                *checkbutton_log_ngham_packets;
         Gtk::CheckButton                *checkbutton_log_ax25_packets;
         Gtk::CheckButton                *checkbutton_log_beacon_data;
@@ -403,16 +400,24 @@ class FSatGRS
 
         // Message Broadcast Dialog
         Gtk::Dialog                     *dialog_broadcast_message;
+        Gtk::Entry                      *entry_broadcast_dst_callsign;
         Gtk::Entry                      *entry_dialog_broadcast_message;
         Gtk::Button                     *dialog_broadcast_message_send;
         Gtk::Button                     *dialog_broadcast_message_cancel;
 
-        // Shutdown Command Authentication Dialog
-        Gtk::Dialog                     *dialog_shutdown_authentication;
-        Gtk::Entry                      *entry_sd_auth_user;
-        Gtk::Entry                      *entry_sd_auth_password;
-        Gtk::Button                     *button_sd_auth_send;
-        Gtk::Button                     *button_sd_auth_cancel;
+        // Hibernation dialog
+        Gtk::Dialog                     *dialog_hibernation;
+        Gtk::Entry                      *entry_hibernation_duration;
+        Gtk::Entry                      *entry_hibernation_key;
+        Gtk::Button                     *button_hibernation_enable;
+        Gtk::Button                     *button_hibernation_disable;
+        Gtk::Button                     *button_hibernation_cancel;
+
+        // Charge reset dialog
+        Gtk::Dialog                     *dialog_charge_reset;
+        Gtk::Entry                      *entry_charge_reset_key;
+        Gtk::Button                     *button_reset_charge_send;
+        Gtk::Button                     *button_reset_charge_cancel;
 
         // Uplink Scheduler Manager Dialog
         Gtk::Dialog                     *dialog_uplink_scheduler_manager;
@@ -445,6 +450,13 @@ class FSatGRS
         Gtk::ProgressBar                *progressbar_payload_x_packet_transfer;
         Gtk::Button                     *button_payload_x_bitfile_send;
         Gtk::Button                     *button_payload_x_bitfile_swap;
+
+        // RUSH Dialog
+        Gtk::Dialog                     *dialog_rush;
+        Gtk::Entry                      *entry_rush_timeout;
+        Gtk::Entry                      *entry_rush_key;
+        Gtk::Button                     *button_rush_send;
+        Gtk::Button                     *button_rush_cancel;
 
         std::unique_ptr<PayloadXUpload> payload_x_upload;
 
@@ -602,18 +614,28 @@ class FSatGRS
          * \return None.
          */
         void OnToolButtonBroadcastMessageClicked();
+
         /**
-         * \brief Shutdown command button click signal handler.
+         * \brief Hibernation command button click signal handler.
          * 
          * \return None
          */
-        void OnToolButtonShutdownClicked();
+        void OnToolButtonHibernationClicked();
+
         /**
          * \brief Payload X control click signal handler.
          *
          * \return None.
          */
         void OnToolButtonPayloadXClicked();
+
+        /**
+         * \brief RUSH enable click signal handler.
+         *
+         * \return None.
+         */
+        void OnToolButtonRUSHClicked();
+
         /**
          * \brief Telecommand scheduler button click signal handler.
          * 
@@ -742,24 +764,42 @@ class FSatGRS
          * \return None.
          */
         void OnButtonBroadcastDialogCancelClicked();
+
         /**
-         * \brief 
+         * \brief Sends an enter hibernation telecommand.
          * 
          * \return None
          */
-        void OnButtonShutdownAuthSendClicked();
+        void OnButtonHibernationEnableClicked();
+
         /**
-         * \brief 
+         * \brief Sends an leave hibernation telecommand.
+         *
+         * \return None.
+         */
+        void OnButtonHibernationDisableClicked();
+
+        /**
+         * \brief Closes the hibernation telecommand dialog.
          * 
          * \return None
          */
-        void OnButtonShutdownAuthCancelClicked();
+        void OnButtonHibernationCancelClicked();
+
         /**
-         * \brief 
-         * 
-         * \return None
+         * \brief Sends an charge reset telecommand.
+         *
+         * \return None.
          */
-        void OnButtonAddNewUserClicked();
+        void OnButtonChargeResetSendClicked();
+
+        /**
+         * \brief Closes the charge reset telecommand dialog.
+         *
+         * \return None.
+         */
+        void OnButtonChargeResetCancelClicked();
+
         /**
          * \brief 
          * 
@@ -836,6 +876,20 @@ class FSatGRS
          * \return None.
          */
         void OnButtonPayloadXSwapClicked();
+
+        /**
+         * \brief RUSH send button clicked signal handle.
+         *
+         * \return None.
+         */
+        void OnButtonRUSHSendClicked();
+
+        /**
+         * \brief RUSH cancel button clicked signal handler.
+         *
+         * \return None.
+         */
+        void OnButtonRUSHCancelClicked();
 
         /**
          * \brief 

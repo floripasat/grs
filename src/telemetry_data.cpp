@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.16
+ * \version 0.5.1
  * 
  * \date 08/10/2017
  * 
@@ -282,10 +282,10 @@ void TelemetryData::Update(uint8_t *data, uint8_t len)
 {
     data_packet_t packet;
 
-    uint16_t flags = ((uint16_t)data[1]<<8) | (uint16_t) data[0];
+    uint16_t flags = ((uint16_t)data[9]<<8) | (uint16_t) data[8];   // byte 0 = ID code, byte1-7 = src callsign
     uint16_t rqt_flags;
     //flags = flags & rqt_packet.flags;
-    uint16_t packageSize = 2;
+    uint16_t packageSize = 10;
 
     unsigned int i;
 
@@ -665,7 +665,7 @@ std::string TelemetryData::Log()
 
 const char* TelemetryData::getLabel()
 {
-    return "TELEMETRY";
+    return "DOWNLINK";
 }
 
 void TelemetryData::ForceDisplay(std::vector<std::string> data)

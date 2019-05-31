@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.0
+ * \version 0.5.11
  * 
  * \date 06/10/2017
  * 
@@ -86,6 +86,8 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
     uint8_t data[256];
     uint8_t data_len;
     string event_text;
+    string src_callsign = "";
+    string dst_callsign = "";
 
     switch(ngham_decode(byte, data, &data_len))
     {
@@ -112,84 +114,173 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                 }
             }
 
-            if ((data[0] == 'H') and (data[1] == 'e') and (data[2] == 'l'))
+            for(unsigned int i=1; i<8; i++)
             {
-                event_text = "Ping result received: ";
-                for(uint8_t i=0; i<data_len; i++)
-                {
-                    event_text += char(data[i]);
-                }
+                src_callsign += data[i];
             }
-            else if ((data[0] == 'S') and (data[1] == 'h') and (data[2] == 'u'))
+
+            switch(data[0])
             {
-                event_text = "Shutdown result received: ";
-                for(uint8_t i=0; i<data_len; i++)
-                {
-                    event_text += char(data[i]);
-                }
-            }
-            else if ((data[6] == 'b') and (data[7] == 'r'))
-            {
-                event_text = "Broadcast message received from ";
-                for(uint8_t i=0; i<6; i++)
-                {
-                    event_text += char(data[i]);
-                }
+                case FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA:
+                    event_text = "New valid BEACON packet from ";
+                    event_text += substr_to_callsign(src_callsign);
+                    event_text += " containing OBDH data!";
 
-                event_text += ": ";
+                    packet_data->Update(data, data_len);
 
-                for(uint8_t i=8; i<data_len; i++)
-                {
-                    event_text += char(data[i]);
-                }
-            }
-            else if ((data[6] == 'X') and (data[7] == 'S'))
-            {
-                event_text = "Payload X status received: ";
+                    break;
+                case FLORIPASAT_PACKET_BEACON_NGHAM_EPS_DATA:
+                    event_text = "New valid BEACON packet from ";
+                    event_text += substr_to_callsign(src_callsign);
+                    event_text += " containing EPS data!";
 
-                for(uint8_t i=8; i<data_len; i++)
-                {
-                    event_text += HexToStr(data[i]);
+                    packet_data->Update(data, data_len);
 
-                    if (i < data_len-1)
+                    break;
+                case FLORIPASAT_PACKET_BEACON_NGHAM_TTC_DATA:
+                    event_text = "New valid BEACON packet from ";
+                    event_text += substr_to_callsign(src_callsign);
+                    event_text += " containing TTC data!";
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_TELEMETRY:
+                    event_text = "New valid DOWNLINK packet from ";
+                    event_text += substr_to_callsign(src_callsign);
+                    event_text += " containing TELEMETRY data!";
+
+                    packet_data->Update(data, data_len);
+
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_PING_ANSWER:
+                    for(unsigned int i=8; i<15; i++)
                     {
-                        event_text += ", ";
+                        dst_callsign += data[i];
                     }
-                }
-            }
-            else
-            {
-                string callsign = "";
 
-                for(unsigned int i=1; i<8; i++)
-                {
-                    callsign += data[i];
-                }
+                    event_text = "Ping answer to ";
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += " received from ";
+                    event_text += substr_to_callsign(src_callsign);
+                    event_text += "!";
 
-                switch(data[0])
-                {
-                    case FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA:
-                        event_text = "New valid BEACON packet from ";
-                        event_text += substr_to_callsign(callsign);
-                        event_text += " containing OBDH data!";
-                        break;
-                    case FLORIPASAT_PACKET_BEACON_NGHAM_EPS_DATA:
-                        event_text = "New valid BEACON packet from ";
-                        event_text += substr_to_callsign(callsign);
-                        event_text += " containing EPS data!";
-                        break;
-                    case FLORIPASAT_PACKET_BEACON_NGHAM_TTC_DATA:
-                        event_text = "New valid BEACON packet from ";
-                        event_text += substr_to_callsign(callsign);
-                        event_text += " containing TTC data!";
-                        break;
-                    case FLORIPASAT_PACKET_DOWNLINK_TELEMETRY:
-                        event_text = "New valid DOWNLINK packet ";
-                        event_text += " containing TELEMETRY data!";
-                        break;
-                    default:
-                        event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
-                }
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_DATA_REQUEST_ANSWER:
+                    // Resquester callsign
+                    for(unsigned int i=8; i<15; i++)
+                    {
+                        dst_callsign += data[i];
+                    }
+
+                    event_text = "Data requested by ";
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += " received!";
+
+                    packet_data->Update(data, data_len);
+
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_HIBERNATION_FEEDBACK:
+                    // Resquester callsign
+                    for(unsigned int i=8; i<15; i++)
+                    {
+                        dst_callsign += data[i];
+                    }
+
+                    event_text = "Enabling hibernation mode for ";
+                    event_text += to_string(int((data[15] << 8) | data[16]));
+                    event_text += " hours!";
+                    event_text += " (requested by ";
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += ")";
+
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_CHARGE_RESET_FEEDBACK:
+                    // Resquester callsign
+                    for(unsigned int i=8; i<15; i++)
+                    {
+                        dst_callsign += data[i];
+                    }
+
+                    event_text = "Charge reset executed! (requested by ";
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += ")";
+
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_MESSAGE_BROADCAST:
+                    // Resquester callsign
+                    for(unsigned int i=8; i<15; i++)
+                    {
+                        dst_callsign += data[i];
+                    }
+
+                    event_text = "Message from ";
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += " to ";
+
+                    // Destination callsign
+                    for(unsigned int i=15; i<22; i++)
+                    {
+                        dst_callsign += data[i];
+                    }
+
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += ": ";
+
+                    // Message
+                    for(unsigned int i=22;i<data_len; i++)
+                    {
+                        event_text += data[i];
+                    }
+
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_PAYLOAD_X_STATUS:
+                    event_text = "Payload X status ";
+                    event_text += to_string(int((data[8] << 8) | data[9]));
+                    event_text += ": ";
+
+                    for(unsigned int i=10; i<data_len; i++)
+                    {
+                        event_text += to_string(int(data[i]));
+
+                        if (i < data_len-1)
+                        {
+                            event_text += ",";
+                        }
+                    }
+
+                    break;
+                case FLORIPASAT_PACKET_DOWNLINK_RUSH_STATUS:
+                    for(unsigned int i=8; i<15; i++)
+                    {
+                        dst_callsign += data[i];
+                    }
+
+                    event_text = "RUSH status received (requested by ";
+                    event_text += substr_to_callsign(dst_callsign);
+                    event_text += "): ";
+                    event_text += data[15] == 0 ? "DISABLED" : "ENABLED";
+
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_PING_REQUEST:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_DATA_REQUEST:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_ENTER_HIBERNATION:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_LEAVE_HIBERNATION:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_CHARGE_RESET:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_BROADCAST_MESSAGE:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_STATUS_REQUEST:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_SWAP:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_DATA_UPLOAD:
+                    break;
+                case FLORIPASAT_PACKET_UPLINK_RUSH_ENABLE:
+                    break;
+                default:
+                    event_text = "New valid NGHAM packet from " + string(packet_data->getLabel());
             }
 
             if (make_log)
@@ -200,8 +291,6 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
 
             protocol_statistic->AddValidPkt();
-
-            packet_data->Update(data, data_len);
 
             if (make_data_log)
             {

@@ -82,6 +82,11 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-media-play</property>
   </object>
+  <object class="GtkImage" id="image_rush_icon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">../rush-icon.png</property>
+  </object>
   <object class="GtkImage" id="image_stop_button_beacon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -680,11 +685,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton_shutdown">
+              <object class="GtkToolButton" id="toolbutton_hibernation">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Shutdown command</property>
+                <property name="tooltip_text" translatable="yes">Hibernation</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-quit</property>
               </object>
@@ -701,6 +706,20 @@
                 <property name="tooltip_text" translatable="yes">Payload X control</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-close</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbutton_rush">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Enable RUSH</property>
+                <property name="use_underline">True</property>
+                <property name="icon_widget">image_rush_icon</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -5710,7 +5729,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
   </object>
   <object class="GtkDialog" id="dialog_broadcast_message">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Message to Broadcast</property>
+    <property name="title" translatable="yes">Broadcast Message</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
@@ -5722,15 +5741,13 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="box_dialog_broadcast_message">
         <property name="can_focus">False</property>
-        <property name="margin_left">10</property>
-        <property name="margin_right">10</property>
-        <property name="margin_top">5</property>
-        <property name="margin_bottom">5</property>
+        <property name="margin_bottom">8</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="buttonbox_dialog_broadcast_message">
             <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="dialog_broadcast_message_send">
@@ -5766,21 +5783,26 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box_broadcast_message_input">
+          <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_top">5</property>
             <property name="margin_bottom">5</property>
-            <property name="spacing">5</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <property name="row_homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="label_dialog_broadcast_message">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Message:</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -5790,9 +5812,128 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="can_focus">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Dest. callsign:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_broadcast_dst_callsign">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="dialog_charge_reset">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Reset EPS Charge</property>
+    <property name="resizable">False</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="margin_bottom">8</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_reset_charge_send">
+                <property name="label" translatable="yes">Send</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_reset_charge_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Key:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_charge_reset_key">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="visibility">False</property>
+                <property name="input_purpose">password</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>
@@ -5881,7 +6022,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Ground Station ID</property>
+                    <property name="label" translatable="yes">Ground Station Callsign</property>
                     <attributes>
                       <attribute name="weight" value="heavy"/>
                     </attributes>
@@ -5902,7 +6043,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                       <object class="GtkLabel" id="label175">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">ID (Max. 6 chars.):</property>
+                        <property name="label" translatable="yes">Callsign:</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5930,166 +6071,6 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label161">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Shutdown Authentication</property>
-                    <attributes>
-                      <attribute name="weight" value="heavy"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid33">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="row_spacing">10</property>
-                    <property name="column_spacing">10</property>
-                    <child>
-                      <object class="GtkLabel" id="label163">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Admin.:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label165">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Admin. password:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label167">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">New user:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label169">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">New user password:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_config_general_admin_user">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_config_general_admin_password">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="invisible_char">•</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_config_general_new_user">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_config_general_new_password">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="invisible_char">•</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_config_general_add_new_user">
-                        <property name="label" translatable="yes">Add new user</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label171">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">New user password again:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_config_general_admin_password_confirmation">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="invisible_char">•</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
@@ -7478,11 +7459,13 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox8">
         <property name="can_focus">False</property>
+        <property name="margin_bottom">8</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area8">
             <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button_data_request_send">
@@ -7523,8 +7506,8 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">2</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
             <property name="orientation">vertical</property>
             <property name="spacing">5</property>
             <child>
@@ -7699,7 +7682,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_request_rush">
-                        <property name="label" translatable="yes">RUSH</property>
+                        <property name="label" translatable="yes">RUSH data</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -7868,6 +7851,140 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="dialog_hibernation">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Hibernation</property>
+    <property name="resizable">False</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">window_fsat_grs</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox6">
+        <property name="can_focus">False</property>
+        <property name="margin_bottom">8</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area6">
+            <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button_hibernation_enable">
+                <property name="label" translatable="yes">Enable</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_hibernation_disable">
+                <property name="label" translatable="yes">Disable</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_hibernation_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid28">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
+            <property name="row_spacing">10</property>
+            <property name="column_spacing">10</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Duration [hours]:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_hibernation_duration">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Key:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_hibernation_key">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="visibility">False</property>
+                <property name="input_purpose">password</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
           </object>
@@ -8218,11 +8335,10 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
       </object>
     </child>
   </object>
-  <object class="GtkDialog" id="dialog_shutdown_authentication">
+  <object class="GtkDialog" id="dialog_rush">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Shutdown Authentication</property>
+    <property name="title" translatable="yes">Enable RUSH</property>
     <property name="resizable">False</property>
-    <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_fsat_grs</property>
@@ -8230,16 +8346,18 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
       <placeholder/>
     </child>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox6">
+      <object class="GtkBox">
         <property name="can_focus">False</property>
+        <property name="margin_bottom">8</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area6">
+          <object class="GtkButtonBox">
             <property name="can_focus">False</property>
+            <property name="margin_right">6</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button_sd_auth_send">
+              <object class="GtkButton" id="button_rush_send">
                 <property name="label" translatable="yes">Send</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8252,7 +8370,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_sd_auth_cancel">
+              <object class="GtkButton" id="button_rush_cancel">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8272,33 +8390,22 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="grid28">
+          <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">2</property>
-            <property name="row_spacing">10</property>
-            <property name="column_spacing">10</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <property name="row_homogeneous">True</property>
             <child>
-              <object class="GtkLabel" id="label107">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">User:</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label110">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Password:</property>
+                <property name="label" translatable="yes">Key:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -8306,25 +8413,38 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="entry_sd_auth_user">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_sd_auth_password">
+              <object class="GtkEntry" id="entry_rush_key">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="visibility">False</property>
-                <property name="invisible_char">•</property>
+                <property name="input_purpose">password</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Timeout [min]:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_rush_timeout">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Valid values: 1 to 30 minutes</property>
+                <property name="input_purpose">digits</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>

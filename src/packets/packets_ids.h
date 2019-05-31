@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.0
+ * \version 0.5.11
  * 
  * \date 10/04/2019
  * 
@@ -52,6 +52,7 @@
 #define FLORIPASAT_PACKET_DOWNLINK_CHARGE_RESET_FEEDBACK    0x14    /**< Charge reset feedback. */
 #define FLORIPASAT_PACKET_DOWNLINK_MESSAGE_BROADCAST        0x15    /**< Message Broadcast. */
 #define FLORIPASAT_PACKET_DOWNLINK_PAYLOAD_X_STATUS         0x16    /**< Payload X status. */
+#define FLORIPASAT_PACKET_DOWNLINK_RUSH_STATUS              0x17    /**< RUSH status. */
 
 // Uplink packets
 #define FLORIPASAT_PACKET_UPLINK_PING_REQUEST               0x20    /**< Ping request. */
@@ -63,6 +64,7 @@
 #define FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_STATUS_REQUEST   0x26    /**< Payload X status request. */
 #define FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_SWAP             0x27    /**< Payload X swap. */
 #define FLORIPASAT_PACKET_UPLINK_PAYLOAD_X_DATA_UPLOAD      0x28    /**< Payload data upload. */
+#define FLORIPASAT_PACKET_UPLINK_RUSH_ENABLE                0x29    /**< RUSH enable. */
 
 #endif // PACKETS_IDS_H_
 
