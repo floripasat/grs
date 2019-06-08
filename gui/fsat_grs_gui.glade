@@ -7946,7 +7946,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Duration [hours]:</property>
+                <property name="label" translatable="yes">Duration [minutes]:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

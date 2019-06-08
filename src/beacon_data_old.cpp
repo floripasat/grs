@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.8
+ * \version 0.5.14
  * 
  * \date 12/09/2017
  * 
@@ -376,7 +376,7 @@ string BeaconDataOld::Log()
 
 const char* BeaconDataOld::getLabel()
 {
-    return "BEACON";
+    return "Beacon";
 }
 
 void BeaconDataOld::ForceDisplay(vector<string> data)

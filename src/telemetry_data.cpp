@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.1
+ * \version 0.5.14
  * 
  * \date 08/10/2017
  * 
@@ -665,7 +665,7 @@ std::string TelemetryData::Log()
 
 const char* TelemetryData::getLabel()
 {
-    return "DOWNLINK";
+    return "Downlink";
 }
 
 void TelemetryData::ForceDisplay(std::vector<std::string> data)

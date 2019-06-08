@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.11
+ * \version 0.5.14
  * 
  * \date 06/10/2017
  * 
@@ -122,30 +122,30 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             switch(data[0])
             {
                 case FLORIPASAT_PACKET_BEACON_NGHAM_OBDH_DATA:
-                    event_text = "New valid BEACON packet from ";
+                    event_text = "Beacon: New OBDH packet from ";
                     event_text += substr_to_callsign(src_callsign);
-                    event_text += " containing OBDH data!";
+                    event_text += "!";
 
                     packet_data->Update(data, data_len);
 
                     break;
                 case FLORIPASAT_PACKET_BEACON_NGHAM_EPS_DATA:
-                    event_text = "New valid BEACON packet from ";
+                    event_text = "Beacon: New EPS packet from ";
                     event_text += substr_to_callsign(src_callsign);
-                    event_text += " containing EPS data!";
+                    event_text += "!";
 
                     packet_data->Update(data, data_len);
 
                     break;
                 case FLORIPASAT_PACKET_BEACON_NGHAM_TTC_DATA:
-                    event_text = "New valid BEACON packet from ";
+                    event_text = "Beacon: New TTC packet from ";
                     event_text += substr_to_callsign(src_callsign);
-                    event_text += " containing TTC data!";
+                    event_text += "!";
                     break;
                 case FLORIPASAT_PACKET_DOWNLINK_TELEMETRY:
-                    event_text = "New valid DOWNLINK packet from ";
+                    event_text = "Downlink: New telemetry packet from ";
                     event_text += substr_to_callsign(src_callsign);
-                    event_text += " containing TELEMETRY data!";
+                    event_text += "!";
 
                     packet_data->Update(data, data_len);
 
@@ -156,7 +156,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         dst_callsign += data[i];
                     }
 
-                    event_text = "Ping answer to ";
+                    event_text = "Downlink: Ping to ";
                     event_text += substr_to_callsign(dst_callsign);
                     event_text += " received from ";
                     event_text += substr_to_callsign(src_callsign);
@@ -170,9 +170,11 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         dst_callsign += data[i];
                     }
 
-                    event_text = "Data requested by ";
+                    event_text = "Downlink: Data requested by ";
                     event_text += substr_to_callsign(dst_callsign);
-                    event_text += " received!";
+                    event_text += " received from ";
+                    event_text += substr_to_callsign(src_callsign);
+                    event_text += "!";
 
                     packet_data->Update(data, data_len);
 
@@ -184,10 +186,9 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         dst_callsign += data[i];
                     }
 
-                    event_text = "Enabling hibernation mode for ";
+                    event_text = "Downlink: Hibernation mode enabled by ";
                     event_text += to_string(int((data[15] << 8) | data[16]));
-                    event_text += " hours!";
-                    event_text += " (requested by ";
+                    event_text += " minutes! (requested by ";
                     event_text += substr_to_callsign(dst_callsign);
                     event_text += ")";
 
@@ -199,7 +200,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         dst_callsign += data[i];
                     }
 
-                    event_text = "Charge reset executed! (requested by ";
+                    event_text = "Downlink: Charge reset executed! (requested by ";
                     event_text += substr_to_callsign(dst_callsign);
                     event_text += ")";
 
@@ -211,7 +212,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         dst_callsign += data[i];
                     }
 
-                    event_text = "Message from ";
+                    event_text = "Downlink: Message from ";
                     event_text += substr_to_callsign(dst_callsign);
                     event_text += " to ";
 
@@ -232,7 +233,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 
                     break;
                 case FLORIPASAT_PACKET_DOWNLINK_PAYLOAD_X_STATUS:
-                    event_text = "Payload X status ";
+                    event_text = "Downlink: Payload X status ";
                     event_text += to_string(int((data[8] << 8) | data[9]));
                     event_text += ": ";
 
@@ -253,7 +254,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                         dst_callsign += data[i];
                     }
 
-                    event_text = "RUSH status received (requested by ";
+                    event_text = "Downlink: RUSH status received (requested by ";
                     event_text += substr_to_callsign(dst_callsign);
                     event_text += "): ";
                     event_text += data[15] == 0 ? "DISABLED" : "ENABLED";
@@ -300,13 +301,10 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             receive_pkt = false;
 
             return true;
-
-            break;
         case PKT_CONDITION_PREFAIL:
             return false;
-            break;
         case PKT_CONDITION_FAIL:
-            event_text = "New invalid NGHAM packet from " + string(packet_data->getLabel());
+            event_text = string(packet_data->getLabel()) + ": New invalid NGHam packet!";
 
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_INVALID_PACKET);
 
@@ -320,7 +318,6 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
             receive_pkt = false;
 
             return true;
-            break;
     }
 
     return false;

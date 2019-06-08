@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.13
+ * \version 0.5.15
  * 
  * \date 10/09/2017
  * 
@@ -2436,7 +2436,7 @@ void FSatGRS::OnButtonDataRequestCancelClicked()
 
 void FSatGRS::OnButtonBroadcastDialogSendClicked()
 {
-    if (entry_dialog_broadcast_message->get_text().size() <= 20)
+    if (entry_dialog_broadcast_message->get_text().size() <= 38)
     {
         string message_broadcast_event = "Transmitting ";
         message_broadcast_event += entry_config_uplink_burst->get_text();
@@ -2452,7 +2452,7 @@ void FSatGRS::OnButtonBroadcastDialogSendClicked()
     }
     else
     {
-        this->RaiseErrorMessage("The message is too large!", "The message to broadcast must be lesser or equal to 20 characters.");
+        this->RaiseErrorMessage("The message is too large!", "The message to broadcast must be lesser or equal to 38 characters.");
     }
 }
 
