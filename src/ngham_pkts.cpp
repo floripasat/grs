@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.14
+ * \version 0.6.2
  * 
  * \date 06/10/2017
  * 
@@ -215,6 +215,8 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
                     event_text = "Downlink: Message from ";
                     event_text += substr_to_callsign(dst_callsign);
                     event_text += " to ";
+
+                    dst_callsign = "";
 
                     // Destination callsign
                     for(unsigned int i=15; i<22; i++)
