@@ -6047,7 +6047,7 @@ Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
                         <property name="hexpand">True</property>
                         <property name="max_length">6</property>
                         <property name="width_chars">6</property>
-                        <property name="text" translatable="yes">PY0EFS</property>
+                        <property name="text" translatable="yes">PP5UF</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

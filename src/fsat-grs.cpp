@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.15
+ * \version 0.6.3
  * 
  * \date 10/09/2017
  * 
@@ -3319,7 +3319,7 @@ void FSatGRS::SaveConfigs()
 
 void FSatGRS::LoadDefaultConfigs()
 {
-    entry_config_general_gs_id->set_text("PY0EFS");
+    entry_config_general_gs_id->set_text("PP5UF");
     checkbutton_log_ngham_packets->set_active(true);
     checkbutton_log_ax25_packets->set_active(true);
     checkbutton_log_beacon_data->set_active(true);
