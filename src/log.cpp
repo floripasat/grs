@@ -1,7 +1,7 @@
 /*
  * log.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file log.cpp
- * 
  * \brief A module for record data on a .txt file.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.6.4
  * 
  * \date 07/05/2017
  * 
@@ -76,10 +74,7 @@ bool Log::VerifyDirectory(const char *folder)
 
 void Log::CreateDirectory(const char* folder)
 {
-    if (mkdir(folder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
-    {
-        throw runtime_error("It is not possible to create a new log folder!");
-    }
+    mkdir(folder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
 string Log::CurrentDateTime(int output_format)

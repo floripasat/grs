@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.3
+ * \version 0.6.4
  * 
  * \date 10/09/2017
  * 
@@ -358,7 +358,17 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     if (textview_event_log)
     {
         event_log = new EventLog(textview_event_log);
-        event_log->open((LOG_DEFAULT_DIR "/EVENTS_" + event_log->CurrentDateTime() + ".csv").c_str(), ofstream::out);
+
+        string event_log_file;
+
+        event_log_file += getenv("HOME");
+        event_log_file += "/";
+        event_log_file += LOG_DEFAULT_DIR;
+        event_log_file += "/EVENTS_";
+        event_log_file += event_log->CurrentDateTime();
+        event_log_file += ".csv";
+
+        event_log->open(event_log_file.c_str(), ofstream::out);
     }
     
     // NGHam packet configuration preamble

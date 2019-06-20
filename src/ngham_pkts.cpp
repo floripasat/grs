@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.2
+ * \version 0.6.4
  * 
  * \date 06/10/2017
  * 
@@ -34,6 +34,8 @@
  */
 
 #include <fstream>
+#include <algorithm>
+#include <stdlib.h>
 
 extern "C"
 {
@@ -65,7 +67,17 @@ NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *
     if (make_log)
     {
         log_pkts = new Log;
-        log_pkts->open((LOG_DEFAULT_DIR "/NGHAM_" + log_pkts->CurrentDateTime() + ".csv").c_str(), ofstream::out);
+
+        string log_file;
+
+        log_file += getenv("HOME");
+        log_file += "/";
+        log_file += LOG_DEFAULT_DIR;
+        log_file += "/NGHAM_";
+        log_file += log_pkts->CurrentDateTime();
+        log_file += ".csv";
+
+        log_pkts->open(log_file.c_str(), ofstream::out);
     }
 
     make_data_log = pdl;
@@ -73,7 +85,22 @@ NGHamPkts::NGHamPkts(EventLog *ev_log, PacketData *pkt_data, ProtocolStatistic *
     if (make_data_log)
     {
         log_data_pkts = new Log;
-        log_data_pkts->open((LOG_DEFAULT_DIR "/" + ToString(packet_data->getLabel()) + "_" + log_data_pkts->CurrentDateTime() + ".csv").c_str(), ofstream::out);
+
+        string log_file;
+
+        string pkt_label = packet_data->getLabel();
+        transform(pkt_label.begin(), pkt_label.end(), pkt_label.begin(), ::toupper);
+
+        log_file += getenv("HOME");
+        log_file += "/";
+        log_file += LOG_DEFAULT_DIR;
+        log_file += "/";
+        log_file += pkt_label;
+        log_file += "_";
+        log_file += log_data_pkts->CurrentDateTime();
+        log_file += ".csv";
+
+        log_data_pkts->open(log_file.c_str(), ofstream::out);
     }
 
     this->InitPkts();

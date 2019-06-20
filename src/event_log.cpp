@@ -1,7 +1,7 @@
 /*
  * event_log.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file event_log.cpp
- * 
  * \brief Event log implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.6.4
  * 
  * \date 07/10/2017
  * 
@@ -35,8 +33,12 @@
  * \{
  */
 
+#include <string>
+
 #include "event_log.h"
 #include "aux.hpp"
+
+using namespace std;
 
 EventLog::EventLog(Gtk::TextView *textview)
 {
@@ -85,7 +87,7 @@ void EventLog::AddNewEvent(const char *event_description, uint8_t type)
     
     textview_event_log->scroll_to(iter_end);
     
-    *this << ToConstChar(int(type)) << "," << this->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << event_description << "\n";
+    *this << to_string(int(type)) << "," << this->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << event_description << "\n";
 }
 
 //! \} End of event_log group
