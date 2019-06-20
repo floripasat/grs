@@ -2555,6 +2555,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2582,6 +2585,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2609,6 +2615,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2636,6 +2645,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2663,6 +2675,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2690,6 +2705,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2704,6 +2722,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2731,6 +2752,9 @@
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2768,6 +2792,9 @@
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2781,6 +2808,9 @@
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2854,6 +2884,9 @@
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2867,6 +2900,9 @@
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2880,6 +2916,9 @@
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2893,6 +2932,9 @@
                                         <property name="halign">end</property>
                                         <property name="label" translatable="yes">-</property>
                                         <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2969,6 +3011,9 @@
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3008,6 +3053,9 @@
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3022,6 +3070,9 @@
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3048,6 +3099,9 @@
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3109,6 +3163,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3122,6 +3179,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3135,6 +3195,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3148,6 +3211,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3214,6 +3280,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3239,6 +3308,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3300,6 +3372,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3313,6 +3388,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3326,6 +3404,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3339,6 +3420,9 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">-</property>
                                             <property name="justify">right</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3470,6 +3554,9 @@
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">0</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -3483,6 +3570,9 @@
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">0</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -3496,6 +3586,9 @@
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">0</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -3509,6 +3602,9 @@
                                         <property name="halign">end</property>
                                         <property name="valign">center</property>
                                         <property name="label" translatable="yes">0</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -3631,6 +3727,9 @@
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">0</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3644,6 +3743,9 @@
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">0</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3657,6 +3759,9 @@
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">0</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3670,6 +3775,9 @@
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="label" translatable="yes">0</property>
+                                            <attributes>
+                                              <attribute name="weight" value="heavy"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3803,6 +3911,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3828,6 +3939,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3853,6 +3967,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3878,6 +3995,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3903,6 +4023,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3928,6 +4051,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3941,6 +4067,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -3954,6 +4083,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4045,6 +4177,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4070,6 +4205,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4095,6 +4233,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4162,6 +4303,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4187,6 +4331,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4330,6 +4477,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4343,6 +4493,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4356,6 +4509,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4369,6 +4525,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4382,6 +4541,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4395,6 +4557,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4522,6 +4687,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4535,6 +4703,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4548,6 +4719,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4561,6 +4735,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4574,6 +4751,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4587,6 +4767,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4654,6 +4837,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4679,6 +4865,9 @@
                                                         <property name="halign">end</property>
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -4796,6 +4985,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4833,6 +5025,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4846,6 +5041,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4871,6 +5069,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4896,6 +5097,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4921,6 +5125,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4946,6 +5153,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4971,6 +5181,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -4996,6 +5209,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -5021,6 +5237,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -5046,6 +5265,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -5071,6 +5293,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -5096,6 +5321,9 @@
                                                     <property name="halign">end</property>
                                                     <property name="label" translatable="yes">-</property>
                                                     <property name="justify">right</property>
+                                                    <attributes>
+                                                      <attribute name="weight" value="heavy"/>
+                                                    </attributes>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -5270,6 +5498,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5284,6 +5515,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5298,6 +5532,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5312,6 +5549,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5326,6 +5566,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5340,6 +5583,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5354,6 +5600,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5368,6 +5617,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5382,6 +5634,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5489,6 +5744,9 @@
                                                         <property name="justify">right</property>
                                                         <property name="width_chars">0</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5503,6 +5761,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5517,6 +5778,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5531,6 +5795,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -5557,6 +5824,9 @@
                                                         <property name="label" translatable="yes">-</property>
                                                         <property name="justify">right</property>
                                                         <property name="max_width_chars">10</property>
+                                                        <attributes>
+                                                          <attribute name="weight" value="heavy"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
