@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.4
+ * \version 0.6.6
  * 
  * \date 06/10/2017
  * 
@@ -315,7 +315,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 
             if (make_log)
             {
-                *log_pkts << "\n";
+                *log_pkts << endl;
             }
 
             event_log->AddNewEvent(event_text.c_str(), EVENT_LOG_TYPE_NEW_VALID_PACKET);
@@ -324,7 +324,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 
             if (make_data_log)
             {
-                *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << packet_data->Log() << "\n";
+                *log_data_pkts << log_data_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << packet_data->Log() << endl;
             }
 
             receive_pkt = false;
@@ -339,7 +339,7 @@ bool NGHamPkts::ProcessByte(uint8_t byte)
 
             if (make_log)
             {
-                *log_pkts << "I," << log_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << "\n";
+                *log_pkts << "I," << log_pkts->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << endl;
             }
 
             protocol_statistic->AddInvalidPkt();
