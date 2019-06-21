@@ -1,7 +1,7 @@
 /*
  * log.h
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file log.h
- * 
  * \brief A module for record data on a .txt file.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.6.4
  * 
  * \date 07/05/2017
  * 
@@ -55,22 +53,22 @@
 #define LOG_SECOND                  8
 
 /**
- * \class Log
- * 
- * \brief 
- * 
+ * \brief Data log class.
  */
 class Log: public std::ofstream
 {
     public:
+
         /**
          * \brief Object constructor (without arguments)
          */
         Log();
+
         /**
          * \brief Object destructor.
          */
         ~Log();
+
         /**
          * \brief 
          * 
@@ -79,6 +77,7 @@ class Log: public std::ofstream
          * \return 
          */
         bool VerifyDirectory(const char* folder);
+
         /**
          * \brief 
          * 
@@ -87,6 +86,7 @@ class Log: public std::ofstream
          * \return None
          */
         void CreateDirectory(const char* folder);
+
         /**
          * \brief 
          * 

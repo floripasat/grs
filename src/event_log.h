@@ -1,7 +1,7 @@
 /*
  * event_log.h
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file event_log.h
- * 
  * \brief Event log class.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.6.4
  * 
  * \date 07/10/2017
  * 
@@ -48,36 +46,42 @@
 #define EVENT_LOG_TYPE_OTHERS               2
 
 /**
- * \class EventLog
- * 
- * \brief 
+ * \brief Events logger.
  */
 class EventLog: public Log
 {
+    private:
+
         /**
          * \brief 
          * 
          */
         Gtk::TextView *textview_event_log;
+
         /**
          * \brief 
          */
         Glib::RefPtr<Gtk::TextBuffer> textview_event_log_buffer;
+
         /**
          * \brief 
          */
         Glib::RefPtr<Gtk::TextBuffer::Tag> event_tag_valid;
+
         /**
          * \brief 
          */
         Glib::RefPtr<Gtk::TextBuffer::Tag> event_tag_invalid;
+
     public:
+
         /**
          * \brief 
          * 
          * \return None
          */
         EventLog(Gtk::TextView *textview);
+
         /**
          * \brief 
          * 

@@ -1,7 +1,7 @@
 /*
  * event_log.cpp
  * 
- * Copyright (C) 2017, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -21,13 +21,11 @@
  */
 
 /**
- * \file event_log.cpp
- * 
  * \brief Event log implementation.
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 1.0-dev
+ * \version 0.6.6
  * 
  * \date 07/10/2017
  * 
@@ -35,23 +33,27 @@
  * \{
  */
 
+#include <string>
+
 #include "event_log.h"
 #include "aux.hpp"
+
+using namespace std;
 
 EventLog::EventLog(Gtk::TextView *textview)
 {
     textview_event_log = textview;
     textview_event_log_buffer = textview_event_log->get_buffer();
-    
+
     if (!this->VerifyDirectory(LOG_DEFAULT_DIR))
     {
         this->CreateDirectory(LOG_DEFAULT_DIR);
     }
-    
+
     event_tag_valid = textview_event_log_buffer->create_tag("valid-pkt");
     event_tag_valid->property_background() = "green";
     event_tag_valid->property_foreground() = "white";
-    
+
     event_tag_invalid = textview_event_log_buffer->create_tag("invalid-pkt");
     event_tag_invalid->property_background() = "red";
     event_tag_invalid->property_foreground() = "white";
@@ -80,12 +82,12 @@ void EventLog::AddNewEvent(const char *event_description, uint8_t type)
             textview_event_log_buffer->insert(textview_event_log_buffer->end(), "\n");
             break;
     }
-    
+
     auto iter_end = textview_event_log_buffer->end();
-    
+
     textview_event_log->scroll_to(iter_end);
-    
-    *this << ToConstChar(int(type)) << "," << this->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << event_description << "\n";
+
+    *this << to_string(int(type)) << "," << this->CurrentDateTime(LOG_DATA_TIME_FOR_LOG_CSV) << event_description << endl;
 }
 
 //! \} End of event_log group
