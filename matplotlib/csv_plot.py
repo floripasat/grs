@@ -1,7 +1,7 @@
 #
 #  csv_plot.py
 #  
-#  Copyright (C) 2017, Federal University of Santa Catarina
+#  Copyright (C) 2017-2019, Universidade Federal de Santa Catarina
 #  
 #  This file is part of FloripaSat-GRS.
 #
@@ -21,13 +21,13 @@
 #
 
 __author__      = "Gabriel Mariano Marcelino"
-__copyright__   = "Copyright (C) 2017, Federal University of Santa Catarina"
+__copyright__   = "Copyright (C) 2017-2019, Universidade Federal de Santa Catarina"
 __credits__     = ["Gabriel Mariano Marcelino"]
 __license__     = "GPL3"
-__version__     = "1.0-dev"
+__version__     = "0.6.7"
 __maintainer__  = "Gabriel Mariano Marcelino"
 __email__       = "gabriel.mm8@gmail.com"
-__status__      = "Prototype"
+__status__      = "Development"
 
 
 import csv
@@ -133,7 +133,7 @@ def main(args):
             plot_data(sat_time_sec, column, args[3], args[4], args[5], args[6])
         else:
             plot_data(time_sec, column, args[3], args[4], args[5], args[6])
-    elif len(args) == 8:
+    elif len(args) >= 8:
         if use_sat_time:
             plot_data(sat_time_sec, column, args[3], args[4], args[5], args[6], args[7])
         else:

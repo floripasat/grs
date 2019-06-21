@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.4
+ * \version 0.6.7
  * 
  * \date 10/09/2017
  * 
@@ -2048,39 +2048,49 @@ void FSatGRS::OnButtonPlotClicked()
         
         if (checkbutton_plot_save_pdf_beacon->get_active())
         {
-            system("mkdir -p plots");
-            
+            system("mkdir -p $HOME/floripasat-grs/plots");
+
+            cmd += " \"";
+            cmd += getenv("HOME");
+            cmd += "/";
+            cmd += "floripasat-grs";
+            cmd += "/";
+            cmd += "plots";
+            cmd += "/";
+
             switch(combobox_plot_beacon_data->get_active_row_number())
             {
-                case 0:     cmd += " plots/beacon_battery_cell_1_voltage.pdf";         break;
-                case 1:     cmd += " plots/beacon_battery_cell_2_voltage.pdf";         break;
-                case 2:     cmd += " plots/beacon_battery_cell_1_temperature.pdf";     break;
-                case 3:     cmd += " plots/beacon_battery_cell_2_temperature.pdf";     break;
-                case 4:     cmd += " plots/beacon_battery_charge.pdf";                 break;
-                case 5:     cmd += " plots/beacon_solar_panel_my_current.pdf";         break;
-                case 6:     cmd += " plots/beacon_solar_panel_px_current.pdf";         break;
-                case 7:     cmd += " plots/beacon_solar_panel_mx_current.pdf";         break;
-                case 8:     cmd += " plots/beacon_solar_panel_pz_current.pdf";         break;
-                case 9:     cmd += " plots/beacon_solar_panel_mz_current.pdf";         break;
-                case 10:    cmd += " plots/beacon_solar_panel_py_current.pdf";         break;
-                case 11:    cmd += " plots/beacon_solar_panel_voltage_my_px.pdf";      break;
-                case 12:    cmd += " plots/beacon_solar_panel_voltage_mx_pz.pdf";      break;
-                case 13:    cmd += " plots/beacon_solar_panel_voltage_mz_py.pdf";      break;
-                case 14:    cmd += " plots/beacon_energy_level.pdf";                   break;
-                case 15:    cmd += " plots/beacon_imu_status.pdf";                     break;
-                case 16:    cmd += " plots/beacon_sd_card_status.pdf";                 break;
-                case 17:    cmd += " plots/beacon_rush_status.pdf";                    break;
-                case 18:    cmd += " plots/beacon_eps_status.pdf";                     break;
-                case 19:    cmd += " plots/beacon_antenna_status.pdf";                 break;
-                case 20:    cmd += " plots/beacon_imu_accel_x.pdf";                    break;
-                case 21:    cmd += " plots/beacon_imu_accel_y.pdf";                    break;
-                case 22:    cmd += " plots/beacon_imu_accel_z.pdf";                    break;
-                case 23:    cmd += " plots/beacon_imu_gyro_x.pdf";                     break;
-                case 24:    cmd += " plots/beacon_imu_gyro_y.pdf";                     break;
-                case 25:    cmd += " plots/beacon_imu_gyro_z.pdf";                     break;
-                case 26:    cmd += " plots/beacon_obdh_resets.pdf";                    break;
-                default:    cmd += " plots/beacon_plot.pdf";                           break;
+                case 0:     cmd += "beacon_battery_cell_1_voltage.pdf";         break;
+                case 1:     cmd += "beacon_battery_cell_2_voltage.pdf";         break;
+                case 2:     cmd += "beacon_battery_cell_1_temperature.pdf";     break;
+                case 3:     cmd += "beacon_battery_cell_2_temperature.pdf";     break;
+                case 4:     cmd += "beacon_battery_charge.pdf";                 break;
+                case 5:     cmd += "beacon_solar_panel_my_current.pdf";         break;
+                case 6:     cmd += "beacon_solar_panel_px_current.pdf";         break;
+                case 7:     cmd += "beacon_solar_panel_mx_current.pdf";         break;
+                case 8:     cmd += "beacon_solar_panel_pz_current.pdf";         break;
+                case 9:     cmd += "beacon_solar_panel_mz_current.pdf";         break;
+                case 10:    cmd += "beacon_solar_panel_py_current.pdf";         break;
+                case 11:    cmd += "beacon_solar_panel_voltage_my_px.pdf";      break;
+                case 12:    cmd += "beacon_solar_panel_voltage_mx_pz.pdf";      break;
+                case 13:    cmd += "beacon_solar_panel_voltage_mz_py.pdf";      break;
+                case 14:    cmd += "beacon_energy_level.pdf";                   break;
+                case 15:    cmd += "beacon_imu_status.pdf";                     break;
+                case 16:    cmd += "beacon_sd_card_status.pdf";                 break;
+                case 17:    cmd += "beacon_rush_status.pdf";                    break;
+                case 18:    cmd += "beacon_eps_status.pdf";                     break;
+                case 19:    cmd += "beacon_antenna_status.pdf";                 break;
+                case 20:    cmd += "beacon_imu_accel_x.pdf";                    break;
+                case 21:    cmd += "beacon_imu_accel_y.pdf";                    break;
+                case 22:    cmd += "beacon_imu_accel_z.pdf";                    break;
+                case 23:    cmd += "beacon_imu_gyro_x.pdf";                     break;
+                case 24:    cmd += "beacon_imu_gyro_y.pdf";                     break;
+                case 25:    cmd += "beacon_imu_gyro_z.pdf";                     break;
+                case 26:    cmd += "beacon_obdh_resets.pdf";                    break;
+                default:    cmd += "beacon_plot.pdf";                           break;
             };
+
+            cmd += "\"";
         }
 
         cmd += checkbutton_plot_use_sat_time_beacon->get_active()? " \"1\"" : " \"0\"";
