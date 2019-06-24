@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.7
+ * \version 0.6.8
  * 
  * \date 10/09/2017
  * 
@@ -833,9 +833,12 @@ int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
     system(cmd.c_str());
     
     this->LoadConfigs();
-    
+
     auto timer_slot = sigc::mem_fun(*this, &FSatGRS::Timer);
     auto conn = Glib::signal_timeout().connect(timer_slot, DATA_RECEPTION_SAMPLE_RATE);
+
+    auto timer_slot_buffer_reset = sigc::mem_fun(*this, &FSatGRS::TimerBufferReset);
+    auto conn_buffer_reset = Glib::signal_timeout().connect(timer_slot_buffer_reset, DATA_RECEPTION_BUFFER_RESET_PERIOD_MS);
 
     return app->run(*window_fsat_grs);
 }
@@ -1026,6 +1029,44 @@ bool FSatGRS::Timer()
     }
 
 	return true;
+}
+
+bool FSatGRS::TimerBufferReset()
+{
+    if (togglebutton_play_beacon->get_active())
+    {
+
+        // Save bin stream for further analysis
+        system(string(string("mkdir -p ") + string(FSAT_GRS_OUTPUT_DIR) + string(FSAT_GRS_BINDATA_DIR)).c_str());
+        system(string(string("cp -a ") + string(FSAT_GRS_GRC_BEACON_BIN) + string(" ") + string(FSAT_GRS_OUTPUT_DIR) + string(FSAT_GRS_BINDATA_DIR) + string("/BEACON_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin")).c_str());
+
+        // Deleting the buffer
+        system("rm -f " FSAT_GRS_GRC_BEACON_BIN);
+
+        // Creating an empty buffer
+        system("touch " FSAT_GRS_GRC_BEACON_BIN);
+
+        // Reseting the buffer counters
+        ngham_pkts_beacon->reset();
+    }
+
+    if (togglebutton_play_telemetry->get_active())
+    {
+        // Save bin stream for further analysis
+        system(string(string("mkdir -p ") + string(FSAT_GRS_OUTPUT_DIR) + string(FSAT_GRS_BINDATA_DIR)).c_str());
+        system(string(string("cp -a ") + string(FSAT_GRS_GRC_TELEMETRY_BIN) + string(" ") + string(FSAT_GRS_OUTPUT_DIR) + string(FSAT_GRS_BINDATA_DIR) + string("/DOWNLINK_`date +\"%Y-%m-%d_%H-%M-%S\"`.bin")).c_str());
+
+        // Deleting the buffer
+        system("rm -f " FSAT_GRS_GRC_TELEMETRY_BIN);
+
+        // Creating an empty buffer
+        system("touch " FSAT_GRS_GRC_TELEMETRY_BIN);
+
+        // Reseting the buffer counters
+        ngham_pkts_telemetry->reset();
+    }
+
+    return true;
 }
 
 void FSatGRS::UpdateBeaconDataTab(grs::BeaconData beacon)

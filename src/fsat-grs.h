@@ -1,7 +1,7 @@
 /*
  * fsat-grs.h
  * 
- * Copyright (C) 2017-2019, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.11
+ * \version 0.6.8
  * 
  * \date 10/09/2017
  * 
@@ -58,6 +58,7 @@
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL          "glade/fsat_grs_gui.glade"
 
 #define DATA_RECEPTION_SAMPLE_RATE                  1000
+#define DATA_RECEPTION_BUFFER_RESET_PERIOD_MS       (60*60*1000)    // 1 hour
 
 #define FSAT_GRS_RX_BEACON                          0
 #define FSAT_GRS_RX_TELEMETRY                       1
@@ -531,6 +532,13 @@ class FSatGRS
          * \return
          */
         bool Timer();
+
+        /**
+         * \brief Buffer reset task.
+         *
+         * \return TRUE/FALSE if the task must continue or not.
+         */
+        bool TimerBufferReset();
 
         /**
          * \brief Updates the beacon data tab.
