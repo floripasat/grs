@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.8
+ * \version 0.6.9
  * 
  * \date 10/09/2017
  * 
@@ -837,8 +837,8 @@ int FSatGRS::Run(Glib::RefPtr<Gtk::Application> app)
     auto timer_slot = sigc::mem_fun(*this, &FSatGRS::Timer);
     auto conn = Glib::signal_timeout().connect(timer_slot, DATA_RECEPTION_SAMPLE_RATE);
 
-    auto timer_slot_buffer_reset = sigc::mem_fun(*this, &FSatGRS::TimerBufferReset);
-    auto conn_buffer_reset = Glib::signal_timeout().connect(timer_slot_buffer_reset, DATA_RECEPTION_BUFFER_RESET_PERIOD_MS);
+//    auto timer_slot_buffer_reset = sigc::mem_fun(*this, &FSatGRS::TimerBufferReset);
+//    auto conn_buffer_reset = Glib::signal_timeout().connect(timer_slot_buffer_reset, DATA_RECEPTION_BUFFER_RESET_PERIOD_MS);
 
     return app->run(*window_fsat_grs);
 }
