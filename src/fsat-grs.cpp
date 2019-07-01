@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.9
+ * \version 0.6.10
  * 
  * \date 10/09/2017
  * 
@@ -1922,8 +1922,8 @@ void FSatGRS::OnButtonPlotClicked()
         
         return;
     }
-    
-    string cmd = "python ";
+
+    string cmd = "python3 ";
 
     if (this->CheckFile(FSAT_GRS_PLOT_SCRIPT))
     {
@@ -2140,9 +2140,9 @@ void FSatGRS::OnButtonPlotClicked()
 
         thread_matplotlib_beacon.detach();
     }
-    
-    string cmd2 = "python matplotlib/csv_plot.py";
-    
+
+    string cmd2 = "python3 matplotlib/csv_plot.py";
+
     if (filechooserbutton_plot_telemetry->get_filename().size() > 0)  
     {
         cmd2 += " ";

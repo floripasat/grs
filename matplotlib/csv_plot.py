@@ -24,58 +24,58 @@ __author__      = "Gabriel Mariano Marcelino"
 __copyright__   = "Copyright (C) 2017-2019, Universidade Federal de Santa Catarina"
 __credits__     = ["Gabriel Mariano Marcelino"]
 __license__     = "GPL3"
-__version__     = "0.6.7"
+__version__     = "0.6.10"
 __maintainer__  = "Gabriel Mariano Marcelino"
 __email__       = "gabriel.mm8@gmail.com"
 __status__      = "Development"
 
 
 import csv
-import pylab
+import matplotlib.pyplot as plt
 import datetime
 
 def plot_data(x, y, y_label="Data", c_title="Time x Data", con_points="1", best_curve="0", file_name=""):
     x_label = "Time [sec]"
-    
+
     # Cubic Linear Regression
     if best_curve == "1":
-        fit = pylab.polyfit(x, y, 3)
-        fit_fn = pylab.poly1d(fit)
-        pylab.plot(x, fit_fn(x), '-g', label='Best curve')
-    
+        fit = plt.polyfit(x, y, 3)
+        fit_fn = plt.poly1d(fit)
+        plt.plot(x, fit_fn(x), '-g', label='Best curve')
+
     if con_points == "1":
         if best_curve == "1":
-            pylab.plot(x, y, '-bo', label='Measures')
+            plt.plot(x, y, '-bo', label='Measures')
         else:
-            pylab.plot(x, y, '-bo')
+            plt.plot(x, y, '-bo')
     else:
         if best_curve == "1":
-            pylab.plot(x, y, 'bo', label='Measures')
+            plt.plot(x, y, 'bo', label='Measures')
         else:
-            pylab.plot(x, y, 'bo')
-    
-    pylab.title(c_title)
-    pylab.xlabel(x_label)
-    pylab.ylabel(y_label)
+            plt.plot(x, y, 'bo')
+
+    plt.title(c_title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
     if best_curve == "1":
-        pylab.legend(loc='best')
-    #pylab.axis([0, x[-1], min(y)*0.999, max(y)*1.001])
+        plt.legend(loc='best')
+    #plt.axis([0, x[-1], min(y)*0.999, max(y)*1.001])
     if len(file_name) > 0:
-        pylab.savefig(file_name, bbox_inches='tight', dpi=600, transparent=True)
-    pylab.show()
+        plt.savefig(file_name, bbox_inches='tight', dpi=600, transparent=True)
+    plt.show()
 
 
 def main(args):
     if len(args) <= 2 or args[2] == '--help':
-        print "Usage:"
-        print "\t- 1st argument must be the CSV file"
-        print "\t- 2nd argument must be the column to display the data"
-        print "\t- 3rd argument (OPTIONAL) is the axis y label"
-        print "\t- 4th argument (OPTIONAL) is the plot title"
-        print "\t- 5th argument (OPTIONAL) is the connect points flag (True/False)"
-        print "\t- 6th argument (OPTIONAL) is the plot best curve flag (True/False)"
-        print "\t- 7th argument (OPTIONAL) is the name of the pdf file to save the plot"
-        print "\t- 8th argument (OPTIONAL) is the option to use the system or the satellite time for the x-axis reference"
+        print("Usage:")
+        print("\t- 1st argument must be the CSV file")
+        print("\t- 2nd argument must be the column to display the data")
+        print("\t- 3rd argument (OPTIONAL) is the axis y label")
+        print("\t- 4th argument (OPTIONAL) is the plot title")
+        print("\t- 5th argument (OPTIONAL) is the connect points flag (True/False)")
+        print("\t- 6th argument (OPTIONAL) is the plot best curve flag (True/False)")
+        print("\t- 7th argument (OPTIONAL) is the name of the pdf file to save the plot")
+        print("\t- 8th argument (OPTIONAL) is the option to use the system or the satellite time for the x-axis reference")
         
         return 0
 
@@ -87,7 +87,7 @@ def main(args):
     column = list()
     time_sec = list()
     sat_time_sec = list()
-    with open(args[1], 'rb') as csvfile:
+    with open(args[1]) as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='|')
         try:
             for row in reader:
@@ -107,7 +107,7 @@ def main(args):
             sat_time_sec[i] = sat_time_sec[i] - initial_sat_time_sec
             if (i > 1) and (sat_time_sec[i-1] > sat_time_sec[i]):
                 sat_time_sec[i] = sat_time_sec[i-1]
-            print sat_time_sec[i]
+            print(sat_time_sec[i])
     else:
         initial_time_sec = time_sec[0]
         for i in range(len(time_sec)):
