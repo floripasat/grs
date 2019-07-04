@@ -24,7 +24,7 @@ __author__      = "Gabriel Mariano Marcelino"
 __copyright__   = "Copyright (C) 2017-2019, Universidade Federal de Santa Catarina"
 __credits__     = ["Gabriel Mariano Marcelino"]
 __license__     = "GPL3"
-__version__     = "0.6.10"
+__version__     = "0.6.11"
 __maintainer__  = "Gabriel Mariano Marcelino"
 __email__       = "gabriel.mm8@gmail.com"
 __status__      = "Development"
@@ -85,7 +85,7 @@ def main(args):
             use_sat_time = True
 
     column = list()
-    time_sec = list()
+    time = list()
     sat_time_sec = list()
     with open(args[1]) as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -96,10 +96,11 @@ def main(args):
                     if use_sat_time:
                         sat_time_sec.append((int(row[31])*60*60) + (int(row[32])*60) + int(row[33]))
                     else:
-                        time_sec.append(datetime.datetime(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4]), int(row[5])))
+                        time.append(datetime.datetime(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4]), int(row[5])))
         except:
             pass
-    
+
+    time_sec = list()
     i = 0
     if use_sat_time:
         initial_sat_time_sec = sat_time_sec[0]
@@ -109,9 +110,8 @@ def main(args):
                 sat_time_sec[i] = sat_time_sec[i-1]
             print(sat_time_sec[i])
     else:
-        initial_time_sec = time_sec[0]
-        for i in range(len(time_sec)):
-            time_sec[i] = (time_sec[i] - initial_time_sec).seconds
+        for t in time:
+            time_sec.append(int((t - time[0]).total_seconds()))
 
     if len(args) == 4:
         if use_sat_time:
