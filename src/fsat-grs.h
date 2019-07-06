@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.8
+ * \version 0.6.12
  * 
  * \date 10/09/2017
  * 
@@ -368,14 +368,13 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_plot_beacon_connect_points;
         Gtk::CheckButton                *checkbutton_plot_beacon_best_curve;
         Gtk::CheckButton                *checkbutton_plot_save_pdf_beacon;
-        Gtk::CheckButton                *checkbutton_plot_use_sat_time_beacon;
         Gtk::FileChooserButton          *filechooserbutton_plot_telemetry;
         Gtk::ComboBox                   *combobox_plot_telemetry_data;
         Gtk::CheckButton                *checkbutton_plot_telemetry_connect_points;
         Gtk::CheckButton                *checkbutton_plot_telemetry_best_curve;
         Gtk::CheckButton                *checkbutton_plot_save_pdf_telemetry;
         Gtk::CheckButton                *checkbutton_plot_use_sat_time_telemetry;
-        Gtk::Button                     *button_plot;
+        Gtk::Button                     *button_plot_beacon_data;
         
         // Data Request Dialog
         Gtk::Dialog                     *dialog_data_request;

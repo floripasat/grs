@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.10
+ * \version 0.6.12
  * 
  * \date 10/09/2017
  * 
@@ -592,18 +592,17 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("checkbutton_plot_beacon_connect_points", checkbutton_plot_beacon_connect_points);
     ref_builder->get_widget("checkbutton_plot_beacon_best_curve", checkbutton_plot_beacon_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_beacon", checkbutton_plot_save_pdf_beacon);
-    ref_builder->get_widget("checkbutton_plot_use_sat_time_beacon", checkbutton_plot_use_sat_time_beacon);
     ref_builder->get_widget("filechooserbutton_plot_telemetry", filechooserbutton_plot_telemetry);
     ref_builder->get_widget("combobox_plot_telemetry_data", combobox_plot_telemetry_data);
     ref_builder->get_widget("checkbutton_plot_telemetry_connect_points", checkbutton_plot_telemetry_connect_points);
     ref_builder->get_widget("checkbutton_plot_telemetry_best_curve", checkbutton_plot_telemetry_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_telemetry", checkbutton_plot_save_pdf_telemetry);
     ref_builder->get_widget("checkbutton_plot_use_sat_time_telemetry", checkbutton_plot_use_sat_time_telemetry);
-    ref_builder->get_widget("button_plot", button_plot);
+    ref_builder->get_widget("button_plot_beacon_data", button_plot_beacon_data);
     
-    if (button_plot)
+    if (button_plot_beacon_data)
     {
-        button_plot->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPlotClicked));
+        button_plot_beacon_data->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonPlotClicked));
     }
 
     // Preferences dialog
@@ -2134,7 +2133,7 @@ void FSatGRS::OnButtonPlotClicked()
             cmd += "\"";
         }
 
-        cmd += checkbutton_plot_use_sat_time_beacon->get_active()? " \"1\"" : " \"0\"";
+        cmd += " \"0\""; // Do not use satellite time as reference
 
         thread thread_matplotlib_beacon(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
