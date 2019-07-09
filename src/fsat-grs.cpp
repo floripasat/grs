@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.13
+ * \version 0.7.0
  * 
  * \date 10/09/2017
  * 
@@ -269,7 +269,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
         button_clear_all_beacon->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnButtonClearAllBeaconClicked));
     }
     
-    // Telemetry stream
+    // Downlink stream
     ref_builder->get_widget("radiobutton_telemetry_src_sdr", radiobutton_telemetry_src_sdr);
     ref_builder->get_widget("combobox_telemetry_sdr_dev", combobox_telemetry_sdr_dev);
     ref_builder->get_widget("radiobutton_telemetry_src_tcp", radiobutton_telemetry_src_tcp);
@@ -469,7 +469,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     
     beacon_data = new BeaconDataOld(beacon_data_labels);
     
-    // Telemetry data
+    // Downlink data
     ref_builder->get_widget("label_telemetry_data_status_reset_counter", label_telemetry_data_status_reset_counter);
     ref_builder->get_widget("label_telemetry_data_status_reset_cause", label_telemetry_data_status_reset_cause);
     ref_builder->get_widget("label_telemetry_data_status_clock", label_telemetry_data_status_clock);
@@ -615,6 +615,9 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     // Preferences dialog
     ref_builder->get_widget("dialog_config", dialog_config);
     ref_builder->get_widget("entry_config_general_gs_id", entry_config_general_gs_id);
+    ref_builder->get_widget("entry_config_general_grid", entry_config_general_grid);
+    ref_builder->get_widget("entry_config_general_city", entry_config_general_city);
+    ref_builder->get_widget("entry_config_general_country", entry_config_general_country);
     
     ref_builder->get_widget("entry_config_downlink_beacon_freq", entry_config_downlink_beacon_freq);
     ref_builder->get_widget("entry_config_downlink_beacon_baudrate", entry_config_downlink_beacon_baudrate);
@@ -3352,6 +3355,9 @@ void FSatGRS::LoadConfigs()
         entry_config_uplink_beacon_frequency->set_text(configs_str[15]);
         radiobutton_config_uplink_type_telemetry->set_active((configs_str[16] == "1"? true : false));
         radiobutton_config_uplink_type_beacon->set_active((configs_str[17] == "1"? true : false));
+        entry_config_general_grid->set_text(configs_str[18]);
+        entry_config_general_city->set_text(configs_str[19]);
+        entry_config_general_country->set_text(configs_str[20]);
     }
     else
     {
@@ -3366,41 +3372,47 @@ void FSatGRS::SaveConfigs()
     ofstream file_config((homepath + FSAT_GRS_CONFIG_FILE).c_str(), ofstream::out);
     
     file_config << entry_config_general_gs_id->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << (checkbutton_log_ngham_packets->get_active()? "1" : "0");
-    file_config << "\n";
+    file_config << endl;
     file_config << (checkbutton_log_ax25_packets->get_active()? "1" : "0");
-    file_config << "\n";
+    file_config << endl;
     file_config << (checkbutton_log_beacon_data->get_active()? "1" : "0");
-    file_config << "\n";
+    file_config << endl;
     file_config << (checkbutton_log_telemetry_data->get_active()? "1" : "0");
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_beacon_freq->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_beacon_baudrate->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_beacon_filter->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_beacon_sample_rate->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_telemetry_freq->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_telemetry_baudrate->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_telemetry_filter->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_downlink_telemetry_sample_rate->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_uplink_burst->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_uplink_telemetry_frequency->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << entry_config_uplink_beacon_frequency->get_text();
-    file_config << "\n";
+    file_config << endl;
     file_config << (radiobutton_config_uplink_type_telemetry->get_active()? "1" : "0");
-    file_config << "\n";
+    file_config << endl;
     file_config << (radiobutton_config_uplink_type_beacon->get_active()? "1" : "0");
-    file_config << "\n";
+    file_config << endl;
+    file_config << entry_config_general_grid->get_text();
+    file_config << endl;
+    file_config << entry_config_general_city->get_text();
+    file_config << endl;
+    file_config << entry_config_general_country->get_text();
+    file_config << endl;
     
     file_config.close();
 }
@@ -3408,6 +3420,9 @@ void FSatGRS::SaveConfigs()
 void FSatGRS::LoadDefaultConfigs()
 {
     entry_config_general_gs_id->set_text("PP5UF");
+    entry_config_general_grid->set_text("GG52RJ");
+    entry_config_general_city->set_text("Florianópolis");
+    entry_config_general_country->set_text("Brazil");
     checkbutton_log_ngham_packets->set_active(true);
     checkbutton_log_ax25_packets->set_active(true);
     checkbutton_log_beacon_data->set_active(true);

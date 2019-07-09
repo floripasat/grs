@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.6.13
+ * \version 0.7.0
  * 
  * \date 10/09/2017
  * 
@@ -338,6 +338,9 @@ class FSatGRS
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
         Gtk::Entry                      *entry_config_general_gs_id;
+        Gtk::Entry                      *entry_config_general_grid;
+        Gtk::Entry                      *entry_config_general_city;
+        Gtk::Entry                      *entry_config_general_country;
         Gtk::CheckButton                *checkbutton_log_ngham_packets;
         Gtk::CheckButton                *checkbutton_log_ax25_packets;
         Gtk::CheckButton                *checkbutton_log_beacon_data;
