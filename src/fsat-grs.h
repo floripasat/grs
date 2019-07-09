@@ -1,7 +1,7 @@
 /*
  * fsat-grs.h
  * 
- * Copyright (C) 2017-2019, Federal University of Santa Catarina.
+ * Copyright (C) 2017-2019, Universidade Federal de Santa Catarina.
  * 
  * This file is part of FloripaSat-GRS.
  * 
@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.11
+ * \version 0.7.0
  * 
  * \date 10/09/2017
  * 
@@ -58,6 +58,7 @@
 #define FSAT_PKT_ANA_DEFAULT_UI_FILE_LOCAL          "glade/fsat_grs_gui.glade"
 
 #define DATA_RECEPTION_SAMPLE_RATE                  1000
+#define DATA_RECEPTION_BUFFER_RESET_PERIOD_MS       (60*60*1000)    // 1 hour
 
 #define FSAT_GRS_RX_BEACON                          0
 #define FSAT_GRS_RX_TELEMETRY                       1
@@ -337,6 +338,9 @@ class FSatGRS
         // Preferences Dialog
         Gtk::Dialog                     *dialog_config;
         Gtk::Entry                      *entry_config_general_gs_id;
+        Gtk::Entry                      *entry_config_general_grid;
+        Gtk::Entry                      *entry_config_general_city;
+        Gtk::Entry                      *entry_config_general_country;
         Gtk::CheckButton                *checkbutton_log_ngham_packets;
         Gtk::CheckButton                *checkbutton_log_ax25_packets;
         Gtk::CheckButton                *checkbutton_log_beacon_data;
@@ -367,14 +371,14 @@ class FSatGRS
         Gtk::CheckButton                *checkbutton_plot_beacon_connect_points;
         Gtk::CheckButton                *checkbutton_plot_beacon_best_curve;
         Gtk::CheckButton                *checkbutton_plot_save_pdf_beacon;
-        Gtk::CheckButton                *checkbutton_plot_use_sat_time_beacon;
+        Gtk::Button                     *button_plot_beacon_data;
         Gtk::FileChooserButton          *filechooserbutton_plot_telemetry;
         Gtk::ComboBox                   *combobox_plot_telemetry_data;
         Gtk::CheckButton                *checkbutton_plot_telemetry_connect_points;
         Gtk::CheckButton                *checkbutton_plot_telemetry_best_curve;
         Gtk::CheckButton                *checkbutton_plot_save_pdf_telemetry;
         Gtk::CheckButton                *checkbutton_plot_use_sat_time_telemetry;
-        Gtk::Button                     *button_plot;
+        Gtk::Button                     *button_plot_downlink_data;
         
         // Data Request Dialog
         Gtk::Dialog                     *dialog_data_request;
@@ -533,6 +537,13 @@ class FSatGRS
         bool Timer();
 
         /**
+         * \brief Buffer reset task.
+         *
+         * \return TRUE/FALSE if the task must continue or not.
+         */
+        bool TimerBufferReset();
+
+        /**
          * \brief Updates the beacon data tab.
          *
          * \param[in] beacon is a beacon packet to display.
@@ -584,12 +595,14 @@ class FSatGRS
          * \return None
          */
         void OnToolButtonRunClicked();
+
         /**
          * \brief 
          * 
          * \return None
          */
         void OnToolButtonPlotClicked();
+
         /**
          * \brief Ping button click signal handler.
          * 
@@ -726,12 +739,21 @@ class FSatGRS
          * \return None
          */
         void OnButtonClearAllTelemetryClicked();
+
         /**
          * \brief 
          * 
          * \return None
          */
-        void OnButtonPlotClicked();
+        void OnButtonPlotBeaconDataClicked();
+
+        /**
+         * \brief 
+         * 
+         * \return None
+         */
+        void OnButtonPlotDownlinkDataClicked();
+
         /**
          * \brief 
          * 

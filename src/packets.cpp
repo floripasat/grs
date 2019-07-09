@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.9
+ * \version 0.6.8
  * 
  * \date 06/10/2017
  * 
@@ -193,6 +193,12 @@ void Packets::Search(const char *file)
 string Packets::LogPayload()
 {
     return string();
+}
+
+void Packets::reset()
+{
+    this->prev_fin_byte_counter = 0;
+    this->fin_byte_counter = 0;
 }
 
 //! \} End of packets group
