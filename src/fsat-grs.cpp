@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.0
+ * \version 0.7.1
  * 
  * \date 10/09/2017
  * 
@@ -2095,7 +2095,9 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
         cmd += checkbutton_plot_beacon_connect_points->get_active()? " \"1\"" : " \"0\"";
         
         cmd += checkbutton_plot_beacon_best_curve->get_active()? " \"1\"" : " \"0\"";
-        
+
+        cmd += " \"0\""; // Do not use satellite time as reference
+
         if (checkbutton_plot_save_pdf_beacon->get_active())
         {
             system("mkdir -p $HOME/floripasat-grs/plots");
@@ -2142,8 +2144,6 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
 
             cmd += "\"";
         }
-
-        cmd += " \"0\""; // Do not use satellite time as reference
 
         thread thread_matplotlib_beacon(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
@@ -2436,66 +2436,76 @@ void FSatGRS::OnButtonPlotDownlinkDataClicked()
 
         cmd += checkbutton_plot_telemetry_best_curve->get_active()? " \"1\"" : " \"0\"";
 
+        cmd += checkbutton_plot_use_sat_time_telemetry->get_active()? " \"1\"" : " \"0\"";
+
         if (checkbutton_plot_save_pdf_telemetry->get_active())
         {
-            system("mkdir -p plots");
+            system("mkdir -p $HOME/floripasat-grs/plots");
+
+            cmd += " \"";
+            cmd += getenv("HOME");
+            cmd += "/";
+            cmd += "floripasat-grs";
+            cmd += "/";
+            cmd += "plots";
+            cmd += "/";
 
             switch(combobox_plot_telemetry_data->get_active_row_number())
             {
-                case 0:     cmd += " plots/telemetry_packet_flags.pdf";                 break;
-                case 1:     cmd += " plots/telemetry_reset_counter.pdf";                break;
-                case 2:     cmd += " plots/telemetry_reset_cause.pdf";                  break;
-                case 3:     cmd += " plots/telemetry_clock_fault_flags.pdf";            break;
-                case 4:     cmd += " plots/telemetry_test_module_flags.pdf";            break;
-                case 5:     cmd += " plots/telemetry_imu_status.pdf";                   break;
-                case 6:     cmd += " plots/telemetry_sd_card_status.pdf";               break;
-                case 7:     cmd += " plots/telemetry_rush_status.pdf";                  break;
-                case 8:     cmd += " plots/telemetry_eps_status.pdf";                   break;
-                case 9:     cmd += " plots/telemetry_antenna_status.pdf";               break;
-                case 10:    cmd += " plots/telemetry_imu_1_accel_x.pdf";                break;
-                case 11:    cmd += " plots/telemetry_imu_1_accel_y.pdf";                break;
-                case 12:    cmd += " plots/telemetry_imu_1_accel_z.pdf";                break;
-                case 13:    cmd += " plots/telemetry_imu_1_gyro_x.pdf";                 break;
-                case 14:    cmd += " plots/telemetry_imu_1_gyro_y.pdf";                 break;
-                case 15:    cmd += " plots/telemetry_imu_1_gyro_z.pdf";                 break;
-                case 16:    cmd += " plots/telemetry_imu_2_accel_x.pdf";                break;
-                case 17:    cmd += " plots/telemetry_imu_2_accel_y.pdf";                break;
-                case 18:    cmd += " plots/telemetry_imu_2_accel_z.pdf";                break;
-                case 19:    cmd += " plots/telemetry_imu_2_gyro_x.pdf";                 break;
-                case 20:    cmd += " plots/telemetry_imu_2_gyro_y.pdf";                 break;
-                case 21:    cmd += " plots/telemetry_imu_2_gyro_z.pdf";                 break;
-                case 22:    cmd += " plots/telemetry_obdh_uc_temperature.pdf";          break;
-                case 23:    cmd += " plots/telemetry_obdh_uc_voltage.pdf";              break;
-                case 24:    cmd += " plots/telemetry_obdh_uc_current.pdf";              break;
-                case 25:    cmd += " plots/telemetry_solar_panel_my_current.pdf";       break;
-                case 26:    cmd += " plots/telemetry_solar_panel_px_current.pdf";       break;
-                case 27:    cmd += " plots/telemetry_solar_panel_mx_current.pdf";       break;
-                case 28:    cmd += " plots/telemetry_solar_panel_pz_current.pdf";       break;
-                case 29:    cmd += " plots/telemetry_solar_panel_mz_current.pdf";       break;
-                case 30:    cmd += " plots/telemetry_solar_panel_py_current.pdf";       break;
-                case 31:    cmd += " plots/telemetry_solar_panel_voltage_my_px.pdf";    break;
-                case 32:    cmd += " plots/telemetry_solar_panel_voltage_mx_pz.pdf";    break;
-                case 33:    cmd += " plots/telemetry_solar_panel_voltage_mz_py.pdf";    break;
-                case 34:    cmd += " plots/telemetry_boost_voltage.pdf";                break;
-                case 35:    cmd += " plots/telemetry_main_power_voltage.pdf";           break;
-                case 36:    cmd += " plots/telemetry_beacon_current.pdf";               break;
-                case 37:    cmd += " plots/telemetry_eps_uc_temperature.pdf";           break;
-                case 38:    cmd += " plots/telemetry_battery_average_current.pdf";      break;
-                case 39:    cmd += " plots/telemetry_battery_temperature.pdf";          break;
-                case 40:    cmd += " plots/telemetry_battery_cell_1_temperature.pdf";   break;
-                case 41:    cmd += " plots/telemetry_battery_cell_2_temperature.pdf";   break;
-                case 42:    cmd += " plots/telemetry_battery_current.pdf";              break;
-                case 43:    cmd += " plots/telemetry_battery_accu_current.pdf";         break;
-                case 44:    cmd += " plots/telemetry_active_absolute_capacity.pdf";     break;
-                case 45:    cmd += " plots/telemetry_standby_absolute_capacity.pdf";    break;
-                case 46:    cmd += " plots/telemetry_active_relative_capacity.pdf";     break;
-                case 47:    cmd += " plots/telemetry_standby_relative_capacity.pdf";    break;
-                case 48:    cmd += " plots/telemetry_energy_level.pdf";                 break;
-                default:    cmd += " plots/telemetry_plot.pdf";                         break;
+                case 0:     cmd += "downlink_packet_flags.pdf";                 break;
+                case 1:     cmd += "downlink_reset_counter.pdf";                break;
+                case 2:     cmd += "downlink_reset_cause.pdf";                  break;
+                case 3:     cmd += "downlink_clock_fault_flags.pdf";            break;
+                case 4:     cmd += "downlink_test_module_flags.pdf";            break;
+                case 5:     cmd += "downlink_imu_status.pdf";                   break;
+                case 6:     cmd += "downlink_sd_card_status.pdf";               break;
+                case 7:     cmd += "downlink_rush_status.pdf";                  break;
+                case 8:     cmd += "downlink_eps_status.pdf";                   break;
+                case 9:     cmd += "downlink_antenna_status.pdf";               break;
+                case 10:    cmd += "downlink_imu_1_accel_x.pdf";                break;
+                case 11:    cmd += "downlink_imu_1_accel_y.pdf";                break;
+                case 12:    cmd += "downlink_imu_1_accel_z.pdf";                break;
+                case 13:    cmd += "downlink_imu_1_gyro_x.pdf";                 break;
+                case 14:    cmd += "downlink_imu_1_gyro_y.pdf";                 break;
+                case 15:    cmd += "downlink_imu_1_gyro_z.pdf";                 break;
+                case 16:    cmd += "downlink_imu_2_accel_x.pdf";                break;
+                case 17:    cmd += "downlink_imu_2_accel_y.pdf";                break;
+                case 18:    cmd += "downlink_imu_2_accel_z.pdf";                break;
+                case 19:    cmd += "downlink_imu_2_gyro_x.pdf";                 break;
+                case 20:    cmd += "downlink_imu_2_gyro_y.pdf";                 break;
+                case 21:    cmd += "downlink_imu_2_gyro_z.pdf";                 break;
+                case 22:    cmd += "downlink_obdh_uc_temperature.pdf";          break;
+                case 23:    cmd += "downlink_obdh_uc_voltage.pdf";              break;
+                case 24:    cmd += "downlink_obdh_uc_current.pdf";              break;
+                case 25:    cmd += "downlink_solar_panel_my_current.pdf";       break;
+                case 26:    cmd += "downlink_solar_panel_px_current.pdf";       break;
+                case 27:    cmd += "downlink_solar_panel_mx_current.pdf";       break;
+                case 28:    cmd += "downlink_solar_panel_pz_current.pdf";       break;
+                case 29:    cmd += "downlink_solar_panel_mz_current.pdf";       break;
+                case 30:    cmd += "downlink_solar_panel_py_current.pdf";       break;
+                case 31:    cmd += "downlink_solar_panel_voltage_my_px.pdf";    break;
+                case 32:    cmd += "downlink_solar_panel_voltage_mx_pz.pdf";    break;
+                case 33:    cmd += "downlink_solar_panel_voltage_mz_py.pdf";    break;
+                case 34:    cmd += "downlink_boost_voltage.pdf";                break;
+                case 35:    cmd += "downlink_main_power_voltage.pdf";           break;
+                case 36:    cmd += "downlink_beacon_current.pdf";               break;
+                case 37:    cmd += "downlink_eps_uc_temperature.pdf";           break;
+                case 38:    cmd += "downlink_battery_average_current.pdf";      break;
+                case 39:    cmd += "downlink_battery_temperature.pdf";          break;
+                case 40:    cmd += "downlink_battery_cell_1_temperature.pdf";   break;
+                case 41:    cmd += "downlink_battery_cell_2_temperature.pdf";   break;
+                case 42:    cmd += "downlink_battery_current.pdf";              break;
+                case 43:    cmd += "downlink_battery_accu_current.pdf";         break;
+                case 44:    cmd += "downlink_active_absolute_capacity.pdf";     break;
+                case 45:    cmd += "downlink_standby_absolute_capacity.pdf";    break;
+                case 46:    cmd += "downlink_active_relative_capacity.pdf";     break;
+                case 47:    cmd += "downlink_standby_relative_capacity.pdf";    break;
+                case 48:    cmd += "downlink_energy_level.pdf";                 break;
+                default:    cmd += "downlink_plot.pdf";                         break;
             };
-        }
 
-        cmd += checkbutton_plot_use_sat_time_telemetry->get_active()? " \"1\"" : " \"0\"";
+            cmd += "\"";
+        }
 
         thread thread_matplotlib_telemetry(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
