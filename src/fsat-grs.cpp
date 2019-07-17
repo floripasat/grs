@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.1
+ * \version 0.7.2
  * 
  * \date 10/09/2017
  * 
@@ -584,7 +584,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("label_telemetry_pkt_statistic_lost", label_telemetry_pkt_statistic_lost);
     
     telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
-    
+
     // Plot dialog
     ref_builder->get_widget("dialog_plot", dialog_plot);
     ref_builder->get_widget("filechooserbutton_plot_beacon", filechooserbutton_plot_beacon);
@@ -592,6 +592,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("checkbutton_plot_beacon_connect_points", checkbutton_plot_beacon_connect_points);
     ref_builder->get_widget("checkbutton_plot_beacon_best_curve", checkbutton_plot_beacon_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_beacon", checkbutton_plot_save_pdf_beacon);
+    ref_builder->get_widget("filechooser_plot_beacon_pdf_filename", filechooser_plot_beacon_pdf_filename);
     ref_builder->get_widget("button_plot_beacon_data", button_plot_beacon_data);
 
     if (button_plot_beacon_data)
@@ -604,6 +605,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("checkbutton_plot_telemetry_connect_points", checkbutton_plot_telemetry_connect_points);
     ref_builder->get_widget("checkbutton_plot_telemetry_best_curve", checkbutton_plot_telemetry_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_telemetry", checkbutton_plot_save_pdf_telemetry);
+    ref_builder->get_widget("filechooser_plot_downlink_pdf_filename", filechooser_plot_downlink_pdf_filename);
     ref_builder->get_widget("checkbutton_plot_use_sat_time_telemetry", checkbutton_plot_use_sat_time_telemetry);
     ref_builder->get_widget("button_plot_downlink_data", button_plot_downlink_data);
 
@@ -2100,14 +2102,8 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
 
         if (checkbutton_plot_save_pdf_beacon->get_active())
         {
-            system("mkdir -p $HOME/floripasat-grs/plots");
-
             cmd += " \"";
-            cmd += getenv("HOME");
-            cmd += "/";
-            cmd += "floripasat-grs";
-            cmd += "/";
-            cmd += "plots";
+            cmd += filechooser_plot_beacon_pdf_filename->get_filename();
             cmd += "/";
 
             switch(combobox_plot_beacon_data->get_active_row_number())
@@ -2440,14 +2436,8 @@ void FSatGRS::OnButtonPlotDownlinkDataClicked()
 
         if (checkbutton_plot_save_pdf_telemetry->get_active())
         {
-            system("mkdir -p $HOME/floripasat-grs/plots");
-
             cmd += " \"";
-            cmd += getenv("HOME");
-            cmd += "/";
-            cmd += "floripasat-grs";
-            cmd += "/";
-            cmd += "plots";
+            cmd += filechooser_plot_downlink_pdf_filename->get_filename();
             cmd += "/";
 
             switch(combobox_plot_telemetry_data->get_active_row_number())
