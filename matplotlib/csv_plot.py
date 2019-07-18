@@ -24,7 +24,7 @@ __author__      = "Gabriel Mariano Marcelino"
 __copyright__   = "Copyright (C) 2017-2019, Universidade Federal de Santa Catarina"
 __credits__     = ["Gabriel Mariano Marcelino"]
 __license__     = "GPL3"
-__version__     = "0.7.1"
+__version__     = "0.7.3"
 __maintainer__  = "Gabriel Mariano Marcelino"
 __email__       = "gabriel.mm8@gmail.com"
 __status__      = "Development"
@@ -34,7 +34,7 @@ import csv
 import matplotlib.pyplot as plt
 import datetime
 
-def plot_data(x, y, y_label="Data", c_title="Time x Data", con_points="1", best_curve="0", file_name=""):
+def plot_data(x, y, y_label="Data", c_title="", con_points="1", best_curve="0", file_name=""):
     x_label = "Time [sec]"
 
     # Cubic Linear Regression
@@ -54,7 +54,8 @@ def plot_data(x, y, y_label="Data", c_title="Time x Data", con_points="1", best_
         else:
             plt.plot(x, y, 'bo')
 
-    plt.title(c_title)
+    if len(c_title) > 0:
+        plt.title(c_title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     if best_curve == "1":
@@ -129,6 +130,11 @@ def main(args):
         else:
             plot_data(time_sec, column, args[3], args[4], args[5])
     elif len(args) == 7:        # CSV file, column, y-axis string, curve title, connect points flag
+        if use_sat_time:
+            plot_data(sat_time_sec, column, args[3], args[4], args[5], args[6])
+        else:
+            plot_data(time_sec, column, args[3], args[4], args[5], args[6])
+    elif len(args) == 8:
         if use_sat_time:
             plot_data(sat_time_sec, column, args[3], args[4], args[5], args[6])
         else:
