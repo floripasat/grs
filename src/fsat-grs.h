@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.0
+ * \version 0.7.5
  * 
  * \date 10/09/2017
  * 
@@ -143,6 +143,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_open_gpredict;
         Gtk::ToolButton                 *toolbutton_open_grqx;
         Gtk::ToolButton                 *toolbutton_config;
+        Gtk::ToolButton                 *toolbutton_help;
         Gtk::ToolButton                 *toolbutton_about;
         
         // Beacon stream
@@ -368,15 +369,19 @@ class FSatGRS
         Gtk::Dialog                     *dialog_plot;
         Gtk::FileChooserButton          *filechooserbutton_plot_beacon;
         Gtk::ComboBox                   *combobox_plot_beacon_data;
+        Gtk::Entry                      *entry_plot_beacon_title;
         Gtk::CheckButton                *checkbutton_plot_beacon_connect_points;
         Gtk::CheckButton                *checkbutton_plot_beacon_best_curve;
         Gtk::CheckButton                *checkbutton_plot_save_pdf_beacon;
+        Gtk::FileChooserButton          *filechooser_plot_beacon_pdf_filename;
         Gtk::Button                     *button_plot_beacon_data;
         Gtk::FileChooserButton          *filechooserbutton_plot_telemetry;
         Gtk::ComboBox                   *combobox_plot_telemetry_data;
+        Gtk::Entry                      *entry_plot_downlink_title;
         Gtk::CheckButton                *checkbutton_plot_telemetry_connect_points;
         Gtk::CheckButton                *checkbutton_plot_telemetry_best_curve;
         Gtk::CheckButton                *checkbutton_plot_save_pdf_telemetry;
+        Gtk::FileChooserButton          *filechooser_plot_downlink_pdf_filename;
         Gtk::CheckButton                *checkbutton_plot_use_sat_time_telemetry;
         Gtk::Button                     *button_plot_downlink_data;
         
@@ -685,6 +690,14 @@ class FSatGRS
          * \return None
          */
         void OnButtonConfigDefaultClicked();
+
+        /**
+         * \brief Opens the wiki page on the github repository of FloripaSat-GRS software.
+         *
+         * \return None.
+         */
+        void OnToolButtonHelpClicked();
+
         /**
          * \brief 
          * 

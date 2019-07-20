@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.0
+ * \version 0.7.5
  * 
  * \date 10/09/2017
  * 
@@ -223,6 +223,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     if (toolbutton_config)
     {
         toolbutton_config->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonConfigClicked));
+    }
+
+    ref_builder->get_widget("toolbutton_help", toolbutton_help);
+    if (toolbutton_help)
+    {
+        toolbutton_help->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonHelpClicked));
     }
     
     ref_builder->get_widget("toolbutton_about", toolbutton_about);
@@ -584,14 +590,19 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("label_telemetry_pkt_statistic_lost", label_telemetry_pkt_statistic_lost);
     
     telemetry_ngham_statistic = new ProtocolStatistic(label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_total, label_telemetry_pkt_statistic_lost);
-    
+
     // Plot dialog
     ref_builder->get_widget("dialog_plot", dialog_plot);
     ref_builder->get_widget("filechooserbutton_plot_beacon", filechooserbutton_plot_beacon);
     ref_builder->get_widget("combobox_plot_beacon_data", combobox_plot_beacon_data);
+    ref_builder->get_widget("entry_plot_beacon_title", entry_plot_beacon_title);
     ref_builder->get_widget("checkbutton_plot_beacon_connect_points", checkbutton_plot_beacon_connect_points);
     ref_builder->get_widget("checkbutton_plot_beacon_best_curve", checkbutton_plot_beacon_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_beacon", checkbutton_plot_save_pdf_beacon);
+    ref_builder->get_widget("filechooser_plot_beacon_pdf_filename", filechooser_plot_beacon_pdf_filename);
+
+    filechooser_plot_beacon_pdf_filename->set_filename(getenv("HOME"));
+
     ref_builder->get_widget("button_plot_beacon_data", button_plot_beacon_data);
 
     if (button_plot_beacon_data)
@@ -601,9 +612,14 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
 
     ref_builder->get_widget("filechooserbutton_plot_telemetry", filechooserbutton_plot_telemetry);
     ref_builder->get_widget("combobox_plot_telemetry_data", combobox_plot_telemetry_data);
+    ref_builder->get_widget("entry_plot_downlink_title", entry_plot_downlink_title);
     ref_builder->get_widget("checkbutton_plot_telemetry_connect_points", checkbutton_plot_telemetry_connect_points);
     ref_builder->get_widget("checkbutton_plot_telemetry_best_curve", checkbutton_plot_telemetry_best_curve);
     ref_builder->get_widget("checkbutton_plot_save_pdf_telemetry", checkbutton_plot_save_pdf_telemetry);
+    ref_builder->get_widget("filechooser_plot_downlink_pdf_filename", filechooser_plot_downlink_pdf_filename);
+
+    filechooser_plot_downlink_pdf_filename->set_filename(getenv("HOME"));
+
     ref_builder->get_widget("checkbutton_plot_use_sat_time_telemetry", checkbutton_plot_use_sat_time_telemetry);
     ref_builder->get_widget("button_plot_downlink_data", button_plot_downlink_data);
 
@@ -1365,6 +1381,11 @@ void FSatGRS::OnToolButtonOpenGQRXClicked()
     }
 }
 
+void FSatGRS::OnToolButtonHelpClicked()
+{
+    system("xdg-open https://github.com/floripasat/grs/wiki");
+}
+
 void FSatGRS::OnToolButtonAboutClicked()
 {
     this->aboutdialog->set_version(GRS_SOFTWARE_VERSION);
@@ -1953,159 +1974,131 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
             case 0:
                 cmd += " 6";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Battery Cell 1 Voltage\"";
                 break;
             case 1:
                 cmd += " 7";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Battery Cell 2 Voltage\"";
                 break;
             case 2:
                 cmd += " 8";
                 cmd += " \"Temperature [oC]\"";
-                cmd += " \"Battery Cell 1 Temperature\"";
                 break;
             case 3:
                 cmd += " 9";
                 cmd += " \"Temperature [oC]\"";
-                cmd += " \"Battery Cell 2 Temperature\"";
                 break;
             case 4:
                 cmd += " 10";
                 cmd += " \"Charge [Ah]\"";
-                cmd += " \"Battery Charge\"";
                 break;
             case 5:
                 cmd += " 11";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel +Z Current\"";
                 break;
             case 6:
                 cmd += " 12";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel -Y Current\"";
                 break;
             case 7:
                 cmd += " 13";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel +X Current\"";
                 break;
             case 8:
                 cmd += " 14";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel -X Current\"";
                 break;
             case 9:
                 cmd += " 15";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel -Z Current\"";
                 break;
             case 10:
                 cmd += " 16";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel +Y Current\"";
                 break;
             case 11:
                 cmd += " 17";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Solar Panel Voltage -Y +X\"";
                 break;
             case 12:
                 cmd += " 18";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Solar Panel Voltage -X +Z\"";
                 break;
             case 13:
                 cmd += " 19";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Solar Panel Voltage -Z +Y\"";
                 break;
             case 14:
                 cmd += " 20";
                 cmd += " \"Level\"";
-                cmd += " \"Energy Level\"";
                 break;
             case 15:
                 cmd += " 21";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"IMU Status\"";
                 break;
             case 16:
                 cmd += " 22";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"SD Card Status\"";
                 break;
             case 17:
                 cmd += " 23";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"RUSH Status\"";
                 break;
             case 18:
                 cmd += " 24";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"EPS Status\"";
                 break;
             case 19:
                 cmd += " 25";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"Antenna Status\"";
                 break;
             case 20:
                 cmd += " 26";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU Accelerometer X\"";
                 break;
             case 21:
                 cmd += " 27";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU Accelerometer Y\"";
                 break;
             case 22:
                 cmd += " 28";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU Accelerometer Z\"";
                 break;
             case 23:
                 cmd += " 29";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU Gyroscope X\"";
                 break;
             case 24:
                 cmd += " 30";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU Gyroscope Y\"";
                 break;
             case 25:
                 cmd += " 31";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU Gyroscope Z\"";
                 break;
             case 26:
                 cmd += " 35";
                 cmd += " \"Quantity\"";
-                cmd += " \"OBDH Resets\"";
                 break;
             default:
                 cmd += " 6";
                 cmd += " \"Data\"";
-                cmd += " \"Data\"";
                 break;
         };
-        
+
+        cmd += " \"";
+        cmd += entry_plot_beacon_title->get_text();
+        cmd += "\"";
+
         cmd += checkbutton_plot_beacon_connect_points->get_active()? " \"1\"" : " \"0\"";
         
         cmd += checkbutton_plot_beacon_best_curve->get_active()? " \"1\"" : " \"0\"";
-        
+
+        cmd += " \"0\""; // Do not use satellite time as reference
+
         if (checkbutton_plot_save_pdf_beacon->get_active())
         {
-            system("mkdir -p $HOME/floripasat-grs/plots");
-
             cmd += " \"";
-            cmd += getenv("HOME");
-            cmd += "/";
-            cmd += "floripasat-grs";
-            cmd += "/";
-            cmd += "plots";
+            cmd += filechooser_plot_beacon_pdf_filename->get_filename();
             cmd += "/";
 
             switch(combobox_plot_beacon_data->get_active_row_number())
@@ -2142,8 +2135,6 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
 
             cmd += "\"";
         }
-
-        cmd += " \"0\""; // Do not use satellite time as reference
 
         thread thread_matplotlib_beacon(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
@@ -2183,319 +2174,277 @@ void FSatGRS::OnButtonPlotDownlinkDataClicked()
             case 0:
                 cmd += " 6";
                 cmd += " \"Value\"";
-                cmd += " \"Packet Flags\"";
                 break;
             case 1:
                 cmd += " 7";
                 cmd += " \"Quantity\"";
-                cmd += " \"Reset Counter\"";
                 break;
             case 2:
                 cmd += " 8";
                 cmd += " \"Code\"";
-                cmd += " \"Reset Cause\"";
                 break;
             case 3:
                 cmd += " 9";
                 cmd += " \"Value\"";
-                cmd += " \"Clock Fault Flags\"";
                 break;
             case 4:
                 cmd += " 10";
                 cmd += " \"Value\"";
-                cmd += " \"Test Module Flags\"";
                 break;
             case 5:
                 cmd += " 11";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"IMU Status\"";
                 break;
             case 6:
                 cmd += " 12";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"SD Card Status\"";
                 break;
             case 7:
                 cmd += " 13";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"RUSH Status\"";
                 break;
             case 8:
                 cmd += " 14";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"EPS Status\"";
                 break;
             case 9:
                 cmd += " 15";
                 cmd += " \"Status (True/False)\"";
-                cmd += " \"Antenna Status\"";
                 break;
             case 10:
                 cmd += " 16";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU 1 Accelerometer X\"";
                 break;
             case 11:
                 cmd += " 17";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU 1 Accelerometer Y\"";
                 break;
             case 12:
                 cmd += " 18";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU 1 Accelerometer Z\"";
                 break;
             case 13:
                 cmd += " 19";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU 1 Gyroscope X\"";
                 break;
             case 14:
                 cmd += " 20";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU 1 Gyroscope Y\"";
                 break;
             case 15:
                 cmd += " 21";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU 1 Gyroscope Z\"";
                 break;
             case 16:
                 cmd += " 22";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU 2 Accelerometer X\"";
                 break;
             case 17:
                 cmd += " 23";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU 2 Accelerometer Y\"";
                 break;
             case 18:
                 cmd += " 24";
                 cmd += " \"Acceleration [G]\"";
-                cmd += " \"IMU 2 Accelerometer Z\"";
                 break;
             case 19:
                 cmd += " 25";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU 2 Gyroscope X\"";
                 break;
             case 20:
                 cmd += " 26";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU 2 Gyroscope Y\"";
                 break;
             case 21:
                 cmd += " 27";
                 cmd += " \"Acceleration [deg/s]\"";
-                cmd += " \"IMU 2 Gyroscope Z\"";
                 break;
             case 22:
                 cmd += " 28";
                 cmd += " \"Temperature [oC]\"";
-                cmd += " \"OBDH uC Temperature\"";
                 break;
             case 23:
                 cmd += " 29";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"OBDH uC Voltage\"";
                 break;
             case 24:
                 cmd += " 30";
                 cmd += " \"Current [mA]\"";
-                cmd += " \"OBDH uC Current\"";
                 break;
             case 25:
                 cmd += " 34";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel -Y Current\"";
                 break;
             case 26:
                 cmd += " 35";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel +X Current\"";
                 break;
             case 27:
                 cmd += " 36";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel -X Current\"";
                 break;
             case 28:
                 cmd += " 37";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel +Z Current\"";
                 break;
             case 29:
                 cmd += " 38";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel -Z Current\"";
                 break;
             case 30:
                 cmd += " 39";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Solar Panel +Y Current\"";
                 break;
             case 31:
                 cmd += " 40";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Solar Panel Voltage -Y +X\"";
                 break;
             case 32:
                 cmd += " 41";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Solar Panel Voltage -X +Z\"";
                 break;
             case 33:
                 cmd += " 42";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Solar Panel Voltage -Z +Y\"";
                 break;
             case 34:
                 cmd += " 43";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Boost Voltage\"";
                 break;
             case 35:
                 cmd += " 44";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Main Power Voltage\"";
                 break;
             case 36:
                 cmd += " 45";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Beacon Current\"";
                 break;
             case 37:
                 cmd += " 46";
                 cmd += " \"Temperature [oC]\"";
-                cmd += " \"EPS uC Temperature\"";
                 break;
             case 38:
                 cmd += " 47";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Battery Average Current\"";
                 break;
             case 39:
                 cmd += " 48";
                 cmd += " \"Temperature [oC]\"";
-                cmd += " \"Battery Temperature\"";
                 break;
             case 40:
                 cmd += " 49";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Battery Cell 1 Voltage\"";
                 break;
             case 41:
                 cmd += " 50";
                 cmd += " \"Voltage [V]\"";
-                cmd += " \"Battery Cell 2 Voltage\"";
                 break;
             case 42:
                 cmd += " 51";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Battery Current\"";
                 break;
             case 43:
                 cmd += " 52";
                 cmd += " \"Current [A]\"";
-                cmd += " \"Battery Accumulated Current\"";
                 break;
             case 44:
                 cmd += " 56";
                 cmd += " \"Capacity [mAh]\"";
-                cmd += " \"Active Absolute Capacity\"";
                 break;
             case 45:
                 cmd += " 57";
                 cmd += " \"Capacity [mAh]\"";
-                cmd += " \"Standby Absolute Capacity\"";
                 break;
             case 46:
                 cmd += " 58";
                 cmd += " \"Capacity [\%]\"";
-                cmd += " \"Active Relative Capacity\"";
                 break;
             case 47:
                 cmd += " 59";
                 cmd += " \"Capacity [\%]\"";
-                cmd += " \"Standby Relative Capacity\"";
                 break;
             case 48:
                 cmd += " 67";
                 cmd += " \"Level\"";
-                cmd += " \"Energy Level\"";
                 break;
             default:
                 cmd += " 6";
                 cmd += " \"Data\"";
-                cmd += " \"Data\"";
                 break;
         };
+
+        cmd += " \"";
+        cmd += entry_plot_downlink_title->get_text();
+        cmd += "\"";
 
         cmd += checkbutton_plot_telemetry_connect_points->get_active()? " \"1\"" : " \"0\"";
 
         cmd += checkbutton_plot_telemetry_best_curve->get_active()? " \"1\"" : " \"0\"";
 
+        cmd += checkbutton_plot_use_sat_time_telemetry->get_active()? " \"1\"" : " \"0\"";
+
         if (checkbutton_plot_save_pdf_telemetry->get_active())
         {
-            system("mkdir -p plots");
+            cmd += " \"";
+            cmd += filechooser_plot_downlink_pdf_filename->get_filename();
+            cmd += "/";
 
             switch(combobox_plot_telemetry_data->get_active_row_number())
             {
-                case 0:     cmd += " plots/telemetry_packet_flags.pdf";                 break;
-                case 1:     cmd += " plots/telemetry_reset_counter.pdf";                break;
-                case 2:     cmd += " plots/telemetry_reset_cause.pdf";                  break;
-                case 3:     cmd += " plots/telemetry_clock_fault_flags.pdf";            break;
-                case 4:     cmd += " plots/telemetry_test_module_flags.pdf";            break;
-                case 5:     cmd += " plots/telemetry_imu_status.pdf";                   break;
-                case 6:     cmd += " plots/telemetry_sd_card_status.pdf";               break;
-                case 7:     cmd += " plots/telemetry_rush_status.pdf";                  break;
-                case 8:     cmd += " plots/telemetry_eps_status.pdf";                   break;
-                case 9:     cmd += " plots/telemetry_antenna_status.pdf";               break;
-                case 10:    cmd += " plots/telemetry_imu_1_accel_x.pdf";                break;
-                case 11:    cmd += " plots/telemetry_imu_1_accel_y.pdf";                break;
-                case 12:    cmd += " plots/telemetry_imu_1_accel_z.pdf";                break;
-                case 13:    cmd += " plots/telemetry_imu_1_gyro_x.pdf";                 break;
-                case 14:    cmd += " plots/telemetry_imu_1_gyro_y.pdf";                 break;
-                case 15:    cmd += " plots/telemetry_imu_1_gyro_z.pdf";                 break;
-                case 16:    cmd += " plots/telemetry_imu_2_accel_x.pdf";                break;
-                case 17:    cmd += " plots/telemetry_imu_2_accel_y.pdf";                break;
-                case 18:    cmd += " plots/telemetry_imu_2_accel_z.pdf";                break;
-                case 19:    cmd += " plots/telemetry_imu_2_gyro_x.pdf";                 break;
-                case 20:    cmd += " plots/telemetry_imu_2_gyro_y.pdf";                 break;
-                case 21:    cmd += " plots/telemetry_imu_2_gyro_z.pdf";                 break;
-                case 22:    cmd += " plots/telemetry_obdh_uc_temperature.pdf";          break;
-                case 23:    cmd += " plots/telemetry_obdh_uc_voltage.pdf";              break;
-                case 24:    cmd += " plots/telemetry_obdh_uc_current.pdf";              break;
-                case 25:    cmd += " plots/telemetry_solar_panel_my_current.pdf";       break;
-                case 26:    cmd += " plots/telemetry_solar_panel_px_current.pdf";       break;
-                case 27:    cmd += " plots/telemetry_solar_panel_mx_current.pdf";       break;
-                case 28:    cmd += " plots/telemetry_solar_panel_pz_current.pdf";       break;
-                case 29:    cmd += " plots/telemetry_solar_panel_mz_current.pdf";       break;
-                case 30:    cmd += " plots/telemetry_solar_panel_py_current.pdf";       break;
-                case 31:    cmd += " plots/telemetry_solar_panel_voltage_my_px.pdf";    break;
-                case 32:    cmd += " plots/telemetry_solar_panel_voltage_mx_pz.pdf";    break;
-                case 33:    cmd += " plots/telemetry_solar_panel_voltage_mz_py.pdf";    break;
-                case 34:    cmd += " plots/telemetry_boost_voltage.pdf";                break;
-                case 35:    cmd += " plots/telemetry_main_power_voltage.pdf";           break;
-                case 36:    cmd += " plots/telemetry_beacon_current.pdf";               break;
-                case 37:    cmd += " plots/telemetry_eps_uc_temperature.pdf";           break;
-                case 38:    cmd += " plots/telemetry_battery_average_current.pdf";      break;
-                case 39:    cmd += " plots/telemetry_battery_temperature.pdf";          break;
-                case 40:    cmd += " plots/telemetry_battery_cell_1_temperature.pdf";   break;
-                case 41:    cmd += " plots/telemetry_battery_cell_2_temperature.pdf";   break;
-                case 42:    cmd += " plots/telemetry_battery_current.pdf";              break;
-                case 43:    cmd += " plots/telemetry_battery_accu_current.pdf";         break;
-                case 44:    cmd += " plots/telemetry_active_absolute_capacity.pdf";     break;
-                case 45:    cmd += " plots/telemetry_standby_absolute_capacity.pdf";    break;
-                case 46:    cmd += " plots/telemetry_active_relative_capacity.pdf";     break;
-                case 47:    cmd += " plots/telemetry_standby_relative_capacity.pdf";    break;
-                case 48:    cmd += " plots/telemetry_energy_level.pdf";                 break;
-                default:    cmd += " plots/telemetry_plot.pdf";                         break;
+                case 0:     cmd += "downlink_packet_flags.pdf";                 break;
+                case 1:     cmd += "downlink_reset_counter.pdf";                break;
+                case 2:     cmd += "downlink_reset_cause.pdf";                  break;
+                case 3:     cmd += "downlink_clock_fault_flags.pdf";            break;
+                case 4:     cmd += "downlink_test_module_flags.pdf";            break;
+                case 5:     cmd += "downlink_imu_status.pdf";                   break;
+                case 6:     cmd += "downlink_sd_card_status.pdf";               break;
+                case 7:     cmd += "downlink_rush_status.pdf";                  break;
+                case 8:     cmd += "downlink_eps_status.pdf";                   break;
+                case 9:     cmd += "downlink_antenna_status.pdf";               break;
+                case 10:    cmd += "downlink_imu_1_accel_x.pdf";                break;
+                case 11:    cmd += "downlink_imu_1_accel_y.pdf";                break;
+                case 12:    cmd += "downlink_imu_1_accel_z.pdf";                break;
+                case 13:    cmd += "downlink_imu_1_gyro_x.pdf";                 break;
+                case 14:    cmd += "downlink_imu_1_gyro_y.pdf";                 break;
+                case 15:    cmd += "downlink_imu_1_gyro_z.pdf";                 break;
+                case 16:    cmd += "downlink_imu_2_accel_x.pdf";                break;
+                case 17:    cmd += "downlink_imu_2_accel_y.pdf";                break;
+                case 18:    cmd += "downlink_imu_2_accel_z.pdf";                break;
+                case 19:    cmd += "downlink_imu_2_gyro_x.pdf";                 break;
+                case 20:    cmd += "downlink_imu_2_gyro_y.pdf";                 break;
+                case 21:    cmd += "downlink_imu_2_gyro_z.pdf";                 break;
+                case 22:    cmd += "downlink_obdh_uc_temperature.pdf";          break;
+                case 23:    cmd += "downlink_obdh_uc_voltage.pdf";              break;
+                case 24:    cmd += "downlink_obdh_uc_current.pdf";              break;
+                case 25:    cmd += "downlink_solar_panel_my_current.pdf";       break;
+                case 26:    cmd += "downlink_solar_panel_px_current.pdf";       break;
+                case 27:    cmd += "downlink_solar_panel_mx_current.pdf";       break;
+                case 28:    cmd += "downlink_solar_panel_pz_current.pdf";       break;
+                case 29:    cmd += "downlink_solar_panel_mz_current.pdf";       break;
+                case 30:    cmd += "downlink_solar_panel_py_current.pdf";       break;
+                case 31:    cmd += "downlink_solar_panel_voltage_my_px.pdf";    break;
+                case 32:    cmd += "downlink_solar_panel_voltage_mx_pz.pdf";    break;
+                case 33:    cmd += "downlink_solar_panel_voltage_mz_py.pdf";    break;
+                case 34:    cmd += "downlink_boost_voltage.pdf";                break;
+                case 35:    cmd += "downlink_main_power_voltage.pdf";           break;
+                case 36:    cmd += "downlink_beacon_current.pdf";               break;
+                case 37:    cmd += "downlink_eps_uc_temperature.pdf";           break;
+                case 38:    cmd += "downlink_battery_average_current.pdf";      break;
+                case 39:    cmd += "downlink_battery_temperature.pdf";          break;
+                case 40:    cmd += "downlink_battery_cell_1_temperature.pdf";   break;
+                case 41:    cmd += "downlink_battery_cell_2_temperature.pdf";   break;
+                case 42:    cmd += "downlink_battery_current.pdf";              break;
+                case 43:    cmd += "downlink_battery_accu_current.pdf";         break;
+                case 44:    cmd += "downlink_active_absolute_capacity.pdf";     break;
+                case 45:    cmd += "downlink_standby_absolute_capacity.pdf";    break;
+                case 46:    cmd += "downlink_active_relative_capacity.pdf";     break;
+                case 47:    cmd += "downlink_standby_relative_capacity.pdf";    break;
+                case 48:    cmd += "downlink_energy_level.pdf";                 break;
+                default:    cmd += "downlink_plot.pdf";                         break;
             };
-        }
 
-        cmd += checkbutton_plot_use_sat_time_telemetry->get_active()? " \"1\"" : " \"0\"";
+            cmd += "\"";
+        }
 
         thread thread_matplotlib_telemetry(&FSatGRS::RunMatPlotLib, this, cmd.c_str());
 
