@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.3
+ * \version 0.7.5
  * 
  * \date 10/09/2017
  * 
@@ -223,6 +223,12 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     if (toolbutton_config)
     {
         toolbutton_config->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonConfigClicked));
+    }
+
+    ref_builder->get_widget("toolbutton_help", toolbutton_help);
+    if (toolbutton_help)
+    {
+        toolbutton_help->signal_clicked().connect(sigc::mem_fun(*this, &FSatGRS::OnToolButtonHelpClicked));
     }
     
     ref_builder->get_widget("toolbutton_about", toolbutton_about);
@@ -1373,6 +1379,11 @@ void FSatGRS::OnToolButtonOpenGQRXClicked()
     {
         this->RaiseErrorMessage("GQRX not installed!", "The GQRX software is not installed.");
     }
+}
+
+void FSatGRS::OnToolButtonHelpClicked()
+{
+    system("xdg-open https://github.com/floripasat/grs/wiki");
 }
 
 void FSatGRS::OnToolButtonAboutClicked()

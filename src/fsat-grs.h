@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.3
+ * \version 0.7.5
  * 
  * \date 10/09/2017
  * 
@@ -143,6 +143,7 @@ class FSatGRS
         Gtk::ToolButton                 *toolbutton_open_gpredict;
         Gtk::ToolButton                 *toolbutton_open_grqx;
         Gtk::ToolButton                 *toolbutton_config;
+        Gtk::ToolButton                 *toolbutton_help;
         Gtk::ToolButton                 *toolbutton_about;
         
         // Beacon stream
@@ -689,6 +690,14 @@ class FSatGRS
          * \return None
          */
         void OnButtonConfigDefaultClicked();
+
+        /**
+         * \brief Opens the wiki page on the github repository of FloripaSat-GRS software.
+         *
+         * \return None.
+         */
+        void OnToolButtonHelpClicked();
+
         /**
          * \brief 
          * 
