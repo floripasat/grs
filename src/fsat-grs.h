@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.5
+ * \version 0.7.6
  * 
  * \date 10/09/2017
  * 
@@ -97,6 +97,14 @@
 
 #define FSAT_GRS_ADMIN_HASH                         "ff06535ac1029cca2fc2b86ac7355a7b4e0b8d839fc76b51d30833f4e1347ddc"
 #define FSAT_GRS_ADMIN_PASSWORD_HASH                "59dbdb4f174e20b2c26bad7c5f8fd6f9be20e741e28070d31acc72d6b732925c"
+
+#define FSAT_GRS_BEACON_DEFAULT_FREQUENCY_HZ        "145.9e6"
+#define FSAT_GRS_DOWNLINK_DEFAULT_FREQUENCY_HZ      "436.1e6"
+#define FSAT_GRS_UPLINK_DEFAULT_FREQUENCY_HZ        "436.1e6"
+
+#define FSAT_GRS_BEACON_DEFAULT_BAUDRATE_BPS        1200
+#define FSAT_GRS_DOWNLINK_DEFAULT_BAUDRATE_BPS      2400
+#define FSAT_GRS_UPLINK_DEFAULT_BAUDRATE_BPS        2400
 
 /**
  * \brief Uplink commands.
@@ -355,10 +363,8 @@ class FSatGRS
         Gtk::Entry                      *entry_config_downlink_telemetry_filter;
         Gtk::Entry                      *entry_config_downlink_telemetry_sample_rate;
         Gtk::Entry                      *entry_config_uplink_burst;
-        Gtk::Entry                      *entry_config_uplink_telemetry_frequency;
-        Gtk::Entry                      *entry_config_uplink_beacon_frequency;
-        Gtk::RadioButton                *radiobutton_config_uplink_type_telemetry;
-        Gtk::RadioButton                *radiobutton_config_uplink_type_beacon;
+        Gtk::Entry                      *entry_config_uplink_frequency;
+        Gtk::Entry                      *entry_config_uplink_baudrate;
         Gtk::Button                     *button_config_ok;
         Gtk::Button                     *button_config_default;
         

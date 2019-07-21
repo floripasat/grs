@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.5
+ * \version 0.7.6
  * 
  * \date 10/09/2017
  * 
@@ -644,10 +644,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("entry_config_downlink_telemetry_filter", entry_config_downlink_telemetry_filter);
     ref_builder->get_widget("entry_config_downlink_telemetry_sample_rate", entry_config_downlink_telemetry_sample_rate);
     ref_builder->get_widget("entry_config_uplink_burst", entry_config_uplink_burst);
-    ref_builder->get_widget("entry_config_uplink_telemetry_frequency", entry_config_uplink_telemetry_frequency);
-    ref_builder->get_widget("entry_config_uplink_beacon_frequency", entry_config_uplink_beacon_frequency);
-    ref_builder->get_widget("radiobutton_config_uplink_type_telemetry", radiobutton_config_uplink_type_telemetry);
-    ref_builder->get_widget("radiobutton_config_uplink_type_beacon", radiobutton_config_uplink_type_beacon);
+    ref_builder->get_widget("entry_config_uplink_frequency", entry_config_uplink_frequency);
+    ref_builder->get_widget("entry_config_uplink_baudrate", entry_config_uplink_baudrate);
     
     ref_builder->get_widget("button_config_ok", button_config_ok);
     if (button_config_ok)
@@ -1441,7 +1439,7 @@ void FSatGRS::OnToggleButtonPlayBeaconToggled()
 
             beacon_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_beacon->get_filename().c_str(),
                                                              stoi(entry_beacon_audio_sample_rate->get_text(), nullptr),
-                                                             1200,
+                                                             FSAT_GRS_BEACON_DEFAULT_BAUDRATE_BPS,
                                                              FSAT_GRS_GRC_BEACON_BIN);
 
             thread_beacon_audio_decoder = make_unique<thread>(&AudioDecoder::run, *beacon_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
@@ -1624,7 +1622,7 @@ void FSatGRS::OnToggleButtonPlayTelemetryToggled()
 
             downlink_audio_decoder = make_unique<AudioDecoder>(filechooserbutton_telemetry->get_filename().c_str(),
                                                                stoi(entry_downlink_audio_sample_rate->get_text(), nullptr),
-                                                               2400,
+                                                               FSAT_GRS_DOWNLINK_DEFAULT_BAUDRATE_BPS,
                                                                FSAT_GRS_GRC_TELEMETRY_BIN);
 
             thread_downlink_audio_decoder = make_unique<thread>(&AudioDecoder::run, *downlink_audio_decoder, this->CheckFile(FSAT_GRS_AUDIO_DEC_GRC_SCRIPT)? FSAT_GRS_AUDIO_DEC_GRC_SCRIPT : FSAT_GRS_AUDIO_DEC_GRC_SCRIPT_LOCAL);
@@ -2819,21 +2817,11 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
         default:    cmd_str += " -d uhd=0";    break;
     }
 
-    if (radiobutton_config_uplink_type_telemetry->get_active())
-    {
-        cmd_str += " -f ";
-        cmd_str += entry_config_uplink_telemetry_frequency->get_text();
-        cmd_str += " -b ";
-        cmd_str += entry_config_downlink_telemetry_baudrate->get_text();
-    }
-    else if (radiobutton_config_uplink_type_beacon->get_active())
-    {
-        cmd_str += " -f ";
-        cmd_str += entry_config_uplink_beacon_frequency->get_text();
-        cmd_str += " -b ";
-        cmd_str += entry_config_downlink_beacon_baudrate->get_text();
-    }
-    
+    cmd_str += " -f ";
+    cmd_str += entry_config_uplink_frequency->get_text();
+    cmd_str += " -b ";
+    cmd_str += entry_config_uplink_baudrate->get_text();
+
     switch(uplink_type)
     {
         case FSAT_GRS_UPLINK_PING:
@@ -3300,13 +3288,11 @@ void FSatGRS::LoadConfigs()
         entry_config_downlink_telemetry_filter->set_text(configs_str[11]);
         entry_config_downlink_telemetry_sample_rate->set_text(configs_str[12]);
         entry_config_uplink_burst->set_text(configs_str[13]);
-        entry_config_uplink_telemetry_frequency->set_text(configs_str[14]);
-        entry_config_uplink_beacon_frequency->set_text(configs_str[15]);
-        radiobutton_config_uplink_type_telemetry->set_active((configs_str[16] == "1"? true : false));
-        radiobutton_config_uplink_type_beacon->set_active((configs_str[17] == "1"? true : false));
-        entry_config_general_grid->set_text(configs_str[18]);
-        entry_config_general_city->set_text(configs_str[19]);
-        entry_config_general_country->set_text(configs_str[20]);
+        entry_config_uplink_frequency->set_text(configs_str[14]);
+        entry_config_uplink_baudrate->set_text(configs_str[15]);
+        entry_config_general_grid->set_text(configs_str[16]);
+        entry_config_general_city->set_text(configs_str[17]);
+        entry_config_general_country->set_text(configs_str[18]);
     }
     else
     {
@@ -3348,13 +3334,9 @@ void FSatGRS::SaveConfigs()
     file_config << endl;
     file_config << entry_config_uplink_burst->get_text();
     file_config << endl;
-    file_config << entry_config_uplink_telemetry_frequency->get_text();
+    file_config << entry_config_uplink_frequency->get_text();
     file_config << endl;
-    file_config << entry_config_uplink_beacon_frequency->get_text();
-    file_config << endl;
-    file_config << (radiobutton_config_uplink_type_telemetry->get_active()? "1" : "0");
-    file_config << endl;
-    file_config << (radiobutton_config_uplink_type_beacon->get_active()? "1" : "0");
+    file_config << entry_config_uplink_baudrate->get_text();
     file_config << endl;
     file_config << entry_config_general_grid->get_text();
     file_config << endl;
@@ -3376,19 +3358,17 @@ void FSatGRS::LoadDefaultConfigs()
     checkbutton_log_ax25_packets->set_active(true);
     checkbutton_log_beacon_data->set_active(true);
     checkbutton_log_telemetry_data->set_active(true);
-    entry_config_downlink_beacon_freq->set_text("145.9e6");
-    entry_config_downlink_beacon_baudrate->set_text("1200");
+    entry_config_downlink_beacon_freq->set_text(FSAT_GRS_BEACON_DEFAULT_FREQUENCY_HZ);
+    entry_config_downlink_beacon_baudrate->set_text(to_string(FSAT_GRS_BEACON_DEFAULT_BAUDRATE_BPS));
     entry_config_downlink_beacon_filter->set_text("30e3");
     entry_config_downlink_beacon_sample_rate->set_text("1e6");
-    entry_config_downlink_telemetry_freq->set_text("437.9e6");
-    entry_config_downlink_telemetry_baudrate->set_text("2400");
+    entry_config_downlink_telemetry_freq->set_text(FSAT_GRS_DOWNLINK_DEFAULT_FREQUENCY_HZ);
+    entry_config_downlink_telemetry_baudrate->set_text(to_string(FSAT_GRS_DOWNLINK_DEFAULT_BAUDRATE_BPS));
     entry_config_downlink_telemetry_filter->set_text("50e3");
     entry_config_downlink_telemetry_sample_rate->set_text("1e6");
     entry_config_uplink_burst->set_text("1");
-    entry_config_uplink_telemetry_frequency->set_text("437.9318e6");
-    entry_config_uplink_beacon_frequency->set_text("145.911e6");
-    radiobutton_config_uplink_type_telemetry->set_active(true);
-    radiobutton_config_uplink_type_beacon->set_active(false);
+    entry_config_uplink_frequency->set_text(FSAT_GRS_UPLINK_DEFAULT_FREQUENCY_HZ);
+    entry_config_uplink_baudrate->set_text(to_string(FSAT_GRS_UPLINK_DEFAULT_BAUDRATE_BPS));
 }
 
 bool FSatGRS::CheckFile(const char *file)
