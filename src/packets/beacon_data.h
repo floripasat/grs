@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.8
+ * \version 0.7.9
  * 
  * \date 09/04/2019
  * 
@@ -100,8 +100,10 @@ enum beacon_data_id
 {
     BEACON_DATA_BATTERY_VOLTAGE_CELL_1 = 0,         /**< Battery cell 1 voltage. */
     BEACON_DATA_BATTERY_VOLTAGE_CELL_2,             /**< Battery cell 2 voltage. */
-    BEACON_DATA_BATTERY_TEMPERATURE_CELL_1,         /**< Battery cell 1 temperature. */
-    BEACON_DATA_BATTERY_TEMPERATURE_CELL_2,         /**< Battery cell 2 temperature. */
+//    BEACON_DATA_BATTERY_TEMPERATURE_CELL_1,         /**< Battery cell 1 temperature. */
+//    BEACON_DATA_BATTERY_TEMPERATURE_CELL_2,         /**< Battery cell 2 temperature. */
+    BEACON_DATA_BATTERY_MONITOR_TEMPERATURE,        /**< Battery monitor temperature. */
+    BEACON_DATA_BATTERY_CURRENT,                    /**< Battery current. */
     BEACON_DATA_BATTERY_CHARGE,                     /**< Battery charge. */
     BEACON_DATA_SOLAR_PANEL_CURRENT_0,              /**< Solar panel current 0. */
     BEACON_DATA_SOLAR_PANEL_CURRENT_1,              /**< Solar panel current 1. */
@@ -113,6 +115,7 @@ enum beacon_data_id
     BEACON_DATA_SOLAR_PANEL_VOLTAGE_1,              /**< Solar panell voltage 1. */
     BEACON_DATA_SOLAR_PANEL_VOLTAGE_2,              /**< Solar panell voltage 2. */
     BEACON_DATA_ENERGY_LEVEL,                       /**< Satellite energy level. */
+    BEACON_DATA_EPS_UC_TEMPERATURE,                 /**< EPS uC temperature. */
     BEACON_DATA_IMU_STATUS,                         /**< IMU status flag. */
     BEACON_DATA_SD_CARD_STATUS,                     /**< SD card status flag. */
     BEACON_DATA_RUSH_STATUS,                        /**< RUSH status flag. */

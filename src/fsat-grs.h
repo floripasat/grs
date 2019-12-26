@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.6
+ * \version 0.7.9
  * 
  * \date 10/09/2017
  * 
@@ -259,8 +259,8 @@ class FSatGRS
         // Beacon Data
         Gtk::Label                      *label_beacon_data_bat1_v_value;
         Gtk::Label                      *label_beacon_data_bat2_v_value;
-        Gtk::Label                      *label_beacon_data_bat1_t_value;
-        Gtk::Label                      *label_beacon_data_bat2_t_value;
+        Gtk::Label                      *label_beacon_data_bat_mon_value;
+        Gtk::Label                      *label_beacon_data_bat_current_value;
         Gtk::Label                      *label_beacon_data_bat_c_value;
         Gtk::Label                      *label_beacon_data_sp_i_my;
         Gtk::Label                      *label_beacon_data_sp_i_px;
@@ -272,6 +272,7 @@ class FSatGRS
         Gtk::Label                      *label_beacon_data_sp_v_mxpz;
         Gtk::Label                      *label_beacon_data_sp_v_mzpy;
         Gtk::Label                      *label_beacon_data_status_energy_level;
+        Gtk::Label                      *label_beacon_data_uc_temp_value;
         Gtk::Label                      *label_beacon_data_status_imu;
         Gtk::Label                      *label_beacon_data_status_usd;
         Gtk::Label                      *label_beacon_data_status_rush;

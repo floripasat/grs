@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.6
+ * \version 0.7.9
  * 
  * \date 10/09/2017
  * 
@@ -416,8 +416,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     // Beacon Data
     ref_builder->get_widget("label_beacon_data_bat1_v_value", label_beacon_data_bat1_v_value);
     ref_builder->get_widget("label_beacon_data_bat2_v_value", label_beacon_data_bat2_v_value);
-    ref_builder->get_widget("label_beacon_data_bat1_t_value", label_beacon_data_bat1_t_value);
-    ref_builder->get_widget("label_beacon_data_bat2_t_value", label_beacon_data_bat2_t_value);
+    ref_builder->get_widget("label_beacon_data_bat_mon_value", label_beacon_data_bat_mon_value);
+    ref_builder->get_widget("label_beacon_data_bat_current_value", label_beacon_data_bat_current_value);
     ref_builder->get_widget("label_beacon_data_bat_c_value", label_beacon_data_bat_c_value);
     ref_builder->get_widget("label_beacon_data_sp_i_my", label_beacon_data_sp_i_my);
     ref_builder->get_widget("label_beacon_data_sp_i_px", label_beacon_data_sp_i_px);
@@ -429,6 +429,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("label_beacon_data_sp_v_mxpz", label_beacon_data_sp_v_mxpz);
     ref_builder->get_widget("label_beacon_data_sp_v_mzpy", label_beacon_data_sp_v_mzpy);
     ref_builder->get_widget("label_beacon_data_status_energy_level", label_beacon_data_status_energy_level);
+    ref_builder->get_widget("label_beacon_data_uc_temp_value", label_beacon_data_uc_temp_value);
     ref_builder->get_widget("label_beacon_data_status_imu", label_beacon_data_status_imu);
     ref_builder->get_widget("label_beacon_data_status_usd", label_beacon_data_status_usd);
     ref_builder->get_widget("label_beacon_data_status_rush", label_beacon_data_status_rush);
@@ -446,8 +447,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     vector<Gtk::Label *> beacon_data_labels;
     beacon_data_labels.push_back(label_beacon_data_bat1_v_value);
     beacon_data_labels.push_back(label_beacon_data_bat2_v_value);
-    beacon_data_labels.push_back(label_beacon_data_bat1_t_value);
-    beacon_data_labels.push_back(label_beacon_data_bat2_t_value);
+    beacon_data_labels.push_back(label_beacon_data_bat_mon_value);
+    beacon_data_labels.push_back(label_beacon_data_bat_current_value);
     beacon_data_labels.push_back(label_beacon_data_bat_c_value);
     beacon_data_labels.push_back(label_beacon_data_sp_i_my);
     beacon_data_labels.push_back(label_beacon_data_sp_i_px);
@@ -459,6 +460,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     beacon_data_labels.push_back(label_beacon_data_sp_v_mxpz);
     beacon_data_labels.push_back(label_beacon_data_sp_v_mzpy);
     beacon_data_labels.push_back(label_beacon_data_status_energy_level);
+    beacon_data_labels.push_back(label_beacon_data_uc_temp_value);
     beacon_data_labels.push_back(label_beacon_data_status_imu);
     beacon_data_labels.push_back(label_beacon_data_status_usd);
     beacon_data_labels.push_back(label_beacon_data_status_rush);
@@ -1102,8 +1104,8 @@ void FSatGRS::UpdateBeaconDataTab(grs::BeaconData beacon)
     {
         label_beacon_data_bat1_v_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_VOLTAGE_CELL_1]));
         label_beacon_data_bat2_v_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_VOLTAGE_CELL_2]));
-        label_beacon_data_bat1_t_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1]));
-        label_beacon_data_bat2_t_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2]));
+        label_beacon_data_bat_mon_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_MONITOR_TEMPERATURE]));
+        label_beacon_data_bat_current_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_CURRENT]));
         label_beacon_data_bat_c_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_CHARGE]));
         label_beacon_data_sp_i_my->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_0]));
         label_beacon_data_sp_i_px->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_1]));
@@ -1115,6 +1117,7 @@ void FSatGRS::UpdateBeaconDataTab(grs::BeaconData beacon)
         label_beacon_data_sp_v_mxpz->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_1]));
         label_beacon_data_sp_v_mzpy->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_2]));
         label_beacon_data_status_energy_level->set_text(to_string(beacon[BEACON_DATA_ENERGY_LEVEL]));
+        label_beacon_data_uc_temp_value->set_text(to_string(beacon[BEACON_DATA_EPS_UC_TEMPERATURE]));
     }
 
     // OBDH data

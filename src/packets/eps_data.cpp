@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.2
+ * \version 0.7.9
  * 
  * \date 09/04/2019
  * 
@@ -58,12 +58,12 @@ void EPSData::decode(Payload pl)
     this->insert(pair<int, double>(BEACON_DATA_BATTERY_VOLTAGE_CELL_2, this->calc_battery_voltage(raw_battery_voltage)));
 
     // Battery cell 1 temperature
-    uint32_t raw_battery_temperature = (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS] << 16) | (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS+1] << 8) | pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS+2];
-    this->insert(pair<int, double>(BEACON_DATA_BATTERY_TEMPERATURE_CELL_1, this->calc_battery_temperature(raw_battery_temperature)));
+//    uint32_t raw_battery_temperature = (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS] << 16) | (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS+1] << 8) | pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1_POS+2];
+//    this->insert(pair<int, double>(BEACON_DATA_BATTERY_TEMPERATURE_CELL_1, this->calc_battery_temperature(raw_battery_temperature)));
 
     // Battery cell 2 temperature
-    raw_battery_temperature = (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS] << 16) | (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS+1] << 8) | pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS+2];
-    this->insert(pair<int, double>(BEACON_DATA_BATTERY_TEMPERATURE_CELL_2, this->calc_battery_temperature(raw_battery_temperature)));
+//    raw_battery_temperature = (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS] << 16) | (pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS+1] << 8) | pl[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2_POS+2];
+//    this->insert(pair<int, double>(BEACON_DATA_BATTERY_TEMPERATURE_CELL_2, this->calc_battery_temperature(raw_battery_temperature)));
 
     // Battery charge
     uint16_t raw_battery_charge = (pl[BEACON_DATA_BATTERY_CHARGE_POS] << 8) | pl[BEACON_DATA_BATTERY_CHARGE_POS+1];

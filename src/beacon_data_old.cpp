@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.5.14
+ * \version 0.7.9
  * 
  * \date 12/09/2017
  * 
@@ -49,11 +49,11 @@ BeaconDataOld::BeaconDataOld()
 BeaconDataOld::BeaconDataOld(vector<Gtk::Label *> lbs)
 {
     unsigned int pos = 0;
-    
+
     label_beacon_data_bat1_v_value          = lbs[pos++];
     label_beacon_data_bat2_v_value          = lbs[pos++];
-    label_beacon_data_bat1_t_value          = lbs[pos++];
-    label_beacon_data_bat2_t_value          = lbs[pos++];
+    label_beacon_data_bat_mon_value         = lbs[pos++];
+    label_beacon_data_bat_current_value     = lbs[pos++];
     label_beacon_data_bat_c_value           = lbs[pos++];
     label_beacon_data_sp_i_my               = lbs[pos++];
     label_beacon_data_sp_i_px               = lbs[pos++];
@@ -65,6 +65,7 @@ BeaconDataOld::BeaconDataOld(vector<Gtk::Label *> lbs)
     label_beacon_data_sp_v_mxpz             = lbs[pos++];
     label_beacon_data_sp_v_mzpy             = lbs[pos++];
     label_beacon_data_status_energy_level   = lbs[pos++];
+    label_beacon_data_uc_temp_value         = lbs[pos++];
     label_beacon_data_status_imu            = lbs[pos++]; 
     label_beacon_data_status_usd            = lbs[pos++];
     label_beacon_data_status_rush           = lbs[pos++];
@@ -78,7 +79,7 @@ BeaconDataOld::BeaconDataOld(vector<Gtk::Label *> lbs)
     label_beacon_data_imu_gyro_z            = lbs[pos++];
     label_beacon_data_obdh_rst_value        = lbs[pos++];
     label_beacon_data_system_time_value     = lbs[pos++];
-    
+
     this->Clear();
 }
 
@@ -86,8 +87,8 @@ void BeaconDataOld::Display(uint8_t pkt_type)
 {
     label_beacon_data_bat1_v_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_bat2_v_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
-    label_beacon_data_bat1_t_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
-    label_beacon_data_bat2_t_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_bat_mon_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_bat_current_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_bat_c_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_sp_i_my->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_sp_i_px->set_text(BEACON_DATA_UNKNOWN_VALUE);
@@ -99,6 +100,7 @@ void BeaconDataOld::Display(uint8_t pkt_type)
     label_beacon_data_sp_v_mxpz->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_sp_v_mzpy->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_status_energy_level->set_text(BEACON_DATA_UNKNOWN_VALUE);
+    label_beacon_data_uc_temp_value->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_status_imu->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_status_usd->set_text(BEACON_DATA_UNKNOWN_VALUE);
     label_beacon_data_status_rush->set_text(BEACON_DATA_UNKNOWN_VALUE);
@@ -122,8 +124,8 @@ void BeaconDataOld::Display(uint8_t pkt_type)
     {
         label_beacon_data_bat1_v_value->set_text(ToConstChar(bat1_voltage));
         label_beacon_data_bat2_v_value->set_text(ToConstChar(bat2_voltage));
-        label_beacon_data_bat1_t_value->set_text(ToConstChar(bat1_temp));
-        label_beacon_data_bat2_t_value->set_text(ToConstChar(bat2_temp));
+        label_beacon_data_bat_mon_value->set_text(to_string(bat_monitor_temp).c_str());
+        label_beacon_data_bat_current_value->set_text(to_string(bat_current).c_str());
         label_beacon_data_bat_c_value->set_text(ToConstChar(bat_charge));
         label_beacon_data_sp_i_my->set_text(ToConstChar(solar_current_1));
         label_beacon_data_sp_i_px->set_text(ToConstChar(solar_current_2));
@@ -156,6 +158,7 @@ void BeaconDataOld::Display(uint8_t pkt_type)
                 break;
         }
     }
+    label_beacon_data_uc_temp_value->set_text(to_string(eps_uc_temp).c_str());
     
     if (pkt_type == BEACON_DATA_OBDH_PKT)
     {
@@ -182,8 +185,11 @@ void BeaconDataOld::Update(uint8_t *data, uint8_t len)
     #if BEACON_DATA_ENDIENESS == BEACON_DATA_LSB_FIRST
         bat1_voltage        = BatVoltConv((data[9] << 8) | data[8]);
         bat2_voltage        = BatVoltConv((data[11] << 8) | data[10]);
-        bat1_temp           = BatTempConv((data[14] << 16) | (data[13] << 8) | data[12]);
-        bat2_temp           = BatTempConv((data[17] << 16) | (data[16] << 8) | data[15]);
+//        bat1_temp           = BatTempConv((data[14] << 16) | (data[13] << 8) | data[12]);
+//        bat2_temp           = BatTempConv((data[17] << 16) | (data[16] << 8) | data[15]);
+        bat_monitor_temp    = BatMonitorTempConv(((uint16_t)data[13] << 8) | data[12]);
+        bat_current         = BatCurrentConv(((uint16_t)data[15] << 8) | data[14]);
+        eps_uc_temp         = EPSuCTempConv(((uint16_t)data[17] << 8) | data[16]);
         bat_charge          = BatChargeConv((data[19] << 8) | data[18]);
         solar_current_1     = SolarPanelCurrentConv((data[21] << 8) | data[20]);
         solar_current_2     = SolarPanelCurrentConv((data[23] << 8) | data[22]);
@@ -197,8 +203,11 @@ void BeaconDataOld::Update(uint8_t *data, uint8_t len)
     #elif BEACON_DATA_ENDIENESS == BEACON_DATA_MSB_FIRST
         bat1_voltage        = BatVoltConv((data[8] << 8) | data[9]);
         bat2_voltage        = BatVoltConv((data[10] << 8) | data[11]);
-        bat1_temp           = BatTempConv((data[12] << 16) | (data[13] << 8) | data[14]);
-        bat2_temp           = BatTempConv((data[15] << 16) | (data[16] << 8) | data[17]);
+//        bat1_temp           = BatTempConv((data[12] << 16) | (data[13] << 8) | data[14]);
+//        bat2_temp           = BatTempConv((data[15] << 16) | (data[16] << 8) | data[17]);
+        bat_monitor_temp    = BatMonitorTempConv(((uint16_t)data[12] << 8) | data[13]);
+        bat_current         = BatCurrentConv(((uint16_t)data[14] << 8) | data[15]);
+        eps_uc_temp         = EPSuCTempConv(((uint16_t)data[16] << 8) | data[17]);
         bat_charge          = BatChargeConv((data[18] << 8) | data[19]);
         solar_current_1     = SolarPanelCurrentConv((data[20] << 8) | data[21]);
         solar_current_2     = SolarPanelCurrentConv((data[22] << 8) | data[23]);
@@ -267,6 +276,8 @@ void BeaconDataOld::Clear()
     bat2_voltage        = 0;
     bat1_temp           = 0;
     bat2_temp           = 0;
+    bat_monitor_temp    = 0;
+    bat_current         = 0;
     bat_charge          = 0;
     solar_current_1     = 0;
     solar_current_2     = 0;
@@ -278,6 +289,7 @@ void BeaconDataOld::Clear()
     solar_voltage_2     = 0;
     solar_voltage_3     = 0;
     energy_level        = 0;
+    eps_uc_temp         = 0;
     imu_status          = false;
     usd_status          = false;
     rush_status         = false;
@@ -390,8 +402,10 @@ void BeaconDataOld::ForceDisplay(vector<string> data)
 
     label_beacon_data_bat1_v_value->set_text(data[i++]);
     label_beacon_data_bat2_v_value->set_text(data[i++]);
-    label_beacon_data_bat1_t_value->set_text(data[i++]);
-    label_beacon_data_bat2_t_value->set_text(data[i++]);
+//    label_beacon_data_bat1_t_value->set_text(data[i++]);
+//    label_beacon_data_bat2_t_value->set_text(data[i++]);
+    label_beacon_data_bat_mon_value->set_text(data[i++]);
+    label_beacon_data_bat_current_value->set_text(data[i++]);
     label_beacon_data_bat_c_value->set_text(data[i++]);
     label_beacon_data_sp_i_my->set_text(data[i++]);
     label_beacon_data_sp_i_px->set_text(data[i++]);
@@ -466,6 +480,21 @@ const char* BeaconDataOld::PrintTime(uint16_t h, uint8_t m, uint8_t s)
     std::string output = input_str.str();
     
     return output.c_str();
+}
+
+double BeaconDataOld::BatMonitorTempConv(uint16_t val)
+{
+    return (int16_t)(val) * 0.125 / 32.0;
+}
+
+double BeaconDataOld::BatCurrentConv(uint16_t val)
+{
+    return int16_t(val) * (1.5625e-6 / 0.01);
+}
+
+double BeaconDataOld::EPSuCTempConv(uint16_t val)
+{
+    return (val * (2.5 / 4095.0)  - 0.680) * 70.0 / 0.170;
 }
 
 //! \} End of beacon_data group
