@@ -2541,7 +2541,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="vexpand">True</property>
-                                    <property name="row_spacing">5</property>
+                                    <property name="row_spacing">3</property>
                                     <property name="row_homogeneous">True</property>
                                     <property name="column_homogeneous">True</property>
                                     <child>
@@ -2610,7 +2610,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="valign">center</property>
-                                        <property name="label" translatable="yes">Battery 1 Temp. [ºC]:</property>
+                                        <property name="label" translatable="yes">Bat. Mon. Temp. [ºC]:</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -2618,7 +2618,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label_beacon_data_bat1_t_value">
+                                      <object class="GtkLabel" id="label_beacon_data_bat_mon_value">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
@@ -2640,7 +2640,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="valign">center</property>
-                                        <property name="label" translatable="yes">Battery 2 Temp. [ºC]:</property>
+                                        <property name="label" translatable="yes">Battery Current [A]:</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -2648,7 +2648,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label_beacon_data_bat2_t_value">
+                                      <object class="GtkLabel" id="label_beacon_data_bat_current_value">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
@@ -2742,19 +2742,6 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label38">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="valign">center</property>
-                                        <property name="label" translatable="yes">SP Voltage -Y +X [V]:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">11</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkLabel" id="label_beacon_data_sp_v_mypx">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -2772,30 +2759,6 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label172">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">SP Voltage -X +Z [V]:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">12</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label173">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">SP Voltage -Z +Y [V]:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">13</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkLabel" id="label_beacon_data_sp_v_mxpz">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -2809,22 +2772,6 @@
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">12</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label_beacon_data_sp_v_mzpy">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="label" translatable="yes">-</property>
-                                        <property name="justify">right</property>
-                                        <attributes>
-                                          <attribute name="weight" value="heavy"/>
-                                        </attributes>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">13</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2861,30 +2808,6 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">8</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label179">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">SP Current -Z [A]:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">9</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label180">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">SP Current +Y [A]:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">10</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2949,6 +2872,110 @@
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">10</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label179">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">SP Current -Z [A]:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">9</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label180">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">SP Current +Y [A]:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">10</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label38">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="label" translatable="yes">SP Voltage -Y +X [V]:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">11</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label172">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">SP Voltage -X +Z [V]:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">12</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label_beacon_data_sp_v_mzpy">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">-</property>
+                                        <property name="justify">right</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">13</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label173">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">SP Voltage -Z +Y [V]:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">13</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">uC Temp. [ºC]:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">14</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label_beacon_data_uc_temp_value">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">-</property>
+                                        <attributes>
+                                          <attribute name="weight" value="heavy"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">14</property>
                                       </packing>
                                     </child>
                                   </object>
