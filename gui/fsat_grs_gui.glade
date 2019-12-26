@@ -5995,7 +5995,7 @@
     <property name="website_label" translatable="yes">https://github.com/floripasat/grs</property>
     <property name="authors">André Martins Pio de Mattos  &lt;andrempmattos@gmail.com&gt;
 Elder Dominghini Tramontin &lt;elderdtramontin@gmail.com&gt;
-Gabriel Mariano Marcelino &lt;gabriel.mm8@gmail.com&gt;</property>
+Gabriel Mariano Marcelino (PU5GMA) &lt;gabriel.mm8@gmail.com&gt;</property>
     <property name="logo">../icon.png</property>
     <property name="license_type">gpl-3-0</property>
     <child>
