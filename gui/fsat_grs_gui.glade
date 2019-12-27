@@ -177,10 +177,10 @@
         <col id="0" translatable="yes">Battery 2 voltage</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Battery 1 temperature</col>
+        <col id="0" translatable="yes">Battery Monitor Temperature</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Battery 2 temperature</col>
+        <col id="0" translatable="yes">Battery Current</col>
       </row>
       <row>
         <col id="0" translatable="yes">Battery charge</col>
@@ -250,6 +250,9 @@
       </row>
       <row>
         <col id="0" translatable="yes">OBDH resets</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">EPS uC Temperature</col>
       </row>
     </data>
   </object>

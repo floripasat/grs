@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.9
+ * \version 0.7.10
  * 
  * \date 10/09/2017
  * 
@@ -1986,7 +1986,7 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
                 break;
             case 3:
                 cmd += " 9";
-                cmd += " \"Temperature [oC]\"";
+                cmd += " \"Current [A]\"";
                 break;
             case 4:
                 cmd += " 10";
@@ -2080,6 +2080,10 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
                 cmd += " 35";
                 cmd += " \"Quantity\"";
                 break;
+            case 27:
+                cmd += " 36";
+                cmd += " \"Temperature [oC]\"";
+                break;
             default:
                 cmd += " 6";
                 cmd += " \"Data\"";
@@ -2106,8 +2110,8 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
             {
                 case 0:     cmd += "beacon_battery_cell_1_voltage.pdf";         break;
                 case 1:     cmd += "beacon_battery_cell_2_voltage.pdf";         break;
-                case 2:     cmd += "beacon_battery_cell_1_temperature.pdf";     break;
-                case 3:     cmd += "beacon_battery_cell_2_temperature.pdf";     break;
+                case 2:     cmd += "beacon_battery_monitor_temperature.pdf";    break;
+                case 3:     cmd += "beacon_battery_current.pdf";                break;
                 case 4:     cmd += "beacon_battery_charge.pdf";                 break;
                 case 5:     cmd += "beacon_solar_panel_my_current.pdf";         break;
                 case 6:     cmd += "beacon_solar_panel_px_current.pdf";         break;
@@ -2131,6 +2135,7 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
                 case 24:    cmd += "beacon_imu_gyro_y.pdf";                     break;
                 case 25:    cmd += "beacon_imu_gyro_z.pdf";                     break;
                 case 26:    cmd += "beacon_obdh_resets.pdf";                    break;
+                case 27:    cmd += "beacon_eps_uc_temperature.pdf";             break;
                 default:    cmd += "beacon_plot.pdf";                           break;
             };
 
