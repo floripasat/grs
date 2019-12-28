@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.9
+ * \version 0.7.11
  * 
  * \date 12/09/2017
  * 
@@ -322,9 +322,13 @@ string BeaconDataOld::Log()
         log_entry += ",";
         log_entry += ToString(bat2_voltage);
         log_entry += ",";
-        log_entry += ToString(bat1_temp);
+//        log_entry += ToString(bat1_temp);
+//        log_entry += ",";
+//        log_entry += ToString(bat2_temp);
+//        log_entry += ",";
+        log_entry += ToString(bat_monitor_temp);
         log_entry += ",";
-        log_entry += ToString(bat2_temp);
+        log_entry += ToString(bat_current);
         log_entry += ",";
         log_entry += ToString(bat_charge);
         log_entry += ",";
@@ -381,6 +385,26 @@ string BeaconDataOld::Log()
         log_entry += ToString(int(system_time_hou));
         log_entry += ",";
         log_entry += ToString(obdh_resets);
+    }
+    else
+    {
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ",";
+        log_entry += ToString(eps_uc_temp);
     }
     
     return log_entry;
