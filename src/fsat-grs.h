@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.9
+ * \version 0.7.14
  * 
  * \date 10/09/2017
  * 
@@ -171,6 +171,7 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_beacon;
         Gtk::Button                     *button_stop_beacon;
         Gtk::Button                     *button_clear_all_beacon;
+        Gtk::ProgressBar                *progress_bar_beacon_audio_file;
 
         std::unique_ptr<AudioDecoder>   beacon_audio_decoder;
         std::unique_ptr<std::thread>    thread_beacon_audio_decoder;
@@ -195,6 +196,7 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_telemetry;
         Gtk::Button                     *button_stop_telemetry;
         Gtk::Button                     *button_clear_all_telemetry;
+        Gtk::ProgressBar                *progress_bar_downlink_audio_file;
 
         std::unique_ptr<AudioDecoder>   downlink_audio_decoder;
         std::unique_ptr<std::thread>    thread_downlink_audio_decoder;
