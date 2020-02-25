@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.14
+ * \version 0.7.15
  * 
  * \date 10/09/2017
  * 
@@ -2695,7 +2695,7 @@ void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)
 //***************************************************************************************************************************************
 void FSatGRS::RunGNURadioReceiver(uint8_t rx_type)
 {
-    string grc_cmd = "python -u ";
+    string grc_cmd = "python2 -u ";
 
     if (this->CheckFile(FSAT_GRS_RX_GRC_SCRIPT))
     {
@@ -2808,7 +2808,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
-    string cmd_str = "python -u ";
+    string cmd_str = "python2 -u ";
 
     if (this->CheckFile(FSAT_GRS_TX_GRC_SCRIPT))
     {
