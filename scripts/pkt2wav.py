@@ -1,5 +1,5 @@
 #
-#  bin2wav.py
+#  pkt2wav.py
 #  
 #  Copyright (C) 2020, Universidade Federal de Santa Catarina
 #  
@@ -61,23 +61,28 @@ def write_byte(wav_file, bit_samples, byte):
 
 
 def main(args):
-    sample_rate_hz = float(args[1])
-    baudrate = int(args[2])
+    # args[1] = input bin file
+    # args[2] = sample rate in Hz
+    # args[3] = baudrate
+    # args[4] = output wav file
+    input_file = args[1]
+    sample_rate_hz = float(args[2])
+    baudrate = int(args[3])
 
     bit_samples = int(sample_rate_hz/baudrate)
 
-    wav_file = wave.open(args[3],'w')
+    wav_file = wave.open(args[4],'w')
     wav_file.setnchannels(1) # mono
     wav_file.setsampwidth(2)
     wav_file.setframerate(sample_rate_hz)
 
     write_zeros(wav_file, int(sample_rate_hz/20))
 
-    pkt = [170,170,170,170,93,230,42,126,59,73,205,245,120,94,153,170,72,54,239,140,106,223,226,245,254,22,143,9,214,41,48,120,162,191,62,10,16,241,136,148,205,234,239,82,186,226,244,61,118,66,149,12,193,72,224,86,52,245]
-
-    i = 0
-    for i in range(len(pkt)):
-        write_byte(wav_file, bit_samples, pkt[i])
+    with open(input_file, "rb") as f:
+        byte = f.read(1)
+        while byte != b"":
+            write_byte(wav_file, bit_samples, ord(byte))
+            byte = f.read(1)
 
     write_zeros(wav_file, int(sample_rate_hz/20))
 
