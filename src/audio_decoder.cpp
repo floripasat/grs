@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.15
+ * \version 0.7.12
  * 
  * \date 29/04/2019
  * 
@@ -84,7 +84,7 @@ void AudioDecoder::run(string script)
 {
     auto args = this->gen_script_args(script);
 
-    string cmd = "python ";
+    string cmd = "python2 ";
 
     for(unsigned int i=0; i<args.size(); i++)
     {

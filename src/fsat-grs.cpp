@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.6
+ * \version 0.7.15
  * 
  * \date 10/09/2017
  * 
@@ -250,6 +250,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("radiobutton_beacon_src_file", radiobutton_beacon_src_file);
     ref_builder->get_widget("filechooserbutton_beacon", filechooserbutton_beacon);
     ref_builder->get_widget("entry_beacon_audio_sample_rate", entry_beacon_audio_sample_rate);
+    ref_builder->get_widget("progress_bar_beacon_audio_file", progress_bar_beacon_audio_file);
     
     ref_builder->get_widget("togglebutton_play_beacon", togglebutton_play_beacon);
     if (togglebutton_play_beacon)
@@ -288,6 +289,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("radiobutton_telemetry_src_file", radiobutton_telemetry_src_file);
     ref_builder->get_widget("filechooserbutton_telemetry", filechooserbutton_telemetry);
     ref_builder->get_widget("entry_downlink_audio_sample_rate", entry_downlink_audio_sample_rate);
+    ref_builder->get_widget("progress_bar_downlink_audio_file", progress_bar_downlink_audio_file);
 
     ref_builder->get_widget("togglebutton_play_telemetry", togglebutton_play_telemetry);
     if (togglebutton_play_telemetry)
@@ -416,8 +418,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     // Beacon Data
     ref_builder->get_widget("label_beacon_data_bat1_v_value", label_beacon_data_bat1_v_value);
     ref_builder->get_widget("label_beacon_data_bat2_v_value", label_beacon_data_bat2_v_value);
-    ref_builder->get_widget("label_beacon_data_bat1_t_value", label_beacon_data_bat1_t_value);
-    ref_builder->get_widget("label_beacon_data_bat2_t_value", label_beacon_data_bat2_t_value);
+    ref_builder->get_widget("label_beacon_data_bat_mon_value", label_beacon_data_bat_mon_value);
+    ref_builder->get_widget("label_beacon_data_bat_current_value", label_beacon_data_bat_current_value);
     ref_builder->get_widget("label_beacon_data_bat_c_value", label_beacon_data_bat_c_value);
     ref_builder->get_widget("label_beacon_data_sp_i_my", label_beacon_data_sp_i_my);
     ref_builder->get_widget("label_beacon_data_sp_i_px", label_beacon_data_sp_i_px);
@@ -429,6 +431,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     ref_builder->get_widget("label_beacon_data_sp_v_mxpz", label_beacon_data_sp_v_mxpz);
     ref_builder->get_widget("label_beacon_data_sp_v_mzpy", label_beacon_data_sp_v_mzpy);
     ref_builder->get_widget("label_beacon_data_status_energy_level", label_beacon_data_status_energy_level);
+    ref_builder->get_widget("label_beacon_data_uc_temp_value", label_beacon_data_uc_temp_value);
     ref_builder->get_widget("label_beacon_data_status_imu", label_beacon_data_status_imu);
     ref_builder->get_widget("label_beacon_data_status_usd", label_beacon_data_status_usd);
     ref_builder->get_widget("label_beacon_data_status_rush", label_beacon_data_status_rush);
@@ -446,8 +449,8 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     vector<Gtk::Label *> beacon_data_labels;
     beacon_data_labels.push_back(label_beacon_data_bat1_v_value);
     beacon_data_labels.push_back(label_beacon_data_bat2_v_value);
-    beacon_data_labels.push_back(label_beacon_data_bat1_t_value);
-    beacon_data_labels.push_back(label_beacon_data_bat2_t_value);
+    beacon_data_labels.push_back(label_beacon_data_bat_mon_value);
+    beacon_data_labels.push_back(label_beacon_data_bat_current_value);
     beacon_data_labels.push_back(label_beacon_data_bat_c_value);
     beacon_data_labels.push_back(label_beacon_data_sp_i_my);
     beacon_data_labels.push_back(label_beacon_data_sp_i_px);
@@ -459,6 +462,7 @@ int FSatGRS::BuildWidgets(Glib::RefPtr<Gtk::Builder> ref_builder)
     beacon_data_labels.push_back(label_beacon_data_sp_v_mxpz);
     beacon_data_labels.push_back(label_beacon_data_sp_v_mzpy);
     beacon_data_labels.push_back(label_beacon_data_status_energy_level);
+    beacon_data_labels.push_back(label_beacon_data_uc_temp_value);
     beacon_data_labels.push_back(label_beacon_data_status_imu);
     beacon_data_labels.push_back(label_beacon_data_status_usd);
     beacon_data_labels.push_back(label_beacon_data_status_rush);
@@ -1102,8 +1106,8 @@ void FSatGRS::UpdateBeaconDataTab(grs::BeaconData beacon)
     {
         label_beacon_data_bat1_v_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_VOLTAGE_CELL_1]));
         label_beacon_data_bat2_v_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_VOLTAGE_CELL_2]));
-        label_beacon_data_bat1_t_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_TEMPERATURE_CELL_1]));
-        label_beacon_data_bat2_t_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_TEMPERATURE_CELL_2]));
+        label_beacon_data_bat_mon_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_MONITOR_TEMPERATURE]));
+        label_beacon_data_bat_current_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_CURRENT]));
         label_beacon_data_bat_c_value->set_text(to_string(beacon[BEACON_DATA_BATTERY_CHARGE]));
         label_beacon_data_sp_i_my->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_0]));
         label_beacon_data_sp_i_px->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_CURRENT_1]));
@@ -1115,6 +1119,7 @@ void FSatGRS::UpdateBeaconDataTab(grs::BeaconData beacon)
         label_beacon_data_sp_v_mxpz->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_1]));
         label_beacon_data_sp_v_mzpy->set_text(to_string(beacon[BEACON_DATA_SOLAR_PANEL_VOLTAGE_2]));
         label_beacon_data_status_energy_level->set_text(to_string(beacon[BEACON_DATA_ENERGY_LEVEL]));
+        label_beacon_data_uc_temp_value->set_text(to_string(beacon[BEACON_DATA_EPS_UC_TEMPERATURE]));
     }
 
     // OBDH data
@@ -1983,7 +1988,7 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
                 break;
             case 3:
                 cmd += " 9";
-                cmd += " \"Temperature [oC]\"";
+                cmd += " \"Current [A]\"";
                 break;
             case 4:
                 cmd += " 10";
@@ -2077,6 +2082,10 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
                 cmd += " 35";
                 cmd += " \"Quantity\"";
                 break;
+            case 27:
+                cmd += " 36";
+                cmd += " \"Temperature [oC]\"";
+                break;
             default:
                 cmd += " 6";
                 cmd += " \"Data\"";
@@ -2103,8 +2112,8 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
             {
                 case 0:     cmd += "beacon_battery_cell_1_voltage.pdf";         break;
                 case 1:     cmd += "beacon_battery_cell_2_voltage.pdf";         break;
-                case 2:     cmd += "beacon_battery_cell_1_temperature.pdf";     break;
-                case 3:     cmd += "beacon_battery_cell_2_temperature.pdf";     break;
+                case 2:     cmd += "beacon_battery_monitor_temperature.pdf";    break;
+                case 3:     cmd += "beacon_battery_current.pdf";                break;
                 case 4:     cmd += "beacon_battery_charge.pdf";                 break;
                 case 5:     cmd += "beacon_solar_panel_my_current.pdf";         break;
                 case 6:     cmd += "beacon_solar_panel_px_current.pdf";         break;
@@ -2128,6 +2137,7 @@ void FSatGRS::OnButtonPlotBeaconDataClicked()
                 case 24:    cmd += "beacon_imu_gyro_y.pdf";                     break;
                 case 25:    cmd += "beacon_imu_gyro_z.pdf";                     break;
                 case 26:    cmd += "beacon_obdh_resets.pdf";                    break;
+                case 27:    cmd += "beacon_eps_uc_temperature.pdf";             break;
                 default:    cmd += "beacon_plot.pdf";                           break;
             };
 
@@ -2685,7 +2695,7 @@ void FSatGRS::RaiseErrorMessage(const char* error_title, const char* error_text)
 //***************************************************************************************************************************************
 void FSatGRS::RunGNURadioReceiver(uint8_t rx_type)
 {
-    string grc_cmd = "python -u ";
+    string grc_cmd = "python2 -u ";
 
     if (this->CheckFile(FSAT_GRS_RX_GRC_SCRIPT))
     {
@@ -2798,7 +2808,7 @@ void FSatGRS::RunGNURadioTransmitter(int uplink_type)
     request_data_packet_t rqt_packet; 
     unsigned int packets_number = 1;
 
-    string cmd_str = "python -u ";
+    string cmd_str = "python2 -u ";
 
     if (this->CheckFile(FSAT_GRS_TX_GRC_SCRIPT))
     {

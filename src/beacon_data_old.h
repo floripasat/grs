@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.4.6
+ * \version 0.7.9
  * 
  * \date 12/09/2017
  * 
@@ -65,8 +65,10 @@ class BeaconDataOld: public PacketData
     private:
         Gtk::Label *label_beacon_data_bat1_v_value;
         Gtk::Label *label_beacon_data_bat2_v_value;
-        Gtk::Label *label_beacon_data_bat1_t_value;
-        Gtk::Label *label_beacon_data_bat2_t_value;
+//        Gtk::Label *label_beacon_data_bat1_t_value;
+//        Gtk::Label *label_beacon_data_bat2_t_value;
+        Gtk::Label *label_beacon_data_bat_mon_value;
+        Gtk::Label *label_beacon_data_bat_current_value;
         Gtk::Label *label_beacon_data_bat_c_value;
         Gtk::Label *label_beacon_data_sp_i_my;
         Gtk::Label *label_beacon_data_sp_i_px;
@@ -78,6 +80,7 @@ class BeaconDataOld: public PacketData
         Gtk::Label *label_beacon_data_sp_v_mxpz;
         Gtk::Label *label_beacon_data_sp_v_mzpy;
         Gtk::Label *label_beacon_data_status_energy_level;
+        Gtk::Label *label_beacon_data_uc_temp_value;
         Gtk::Label *label_beacon_data_status_imu;
         Gtk::Label *label_beacon_data_status_usd;
         Gtk::Label *label_beacon_data_status_rush;
@@ -96,6 +99,8 @@ class BeaconDataOld: public PacketData
         double bat2_voltage;
         double bat1_temp;
         double bat2_temp;
+        double bat_monitor_temp;
+        double bat_current;
         double bat_charge;
         double solar_current_1;
         double solar_current_2;
@@ -117,6 +122,7 @@ class BeaconDataOld: public PacketData
         uint8_t system_time_hou;
         uint16_t obdh_resets;
         uint8_t energy_level;
+        double eps_uc_temp;
         bool imu_status;
         bool usd_status;
         bool rush_status;
@@ -192,6 +198,34 @@ class BeaconDataOld: public PacketData
          * \return 
          */
         const char* PrintTime(uint16_t h, uint8_t m, uint8_t s);
+
+        /**
+         * \brief Converts the raw value of the battery monitor temperature to a real temperature.
+         *
+         * \param[in] val is the raw value of the battery monitor temperature.
+         *
+         * \return The battery monitor temperature in Celsius.
+         */
+        double BatMonitorTempConv(uint16_t val);
+
+        /**
+         * \brief Converts the raw value of the battery current to a real value.
+         *
+         * \param[in] val is the raw value of the battery current.
+         *
+         * \return The battery current in Ampere.
+         */
+        double BatCurrentConv(uint16_t val);
+
+        /**
+         * \brief Converts the raw value of the EPS uC temperature to a real value.
+         *
+         * \param[in] val is the raw value of the EPS uC temperature.
+         *
+         * \return The EPS uC temperature in Celsius.
+         */
+        double EPSuCTempConv(uint16_t val);
+
     public:
         /**
          * \brief 

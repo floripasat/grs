@@ -25,7 +25,7 @@
  * 
  * \author Gabriel Mariano Marcelino <gabriel.mm8@gmail.com>
  * 
- * \version 0.7.6
+ * \version 0.7.14
  * 
  * \date 10/09/2017
  * 
@@ -171,6 +171,7 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_beacon;
         Gtk::Button                     *button_stop_beacon;
         Gtk::Button                     *button_clear_all_beacon;
+        Gtk::ProgressBar                *progress_bar_beacon_audio_file;
 
         std::unique_ptr<AudioDecoder>   beacon_audio_decoder;
         std::unique_ptr<std::thread>    thread_beacon_audio_decoder;
@@ -195,6 +196,7 @@ class FSatGRS
         Gtk::ToggleButton               *togglebutton_pause_telemetry;
         Gtk::Button                     *button_stop_telemetry;
         Gtk::Button                     *button_clear_all_telemetry;
+        Gtk::ProgressBar                *progress_bar_downlink_audio_file;
 
         std::unique_ptr<AudioDecoder>   downlink_audio_decoder;
         std::unique_ptr<std::thread>    thread_downlink_audio_decoder;
@@ -259,8 +261,8 @@ class FSatGRS
         // Beacon Data
         Gtk::Label                      *label_beacon_data_bat1_v_value;
         Gtk::Label                      *label_beacon_data_bat2_v_value;
-        Gtk::Label                      *label_beacon_data_bat1_t_value;
-        Gtk::Label                      *label_beacon_data_bat2_t_value;
+        Gtk::Label                      *label_beacon_data_bat_mon_value;
+        Gtk::Label                      *label_beacon_data_bat_current_value;
         Gtk::Label                      *label_beacon_data_bat_c_value;
         Gtk::Label                      *label_beacon_data_sp_i_my;
         Gtk::Label                      *label_beacon_data_sp_i_px;
@@ -272,6 +274,7 @@ class FSatGRS
         Gtk::Label                      *label_beacon_data_sp_v_mxpz;
         Gtk::Label                      *label_beacon_data_sp_v_mzpy;
         Gtk::Label                      *label_beacon_data_status_energy_level;
+        Gtk::Label                      *label_beacon_data_uc_temp_value;
         Gtk::Label                      *label_beacon_data_status_imu;
         Gtk::Label                      *label_beacon_data_status_usd;
         Gtk::Label                      *label_beacon_data_status_rush;
